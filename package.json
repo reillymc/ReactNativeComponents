@@ -1,10 +1,12 @@
 {
-  "name": "@reillymc/reactnativecomponents",
+  "name": "@reillymc/react-native-components",
   "version": "0.1.0",
   "description": "A collection of React Native components and resources",
-  "main": "index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "start": "cd example && npm start",
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
@@ -17,6 +19,18 @@
   },
   "homepage": "https://github.com/reillymc/react-native-components#readme",
   "devDependencies": {
+    "babel-plugin-module-resolver": "^4.1.0",
     "typescript": "^4.8.4"
+  },
+  "dependencies": {
+    "@gorhom/bottom-sheet": "^4.4.5",
+    "@gorhom/portal": "^1.0.14",
+    "react-native-elements": "^3.4.2"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-gesture-handler": ">=1.10.1",
+    "react-native-reanimated": ">=2.2.0"
   }
 }
