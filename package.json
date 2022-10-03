@@ -1,0 +1,22 @@
+{
+  "name": "@reillymc/reactnativecomponents",
+  "version": "0.1.0",
+  "description": "A collection of React Native components and resources",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reillymc/react-native-components.git"
+  },
+  "author": "reillymc",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reillymc/react-native-components/issues"
+  },
+  "homepage": "https://github.com/reillymc/react-native-components#readme",
+  "devDependencies": {
+    "typescript": "^4.8.4"
+  }
+}
