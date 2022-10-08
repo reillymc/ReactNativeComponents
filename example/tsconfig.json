@@ -1,12 +1,8 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
-    "baseUrl": "./",
     "strict": true,
     "paths": {
-      "*": [
-        "."
-      ],
       "@reillymc/react-native-components": [
         "../src/index"
       ],

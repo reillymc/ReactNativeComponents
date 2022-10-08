@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-import { Icon } from "react-native-elements";
+// import { Icon } from "react-native-elements";
 import { ButtonProps, ButtonSize } from "./Button";
 
 const sizeToValue = (height: ButtonSize) => {
@@ -38,14 +38,14 @@ const IconButton: React.FC<IconButtonProps> = ({ iconName, label, size = "medium
             onPress={onPress}
         >
             <>
-                <Icon
+                {/* <Icon
                     name={iconName}
                     type="font-awesome"
                     size={dimensions * 0.4}
                     color={disabled ? "#bbb" : "#000"}
                     tvParallaxProperties={null}
                     style={styles.icon}
-                />
+                /> */}
                 {size !== "small" && label && (
                     <Text
                         style={[

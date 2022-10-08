@@ -1,23 +1,42 @@
 const path = require("path");
-const extraNodeModules = {
-    "@reillymc/react-native-components": path.resolve(__dirname + "/../src"),
-};
-const watchFolders = [path.resolve(__dirname + "/../src")];
-module.exports = {
-    transformer: {
-      getTransformOptions: async () => ({
-        transform: {
-          experimentalImportSupport: false,
-          inlineRequires: false,
-        },
-      }),
-    }, 
+const exclusionList = require("metro-config/src/defaults/exclusionList");
+const escape = require("escape-string-regexp");
+
+const rootPak = require("../package.json");
+
+const root = path.resolve(__dirname, "..");
+
+const modules = [
+    "@babel/runtime",
+    ...Object.keys({
+        ...rootPak.dependencies,
+        ...rootPak.peerDependencies,
+    }),
+];
+
+const config = {
+    projectRoot: __dirname,
+    watchFolders: [root],
+
+    // We need to make sure that only one version is loaded for peerDependencies
+    // So we blacklist them at the root, and alias them to the versions in example's node_modules
     resolver: {
-      extraNodeModules: new Proxy(extraNodeModules, {
-        get: (target, name) =>
-          //redirects dependencies referenced from common/ to local node_modules
-          name in target ? target[name] : path.join(process.cwd(), `node_modules/${name}`),
-      }),
+        blacklistRE: exclusionList([new RegExp(`^${escape(path.join(root, "node_modules"))}\\/.*$`)]),
+
+        extraNodeModules: modules.reduce((acc, name) => {
+            acc[name] = path.join(__dirname, "node_modules", name);
+            return acc;
+        }, {}),
     },
-    watchFolders,
-  };
+
+    transformer: {
+        getTransformOptions: async () => ({
+            transform: {
+                experimentalImportSupport: false,
+                inlineRequires: true,
+            },
+        }),
+    },
+};
+
+module.exports = config;

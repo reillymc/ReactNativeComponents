@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { PortalProvider } from "@gorhom/portal";
 
 import { ThemeProvider } from "@reillymc/react-native-components";
 
@@ -54,15 +55,17 @@ export default function App() {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider theme={appTheme} styles={appStyles}>
                 <StatusBar style="auto" />
-                <NavigationContainer>
-                    <RootStack.Navigator>
-                        <RootStack.Screen
-                            name="Examples"
-                            options={{ headerShown: false }}
-                            component={ComponentStackNavigator}
-                        />
-                    </RootStack.Navigator>
-                </NavigationContainer>
+                <PortalProvider>
+                    <NavigationContainer>
+                        <RootStack.Navigator>
+                            <RootStack.Screen
+                                name="Examples"
+                                options={{ headerShown: false }}
+                                component={ComponentStackNavigator}
+                            />
+                        </RootStack.Navigator>
+                    </NavigationContainer>
+                </PortalProvider>
             </ThemeProvider>
         </GestureHandlerRootView>
     );
