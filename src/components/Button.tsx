@@ -1,65 +1,55 @@
 import React from "react";
-import { ColorValue, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { ColorValue, Pressable, StyleSheet, Text, ViewStyle, TextStyle } from "react-native";
+import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
 
-type ButtonType = "shaded" | "flat";
+type ButtonVariant = "primary" | "secondary" | "flat";
 type ButtonSize = "small" | "medium" | "large";
 
-const getBackgroundColor = (type: ButtonType, pressed: boolean): ColorValue => {
-    if (type === "shaded") {
-        return pressed ? "#666" : "#333";
+const getBackgroundColor = ({ color }: Theme, type: ButtonVariant, pressed: boolean): ColorValue => {
+    switch (type) {
+        case "primary":
+            return pressed ? color.primaryHighlight : color.primary;
+        case "secondary":
+            return pressed ? color.secondaryHighlight : color.secondary;
+        case "flat":
+            return "transparent";
     }
-
-    return "transparent";
 };
 
-const getLabelColor = (type: ButtonType, pressed: boolean): ColorValue => {
-    if (type === "shaded") {
-        return "#fff";
+const getLabelColor = ({ color }: Theme, type: ButtonVariant, pressed: boolean): ColorValue => {
+    if (type !== "flat") {
+        return color.textInverted;
     }
 
-    return pressed ? "#bbb" : "#333";
+    return pressed ? color.textHighlight : color.text;
 };
 
-const getHeight = (type: ButtonType, size: ButtonSize): number => {
-    if (type === "flat") return 0;
-
+const getFontSize = ({ font }: Theme, size: ButtonSize): number => {
     switch (size) {
         case "small":
-            return 30;
+            return font.size.small;
         case "medium":
-            return 40;
+            return font.size.regular;
         case "large":
-            return 50;
+            return font.size.large;
     }
 };
 
-const getWidth = (type: ButtonType, size: ButtonSize): number => {
-    if (type === "flat") return 0;
+type ButtonStyles = {
+    height: { [key in ButtonSize]: number };
+    width: { [key in ButtonSize]: number };
+    color: { [key in ButtonVariant]: string };
+    borderRadius: number;
 
-    switch (size) {
-        case "small":
-            return 80;
-        case "medium":
-            return 120;
-        case "large":
-            return 180;
-    }
-};
-
-const getFontSize = (size: ButtonSize): number => {
-    switch (size) {
-        case "small":
-            return 14;
-        case "medium":
-            return 16;
-        case "large":
-            return 20;
-    }
+    /**
+     * Font family due to weight limitations.
+     */
+    fontFamilyWeight: string;
 };
 
 interface ButtonProps {
     label: string;
-    type?: ButtonType;
+    variant?: ButtonVariant;
     size?: ButtonSize;
     contentAlign?: "center" | "left" | "right";
     disabled?: boolean;
@@ -69,7 +59,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({
     label,
-    type = "shaded",
+    variant = "primary",
     size = "large",
     contentAlign = "center",
     disabled,
@@ -78,20 +68,25 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     const hitBuffer = size === "small" ? 80 : 20;
 
+    const styles = useThemedStyles(createStyles);
+    const {
+        styles: { button },
+        theme,
+    } = useTheme();
+
     return (
         <Pressable
             hitSlop={hitBuffer}
             disabled={disabled}
             style={({ pressed }) => [
-                style,
                 styles.button,
                 {
-                    minHeight: getHeight(type, size),
-                    minWidth: getWidth(type, size),
-                    borderRadius: 8,
-                    backgroundColor: getBackgroundColor(type, pressed),
-                    color: getLabelColor(type, pressed),
+                    minHeight: button.height[size],
+                    minWidth: button.width[size],
+                    backgroundColor: getBackgroundColor(theme, variant, pressed),
+                    color: getLabelColor(theme, variant, pressed),
                 },
+                style,
             ]}
             onPress={onPress}
         >
@@ -100,10 +95,10 @@ const Button: React.FC<ButtonProps> = ({
                     style={[
                         styles.label,
                         {
-                            color: getLabelColor(type, pressed),
-                            fontSize: getFontSize(size),
+                            color: getLabelColor(theme, variant, pressed),
+                            fontSize: getFontSize(theme, size),
                             textAlign: contentAlign,
-                            paddingHorizontal: type === "shaded" ? 8 : 0,
+                            paddingHorizontal: variant !== "flat" ? 8 : 0,
                         },
                     ]}
                 >
@@ -114,15 +109,15 @@ const Button: React.FC<ButtonProps> = ({
     );
 };
 
-export { Button, ButtonProps, ButtonSize };
+export { Button, ButtonProps, ButtonStyles, ButtonSize };
 
-const styles = StyleSheet.create({
-    button: {
-        justifyContent: "center",
-    },
-    label: {
-        fontWeight: "bold",
-        textAlign: "center",
-        fontFamily: "Comfortaa-Regular",
-    },
-});
+const createStyles = ({ theme, styles: { button } }: ThemeContext) =>
+    StyleSheet.create({
+        button: {
+            justifyContent: "center",
+            borderRadius: button.borderRadius,
+        },
+        label: {
+            fontFamily: button.fontFamilyWeight,
+        },
+    });
