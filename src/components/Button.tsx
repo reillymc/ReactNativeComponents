@@ -2,11 +2,11 @@ import React from "react";
 import { ColorValue, Pressable, StyleSheet, Text, ViewStyle, TextStyle } from "react-native";
 import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
 
-type ButtonVariant = "primary" | "secondary" | "flat";
-type ButtonSize = "small" | "medium" | "large";
+export type ButtonVariant = "primary" | "secondary" | "flat";
+export type ButtonSize = "small" | "medium" | "large";
 
-const getBackgroundColor = ({ color }: Theme, type: ButtonVariant, pressed: boolean): ColorValue => {
-    switch (type) {
+export const getBackgroundColor = ({ color }: Theme, variant: ButtonVariant, pressed: boolean): ColorValue => {
+    switch (variant) {
         case "primary":
             return pressed ? color.primaryHighlight : color.primary;
         case "secondary":
@@ -16,7 +16,7 @@ const getBackgroundColor = ({ color }: Theme, type: ButtonVariant, pressed: bool
     }
 };
 
-const getLabelColor = ({ color }: Theme, type: ButtonVariant, pressed: boolean): ColorValue => {
+export const getLabelColor = ({ color }: Theme, type: ButtonVariant, pressed: boolean): ColorValue => {
     if (type !== "flat") {
         return color.textInverted;
     }
@@ -109,7 +109,9 @@ const Button: React.FC<ButtonProps> = ({
     );
 };
 
-export { Button, ButtonProps, ButtonStyles, ButtonSize };
+Button.displayName = "Button";
+
+export { Button, ButtonProps, ButtonStyles };
 
 const createStyles = ({ theme, styles: { button } }: ThemeContext) =>
     StyleSheet.create({

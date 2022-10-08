@@ -1,5 +1,6 @@
 import React from "react";
 import { ButtonStyles } from "./Button";
+import { IconButtonStyles } from "./IconButton";
 
 type Theme = {
     font: {
@@ -69,6 +70,7 @@ const DefaultTheme: Theme = {
 
 type Styles = {
     button: ButtonStyles;
+    iconButton: IconButtonStyles;
 };
 
 // const DefaultStyles: Styles = {
@@ -113,6 +115,14 @@ const createDefaultStyles = (theme: Theme): Styles => ({
             flat: "transparent",
         },
         fontFamilyWeight: theme.font.regular,
+    },
+    iconButton: {
+        size: {
+            small: 50,
+            medium: 60,
+            large: 80,
+        },
+        rounded: true,
     },
 });
 

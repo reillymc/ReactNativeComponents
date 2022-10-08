@@ -1,2 +1,4 @@
 export { ComponentListScreen } from "./ComponentListScreen";
-export { ButtonExample } from "./ButtonExample";
+export { ButtonPage } from "./ButtonPage";
+export { IconButtonPage } from "./IconButtonPage";
+export { ModalSheetPage } from "./ModalSheetPage";

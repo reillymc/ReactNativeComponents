@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
-// import { Icon } from "react-native-elements";
-import { ButtonProps, ButtonSize } from "./Button";
+import { Icon } from "react-native-elements";
+import { ButtonProps, ButtonSize, ButtonVariant, getBackgroundColor, getLabelColor } from "./Button";
+import { useThemedStyles, ThemeContext, useTheme } from "./ThemeProvider";
 
 const sizeToValue = (height: ButtonSize) => {
     switch (height) {
@@ -14,14 +15,32 @@ const sizeToValue = (height: ButtonSize) => {
     }
 };
 
+type IconButtonStyles = {
+    size: { [key in ButtonSize]: number };
+    rounded: boolean;
+};
+
 interface IconButtonProps extends ButtonProps {
     iconName: string;
 
     onPress: () => void;
 }
 
-const IconButton: React.FC<IconButtonProps> = ({ iconName, label, size = "medium", disabled, onPress }) => {
+const IconButton: React.FC<IconButtonProps> = ({
+    iconName,
+    label,
+    variant = "primary",
+    size = "medium",
+    disabled,
+    onPress,
+}) => {
     const dimensions = sizeToValue(size);
+
+    const styles = useThemedStyles(createStyles);
+    const {
+        styles: { button, iconButton },
+        theme,
+    } = useTheme();
 
     return (
         <Pressable
@@ -29,52 +48,57 @@ const IconButton: React.FC<IconButtonProps> = ({ iconName, label, size = "medium
             style={({ pressed }) => [
                 styles.container,
                 {
-                    height: dimensions,
-                    width: dimensions,
-                    borderRadius: dimensions / 2,
-                    backgroundColor: pressed ? "#fafafa" : "#f2f2f2",
+                    height: iconButton.size[size],
+                    width: iconButton.size[size],
+                    borderRadius: iconButton.rounded ? iconButton.size[size] / 2 : button.borderRadius,
+                    backgroundColor: getBackgroundColor(theme, variant, pressed),
                 },
             ]}
             onPress={onPress}
         >
-            <>
-                {/* <Icon
-                    name={iconName}
-                    type="font-awesome"
-                    size={dimensions * 0.4}
-                    color={disabled ? "#bbb" : "#000"}
-                    tvParallaxProperties={null}
-                    style={styles.icon}
-                /> */}
-                {size !== "small" && label && (
-                    <Text
-                        style={[
-                            styles.label,
-                            {
-                                fontSize: size === "large" ? 13 : 11,
-                                color: disabled ? "#bbb" : "#000",
-                                paddingTop: size === "large" ? 6 : 3,
-                            },
-                        ]}
-                    >
-                        {label}
-                    </Text>
-                )}
-            </>
+            {({ pressed }) => (
+                <>
+                    <Icon
+                        name={iconName}
+                        type="font-awesome"
+                        size={dimensions * 0.4}
+                        color={getLabelColor(theme, variant, pressed)}
+                        tvParallaxProperties={null}
+                        style={styles.icon}
+                    />
+                    {size !== "small" && label && (
+                        <Text
+                            style={[
+                                styles.label,
+                                {
+                                    fontSize: size === "large" ? 13 : 11,
+                                    color: getLabelColor(theme, variant, pressed),
+                                    paddingTop: size === "large" ? 6 : 3,
+                                },
+                            ]}
+                        >
+                            {label}
+                        </Text>
+                    )}
+                </>
+            )}
         </Pressable>
     );
 };
 
-export { IconButton };
+IconButton.displayName = "IconButton";
 
-const styles = StyleSheet.create({
-    container: {
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    icon: {},
-    label: {
-        fontFamily: "Comfortaa-Bold",
-    },
-});
+export { IconButton, IconButtonStyles };
+
+const createStyles = ({ theme, styles: { button } }: ThemeContext) =>
+    StyleSheet.create({
+        container: {
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        icon: {},
+        label: {
+            fontFamily: button.fontFamilyWeight,
+        },
+    });
