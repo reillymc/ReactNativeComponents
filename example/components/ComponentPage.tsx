@@ -6,11 +6,12 @@ import { Text, View, StyleSheet } from "react-native";
 export interface ComponentPageProps {
     componentName?: string;
     component: React.ReactNode;
+    fullscreen?: boolean;
 }
 
-export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ component, componentName }) => {
+export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ component, fullscreen }) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, fullscreen ? undefined : styles.centred]}>
             {component}
             <View>
                 <Text>Props</Text>
@@ -21,8 +22,10 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ com
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
+    },
+    centred: {
         alignItems: "center",
         justifyContent: "center",
-        flex: 1,
     },
 });

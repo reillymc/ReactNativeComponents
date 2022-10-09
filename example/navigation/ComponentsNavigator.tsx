@@ -2,6 +2,7 @@ import { RouteProp } from "@react-navigation/native";
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 
 import { ComponentListScreen, ButtonPage, IconButtonPage, ModalSheetPage } from "../screens";
+import { ListPagePage } from "../screens/ListPagePage";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
     navigation: StackNavigationProp<ComponentStackParamList, T>;
@@ -20,6 +21,7 @@ export type ComponentStackParamList = {
     Button: undefined;
     IconButton: undefined;
     ModalSheet: undefined;
+    ListPage: undefined;
 };
 
 /**
@@ -29,6 +31,7 @@ export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Co
     Button: <ComponentStack.Screen name="Button" component={ButtonPage} />,
     IconButton: <ComponentStack.Screen name="IconButton" component={IconButtonPage} />,
     ModalSheet: <ComponentStack.Screen name="ModalSheet" component={ModalSheetPage} />,
+    ListPage: <ComponentStack.Screen name="ListPage" component={ListPagePage} />,
 };
 
 export const ComponentStackNavigator = () => (
