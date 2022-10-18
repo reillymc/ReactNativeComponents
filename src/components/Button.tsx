@@ -1,5 +1,5 @@
 import React from "react";
-import { ColorValue, Pressable, StyleSheet, Text, ViewStyle, TextStyle } from "react-native";
+import { ColorValue, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
 import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
 
 export type ButtonVariant = "primary" | "secondary" | "flat";
@@ -113,7 +113,7 @@ Button.displayName = "Button";
 
 export { Button, ButtonProps, ButtonStyles };
 
-const createStyles = ({ theme, styles: { button } }: ThemeContext) =>
+const createStyles = ({ styles: { button } }: ThemeContext) =>
     StyleSheet.create({
         button: {
             justifyContent: "center",

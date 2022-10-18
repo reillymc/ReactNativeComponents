@@ -9,16 +9,16 @@ import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { PortalProvider } from "@gorhom/portal";
 
-import { ThemeProvider } from "@reillymc/react-native-components";
+import { ThemeProvider, createDefaultStyles, DefaultTheme, Styles, Theme } from "@reillymc/react-native-components";
 
-import { createDefaultStyles, DefaultTheme, Styles, Theme } from "../src/components/ThemeProvider";
 import { ComponentStackNavigator } from "./navigation/ComponentsNavigator";
 
 export default function App() {
     const [fontsLoaded] = useFonts({
-        "Comfortaa-Bold": require("./assets/fonts/Comfortaa-Bold.ttf"),
-        "Comfortaa-Light": require("./assets/fonts/Comfortaa-Light.ttf"),
-        "Comfortaa-Regular": require("./assets/fonts/Comfortaa-Regular.ttf"),
+        "Comfortaa-Bold": require("../assets/fonts/Comfortaa-Bold.ttf"),
+        "Comfortaa-Light": require("../assets/fonts/Comfortaa-Light.ttf"),
+        "Comfortaa-Regular": require("../assets/fonts/Comfortaa-Regular.ttf"),
+        // "anticon": require("react-native-vector-icons/Fonts/AntDesign.ttf"),
     });
 
     if (!fontsLoaded) {

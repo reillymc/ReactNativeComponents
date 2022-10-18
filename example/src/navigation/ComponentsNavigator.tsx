@@ -1,3 +1,4 @@
+import React from "react";
 import { RouteProp } from "@react-navigation/native";
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 
@@ -28,10 +29,10 @@ export type ComponentStackParamList = {
  * Map of all components to their respective screen
  */
 export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Components">]: React.ReactNode } = {
-    Button: <ComponentStack.Screen name="Button" component={ButtonPage} />,
-    IconButton: <ComponentStack.Screen name="IconButton" component={IconButtonPage} />,
-    ModalSheet: <ComponentStack.Screen name="ModalSheet" component={ModalSheetPage} />,
-    ListPage: <ComponentStack.Screen name="ListPage" component={ListPagePage} />,
+    Button: <ComponentStack.Screen key={"Button"} name="Button" component={ButtonPage} />,
+    IconButton: <ComponentStack.Screen key={"IconButton"} name="IconButton" component={IconButtonPage} />,
+    ModalSheet: <ComponentStack.Screen key={"ModalSheet"} name="ModalSheet" component={ModalSheetPage} />,
+    ListPage: <ComponentStack.Screen key={"ListPage"} name="ListPage" component={ListPagePage} />,
 };
 
 export const ComponentStackNavigator = () => (

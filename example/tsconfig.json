@@ -1,11 +1,6 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "../tsconfig",
   "compilerOptions": {
-    "strict": true,
-    "paths": {
-      "@reillymc/react-native-components": [
-        "../src/index"
-      ],
-    }
+    // Avoid expo-cli auto-generating a tsconfig
   }
 }

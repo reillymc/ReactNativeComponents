@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import BottomSheet, { BottomSheetBackdrop, BottomSheetModal } from "@gorhom/bottom-sheet";
-import { Portal } from "@gorhom/portal"; // TODO use modal
+import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import { Portal } from "@gorhom/portal";
 
 export type ModalHeight = "small" | "mid" | "full";
 

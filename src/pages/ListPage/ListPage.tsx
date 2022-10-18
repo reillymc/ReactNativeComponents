@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatListProps, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+// import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 
 import { ScreenHeading } from "./ScreenHeading";
@@ -16,7 +16,7 @@ interface ListPageProps<T>
 }
 
 const ListPage = <T extends any>({ heading, leftItem, rightItem, modal, ...flatListProps }: ListPageProps<T>) => {
-    const navigation = useNavigation();
+    // const navigation = useNavigation();
 
     const [scrollPosition, setScrollPosition] = React.useState(0);
 
@@ -32,16 +32,19 @@ const ListPage = <T extends any>({ heading, leftItem, rightItem, modal, ...flatL
         [heading, leftItem, rightItem, scrollPosition]
     );
 
-    React.useLayoutEffect(() => {
-        if (navigation) {
-            navigation.setOptions({
-                headerTransparent: true,
-                header: () => navigationHeader,
-            });
-        } else {
-            console.warn("ListPage: navigation is not defined");
-        }
-    }, [navigation, navigationHeader]);
+    console.log(navigationHeader);
+    
+
+    // React.useLayoutEffect(() => {
+    //     if (navigation) {
+    //         navigation.setOptions({
+    //             headerTransparent: true,
+    //             header: () => navigationHeader,
+    //         });
+    //     } else {
+    //         console.warn("ListPage: navigation is not defined");
+    //     }
+    // }, [navigation, navigationHeader]);
     return (
         <>
             <FlatList

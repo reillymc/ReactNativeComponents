@@ -36,7 +36,9 @@ export const ListPagePage: React.FunctionComponent = () => {
                 <ListPage
                     heading="ListPage"
                     data={exampleData}
-                    renderItem={({ item }) => <Button label={item.title} onPress={() => null} />}
+                    renderItem={({ item }) => (
+                        <Button label={item.title} onPress={() => null} />
+                    )}
                 />
             }
         />

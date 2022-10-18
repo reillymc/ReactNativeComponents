@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { Icon } from "react-native-elements";
-import { ButtonProps, ButtonSize, ButtonVariant, getBackgroundColor, getLabelColor } from "./Button";
+import { Text, StyleSheet, Pressable } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
+import { ButtonProps, ButtonSize, getBackgroundColor, getLabelColor } from "./Button";
 import { useThemedStyles, ThemeContext, useTheme } from "./ThemeProvider";
 
 const sizeToValue = (height: ButtonSize) => {
@@ -21,7 +21,7 @@ type IconButtonStyles = {
 };
 
 interface IconButtonProps extends ButtonProps {
-    iconName: string;
+    iconName: keyof typeof AntDesign.glyphMap;
 
     onPress: () => void;
 }
@@ -58,7 +58,7 @@ const IconButton: React.FC<IconButtonProps> = ({
         >
             {({ pressed }) => (
                 <>
-                    <Icon
+                    <AntDesign 
                         name={iconName}
                         type="font-awesome"
                         size={dimensions * 0.4}
@@ -90,7 +90,7 @@ IconButton.displayName = "IconButton";
 
 export { IconButton, IconButtonStyles };
 
-const createStyles = ({ theme, styles: { button } }: ThemeContext) =>
+const createStyles = ({ styles: { button } }: ThemeContext) =>
     StyleSheet.create({
         container: {
             display: "flex",

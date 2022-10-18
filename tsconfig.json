@@ -1,26 +1,32 @@
 {
     "compilerOptions": {
+        "baseUrl": "./",
+        "paths": {
+            "@reillymc/react-native-components": [
+                "./src/index"
+            ]
+        },
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
         "esModuleInterop": true,
-        "jsx": "react-native",
-        "module": "commonjs",
+        // "importsNotUsedAsValues": "",
+        "forceConsistentCasingInFileNames": true,
+        "jsx": "react",
         "lib": [
-            "DOM",
-            "ESNext"
+            "esnext"
         ],
+        "module": "esnext",
         "moduleResolution": "node",
-        "noImplicitAny": true,
-        "outDir": "dist",
-        "sourceMap": true,
-        "noEmit": true,
-        "strictNullChecks": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitUseStrict": false,
+        "noStrictGenericChecks": false,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
         "resolveJsonModule": true,
-        "target": "es2019"
-    },
-    "include": [
-        "src",
-    ],
-    "exclude": [
-        "node_modules",
-        "example"
-    ]
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "esnext"
+    }
 }

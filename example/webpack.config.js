@@ -1,6 +1,5 @@
-const createExpoWebpackConfigAsync = require("@expo/webpack-config");
 const path = require("path");
-
+const createExpoWebpackConfigAsync = require("@expo/webpack-config");
 const { resolver } = require("./metro.config");
 
 const root = path.resolve(__dirname, "..");
@@ -10,7 +9,7 @@ module.exports = async function (env, argv) {
     const config = await createExpoWebpackConfigAsync(env, argv);
 
     config.module.rules.push({
-        test: /\.(js|ts|tsx)$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         include: path.resolve(root, "src"),
         use: "babel-loader",
     });
@@ -22,6 +21,5 @@ module.exports = async function (env, argv) {
         "react-native-web": path.join(node_modules, "react-native-web"),
     });
 
-    console.log("config ", config);
     return config;
 };
