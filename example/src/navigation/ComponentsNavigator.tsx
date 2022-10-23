@@ -2,7 +2,7 @@ import React from "react";
 import { RouteProp } from "@react-navigation/native";
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 
-import { ComponentListScreen, ButtonPage, IconButtonPage, ModalSheetPage } from "../screens";
+import { ComponentListScreen, ButtonPage, IconButtonPage, ModalSheetPage, DropdownInputPage } from "../screens";
 import { ListPagePage } from "../screens/ListPagePage";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
@@ -20,6 +20,7 @@ const ComponentStack = createStackNavigator<ComponentStackParamList>();
 export type ComponentStackParamList = {
     Components: undefined;
     Button: undefined;
+    DropdownInput: undefined;
     IconButton: undefined;
     ModalSheet: undefined;
     ListPage: undefined;
@@ -31,6 +32,7 @@ export type ComponentStackParamList = {
 export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Components">]: React.ReactNode } = {
     Button: <ComponentStack.Screen key={"Button"} name="Button" component={ButtonPage} />,
     IconButton: <ComponentStack.Screen key={"IconButton"} name="IconButton" component={IconButtonPage} />,
+    DropdownInput: <ComponentStack.Screen key={"DropdownInput"} name="DropdownInput" component={DropdownInputPage} />,
     ModalSheet: <ComponentStack.Screen key={"ModalSheet"} name="ModalSheet" component={ModalSheetPage} />,
     ListPage: <ComponentStack.Screen key={"ListPage"} name="ListPage" component={ListPagePage} />,
 };

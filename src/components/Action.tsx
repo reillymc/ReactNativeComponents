@@ -1,94 +1,79 @@
-// import React from "react";
-// import { ColorValue, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
-// import { Theme, useTheme, useThemedStyles } from "./ThemeProvider";
+import React from "react";
+import { ColorValue, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
 
-// type ActionSize = "small" | "medium" | "large";
+export type ActionVariant = "primary" | "secondary" | "flat";
+export type ActionSize = "small" | "medium" | "large";
 
-// const getLabelColor = (type: ActionType, pressed: boolean): ColorValue => {
-//     if (type === "shaded") {
-//         return "#fff";
-//     }
+const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
+    switch (variant) {
+        case "primary":
+            return pressed ? color.primaryHighlight : color.primary;
+        case "secondary":
+            return pressed ? color.secondaryHighlight : color.secondary;
+        case "flat":
+            return pressed ? color.textHighlight : color.text;
+    }
+};
 
-//     return pressed ? "#bbb" : "#333";
-// };
+export const getActionFontSize = ({ font }: Theme, size: ActionSize): number => {
+    switch (size) {
+        case "small":
+            return font.size.small;
+        case "medium":
+            return font.size.regular;
+        case "large":
+            return font.size.large;
+    }
+};
 
-// const getFontSize = (size: ActionSize): number => {
-//     switch (size) {
-//         case "small":
-//             return 14;
-//         case "medium":
-//             return 16;
-//         case "large":
-//             return 20;
-//     }
-// };
+export type ActionStyles = {
+    color: { [key in ActionVariant]: string };
 
+    /**
+     * Font family due to weight limitations.
+     */
+    fontFamilyWeight: string;
+};
 
-// interface ActionProps {
-//     size?: ActionSize;
-//     disabled?: boolean;
-//     style?: ViewStyle;
-//     children?: React.ReactNode;
-//     onPress: () => void;
-// }
+export interface ActionProps {
+    label: string;
+    variant?: ActionVariant;
+    style?: ViewStyle;
+    size?: ActionSize;
+    disabled?: boolean;
+    onPress: () => void;
+}
 
-// const Action: React.FC<ActionProps> = ({
-//     size = "large",
-//     disabled,
-//     style,
-//     children,
-//     onPress,
-// }) => {
-//     const hitBuffer = size === "small" ? 80 : 20;
+export const Action: React.FC<ActionProps> = ({
+    label,
+    variant = "flat",
+    size = "medium",
+    disabled,
+    style,
+    onPress,
+}) => {
+    const styles = useThemedStyles(createStyles, { variant, size });
+    const { theme } = useTheme();
 
-//     const styles = useThemedStyles(createStyles);
-//     const theme = useTheme();
+    return (
+        <Pressable hitSlop={30} disabled={disabled} style={[styles.container, style]} onPress={onPress}>
+            {({ pressed }) => (
+                <Text style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>{label}</Text>
+            )}
+        </Pressable>
+    );
+};
 
-//     return (
-//         <Pressable
-//             hitSlop={hitBuffer}
-//             disabled={disabled}
-//             style={({ pressed }) => [
-//                 style,
-//                 styles.Action,
-//                 {
-//                     minHeight: getHeight(type, size),
-//                     minWidth: getWidth(type, size),
-//                     borderRadius: 8,
-//                     backgroundColor: getBackgroundColor(type, pressed),
-//                     color: getLabelColor(type, pressed),
-//                 },
-//             ]}
-//             onPress={onPress}
-//         >
-//             {({ pressed }) => (
-//                 <Text
-//                     style={[
-//                         styles.label,
-//                         {
-//                             color: getLabelColor(type, pressed),
-//                             fontSize: getFontSize(size),
-//                             textAlign: contentAlign,
-//                             paddingHorizontal: type === "shaded" ? 8 : 0,
-//                         },
-//                     ]}
-//                 >
-//                     {label}
-//                 </Text>
-//             )}
-//         </Pressable>
-//     );
-// };
+Action.displayName = "Action";
 
-// export { Action, ActionProps, ActionSize };
-
-// const createStyles = (theme: Theme) =>
-//     StyleSheet.create({
-//         Action: {
-//             justifyContent: "center",
-//         },
-//         label: {
-//             fontWeight: "bold",
-//             fontFamily: theme.font.regular,
-//         },
-//     });
+const createStyles = ({ styles: { action }, theme }: ThemeContext, { size = "medium" }: Partial<ActionProps>) =>
+    StyleSheet.create({
+        container: {
+            // justifyContent: "center",
+        },
+        label: {
+            fontFamily: action.fontFamilyWeight,
+            fontSize: getActionFontSize(theme, size),
+        },
+    });

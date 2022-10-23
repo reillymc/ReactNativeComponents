@@ -1,11 +1,9 @@
 import React from "react";
-import { ColorValue, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
+import { ColorValue, Pressable, StyleSheet, Text } from "react-native";
+import { ActionProps, ActionSize, ActionVariant, getActionFontSize } from "./Action";
 import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
 
-export type ButtonVariant = "primary" | "secondary" | "flat";
-export type ButtonSize = "small" | "medium" | "large";
-
-export const getBackgroundColor = ({ color }: Theme, variant: ButtonVariant, pressed: boolean): ColorValue => {
+export const getBackgroundColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
         case "primary":
             return pressed ? color.primaryHighlight : color.primary;
@@ -16,7 +14,7 @@ export const getBackgroundColor = ({ color }: Theme, variant: ButtonVariant, pre
     }
 };
 
-export const getLabelColor = ({ color }: Theme, type: ButtonVariant, pressed: boolean): ColorValue => {
+export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: boolean): ColorValue => {
     if (type !== "flat") {
         return color.textInverted;
     }
@@ -24,21 +22,10 @@ export const getLabelColor = ({ color }: Theme, type: ButtonVariant, pressed: bo
     return pressed ? color.textHighlight : color.text;
 };
 
-const getFontSize = ({ font }: Theme, size: ButtonSize): number => {
-    switch (size) {
-        case "small":
-            return font.size.small;
-        case "medium":
-            return font.size.regular;
-        case "large":
-            return font.size.large;
-    }
-};
-
 type ButtonStyles = {
-    height: { [key in ButtonSize]: number };
-    width: { [key in ButtonSize]: number };
-    color: { [key in ButtonVariant]: string };
+    height: { [key in ActionSize]: number };
+    width: { [key in ActionSize]: number };
+    color: { [key in ActionVariant]: string };
     borderRadius: number;
 
     /**
@@ -47,14 +34,8 @@ type ButtonStyles = {
     fontFamilyWeight: string;
 };
 
-interface ButtonProps {
-    label: string;
-    variant?: ButtonVariant;
-    size?: ButtonSize;
+interface ButtonProps extends ActionProps {
     contentAlign?: "center" | "left" | "right";
-    disabled?: boolean;
-    style?: ViewStyle;
-    onPress: () => void;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -68,11 +49,8 @@ const Button: React.FC<ButtonProps> = ({
 }) => {
     const hitBuffer = size === "small" ? 80 : 20;
 
-    const styles = useThemedStyles(createStyles);
-    const {
-        styles: { button },
-        theme,
-    } = useTheme();
+    const styles = useThemedStyles(createStyles, { size, contentAlign, variant });
+    const { theme } = useTheme();
 
     return (
         <Pressable
@@ -81,8 +59,6 @@ const Button: React.FC<ButtonProps> = ({
             style={({ pressed }) => [
                 styles.button,
                 {
-                    minHeight: button.height[size],
-                    minWidth: button.width[size],
                     backgroundColor: getBackgroundColor(theme, variant, pressed),
                     color: getLabelColor(theme, variant, pressed),
                 },
@@ -91,19 +67,7 @@ const Button: React.FC<ButtonProps> = ({
             onPress={onPress}
         >
             {({ pressed }) => (
-                <Text
-                    style={[
-                        styles.label,
-                        {
-                            color: getLabelColor(theme, variant, pressed),
-                            fontSize: getFontSize(theme, size),
-                            textAlign: contentAlign,
-                            paddingHorizontal: variant !== "flat" ? 8 : 0,
-                        },
-                    ]}
-                >
-                    {label}
-                </Text>
+                <Text style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>{label}</Text>
             )}
         </Pressable>
     );
@@ -113,13 +77,21 @@ Button.displayName = "Button";
 
 export { Button, ButtonProps, ButtonStyles };
 
-const createStyles = ({ styles: { button } }: ThemeContext) =>
+const createStyles = (
+    { styles: { button }, theme }: ThemeContext,
+    { size = "large", contentAlign, variant }: Partial<ButtonProps>,
+) =>
     StyleSheet.create({
         button: {
             justifyContent: "center",
             borderRadius: button.borderRadius,
+            minHeight: button.height[size],
+            minWidth: button.width[size],
         },
         label: {
             fontFamily: button.fontFamilyWeight,
+            fontSize: getActionFontSize(theme, size),
+            textAlign: contentAlign,
+            paddingHorizontal: variant !== "flat" ? 8 : 0,
         },
     });

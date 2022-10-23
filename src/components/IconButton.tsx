@@ -1,10 +1,12 @@
 import React from "react";
 import { Text, StyleSheet, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { ButtonProps, ButtonSize, getBackgroundColor, getLabelColor } from "./Button";
+
+import { ActionSize } from "./Action";
+import { ButtonProps, getBackgroundColor, getLabelColor } from "./Button";
 import { useThemedStyles, ThemeContext, useTheme } from "./ThemeProvider";
 
-const sizeToValue = (height: ButtonSize) => {
+const sizeToValue = (height: ActionSize) => {
     switch (height) {
         case "small":
             return 50;
@@ -16,12 +18,12 @@ const sizeToValue = (height: ButtonSize) => {
 };
 
 type IconButtonStyles = {
-    size: { [key in ButtonSize]: number };
-    rounded: boolean;
+    size: { [key in ActionSize]: number };
 };
 
 interface IconButtonProps extends ButtonProps {
     iconName: keyof typeof AntDesign.glyphMap;
+    rounded?: boolean;
 
     onPress: () => void;
 }
@@ -31,34 +33,27 @@ const IconButton: React.FC<IconButtonProps> = ({
     label,
     variant = "primary",
     size = "medium",
+    rounded = true,
     disabled,
     onPress,
 }) => {
     const dimensions = sizeToValue(size);
 
-    const styles = useThemedStyles(createStyles);
-    const {
-        styles: { button, iconButton },
-        theme,
-    } = useTheme();
+    const styles = useThemedStyles(createStyles, { size, rounded });
+    const { theme } = useTheme();
 
     return (
         <Pressable
             disabled={disabled}
             style={({ pressed }) => [
                 styles.container,
-                {
-                    height: iconButton.size[size],
-                    width: iconButton.size[size],
-                    borderRadius: iconButton.rounded ? iconButton.size[size] / 2 : button.borderRadius,
-                    backgroundColor: getBackgroundColor(theme, variant, pressed),
-                },
+                { backgroundColor: getBackgroundColor(theme, variant, pressed) },
             ]}
             onPress={onPress}
         >
             {({ pressed }) => (
                 <>
-                    <AntDesign 
+                    <AntDesign
                         name={iconName}
                         type="font-awesome"
                         size={dimensions * 0.4}
@@ -90,12 +85,18 @@ IconButton.displayName = "IconButton";
 
 export { IconButton, IconButtonStyles };
 
-const createStyles = ({ styles: { button } }: ThemeContext) =>
+const createStyles = (
+    { styles: { button, iconButton } }: ThemeContext,
+    { size = "medium", rounded = true }: Partial<IconButtonProps>,
+) =>
     StyleSheet.create({
         container: {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            height: iconButton.size[size],
+            width: iconButton.size[size],
+            borderRadius: rounded ? iconButton.size[size] / 2 : button.borderRadius,
         },
         icon: {},
         label: {

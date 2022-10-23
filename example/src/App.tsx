@@ -1,15 +1,19 @@
-import "react-native-gesture-handler";
-
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet } from "react-native";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { PortalProvider } from "@gorhom/portal";
 
-import { ThemeProvider, createDefaultStyles, DefaultTheme, Styles, Theme } from "@reillymc/react-native-components";
+import {
+    ThemeProvider,
+    createDefaultStyles,
+    DefaultTheme,
+    Styles,
+    Theme,
+    PortalProvider,
+} from "@reillymc/react-native-components";
 
 import { ComponentStackNavigator } from "./navigation/ComponentsNavigator";
 
@@ -52,7 +56,7 @@ export default function App() {
     const RootStack = createStackNavigator();
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
+        <GestureHandlerRootView style={styles.container}>
             <ThemeProvider theme={appTheme} styles={appStyles}>
                 <StatusBar style="auto" />
                 <PortalProvider>
@@ -74,8 +78,5 @@ export default function App() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
     },
 });

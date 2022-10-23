@@ -1,6 +1,12 @@
 import React from "react";
+import { ActionStyles } from "./Action";
 import { ButtonStyles } from "./Button";
+import { HeadingStyles } from "./Heading";
 import { IconButtonStyles } from "./IconButton";
+import { NavigationHeaderStyles } from "./NavigationHeader";
+import { TextInputStyles } from "./TextInput";
+import { TitleStyles } from "./Title";
+import { ToggleInputStyles } from "./ToggleInput";
 
 type Theme = {
     font: {
@@ -36,6 +42,13 @@ type Theme = {
     //         large: number;
     //     };
     // };
+    size: {
+        heightIncrement1: number;
+        heightIncrement2: number;
+        heightIncrement3: number;
+        heightIncrement4: number;
+        heightIncrement5: number;
+    };
 };
 
 const DefaultTheme: Theme = {
@@ -48,7 +61,7 @@ const DefaultTheme: Theme = {
             regular: 16,
             large: 20,
             heading: 24,
-            title: 32,
+            title: 36,
         },
     },
     color: {
@@ -66,11 +79,24 @@ const DefaultTheme: Theme = {
         textInverted: "#F4EDEA",
     },
     padding: {},
+    size: {
+        heightIncrement1: 30,
+        heightIncrement2: 40,
+        heightIncrement3: 50,
+        heightIncrement4: 60,
+        heightIncrement5: 80,
+    },
 };
 
 type Styles = {
+    action: ActionStyles;
     button: ButtonStyles;
     iconButton: IconButtonStyles;
+    textInput: TextInputStyles;
+    toggleInput: ToggleInputStyles;
+    title: TitleStyles;
+    heading: HeadingStyles;
+    navigationHeader: NavigationHeaderStyles;
 };
 
 // const DefaultStyles: Styles = {
@@ -97,11 +123,20 @@ type Styles = {
 type CreateStyles = (theme: Theme) => Styles;
 
 const createDefaultStyles = (theme: Theme): Styles => ({
+    action: {
+        color: {
+            // Currently overridden by pressed methods
+            primary: theme.color.primary,
+            secondary: theme.color.secondary,
+            flat: theme.color.text,
+        },
+        fontFamilyWeight: theme.font.regular,
+    },
     button: {
         height: {
-            small: 30,
-            medium: 40,
-            large: 50,
+            small: theme.size.heightIncrement1,
+            medium: theme.size.heightIncrement2,
+            large: theme.size.heightIncrement3,
         },
         width: {
             small: 80,
@@ -110,6 +145,7 @@ const createDefaultStyles = (theme: Theme): Styles => ({
         },
         borderRadius: 8,
         color: {
+            // Currently overridden by pressed methods
             primary: theme.color.primary,
             secondary: theme.color.secondary,
             flat: "transparent",
@@ -118,11 +154,29 @@ const createDefaultStyles = (theme: Theme): Styles => ({
     },
     iconButton: {
         size: {
-            small: 50,
-            medium: 60,
-            large: 80,
+            small: theme.size.heightIncrement3,
+            medium: theme.size.heightIncrement4,
+            large: theme.size.heightIncrement5,
         },
-        rounded: true,
+    },
+    textInput: {
+        borderRadius: 8,
+        fontFamilyWeight: theme.font.regular,
+        width: {
+            full: "100%",
+            large: "70%",
+            small: "50%",
+        },
+    },
+    toggleInput: {},
+    title: {
+        fontFamilyWeight: theme.font.bold,
+    },
+    heading: {
+        fontFamilyWeight: theme.font.bold,
+    },
+    navigationHeader: {
+        fontFamilyWeight: theme.font.regular,
     },
 });
 
@@ -156,12 +210,12 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({
 
 const useTheme = () => React.useContext(ThemeContext);
 
-type Generator<T extends {}> = (theme: ThemeContext) => T;
+type Generator<T extends {}, U extends {} | undefined> = (theme: ThemeContext, componentProps: U) => T;
 
-const useThemedStyles = <T extends {}>(generator: Generator<T>) => {
+const useThemedStyles = <T extends {}, U extends {} | undefined>(generator: Generator<T, U>, componentProps: U) => {
     const theme = useTheme();
 
-    const themedStyles = React.useMemo(() => generator(theme), [generator, theme]);
+    const themedStyles = React.useMemo(() => generator(theme, componentProps), [generator, theme, componentProps]);
 
     return themedStyles;
 };

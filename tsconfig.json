@@ -9,7 +9,6 @@
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
         "esModuleInterop": true,
-        // "importsNotUsedAsValues": "",
         "forceConsistentCasingInFileNames": true,
         "jsx": "react",
         "lib": [
@@ -28,5 +27,6 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "esnext"
-    }
+    },
+    // "extends": "expo/tsconfig.base"
 }

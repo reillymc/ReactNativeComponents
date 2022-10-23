@@ -1,57 +1,53 @@
 import React from "react";
 import { FlatListProps, StyleSheet } from "react-native";
-// import { useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 
-import { ScreenHeading } from "./ScreenHeading";
-import { NavigationHeader, NavigationHeaderProps } from "./NavigationHeader";
+import { Heading, NavigationHeaderProps } from "../../components";
 
-interface ListPageProps<T>
-    extends Omit<FlatListProps<T>, "ListHeaderComponent">,
-        Omit<NavigationHeaderProps, "scrollPosition" | "onScroll"> {
+interface ListPageProps<T> extends Omit<FlatListProps<T>, "ListHeaderComponent"> {
     /**
-     * <ModalSheet/> component.
+     * Supports:
+     * - `<NavigationHeader/>` component
+     */
+    heading: React.ReactElement<NavigationHeaderProps>;
+
+    /**
+     * Supports:
+     * `<ModalSheet/>` component.
      */
     modal?: React.ReactNode;
 }
 
-const ListPage = <T extends any>({ heading, leftItem, rightItem, modal, ...flatListProps }: ListPageProps<T>) => {
-    // const navigation = useNavigation();
+const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...flatListProps }: ListPageProps<T>) => {
+    const navigation = useNavigation();
 
     const [scrollPosition, setScrollPosition] = React.useState(0);
 
     const navigationHeader = React.useMemo(
-        () => (
-            <NavigationHeader
-                heading={heading}
-                scrollPosition={scrollPosition}
-                leftItem={leftItem}
-                rightItem={rightItem}
-            />
-        ),
-        [heading, leftItem, rightItem, scrollPosition]
+        () => React.cloneElement(heading, { ...heading.props, scrollPosition }),
+        [heading, scrollPosition],
     );
 
-    console.log(navigationHeader);
-    
-
-    // React.useLayoutEffect(() => {
-    //     if (navigation) {
-    //         navigation.setOptions({
-    //             headerTransparent: true,
-    //             header: () => navigationHeader,
-    //         });
-    //     } else {
-    //         console.warn("ListPage: navigation is not defined");
-    //     }
-    // }, [navigation, navigationHeader]);
+    React.useLayoutEffect(() => {
+        if (navigation && heading) {
+            navigation.setOptions({
+                headerTransparent: true,
+                headerShown: true,
+                header: () => navigationHeader,
+            });
+        } else {
+            console.warn("ListPage: navigation is not defined");
+        }
+    }, [navigation, navigationHeader]);
     return (
         <>
             <FlatList
                 {...flatListProps}
-                style={styles.listContainer}
+                style={styles.list}
+                contentContainerStyle={[styles.listContentContainer, contentContainerStyle]}
                 ListHeaderComponentStyle={styles.listHeader}
-                ListHeaderComponent={<ScreenHeading heading={heading} />}
+                ListHeaderComponent={<Heading heading={heading.props.heading} />}
                 onScroll={e => setScrollPosition(e.nativeEvent.contentOffset.y)}
             />
             {modal}
@@ -62,12 +58,15 @@ const ListPage = <T extends any>({ heading, leftItem, rightItem, modal, ...flatL
 export { ListPage };
 
 const styles = StyleSheet.create({
-    listContainer: {
-        paddingLeft: 16,
-        paddingRight: 16,
-        paddingTop: 120,
+    list: {
+        backgroundColor: "#fff",
     },
     listHeader: {
         paddingBottom: 12,
+    },
+    listContentContainer: {
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingTop: 120,
     },
 });
