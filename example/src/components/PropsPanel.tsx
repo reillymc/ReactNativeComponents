@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import { ButtonProps, DropdownInput, Heading, TextInput } from "@reillymc/react-native-components";
+import { SelectionInput, Text, TextInput, ToggleInput } from "@reillymc/react-native-components";
 
 type PropDefinitionBase = {
     label?: string;
@@ -8,6 +8,10 @@ type PropDefinitionBase = {
 
 type StringPropDefinition = {
     type: "string";
+};
+
+type BooleanPropDefinition = {
+    type: "boolean";
 };
 
 type FunctionPropDefinition = {
@@ -19,7 +23,8 @@ type ArrayPropDefinition = {
     values: string[];
 };
 
-type PropDefinition = PropDefinitionBase & (StringPropDefinition | FunctionPropDefinition | ArrayPropDefinition);
+type PropDefinition = PropDefinitionBase &
+    (StringPropDefinition | BooleanPropDefinition | FunctionPropDefinition | ArrayPropDefinition);
 
 export type PropDefinitions<T> = {
     [P in keyof T]: PropDefinition;
@@ -48,28 +53,43 @@ export const PropsPanel = <T extends Record<string, any>>({
                 keyboardDismissMode="on-drag"
             >
                 {Object.entries(propDefinitions).map(([key, definition]) => {
-                    const propId = key as keyof ButtonProps;
+                    const propId = key;
+                    const currentValue = propValues[propId];
 
                     switch (definition.type) {
                         case "string":
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
-                                    <Heading heading={definition.label ?? propId} style={styles.propHeading} />
+                                    <Text variant="heading" style={styles.propHeading}>
+                                        {definition.label ?? propId}
+                                    </Text>
                                     <TextInput
-                                        value={propValues[propId as keyof ButtonProps] as any}
+                                        value={currentValue}
                                         onChangeText={value => onChange(propId, value)}
                                         width="full"
                                         autoCapitalize="none"
                                     />
                                 </View>
                             );
+                        case "boolean":
+                            return (
+                                <View key={definition.label} style={styles.propContainer}>
+                                    <Text variant="heading" style={styles.propHeading}>
+                                        {definition.label ?? propId}
+                                    </Text>
+                                    <ToggleInput value={currentValue} onChange={value => onChange(propId, value)} />
+                                </View>
+                            );
                         case "array":
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
-                                    <Heading heading={definition.label ?? propId} style={styles.propHeading} />
-                                    <DropdownInput
-                                        items={definition.values.map(value => ({ id: value, label: value }))}
-                                        onSelect={value => onChange(propId, value?.id)}
+                                    <Text variant="heading" style={styles.propHeading}>
+                                        {definition.label ?? propId}
+                                    </Text>
+                                    <SelectionInput
+                                        items={definition.values.map(value => ({ value, label: value }))}
+                                        onSelect={value => onChange(propId, value?.value)}
+                                        selectedItem={{ label: currentValue, value: currentValue }}
                                     />
                                 </View>
                             );

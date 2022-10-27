@@ -1,6 +1,6 @@
-import { Portal } from "@gorhom/portal";
 import React from "react";
-import { View, ViewStyle } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
+import { Portal } from "@gorhom/portal";
 
 export interface FloatingContainerProps {
     style?: ViewStyle;
@@ -14,22 +14,13 @@ export interface FloatingContainerProps {
     children?: React.ReactNode;
 }
 
-const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
-    ({ style, position: { x = 0, y = 0, offsetX = 0, offsetY = 0 }, children }, ref) => {
+export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
+    ({ style, position, children }, ref) => {
+        const styles = createStyles({ position });
+
         return (
             <Portal>
-                <View
-                    ref={ref}
-                    style={[
-                        {
-                            marginTop: 5,
-                            position: "absolute",
-                            top: y + offsetY,
-                            left: x + offsetX,
-                        },
-                        style,
-                    ]}
-                >
+                <View ref={ref} style={[styles.container, style]}>
                     {children}
                 </View>
             </Portal>
@@ -39,4 +30,11 @@ const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
 
 FloatingContainer.displayName = "FloatingContainer";
 
-export { FloatingContainer };
+const createStyles = ({ position: { x = 0, y = 0, offsetX = 0, offsetY = 0 } }: FloatingContainerProps) =>
+    StyleSheet.create({
+        container: {
+            position: "absolute",
+            top: y + offsetY,
+            left: x + offsetX,
+        },
+    });

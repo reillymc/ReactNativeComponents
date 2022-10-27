@@ -33,9 +33,13 @@ export default function App() {
         ...DefaultTheme,
         font: {
             ...DefaultTheme.font,
-            regular: "Comfortaa-Regular",
-            bold: "Comfortaa-Bold",
-            light: "Comfortaa-Light",
+            familyWeight: {
+                light100: "Comfortaa-Light",
+                light200: "Comfortaa-Light",
+                regular400: "Comfortaa-Regular",
+                bold600: "Comfortaa-Bold",
+                bold800: "Comfortaa-Bold",
+            },
         },
     };
 
@@ -45,7 +49,7 @@ export default function App() {
         ...defaultStyles,
         button: {
             ...defaultStyles.button,
-            fontFamilyWeight: appTheme.font.bold,
+            fontFamilyWeight: appTheme.font.familyWeight.regular400,
         },
     };
 

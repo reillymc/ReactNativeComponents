@@ -1,7 +1,10 @@
 import React from "react";
 import { ColorValue, Pressable, StyleSheet, Text } from "react-native";
-import { ActionProps, ActionSize, ActionVariant, getActionFontSize } from "./Action";
-import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
+
+import { Theme } from "../../theme";
+import { ActionProps } from "./Action";
+import { ActionSize, ActionVariant } from ".";
+import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 
 export const getBackgroundColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
@@ -19,7 +22,7 @@ export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: bo
         return color.textInverted;
     }
 
-    return pressed ? color.textHighlight : color.text;
+    return pressed ? color.textHighlight : color.textPrimary;
 };
 
 type ButtonStyles = {
@@ -47,7 +50,7 @@ const Button: React.FC<ButtonProps> = ({
     style,
     onPress,
 }) => {
-    const hitBuffer = size === "small" ? 80 : 20;
+    const hitBuffer = size === "small" ? 60 : 30;
 
     const styles = useThemedStyles(createStyles, { size, contentAlign, variant });
     const { theme } = useTheme();
@@ -78,7 +81,7 @@ Button.displayName = "Button";
 export { Button, ButtonProps, ButtonStyles };
 
 const createStyles = (
-    { styles: { button }, theme }: ThemeContext,
+    { styles: { button, common } }: ThemedStyles,
     { size = "large", contentAlign, variant }: Partial<ButtonProps>,
 ) =>
     StyleSheet.create({
@@ -90,8 +93,8 @@ const createStyles = (
         },
         label: {
             fontFamily: button.fontFamilyWeight,
-            fontSize: getActionFontSize(theme, size),
+            fontSize: common.action.fontSize[size],
             textAlign: contentAlign,
-            paddingHorizontal: variant !== "flat" ? 8 : 0,
+            paddingHorizontal: variant !== "flat" ? common.input.padding : 0,
         },
     });

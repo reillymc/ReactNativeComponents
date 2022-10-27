@@ -1,22 +1,27 @@
 import React from "react";
-import { LayoutRectangle, Pressable, TextInput as DefaultTextInput, View, ViewStyle } from "react-native";
+import { LayoutRectangle, Pressable, TextInput as DefaultTextInput, View, ViewStyle, StyleSheet } from "react-native";
 
-import { IsValidString } from "../helpers";
-import { FloatingContainer } from "./FloatingContainer";
-import { HighlightedText } from "./HighlightedText";
+import { IsValidString } from "../../helpers";
+import { ThemedStyles, useThemedStyles } from "../../hooks";
+import { FloatingContainer } from "../FloatingContainer";
+import { HighlightedText } from "../HighlightedText";
 import { TextInput, TextInputProps } from "./TextInput";
 
 export type DropdownItem = {
-    id: string;
     label: string;
+    value: string;
 };
+
+export interface DropdownInputStyles {
+    dropdownMarginTop: number;
+}
 
 export interface DropdownInputProps
     extends Pick<
         TextInputProps,
         "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
     > {
-    items: Array<DropdownItem>;
+    items?: Array<DropdownItem>;
     selectedItem?: DropdownItem;
 
     /**
@@ -45,9 +50,9 @@ export interface DropdownInputProps
     onAdd?: (e: string) => void;
 }
 
-const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
+export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
     (
-        { items, selectedItem, minimumSearchLength = 1, maxSuggestionCount = 5, style, onSelect, onAdd, ...props },
+        { items = [], selectedItem, minimumSearchLength = 1, maxSuggestionCount = 5, style, onSelect, onAdd, ...props },
         ref,
     ) => {
         const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? "");
@@ -56,6 +61,8 @@ const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
         const viewRef = React.useRef<View>(null);
 
         const [layout, setLayout] = React.useState<LayoutRectangle>();
+
+        const styles = useThemedStyles(createStyles, {});
 
         React.useEffect(() => {
             setSearchValue(selectedItem?.label ?? "");
@@ -123,14 +130,15 @@ const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
                 {hasFocus && searchValue.length >= minimumSearchLength && (
                     <FloatingContainer
                         position={{ x: layout?.x, y: layout?.y, offsetY: layout?.height }}
-                        style={{ marginTop: 5 }}
+                        style={styles.dropdownContainer}
                     >
                         {items
                             .filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase()))
                             .slice(0, maxSuggestionCount)
                             .map((item, idx) => (
+                                // TODO extract to styled component
                                 <Pressable
-                                    key={item.id}
+                                    key={item.value}
                                     onPress={() => onSelect(item)}
                                     style={{
                                         borderRadius: 5,
@@ -151,4 +159,9 @@ const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
 
 DropdownInput.displayName = "DropdownInput";
 
-export { DropdownInput };
+const createStyles = ({ styles: { dropdownInput } }: ThemedStyles) =>
+    StyleSheet.create({
+        dropdownContainer: {
+            marginTop: dropdownInput.dropdownMarginTop,
+        },
+    });

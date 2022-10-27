@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "baseUrl": "./",
+        // "baseUrl": "./",
         "paths": {
             "@reillymc/react-native-components": [
                 "./src/index"

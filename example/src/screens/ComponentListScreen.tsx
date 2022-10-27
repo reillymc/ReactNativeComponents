@@ -1,11 +1,12 @@
 import React from "react";
+import { View, StyleSheet } from "react-native";
 
 import { Button } from "@reillymc/react-native-components";
-import { View, StyleSheet } from "react-native";
-import { ComponentsScreenProps, ComponentStackParamList, ComponentScreens } from "../navigation/ComponentsNavigator";
+
+import { ComponentsScreenProps, ComponentScreens } from "../navigation/ComponentsNavigator";
 
 export const ComponentListScreen: React.FunctionComponent<ComponentsScreenProps> = ({ navigation }) => {
-    const navigateTo = (componentName: keyof ComponentStackParamList) => () => {
+    const navigateTo = (componentName: keyof typeof ComponentScreens) => () => {
         navigation.navigate(componentName);
     };
 
@@ -15,9 +16,9 @@ export const ComponentListScreen: React.FunctionComponent<ComponentsScreenProps>
                 <Button
                     key={componentName}
                     label={componentName}
-                    onPress={navigateTo(componentName as keyof ComponentStackParamList)}
+                    onPress={navigateTo(componentName as keyof typeof ComponentScreens)}
                     variant="primary"
-                    size="medium"
+                    size="regular"
                     style={styles.navigator}
                 />
             ))}

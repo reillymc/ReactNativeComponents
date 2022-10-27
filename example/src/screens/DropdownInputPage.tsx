@@ -5,10 +5,6 @@ import { ComponentPage } from "../components";
 import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
-    items: {
-        type: "array",
-        values: ["one", "two", "three"],
-    },
     onSelect: {
         type: "function",
     },
@@ -25,10 +21,11 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
 const defaultProps: DropdownInputProps = {
     placeholder: "Dropdown Input",
     items: [
-        { id: "1", label: "Item 1" },
-        { id: "2", label: "Item 2" },
-        { id: "3", label: "Item 3" },
+        { value: "1", label: "Item 1" },
+        { value: "2", label: "Item 2" },
+        { value: "3", label: "Item 3" },
     ],
+    width: "large",
     onSelect: () => null,
 };
 

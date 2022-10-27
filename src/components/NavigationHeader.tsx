@@ -1,7 +1,9 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { BlurView } from "expo-blur";
-import { ThemeContext, useThemedStyles } from "./ThemeProvider";
+
+import { ThemedStyles, useThemedStyles } from "../hooks";
+import { Text } from "./Text";
 
 const headerStartPos = 40;
 
@@ -10,6 +12,11 @@ export type NavigationHeaderStyles = {
      * Font family due to weight limitations.
      */
     fontFamilyWeight: string;
+    fontSize: number;
+    paddingTop: number;
+    paddingBottom: number;
+    paddingLeft: number;
+    paddingRight: number;
 };
 
 export interface NavigationHeaderProps {
@@ -50,8 +57,10 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     );
 };
 
+NavigationHeader.displayName = "NavigationHeader";
+
 const createStyles = (
-    { styles: { navigationHeader } }: ThemeContext,
+    { styles: { navigationHeader } }: ThemedStyles,
     { scrollPosition = 100 }: Partial<NavigationHeaderProps>,
 ) =>
     StyleSheet.create({
@@ -60,8 +69,10 @@ const createStyles = (
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            paddingTop: 48,
-            paddingBottom: 8,
+            paddingTop: navigationHeader.paddingTop,
+            paddingBottom: navigationHeader.paddingBottom,
+            paddingLeft: navigationHeader.paddingLeft,
+            paddingRight: navigationHeader.paddingRight,
             shadowColor: "#555",
             shadowOpacity: 0.2,
             shadowRadius: 5,
@@ -72,17 +83,14 @@ const createStyles = (
         },
         headerItemLeft: {
             flex: 1,
-            marginLeft: 20,
         },
         headerItemRight: {
             flex: 1,
-            marginRight: 20,
             alignItems: "flex-end",
         },
         heading: {
             fontFamily: navigationHeader.fontFamilyWeight,
-            fontSize: 20,
-            paddingVertical: 8,
+            fontSize: navigationHeader.fontSize,
             opacity: (scrollPosition - headerStartPos) / 30,
         },
     });

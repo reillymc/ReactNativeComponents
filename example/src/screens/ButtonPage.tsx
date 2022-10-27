@@ -16,12 +16,13 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
     variant: {
         label: "Style variant",
-        type: "string",
+        type: "array",
+        values: ["primary", "secondary", "flat"],
     },
     size: {
         label: "Size",
         type: "array",
-        values: ["small", "medium", "large"],
+        values: ["small", "regular", "large"],
     },
     onPress: {
         label: "Press action",
@@ -33,7 +34,7 @@ const defaultProps: ButtonProps = {
     label: "Secondary Button",
     contentAlign: "center",
     variant: "secondary",
-    size: "medium",
+    size: "regular",
     onPress: () => null,
 };
 

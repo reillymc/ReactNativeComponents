@@ -1,9 +1,9 @@
 import React from "react";
-import { ColorValue, Pressable, StyleSheet, Text, ViewStyle } from "react-native";
-import { Theme, ThemeContext, useTheme, useThemedStyles } from "./ThemeProvider";
-
-export type ActionVariant = "primary" | "secondary" | "flat";
-export type ActionSize = "small" | "medium" | "large";
+import { ColorValue, Pressable, StyleSheet, ViewStyle } from "react-native";
+import { ActionSize, ActionVariant } from ".";
+import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { Theme } from "../../theme";
+import { Text } from "../Text";
 
 const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
@@ -12,18 +12,7 @@ const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolea
         case "secondary":
             return pressed ? color.secondaryHighlight : color.secondary;
         case "flat":
-            return pressed ? color.textHighlight : color.text;
-    }
-};
-
-export const getActionFontSize = ({ font }: Theme, size: ActionSize): number => {
-    switch (size) {
-        case "small":
-            return font.size.small;
-        case "medium":
-            return font.size.regular;
-        case "large":
-            return font.size.large;
+            return pressed ? color.textHighlight : color.textPrimary;
     }
 };
 
@@ -48,7 +37,7 @@ export interface ActionProps {
 export const Action: React.FC<ActionProps> = ({
     label,
     variant = "flat",
-    size = "medium",
+    size = "regular",
     disabled,
     style,
     onPress,
@@ -67,13 +56,12 @@ export const Action: React.FC<ActionProps> = ({
 
 Action.displayName = "Action";
 
-const createStyles = ({ styles: { action }, theme }: ThemeContext, { size = "medium" }: Partial<ActionProps>) =>
+const createStyles = ({ styles: { action, common } }: ThemedStyles, { size = "regular", variant = "flat" }: Partial<ActionProps>) =>
     StyleSheet.create({
-        container: {
-            // justifyContent: "center",
-        },
+        container: {},
         label: {
+            color: action.color[variant],
             fontFamily: action.fontFamilyWeight,
-            fontSize: getActionFontSize(theme, size),
+            fontSize: common.action.fontSize[size],
         },
     });

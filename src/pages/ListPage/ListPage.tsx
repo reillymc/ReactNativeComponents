@@ -3,7 +3,7 @@ import { FlatListProps, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { FlatList } from "react-native-gesture-handler";
 
-import { Heading, NavigationHeaderProps } from "../../components";
+import { Text, NavigationHeaderProps } from "../../components";
 
 interface ListPageProps<T> extends Omit<FlatListProps<T>, "ListHeaderComponent"> {
     /**
@@ -47,7 +47,7 @@ const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...fla
                 style={styles.list}
                 contentContainerStyle={[styles.listContentContainer, contentContainerStyle]}
                 ListHeaderComponentStyle={styles.listHeader}
-                ListHeaderComponent={<Heading heading={heading.props.heading} />}
+                ListHeaderComponent={<Text variant="title">{heading.props.heading}</Text>}
                 onScroll={e => setScrollPosition(e.nativeEvent.contentOffset.y)}
             />
             {modal}
@@ -58,9 +58,7 @@ const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...fla
 export { ListPage };
 
 const styles = StyleSheet.create({
-    list: {
-        backgroundColor: "#fff",
-    },
+    list: {},
     listHeader: {
         paddingBottom: 12,
     },
