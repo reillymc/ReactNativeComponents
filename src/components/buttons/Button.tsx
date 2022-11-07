@@ -26,8 +26,8 @@ export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: bo
 };
 
 type ButtonStyles = {
-    height: { [key in ActionSize]: number };
-    width: { [key in ActionSize]: number };
+    height: { [key in ActionSize]: number | string };
+    width: { [key in ActionSize]: number | string };
     color: { [key in ActionVariant]: string };
     borderRadius: number;
 
@@ -90,6 +90,8 @@ const createStyles = (
             borderRadius: button.borderRadius,
             minHeight: button.height[size],
             minWidth: button.width[size],
+            width: button.width[size],
+            height: button.height[size],
         },
         label: {
             fontFamily: button.fontFamilyWeight,

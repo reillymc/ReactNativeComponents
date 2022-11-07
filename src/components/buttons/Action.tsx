@@ -56,7 +56,10 @@ export const Action: React.FC<ActionProps> = ({
 
 Action.displayName = "Action";
 
-const createStyles = ({ styles: { action, common } }: ThemedStyles, { size = "regular", variant = "flat" }: Partial<ActionProps>) =>
+const createStyles = (
+    { styles: { action, common } }: ThemedStyles,
+    { size = "regular", variant = "flat" }: Partial<ActionProps>,
+) =>
     StyleSheet.create({
         container: {},
         label: {

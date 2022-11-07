@@ -6,3 +6,5 @@ export { NavigationHeader, NavigationHeaderProps, NavigationHeaderStyles } from 
 export { FloatingContainer, FloatingContainerProps } from "./FloatingContainer";
 export { HighlightedText, HighlightedTextProps, HighlightedTextStyles } from "./HighlightedText";
 export { Text, TextProps, TextStyles, TextVariant } from "./Text";
+export { Form, FormProps } from "./Form";
+export { ModalHeader, ModalHeaderProps } from "./ModalHeader";

@@ -1,6 +1,6 @@
 import {
     ActionSize,
-    ActionStyles,
+    IconActionStyles,
     ButtonStyles,
     DropdownInputStyles,
     HighlightedTextStyles,
@@ -11,6 +11,7 @@ import {
     TextInputStyles,
     TextStyles,
     ToggleInputStyles,
+    ActionStyles,
 } from "../components";
 import { Theme } from "./theme";
 
@@ -45,6 +46,7 @@ export type Styles = {
     dropdownInput: DropdownInputStyles;
 
     action: ActionStyles;
+    iconAction: IconActionStyles;
     button: ButtonStyles;
     iconButton: IconButtonStyles;
 };
@@ -109,6 +111,13 @@ export const createDefaultStyles: CreateStyles = theme => ({
         },
         fontFamilyWeight: theme.font.familyWeight.regular400,
     },
+    iconAction: {
+        size: {
+            small: 20,
+            regular: 24,
+            large: 32,
+        },
+    },
     button: {
         height: {
             large: 50,
@@ -116,9 +125,9 @@ export const createDefaultStyles: CreateStyles = theme => ({
             small: 30,
         },
         width: {
-            small: 80,
-            regular: 120,
-            large: 180,
+            small: 120,
+            regular: 160,
+            large: "100%",
         },
         borderRadius: 8,
         color: {
