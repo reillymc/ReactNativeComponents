@@ -1,5 +1,7 @@
 # @reillymc/react-native-components
+
 @reillymc/react-native-components
+
 ## Installation
 
 ```sh
@@ -19,6 +21,10 @@ const result = await multiply(3, 7);
 ## Contributing
 
 See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+
+## Publishing
+
+This package is published to github npm packages and requires [authentication](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
 ## License
 
