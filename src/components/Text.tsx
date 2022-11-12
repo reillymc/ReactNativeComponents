@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleProp, StyleSheet, Text as RNText, TextStyle } from "react-native";
+import { StyleProp, StyleSheet, Text as RNText, TextProps as RNTextProps, TextStyle } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
@@ -18,16 +18,19 @@ export interface TextStyles {
     };
 }
 
-export interface TextProps {
+export interface TextProps extends RNTextProps {
     variant?: TextVariant;
-    style?: StyleProp<TextStyle>;
     children?: React.ReactNode;
 }
 
-export const Text: React.FC<TextProps> = ({ variant = "body", style, children }) => {
+export const Text: React.FC<TextProps> = ({ variant = "body", style, children, ...props }) => {
     const styles = useThemedStyles(createStyles, { variant });
 
-    return <RNText style={[styles.text, style]}>{children}</RNText>;
+    return (
+        <RNText {...props} style={[styles.text, style]}>
+            {children}
+        </RNText>
+    );
 };
 
 Text.displayName = "Text";

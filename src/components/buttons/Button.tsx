@@ -70,7 +70,9 @@ const Button: React.FC<ButtonProps> = ({
             onPress={onPress}
         >
             {({ pressed }) => (
-                <Text style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>{label}</Text>
+                <Text numberOfLines={1} style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>
+                    {label}
+                </Text>
             )}
         </Pressable>
     );

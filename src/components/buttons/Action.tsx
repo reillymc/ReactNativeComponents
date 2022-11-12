@@ -48,7 +48,9 @@ export const Action: React.FC<ActionProps> = ({
     return (
         <Pressable hitSlop={30} disabled={disabled} style={[styles.container, style]} onPress={onPress}>
             {({ pressed }) => (
-                <Text style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>{label}</Text>
+                <Text numberOfLines={1} style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>
+                    {label}
+                </Text>
             )}
         </Pressable>
     );

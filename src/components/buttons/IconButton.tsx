@@ -49,7 +49,12 @@ export const IconButton: React.FC<IconButtonProps> = ({
                         style={styles.icon}
                     />
                     {size !== "small" && label && (
-                        <Text style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>{label}</Text>
+                        <Text
+                            numberOfLines={1}
+                            style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}
+                        >
+                            {label}
+                        </Text>
                     )}
                 </>
             )}
