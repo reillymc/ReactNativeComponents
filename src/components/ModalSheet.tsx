@@ -31,8 +31,12 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
 
     if (!show && ref.current) {
         ref.current.close();
-        Keyboard.dismiss();
     }
+
+    const handleClose = () => {
+        Keyboard.dismiss();
+        onClose();
+    };
 
     return (
         <Portal>
@@ -42,8 +46,9 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
                 enableOverDrag
                 enablePanDownToClose
                 backgroundStyle={styles.sheetBackground}
+                keyboardBlurBehavior="restore"
                 snapPoints={[modalSheet.height[height]]}
-                onClose={onClose}
+                onClose={handleClose}
                 backdropComponent={props => (
                     <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
                 )}

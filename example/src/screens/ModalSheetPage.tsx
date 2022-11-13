@@ -1,13 +1,26 @@
 import React from "react";
 
-import { ModalSheet } from "@reillymc/react-native-components";
+import { Action, Button, Form, ModalHeader, ModalSheet, TextInput } from "@reillymc/react-native-components";
 import { ComponentPage } from "../components";
 
 export const ModalSheetPage: React.FunctionComponent = () => {
+    const [show, setShow] = React.useState(true);
+
     return (
         <ComponentPage
             componentName="Button"
-            component={<ModalSheet height="mid" onClose={() => null} show={true} />}
+            component={
+                <ModalSheet height="mid" onClose={() => setShow(false)} show={show}>
+                    <ModalHeader
+                        heading="Modal Header"
+                        rightItem={<Action onPress={() => setShow(false)} label="Close" />}
+                    />
+                    <Form>
+                        <TextInput modalSupport />
+                    </Form>
+                </ModalSheet>
+            }
+            propsPanel={<Button onPress={() => setShow(true)} label="Show Modal" />}
         />
     );
 };

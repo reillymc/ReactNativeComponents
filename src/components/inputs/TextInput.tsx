@@ -13,13 +13,17 @@ export interface TextInputProps extends RNTextInputProps {
     modalSupport?: boolean;
 }
 
-export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(({ style, width, disabled, modalSupport, ...props }, ref) => {
-    const styles = useThemedStyles(createStyles, { width, disabled });
+export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(
+    ({ style, width, disabled = false, modalSupport, ...props }, ref) => {
+        const styles = useThemedStyles(createStyles, { width, disabled });
 
-    const Component = modalSupport ? BottomSheetTextInput : RNTextInput;
-
-    return <Component ref={ref as any} editable={disabled} style={[styles.input, style]} {...props} />;
-});
+        return modalSupport ? (
+            <BottomSheetTextInput ref={ref as any} editable={!disabled} style={[styles.input, style]} {...props} />
+        ) : (
+            <RNTextInput ref={ref as any} editable={!disabled} style={[styles.input, style]} {...props} />
+        );
+    },
+);
 
 TextInput.displayName = "TextInput";
 
