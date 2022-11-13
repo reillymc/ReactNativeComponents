@@ -10,6 +10,7 @@ import {
     DropdownInputPage,
     SelectionInputPage,
     ListPagePage,
+    ListItemPage,
 } from "../screens";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
@@ -32,6 +33,7 @@ export type ComponentStackParamList = {
     IconButton: undefined;
     ModalSheet: undefined;
     ListPage: undefined;
+    ListItem: undefined;
 };
 
 /**
@@ -46,6 +48,7 @@ export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Co
     ),
     ModalSheet: <ComponentStack.Screen key={"ModalSheet"} name="ModalSheet" component={ModalSheetPage} />,
     ListPage: <ComponentStack.Screen key={"ListPage"} name="ListPage" component={ListPagePage} />,
+    ListItem: <ComponentStack.Screen key={"ListItem"} name="ListItem" component={ListItemPage} />,
 }; //satisfies Record<keyof ComponentStackParamList, React.ReactNode>;
 
 export const ComponentStackNavigator = () => (

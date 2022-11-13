@@ -12,6 +12,8 @@ export const getBackgroundColor = ({ color }: Theme, variant: ActionVariant, pre
             return pressed ? color.primaryHighlight : color.primary;
         case "secondary":
             return pressed ? color.secondaryHighlight : color.secondary;
+        case "destructive":
+            return pressed ? color.destructiveHighlight : color.destructive;
         case "flat":
             return "transparent";
     }
@@ -28,7 +30,6 @@ export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: bo
 type ButtonStyles = {
     height: { [key in ActionSize]: number | string };
     width: { [key in ActionSize]: number | string };
-    color: { [key in ActionVariant]: string };
     borderRadius: number;
 
     /**

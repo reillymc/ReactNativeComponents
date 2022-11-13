@@ -46,6 +46,7 @@ const createStyles = (
         flat: color.textPrimary,
         primary: color.primary,
         secondary: color.secondary,
+        destructive: color.destructive,
     }[variant];
 
     return StyleSheet.create({

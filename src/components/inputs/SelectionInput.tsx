@@ -5,23 +5,27 @@ import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionVariant } from "../buttons";
 import { ModalSheet } from "../ModalSheet";
 import { Text } from "../Text";
-import { DropdownItem } from "./DropdownInput";
 
 export type SelectionInputStyles = {};
 
-export interface SelectionInputProps {
+export type SelectionItem<T> = {
+    label: string;
+    value: T;
+};
+
+export interface SelectionInputProps<T extends {} = string> {
     label?: string;
     placeholder?: string;
-    variant?: ActionVariant;
+    variant?: Exclude<ActionVariant, "destructive">;
     width?: InputWidth;
     disabled?: boolean;
-    items?: Array<DropdownItem>;
-    selectedItem?: DropdownItem;
+    items?: Array<SelectionItem<T>>;
+    selectedItem?: SelectionItem<T>;
     style?: StyleProp<ViewStyle>;
-    onSelect: (item: DropdownItem) => void;
+    onSelect: (item: SelectionItem<T>) => void;
 }
 
-export const SelectionInput: React.FC<SelectionInputProps> = ({
+export const SelectionInput = <T extends {} = string>({
     label,
     variant = "primary",
     width = "full",
@@ -31,18 +35,15 @@ export const SelectionInput: React.FC<SelectionInputProps> = ({
     placeholder,
     style,
     onSelect,
-}) => {
+}: SelectionInputProps<T>) => {
     const [showOptions, setShowOptions] = React.useState(false);
 
     const styles = useThemedStyles(createStyles, { variant, width, disabled });
 
-    const handleItemPress = (item: DropdownItem) => {
+    const handleItemPress = (item: SelectionItem<T>) => {
         setShowOptions(false);
         onSelect(item);
     };
-
-    console.log("selectedItem", selectedItem, placeholder);
-    
 
     return (
         <>
@@ -60,10 +61,10 @@ export const SelectionInput: React.FC<SelectionInputProps> = ({
             </Pressable>
             <ModalSheet height="mid" onClose={() => setShowOptions(false)} show={showOptions}>
                 {!!label && <Text variant="heading">{label}</Text>}
-                {items.map(item => (
+                {items.map((item, idx) => (
                     // TODO extract to styled component
                     <Pressable
-                        key={item.value}
+                        key={idx}
                         onPress={() => handleItemPress(item)}
                         style={{
                             borderRadius: 5,

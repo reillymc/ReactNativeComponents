@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet } from "react-native";
+import { Keyboard, StyleSheet } from "react-native";
 import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
 
@@ -29,7 +29,10 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
         styles: { modalSheet },
     } = useTheme();
 
-    if (!show && ref.current) ref.current.close();
+    if (!show && ref.current) {
+        ref.current.close();
+        Keyboard.dismiss();
+    }
 
     return (
         <Portal>

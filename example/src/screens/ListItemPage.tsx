@@ -1,0 +1,112 @@
+import React from "react";
+import { IconAction, ListItem, ListItemProps, Text, ListItemRow, SwipeAction } from "@reillymc/react-native-components";
+
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+
+const defaultProps: ListItemProps = {
+    heading: "Heading text",
+    avatar: <IconAction onPress={() => null} iconName="API" />,
+    contentRows: [
+        <ListItemRow key={1} contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]} />,
+    ],
+    swipeActions: [<SwipeAction key="1" iconName="delete" variant="destructive" label="" onPress={() => null} />],
+    onPress: () => null,
+};
+
+const propDefinitions: PropDefinitions<ListItemProps> = {
+    heading: {
+        type: "string",
+        label: "Heading text",
+    },
+    avatar: {
+        type: "enum",
+        label: "Avatar",
+        default: "Icon",
+        values: [
+            { label: "None", value: undefined },
+            { label: "Icon", value: defaultProps.avatar },
+        ],
+    },
+    contentRows: {
+        type: "enum",
+        label: "Content rows",
+        default: "One",
+        values: [
+            { label: "None", value: undefined },
+            {
+                label: "One",
+                value: defaultProps.contentRows,
+            },
+            {
+                label: "Two",
+                value: [
+                    <ListItemRow
+                        key={1}
+                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                    />,
+                    <ListItemRow
+                        key={2}
+                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                    />,
+                ],
+            },
+            {
+                label: "Three",
+                value: [
+                    <ListItemRow
+                        key={1}
+                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                    />,
+                    <ListItemRow key={2} contentItems={[<Text key={1}>Description</Text>]} />,
+                    <ListItemRow
+                        key={3}
+                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                    />,
+                ],
+            },
+        ],
+    },
+    swipeActions: {
+        type: "enum",
+        label: "Swipe actions",
+        default: "Delete",
+        values: [
+            { label: "None", value: undefined },
+            {
+                label: "Delete",
+                value: defaultProps.swipeActions,
+            },
+            {
+                label: "Delete and Edit",
+                value: [
+                    <SwipeAction key="1" iconName="delete" variant="destructive" label="" onPress={() => null} />,
+                    <SwipeAction key="2" iconName="edit" variant="secondary" label="" onPress={() => null} />,
+                ],
+            },
+        ],
+    },
+    onPress: {
+        type: "function",
+        label: "On press",
+    },
+};
+
+export const ListItemPage: React.FunctionComponent = () => {
+    const [props, setProps] = React.useState<ListItemProps>(defaultProps);
+
+    return (
+        <ComponentPage
+            componentName="Button"
+            component={<ListItem {...props} />}
+            propsPanel={
+                <PropsPanel
+                    propValues={props}
+                    propDefinitions={propDefinitions}
+                    onChange={(propId, value) => {
+                        setProps(prev => ({ ...prev, [propId]: value }));
+                    }}
+                />
+            }
+        />
+    );
+};

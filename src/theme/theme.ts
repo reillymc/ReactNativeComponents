@@ -25,6 +25,9 @@ export const DefaultTheme = {
         secondaryHighlight: "#22476D",
         tertiary: "#06bcc1",
 
+        destructive: "#ff382e",
+        destructiveHighlight: "#ff5c54",
+
         light: "#F4EDEA",
 
         white: "#ffffff",

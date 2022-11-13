@@ -25,6 +25,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
     size = "regular",
     rounded = true,
     disabled,
+    style,
     onPress,
 }) => {
     const styles = useThemedStyles(createStyles, { size, rounded });
@@ -36,6 +37,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
             style={({ pressed }) => [
                 styles.container,
                 { backgroundColor: getBackgroundColor(theme, variant, pressed) },
+                style,
             ]}
             onPress={onPress}
         >

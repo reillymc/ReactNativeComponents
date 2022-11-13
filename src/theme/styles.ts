@@ -12,6 +12,7 @@ import {
     TextStyles,
     ToggleInputStyles,
     ActionStyles,
+    ListItemStyles,
 } from "../components";
 import { Theme } from "./theme";
 
@@ -44,6 +45,7 @@ export type Styles = {
     modalSheet: ModalSheetStyles;
     toggleInput: ToggleInputStyles;
     dropdownInput: DropdownInputStyles;
+    listItem: ListItemStyles;
 
     action: ActionStyles;
     iconAction: IconActionStyles;
@@ -130,12 +132,6 @@ export const createDefaultStyles: CreateStyles = theme => ({
             large: "100%",
         },
         borderRadius: 8,
-        color: {
-            // Currently overridden by pressed methods
-            primary: theme.color.primary,
-            secondary: theme.color.secondary,
-            flat: "transparent",
-        },
         fontFamilyWeight: theme.font.familyWeight.regular400,
     },
     iconButton: {
@@ -170,5 +166,12 @@ export const createDefaultStyles: CreateStyles = theme => ({
         paddingBottom: 16,
         paddingLeft: theme.padding.pageHorizontal,
         paddingRight: theme.padding.pageHorizontal,
+    },
+    listItem: {
+        spacingMargin: 12,
+        internalSpacing: 16,
+        borderRadius: 16,
+        contentItemSpacing: 8,
+        contentItemTopMargin: 4,
     },
 });

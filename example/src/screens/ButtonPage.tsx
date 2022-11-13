@@ -4,38 +4,43 @@ import { Button, ButtonProps } from "@reillymc/react-native-components";
 import { ComponentPage } from "../components";
 import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 
-const propDefinitions: PropDefinitions<ButtonProps> = {
-    label: {
-        label: "Label",
-        type: "string",
-    },
-    contentAlign: {
-        label: "Content alignment",
-        type: "array",
-        values: ["left", "center", "right"],
-    },
-    variant: {
-        label: "Style variant",
-        type: "array",
-        values: ["primary", "secondary", "flat"],
-    },
-    size: {
-        label: "Size",
-        type: "array",
-        values: ["small", "regular", "large"],
-    },
-    onPress: {
-        label: "Press action",
-        type: "function",
-    },
-};
-
 const defaultProps: ButtonProps = {
     label: "Secondary Button",
     contentAlign: "center",
     variant: "secondary",
     size: "regular",
     onPress: () => null,
+};
+
+const propDefinitions: PropDefinitions<ButtonProps> = {
+    label: {
+        type: "string",
+        label: "Label",
+    },
+    contentAlign: {
+        type: "array",
+        label: "Content alignment",
+        values: ["left", "center", "right"],
+    },
+    variant: {
+        type: "enum",
+        label: "Style variant",
+        default: "Secondary",
+        values: [
+            { label: "Primary", value: "primary" },
+            { label: "Secondary", value: "secondary" },
+            { label: "Flat", value: "flat" },
+        ],
+    },
+    size: {
+        type: "array",
+        label: "Size",
+        values: ["small", "regular", "large"],
+    },
+    onPress: {
+        type: "function",
+        label: "Press action",
+    },
 };
 
 export const ButtonPage: React.FunctionComponent = () => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { ColorValue, Pressable, StyleSheet, ViewStyle } from "react-native";
+import { ColorValue, Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
 import { ActionSize, ActionVariant } from ".";
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Theme } from "../../theme";
@@ -11,14 +11,14 @@ const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolea
             return pressed ? color.primaryHighlight : color.primary;
         case "secondary":
             return pressed ? color.secondaryHighlight : color.secondary;
+        case "destructive":
+            return pressed ? color.destructiveHighlight : color.destructive;
         case "flat":
             return pressed ? color.textHighlight : color.textPrimary;
     }
 };
 
 export type ActionStyles = {
-    color: { [key in ActionVariant]: string };
-
     /**
      * Font family due to weight limitations.
      */
@@ -26,16 +26,16 @@ export type ActionStyles = {
 };
 
 export interface ActionProps {
-    label: string;
+    label?: string;
     variant?: ActionVariant;
-    style?: ViewStyle;
+    style?: StyleProp<ViewStyle>;
     size?: ActionSize;
     disabled?: boolean;
     onPress: () => void;
 }
 
 export const Action: React.FC<ActionProps> = ({
-    label,
+    label = "",
     variant = "flat",
     size = "regular",
     disabled,
@@ -58,14 +58,10 @@ export const Action: React.FC<ActionProps> = ({
 
 Action.displayName = "Action";
 
-const createStyles = (
-    { styles: { action, common } }: ThemedStyles,
-    { size = "regular", variant = "flat" }: Partial<ActionProps>,
-) =>
+const createStyles = ({ styles: { action, common } }: ThemedStyles, { size = "regular" }: Partial<ActionProps>) =>
     StyleSheet.create({
         container: {},
         label: {
-            color: action.color[variant],
             fontFamily: action.fontFamilyWeight,
             fontSize: common.action.fontSize[size],
         },
