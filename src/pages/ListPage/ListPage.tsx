@@ -44,7 +44,6 @@ const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...fla
         <>
             <FlatList
                 {...flatListProps}
-                style={styles.list}
                 contentContainerStyle={[styles.listContentContainer, contentContainerStyle]}
                 ListHeaderComponentStyle={styles.listHeader}
                 ListHeaderComponent={<Text variant="title">{heading.props.heading}</Text>}
@@ -58,7 +57,6 @@ const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...fla
 export { ListPage };
 
 const styles = StyleSheet.create({
-    list: {},
     listHeader: {
         paddingBottom: 12,
     },
