@@ -13,6 +13,7 @@ import {
     ToggleInputStyles,
     ActionStyles,
     ListItemStyles,
+    AvatarStyles,
 } from "../components";
 import { Theme } from "./theme";
 
@@ -46,6 +47,7 @@ export type Styles = {
     toggleInput: ToggleInputStyles;
     dropdownInput: DropdownInputStyles;
     listItem: ListItemStyles;
+    avatar: AvatarStyles;
 
     action: ActionStyles;
     iconAction: IconActionStyles;
@@ -173,5 +175,11 @@ export const createDefaultStyles: CreateStyles = theme => ({
         borderRadius: 16,
         contentItemSpacing: 8,
         contentItemTopMargin: 4,
+    },
+    avatar: {
+        size: 100,
+        initialsFontFamilyWeight: theme.font.familyWeight.bold600,
+        initialsFontSize: theme.font.size.xxLarge,
+        labelFontSize: theme.font.size.tiny,
     },
 });

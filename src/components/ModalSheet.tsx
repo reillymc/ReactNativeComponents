@@ -1,6 +1,11 @@
 import React from "react";
 import { Keyboard, StyleSheet } from "react-native";
-import BottomSheet, { BottomSheetBackdrop } from "@gorhom/bottom-sheet";
+import BottomSheet, {
+    BottomSheetBackdrop,
+    BottomSheetScrollView,
+    BottomSheetView,
+    BottomSheetFlatList,
+} from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../hooks";
@@ -29,14 +34,12 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
         styles: { modalSheet },
     } = useTheme();
 
-    if (!show && ref.current) {
-        ref.current.close();
-    }
-
-    const handleClose = () => {
-        Keyboard.dismiss();
-        onClose();
-    };
+    React.useEffect(() => {
+        if (!show) {
+            Keyboard.dismiss();
+            if (ref.current) ref.current.close();
+        }
+    }, [show, ref]);
 
     return (
         <Portal>
@@ -46,9 +49,10 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
                 enableOverDrag
                 enablePanDownToClose
                 backgroundStyle={styles.sheetBackground}
-                keyboardBlurBehavior="restore"
+                keyboardBlurBehavior={show ? "restore" : "none"}
                 snapPoints={[modalSheet.height[height]]}
-                onClose={handleClose}
+                keyboardBehavior="extend"
+                onClose={show ? onClose : undefined}
                 backdropComponent={props => (
                     <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
                 )}
@@ -61,7 +65,13 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
 
 ModalSheet.displayName = "ModalSheet";
 
-export { ModalSheet, ModalSheetProps };
+export {
+    ModalSheet,
+    ModalSheetProps,
+    BottomSheetScrollView as ModalSheetScrollView,
+    BottomSheetFlatList as ModalSheetFlatList,
+    BottomSheetView as ModalSheetView,
+};
 
 const createStyles = ({ styles: { modalSheet } }: ThemedStyles) =>
     StyleSheet.create({

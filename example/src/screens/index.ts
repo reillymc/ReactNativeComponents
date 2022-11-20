@@ -6,3 +6,4 @@ export { DropdownInputPage } from "./DropdownInputPage";
 export { SelectionInputPage } from "./SelectionInputPage";
 export { ListPagePage } from "./ListPagePage";
 export { ListItemPage } from "./ListItemPage";
+export { AvatarPage } from "./AvatarPage";

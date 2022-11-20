@@ -40,6 +40,12 @@ export const DefaultTheme = {
 
         grey200: "#E2E8F0",
         grey600: "#718096",
+
+        red: "#FF9AA2",
+        orange: "#FFDAC1",
+        green: "#E2F0CB",
+        blue: "#B5EAD7",
+        purple: "#C7CEEA",
     },
     padding: {
         pageHorizontal: 16,
