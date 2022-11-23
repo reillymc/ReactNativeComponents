@@ -1,6 +1,7 @@
 import React from "react";
+import { DeepPartial } from "../helpers";
 
-import { createDefaultStyles, DefaultTheme, Styles, Theme } from "../theme";
+import { createDefaultStyles, DefaultTheme, Styles, Theme, MergeTheme } from "../theme";
 
 export interface ThemeContextDefinition {
     theme: Theme;
@@ -13,13 +14,18 @@ export const ThemeContext = React.createContext<ThemeContextDefinition>({
 });
 
 interface ThemeProviderProps {
-    theme?: Theme;
+    theme?: DeepPartial<Theme>;
     styles?: Styles;
     children?: React.ReactNode;
 }
 
 export const ThemeProvider: React.FC<ThemeProviderProps> = ({
-    theme = DefaultTheme,
-    styles = createDefaultStyles(theme),
+    theme: initialTheme,
+    styles: initialStyles,
     children,
-}: ThemeProviderProps) => <ThemeContext.Provider value={{ theme, styles }}>{children}</ThemeContext.Provider>;
+}: ThemeProviderProps) => {
+    const theme = MergeTheme(DefaultTheme, initialTheme);
+    const styles = initialStyles ?? createDefaultStyles(theme);
+
+    return <ThemeContext.Provider value={{ theme, styles }}>{children}</ThemeContext.Provider>;
+};

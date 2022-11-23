@@ -1,3 +1,5 @@
+import { DeepPartial } from "../helpers";
+
 export type Theme = typeof DefaultTheme;
 
 export const DefaultTheme = {
@@ -50,4 +52,37 @@ export const DefaultTheme = {
     padding: {
         pageHorizontal: 16,
     },
+};
+
+export const MergeTheme = (first: DeepPartial<Theme>, second: DeepPartial<Theme> | undefined): Theme => {
+    return {
+        ...DefaultTheme,
+        ...first,
+        ...second,
+        color: {
+            ...DefaultTheme.color,
+            ...first.color,
+            ...second?.color,
+        },
+        font: {
+            ...DefaultTheme.font,
+            ...first.font,
+            ...second?.font,
+            familyWeight: {
+                ...DefaultTheme.font.familyWeight,
+                ...first.font?.familyWeight,
+                ...second?.font?.familyWeight,
+            },
+            size: {
+                ...DefaultTheme.font.size,
+                ...first.font?.size,
+                ...second?.font?.size,
+            },
+        },
+        padding: {
+            ...DefaultTheme.padding,
+            ...first.padding,
+            ...second?.padding,
+        },
+    };
 };
