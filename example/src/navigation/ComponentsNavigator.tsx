@@ -12,6 +12,10 @@ import {
     ListPagePage,
     ListItemPage,
     AvatarPage,
+    ActionPage,
+    IconActionPage,
+    TextInputPage,
+    ToggleInputPage,
 } from "../screens";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
@@ -28,13 +32,20 @@ const ComponentStack = createStackNavigator<ComponentStackParamList>();
  */
 export type ComponentStackParamList = {
     Components: undefined;
+
+    Action: undefined;
     Button: undefined;
+    IconAction: undefined;
+    IconButton: undefined;
+
     DropdownInput: undefined;
     SelectionInput: undefined;
-    IconButton: undefined;
-    ModalSheet: undefined;
-    ListPage: undefined;
+    TextInput: undefined;
+    ToggleInput: undefined;
+
     ListItem: undefined;
+    ListPage: undefined;
+    ModalSheet: undefined;
     Avatar: undefined;
 };
 
@@ -42,12 +53,16 @@ export type ComponentStackParamList = {
  * Map of all components to their respective screen
  */
 export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Components">]: React.ReactNode } = {
+    Action: <ComponentStack.Screen key={"Action"} name="Action" component={ActionPage} />,
     Button: <ComponentStack.Screen key={"Button"} name="Button" component={ButtonPage} />,
-    DropdownInput: <ComponentStack.Screen key={"DropdownInput"} name="DropdownInput" component={DropdownInputPage} />,
+    IconAction: <ComponentStack.Screen key={"IconAction"} name="IconAction" component={IconActionPage} />,
     IconButton: <ComponentStack.Screen key={"IconButton"} name="IconButton" component={IconButtonPage} />,
+    DropdownInput: <ComponentStack.Screen key={"DropdownInput"} name="DropdownInput" component={DropdownInputPage} />,
     SelectionInput: (
         <ComponentStack.Screen key={"SelectionInput"} name="SelectionInput" component={SelectionInputPage} />
     ),
+    TextInput: <ComponentStack.Screen key={"TextInput"} name="TextInput" component={TextInputPage} />,
+    ToggleInput: <ComponentStack.Screen key={"ToggleInput"} name="ToggleInput" component={ToggleInputPage} />,
     ModalSheet: <ComponentStack.Screen key={"ModalSheet"} name="ModalSheet" component={ModalSheetPage} />,
     ListPage: <ComponentStack.Screen key={"ListPage"} name="ListPage" component={ListPagePage} />,
     ListItem: <ComponentStack.Screen key={"ListItem"} name="ListItem" component={ListItemPage} />,

@@ -17,6 +17,7 @@ export interface ModalSheetStyles {
         [key in ModalHeight]: number | string;
     };
     borderRadius: number;
+    backgroundColor: string;
 }
 
 interface ModalSheetProps {
@@ -78,5 +79,6 @@ const createStyles = ({ styles: { modalSheet } }: ThemedStyles) =>
         sheetBackground: {
             flex: 1,
             borderRadius: modalSheet.borderRadius,
+            backgroundColor: modalSheet.backgroundColor,
         },
     });

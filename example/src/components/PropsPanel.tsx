@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import { SelectionInput, Text, TextInput, ToggleInput } from "@reillymc/react-native-components";
+import { SelectionInput, Text, TextInput, Theme, ToggleInput, useTheme } from "@reillymc/react-native-components";
 import { SelectionItem } from "../../../src/components/inputs/SelectionInput";
 
 type PropDefinitionBase = {
@@ -54,7 +54,11 @@ export const PropsPanel = <T extends Record<string, any>>({
     propValues,
     onChange,
 }: PropsPanelProps<T>) => {
+    const { theme } = useTheme();
+
     const [customLabels, setCustomLabels] = React.useState<{ [P in keyof T]?: string }>({});
+
+    const styles = createStyles(theme);
 
     return (
         <KeyboardAvoidingView
@@ -124,6 +128,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         {definition.label ?? propId}
                                     </Text>
                                     <SelectionInput
+                                        label={definition.label}
                                         items={definition.values}
                                         onSelect={value => {
                                             onChange(propId, value?.value);
@@ -144,29 +149,30 @@ export const PropsPanel = <T extends Record<string, any>>({
 
 PropsPanel.displayName = "PropsPanel";
 
-const styles = StyleSheet.create({
-    container: {
-        display: "flex",
-        backgroundColor: "white",
-        marginTop: 16,
-        borderTopStartRadius: 20,
-        borderTopEndRadius: 20,
-    },
-    keyContainer: {
-        flex: 1,
-        flexDirection: "column",
-        justifyContent: "center",
-    },
-    contentContainer: {
-        width: "60%",
-        alignSelf: "center",
-        flexGrow: 1,
-    },
-    propContainer: {
-        display: "flex",
-        marginTop: 24,
-    },
-    propHeading: {
-        marginBottom: 5,
-    },
-});
+const createStyles = (theme: Theme) =>
+    StyleSheet.create({
+        container: {
+            display: "flex",
+            backgroundColor: theme.color.foreground,
+            marginTop: 16,
+            borderTopStartRadius: 20,
+            borderTopEndRadius: 20,
+        },
+        keyContainer: {
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "center",
+        },
+        contentContainer: {
+            width: "60%",
+            alignSelf: "center",
+            flexGrow: 1,
+        },
+        propContainer: {
+            display: "flex",
+            marginTop: 24,
+        },
+        propHeading: {
+            marginBottom: 5,
+        },
+    });

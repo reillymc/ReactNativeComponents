@@ -1,31 +1,20 @@
 import React from "react";
-import { Button, ButtonProps } from "@reillymc/react-native-components";
+import { Action, ActionProps } from "@reillymc/react-native-components";
 
 import { ComponentPage } from "../components";
 import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 
-const defaultProps: ButtonProps = {
-    label: "Secondary Button",
-    contentAlign: "center",
+const defaultProps: ActionProps = {
+    label: "Secondary Action",
     variant: "secondary",
     size: "regular",
     onPress: () => null,
 };
 
-const propDefinitions: PropDefinitions<ButtonProps> = {
+const propDefinitions: PropDefinitions<ActionProps> = {
     label: {
         type: "string",
         label: "Label",
-    },
-    contentAlign: {
-        type: "enum",
-        label: "Content align",
-        default: "Center",
-        values: [
-            { label: "Left", value: "left" },
-            { label: "Center", value: "center" },
-            { label: "Right", value: "right" },
-        ],
     },
     variant: {
         type: "enum",
@@ -40,7 +29,6 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     size: {
         type: "enum",
         label: "Size",
-        default: "Regular",
         values: [
             { label: "Small", value: "small" },
             { label: "Regular", value: "regular" },
@@ -53,13 +41,13 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
 };
 
-export const ButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ButtonProps>(defaultProps);
+export const ActionPage: React.FunctionComponent = () => {
+    const [props, setProps] = React.useState<ActionProps>(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Button"
-            component={<Button {...props} />}
+            componentName="Action"
+            component={<Action {...props} />}
             propsPanel={
                 <PropsPanel
                     propValues={props}

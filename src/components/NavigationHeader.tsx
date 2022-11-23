@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { View, StyleSheet, StyleProp, ViewStyle, useColorScheme } from "react-native";
 import { BlurView } from "expo-blur";
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
@@ -50,9 +50,16 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     style,
 }) => {
     const styles = useThemedStyles(createStyles, { scrollPosition });
+    const colorScheme = useColorScheme();
+
+    const intensity = Math.min(scrollPosition * 2, 85);
 
     return (
-        <BlurView intensity={100} tint="default" style={[styles.headerContainer, style]}>
+        <BlurView
+            intensity={intensity}
+            tint={colorScheme === "dark" ? "dark" : "light"}
+            style={[styles.headerContainer, style]}
+        >
             <View style={styles.headerItemLeft}>{leftItem}</View>
             <Text style={styles.heading}>{heading}</Text>
             <View style={styles.headerItemRight}>{rightItem}</View>

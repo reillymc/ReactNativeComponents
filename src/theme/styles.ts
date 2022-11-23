@@ -15,6 +15,7 @@ import {
     ListItemStyles,
     AvatarStyles,
 } from "../components";
+import { DeepPartial } from "../helpers";
 import { Theme } from "./theme";
 
 export type Styles = {
@@ -26,12 +27,13 @@ export type Styles = {
             };
             borderRadius: number;
             padding: number;
-            textColor: string;
-            textColorDisabled: string;
-            backgroundColor: string;
-            backgroundColorDisabled: string;
             fontSize: number;
             fontFamilyWeight: string;
+            textColor: string;
+            placeholderTextColor: string;
+            disabledTextColor: string;
+            backgroundColor: string;
+            backgroundColorDisabled: string;
         };
         action: {
             fontSize: {
@@ -55,6 +57,8 @@ export type Styles = {
     iconButton: IconButtonStyles;
 };
 
+export type StyleOverrides = DeepPartial<Styles>;
+
 export type CreateStyles = (theme: Theme) => Styles;
 
 export const createDefaultStyles: CreateStyles = theme => ({
@@ -68,12 +72,13 @@ export const createDefaultStyles: CreateStyles = theme => ({
             },
             borderRadius: 6,
             padding: 8,
-            textColor: theme.color.textPrimary,
-            textColorDisabled: theme.color.grey200,
-            backgroundColor: theme.color.grey200,
-            backgroundColorDisabled: theme.color.grey600,
             fontSize: theme.font.size.regular,
             fontFamilyWeight: theme.font.familyWeight.regular400,
+            textColor: theme.color.textPrimary,
+            disabledTextColor: theme.color.textDisabled,
+            placeholderTextColor: theme.color.textSecondary,
+            backgroundColor: theme.color.inputBackground,
+            backgroundColorDisabled: theme.color.inputBackgroundDisabled,
         },
         action: {
             fontSize: {
@@ -104,6 +109,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
             mid: "52%",
             small: "24%",
         },
+        backgroundColor: theme.color.background,
     },
     textInput: {},
     action: {

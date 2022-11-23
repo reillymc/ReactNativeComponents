@@ -59,20 +59,23 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 ListItem.displayName = "ListItem";
 
-const createStyles = ({ styles: { listItem } }: ThemedStyles, { avatar, contentRows = [] }: Partial<ListItemProps>) => {
+const createStyles = (
+    { styles: { listItem }, theme }: ThemedStyles,
+    { avatar, contentRows = [] }: Partial<ListItemProps>,
+) => {
     const rowWidthValue = (contentRows.length + 1) * 4;
 
     return StyleSheet.create({
         container: {
             marginBottom: listItem.spacingMargin,
             width: "100%",
-            backgroundColor: "white",
+            backgroundColor: theme.color.foreground,
             borderRadius: listItem.borderRadius,
             overflow: "hidden",
         },
         innerContainer: {
             flexDirection: "row",
-            backgroundColor: "white",
+            backgroundColor: theme.color.foreground,
         },
         avatar: {
             marginLeft: listItem.internalSpacing,

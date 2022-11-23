@@ -2,10 +2,15 @@ import React from "react";
 import { TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleSheet } from "react-native";
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 
-import { ThemedStyles, useThemedStyles } from "../../hooks";
+import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { InputWidth } from ".";
 
-export interface TextInputStyles {}
+export interface TextInputStyles {
+    // textColor: string;
+    // placeholderTextColor: string;
+    // backgroundColor: string;
+    // backgroundColorDisabled: string;
+}
 
 export interface TextInputProps extends RNTextInputProps {
     width?: InputWidth;
@@ -16,11 +21,20 @@ export interface TextInputProps extends RNTextInputProps {
 export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(
     ({ style, width, disabled = false, modalSupport, ...props }, ref) => {
         const styles = useThemedStyles(createStyles, { width, disabled });
+        const {
+            styles: { common },
+        } = useTheme();
 
         return modalSupport ? (
             <BottomSheetTextInput ref={ref as any} editable={!disabled} style={[styles.input, style]} {...props} />
         ) : (
-            <RNTextInput ref={ref as any} editable={!disabled} style={[styles.input, style]} {...props} />
+            <RNTextInput
+                ref={ref as any}
+                editable={!disabled}
+                placeholderTextColor={common.input.placeholderTextColor}
+                style={[styles.input, style]}
+                {...props}
+            />
         );
     },
 );

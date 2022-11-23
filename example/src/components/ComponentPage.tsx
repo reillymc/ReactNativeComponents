@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
-import { Text } from "@reillymc/react-native-components";
+import { Text, Theme, useTheme } from "@reillymc/react-native-components";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -10,6 +10,9 @@ export interface ComponentPageProps {
 }
 
 export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ component, propsPanel, fullscreen }) => {
+    const { theme } = useTheme();
+
+    const styles = createStyles(theme);
     return (
         <View style={styles.container}>
             <View style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}>{component}</View>
@@ -27,24 +30,25 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ com
 
 ComponentPage.displayName = "ComponentPage";
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-        backgroundColor: "#e8e6e4",
-    },
-    componentContainer: {
-        flex: 1,
-    },
-    centred: {
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    propsContainer: {
-        display: "flex",
-        flex: 3,
-    },
-    heading: {
-        marginLeft: 16,
-    },
-});
+const createStyles = (theme: Theme) =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+            justifyContent: "center",
+            backgroundColor: theme.color.background,
+        },
+        componentContainer: {
+            flex: 1,
+        },
+        centred: {
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        propsContainer: {
+            display: "flex",
+            flex: 3,
+        },
+        heading: {
+            marginLeft: 16,
+        },
+    });

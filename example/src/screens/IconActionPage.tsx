@@ -1,31 +1,27 @@
 import React from "react";
-import { Button, ButtonProps } from "@reillymc/react-native-components";
+import { IconAction, IconActionProps } from "@reillymc/react-native-components";
 
 import { ComponentPage } from "../components";
 import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { AntDesign } from "@expo/vector-icons";
 
-const defaultProps: ButtonProps = {
-    label: "Secondary Button",
-    contentAlign: "center",
+const defaultProps: IconActionProps = {
+    label: "Secondary IconAction",
+    iconName: "downcircle",
     variant: "secondary",
     size: "regular",
     onPress: () => null,
 };
 
-const propDefinitions: PropDefinitions<ButtonProps> = {
+const propDefinitions: PropDefinitions<IconActionProps> = {
     label: {
         type: "string",
         label: "Label",
     },
-    contentAlign: {
+    iconName: {
         type: "enum",
-        label: "Content align",
-        default: "Center",
-        values: [
-            { label: "Left", value: "left" },
-            { label: "Center", value: "center" },
-            { label: "Right", value: "right" },
-        ],
+        label: "Icon Name",
+        values: Object.keys(AntDesign.glyphMap).map((name: any) => ({ label: name, value: name })),
     },
     variant: {
         type: "enum",
@@ -40,7 +36,6 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     size: {
         type: "enum",
         label: "Size",
-        default: "Regular",
         values: [
             { label: "Small", value: "small" },
             { label: "Regular", value: "regular" },
@@ -53,13 +48,13 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
 };
 
-export const ButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ButtonProps>(defaultProps);
+export const IconActionPage: React.FunctionComponent = () => {
+    const [props, setProps] = React.useState<IconActionProps>(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Button"
-            component={<Button {...props} />}
+            componentName="IconAction"
+            component={<IconAction {...props} />}
             propsPanel={
                 <PropsPanel
                     propValues={props}

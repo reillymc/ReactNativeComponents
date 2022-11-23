@@ -15,9 +15,10 @@ export type ToggleInputStyles = {
 export interface ToggleInputProps {
     value?: boolean;
     iconName?: keyof typeof AntDesign.glyphMap;
+    disabled?: boolean;
     variant?: ActionVariant;
     style?: StyleProp<ViewStyle>;
-    onChange: (value: boolean) => void | React.SetStateAction<boolean>;
+    onChange: (value: boolean) => void | null | React.SetStateAction<boolean>;
 }
 
 export const ToggleInput: React.FC<ToggleInputProps> = ({
