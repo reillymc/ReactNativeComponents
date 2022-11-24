@@ -61,6 +61,7 @@ export default function App() {
             textSecondary: "#999",
             background: "#000",
             backgroundHighlight: "#20252a",
+            backgroundOverlay: "#222",
             foreground: "#1a1818",
             border: "#20252a",
             inputBackground: "#141210",

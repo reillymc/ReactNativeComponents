@@ -110,6 +110,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
             small: "24%",
         },
         backgroundColor: theme.color.background,
+        backdropColor: theme.color.backgroundOverlay,
     },
     textInput: {},
     action: {

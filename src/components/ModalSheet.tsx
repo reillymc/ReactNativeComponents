@@ -1,5 +1,5 @@
 import React from "react";
-import { Keyboard, StyleSheet } from "react-native";
+import { Keyboard, StyleSheet, View } from "react-native";
 import BottomSheet, {
     BottomSheetBackdrop,
     BottomSheetScrollView,
@@ -18,6 +18,7 @@ export interface ModalSheetStyles {
     };
     borderRadius: number;
     backgroundColor: string;
+    backdropColor: string;
 }
 
 interface ModalSheetProps {
@@ -55,7 +56,9 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
                 keyboardBehavior="extend"
                 onClose={show ? onClose : undefined}
                 backdropComponent={props => (
-                    <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0} />
+                    <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
+                        <View style={styles.backdrop} />
+                    </BottomSheetBackdrop>
                 )}
             >
                 {children}
@@ -80,5 +83,10 @@ const createStyles = ({ styles: { modalSheet } }: ThemedStyles) =>
             flex: 1,
             borderRadius: modalSheet.borderRadius,
             backgroundColor: modalSheet.backgroundColor,
+        },
+        backdrop: {
+            display: "flex",
+            flexGrow: 1,
+            backgroundColor: modalSheet.backdropColor,
         },
     });
