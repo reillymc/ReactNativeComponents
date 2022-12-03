@@ -8,7 +8,7 @@ export const ModalSheetPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="Button"
+            componentName="Modal Sheet"
             component={
                 <ModalSheet height="mid" onClose={() => setShow(false)} show={show}>
                     <ModalHeader

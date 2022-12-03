@@ -30,52 +30,36 @@ const ComponentStack = createStackNavigator<ComponentStackParamList>();
 /**
  * Route list for all components
  */
-export type ComponentStackParamList = {
+export type ComponentStackParamList = Record<keyof typeof ComponentScreens, undefined> & {
     Components: undefined;
-
-    Action: undefined;
-    Button: undefined;
-    IconAction: undefined;
-    IconButton: undefined;
-
-    DropdownInput: undefined;
-    SelectionInput: undefined;
-    TextInput: undefined;
-    ToggleInput: undefined;
-
-    ListItem: undefined;
-    ListPage: undefined;
-    ModalSheet: undefined;
-    Avatar: undefined;
 };
 
 /**
  * Map of all components to their respective screen
  */
 export const ComponentScreens = {
-    Action: <ComponentStack.Screen key={"Action"} name="Action" component={ActionPage} />,
-    Button: <ComponentStack.Screen key={"Button"} name="Button" component={ButtonPage} />,
-    IconAction: <ComponentStack.Screen key={"IconAction"} name="IconAction" component={IconActionPage} />,
-    IconButton: <ComponentStack.Screen key={"IconButton"} name="IconButton" component={IconButtonPage} />,
-    DropdownInput: <ComponentStack.Screen key={"DropdownInput"} name="DropdownInput" component={DropdownInputPage} />,
-    SelectionInput: (
-        <ComponentStack.Screen key={"SelectionInput"} name="SelectionInput" component={SelectionInputPage} />
-    ),
-    TextInput: <ComponentStack.Screen key={"TextInput"} name="TextInput" component={TextInputPage} />,
-    ToggleInput: <ComponentStack.Screen key={"ToggleInput"} name="ToggleInput" component={ToggleInputPage} />,
-    ModalSheet: <ComponentStack.Screen key={"ModalSheet"} name="ModalSheet" component={ModalSheetPage} />,
-    ListPage: <ComponentStack.Screen key={"ListPage"} name="ListPage" component={ListPagePage} />,
-    ListItem: <ComponentStack.Screen key={"ListItem"} name="ListItem" component={ListItemPage} />,
-    Avatar: <ComponentStack.Screen key={"Avatar"} name="Avatar" component={AvatarPage} />,
-} satisfies Record<keyof Omit<ComponentStackParamList, "Components">, React.ReactNode>;
-
+    Action: { name: "Action", component: ActionPage },
+    Button: { name: "Button", component: ButtonPage },
+    IconAction: { name: "Icon Action", component: IconActionPage },
+    IconButton: { name: "Icon Button", component: IconButtonPage },
+    DropdownInput: { name: "Dropdown Input", component: DropdownInputPage },
+    SelectionInput: { name: "Selection Input", component: SelectionInputPage },
+    TextInput: { name: "Text Input", component: TextInputPage },
+    ToggleInput: { name: "Toggle Input", component: ToggleInputPage },
+    ModalSheet: { name: "Modal Sheet", component: ModalSheetPage },
+    ListPage: { name: "List Page", component: ListPagePage },
+    ListItem: { name: "List Item", component: ListItemPage },
+    Avatar: { name: "Avatar", component: AvatarPage },
+} satisfies Record<string, {name: string, component: React.FunctionComponent}>;
 
 export const ComponentStackNavigator = () => (
     <ComponentStack.Navigator
         initialRouteName="Components"
-        screenOptions={{ headerShown: true, animationEnabled: true }}
+        screenOptions={{ headerShown: false, animationEnabled: true }}
     >
-        <ComponentStack.Screen name="Components" component={ComponentListScreen} />
-        {Object.values(ComponentScreens)}
+        <ComponentStack.Screen name="Components" component={ComponentListScreen} options={{ headerShown: false }} />
+        {Object.entries(ComponentScreens).map(([key, { name, component }]) => (
+            <ComponentStack.Screen key={name} name={key as keyof typeof ComponentScreens} component={component} />
+        ))}
     </ComponentStack.Navigator>
 );

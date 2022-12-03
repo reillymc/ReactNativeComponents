@@ -30,7 +30,7 @@ const exampleData: ExampleData[] = [
 export const ListPagePage: React.FunctionComponent = () => {
     return (
         <ComponentPage
-            componentName="Button"
+            componentName="List Page"
             fullscreen={true}
             component={
                 <ListPage

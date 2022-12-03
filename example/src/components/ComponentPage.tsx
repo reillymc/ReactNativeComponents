@@ -9,7 +9,12 @@ export interface ComponentPageProps {
     fullscreen?: boolean;
 }
 
-export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ component, propsPanel, fullscreen }) => {
+export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
+    component,
+    componentName,
+    propsPanel,
+    fullscreen,
+}) => {
     const { theme } = useTheme();
 
     const styles = createStyles(theme);
@@ -19,7 +24,7 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({ com
             {!fullscreen && (
                 <View style={styles.propsContainer}>
                     <Text variant="title" style={styles.heading}>
-                        Props
+                        {componentName}
                     </Text>
                     {propsPanel}
                 </View>

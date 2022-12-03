@@ -7,6 +7,7 @@ import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
     onSelect: {
         type: "function",
+        label: "onSelect",
     },
     placeholder: {
         type: "string",
@@ -14,6 +15,7 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
     },
     width: {
         type: "array",
+        label: "Width",
         values: ["small", "large", "full"],
     },
 };
@@ -34,7 +36,7 @@ export const DropdownInputPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="DropdownInput"
+            componentName="Dropdown Input"
             component={<DropdownInput {...props} onSelect={e => setProps(prev => ({ ...prev, selectedItem: e }))} />}
             propsPanel={
                 <PropsPanel

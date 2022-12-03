@@ -96,7 +96,7 @@ export const ListItemPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="Button"
+            componentName="List Item"
             component={<ListItem {...props} />}
             propsPanel={
                 <PropsPanel

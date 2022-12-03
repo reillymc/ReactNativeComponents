@@ -13,11 +13,6 @@ const propDefinitions: PropDefinitions<SelectionInputProps> = {
         label: "Placeholder",
         type: "string",
     },
-    variant: {
-        label: "Style variant",
-        type: "array",
-        values: ["primary", "secondary", "flat"],
-    },
     width: {
         label: "Size",
         type: "array",
@@ -45,7 +40,6 @@ const defaultProps: SelectionInputProps = {
     placeholder: "Select an item",
     selectedItem: { label: "Item 1", value: "item1" },
     width: "large",
-    variant: "secondary",
     onSelect: () => null,
 };
 
@@ -54,7 +48,7 @@ export const SelectionInputPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="SelectionInput"
+            componentName="Selection Input"
             component={<SelectionInput {...props} onSelect={e => setProps(prev => ({ ...prev, selectedItem: e }))} />}
             propsPanel={
                 <PropsPanel

@@ -48,7 +48,7 @@ export const ToggleInputPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="ToggleInput"
+            componentName="Toggle Input"
             component={<ToggleInput {...props} onChange={setToggled} value={toggled} />}
             propsPanel={
                 <PropsPanel

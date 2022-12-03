@@ -36,7 +36,7 @@ export const TextInputPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="TextInput"
+            componentName="Text Input"
             component={<TextInput {...props} />}
             propsPanel={
                 <PropsPanel

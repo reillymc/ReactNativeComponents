@@ -6,8 +6,10 @@ import { ComponentPage } from "../components";
 export const IconButtonPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
-            componentName="Button"
-            component={<IconButton label="Action" iconName="close" onPress={() => null} variant="primary" size="large" />}
+            componentName="Icon Button"
+            component={
+                <IconButton label="Action" iconName="close" onPress={() => null} variant="primary" size="large" />
+            }
         />
     );
 };
