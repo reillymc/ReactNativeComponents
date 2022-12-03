@@ -29,7 +29,7 @@ export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(
             <BottomSheetTextInput ref={ref as any} editable={!disabled} style={[styles.input, style]} {...props} />
         ) : (
             <RNTextInput
-                ref={ref as any}
+                ref={ref}
                 editable={!disabled}
                 placeholderTextColor={common.input.placeholderTextColor}
                 style={[styles.input, style]}

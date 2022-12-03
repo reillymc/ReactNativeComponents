@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "example",
-    "slug": "example",
+    "name": "React Native Components",
+    "slug": "react-native-components-example",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",

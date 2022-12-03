@@ -52,7 +52,7 @@ export type ComponentStackParamList = {
 /**
  * Map of all components to their respective screen
  */
-export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Components">]: React.ReactNode } = {
+export const ComponentScreens = {
     Action: <ComponentStack.Screen key={"Action"} name="Action" component={ActionPage} />,
     Button: <ComponentStack.Screen key={"Button"} name="Button" component={ButtonPage} />,
     IconAction: <ComponentStack.Screen key={"IconAction"} name="IconAction" component={IconActionPage} />,
@@ -67,7 +67,8 @@ export const ComponentScreens: { [key in keyof Omit<ComponentStackParamList, "Co
     ListPage: <ComponentStack.Screen key={"ListPage"} name="ListPage" component={ListPagePage} />,
     ListItem: <ComponentStack.Screen key={"ListItem"} name="ListItem" component={ListItemPage} />,
     Avatar: <ComponentStack.Screen key={"Avatar"} name="Avatar" component={AvatarPage} />,
-}; //satisfies Record<keyof ComponentStackParamList, React.ReactNode>;
+} satisfies Record<keyof Omit<ComponentStackParamList, "Components">, React.ReactNode>;
+
 
 export const ComponentStackNavigator = () => (
     <ComponentStack.Navigator

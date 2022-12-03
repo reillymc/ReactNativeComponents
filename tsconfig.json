@@ -1,32 +1,31 @@
 {
-    "compilerOptions": {
-        // "baseUrl": "./",
-        "paths": {
-            "@reillymc/react-native-components": [
-                "./src/index"
-            ]
-        },
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
-        "lib": [
-            "esnext"
-        ],
-        "module": "esnext",
-        "moduleResolution": "node",
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "noImplicitUseStrict": false,
-        "noStrictGenericChecks": false,
-        "noUncheckedIndexedAccess": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "target": "esnext"
+  "compilerOptions": {
+    "paths": {
+      "@reillymc/react-native-components": [
+        "./src/index"
+      ]
     },
-    // "extends": "expo/tsconfig.base"
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
+    "lib": [
+      "esnext"
+    ],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitUseStrict": false,
+    "noStrictGenericChecks": false,
+    "noUncheckedIndexedAccess": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "esnext"
+  },
+  "extends": "expo/tsconfig.base"
 }

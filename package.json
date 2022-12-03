@@ -1,6 +1,6 @@
 {
   "name": "@reillymc/react-native-components",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "description": "A collection of React Native components and resources",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -67,7 +67,7 @@
     "react-native": "0.70.5",
     "react-native-builder-bob": "^0.20.0",
     "release-it": "^15.0.0",
-    "typescript": "^4.6.3"
+    "typescript": "^4.9.3"
   },
   "peerDependencies": {
     "@expo/vector-icons": "^13.0",
