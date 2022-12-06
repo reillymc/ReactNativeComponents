@@ -56,6 +56,7 @@ export const DefaultTheme = {
         foreground: "#ffffff",
         foregroundHighlight: "#B5EAD7",
         backgroundOverlay: "#000",
+        shadow: "#555",
 
         border: "#E2E8F0",
 

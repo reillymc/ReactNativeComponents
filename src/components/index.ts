@@ -8,6 +8,7 @@ export { HighlightedText, HighlightedTextProps, HighlightedTextStyles } from "./
 export { Text, TextProps, TextStyles, TextVariant } from "./Text";
 export { Form, FormProps } from "./Form";
 export { ModalHeader, ModalHeaderProps } from "./ModalHeader";
-export { ListItem, ListItemProps, ListItemStyles, ListItemRow, ListItemRowProps } from "./ListItem";
-export * from "./swipeView";
 export * from "./Avatar";
+export * from "./Icon";
+export * from "./ListItem";
+export * from "./swipeView";

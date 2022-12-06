@@ -16,6 +16,7 @@ export interface ListItemStyles {
 
 export interface ListItemProps {
     heading?: string;
+    header?: React.ReactNode;
     avatar?: React.ReactNode;
 
     /**
@@ -25,6 +26,8 @@ export interface ListItemProps {
      */
     contentRows?: Array<React.ReactNode>;
 
+    footer?: React.ReactNode;
+
     swipeActions?: SwipeViewProps["rightActions"];
     style?: StyleProp<ViewStyle>;
     onPress: () => void;
@@ -33,6 +36,8 @@ export interface ListItemProps {
 export const ListItem: React.FC<ListItemProps> = ({
     avatar,
     heading,
+    footer,
+    header,
     contentRows = [],
     swipeActions,
     style,
@@ -45,12 +50,20 @@ export const ListItem: React.FC<ListItemProps> = ({
     return (
         <View style={styles.container}>
             <SwipeView rightActions={swipeActions}>
-                <Pressable onPress={onPress} style={[styles.innerContainer, style]}>
-                    {!!avatar && <View style={styles.avatar}>{avatar}</View>}
-                    <View style={styles.contentContainer}>
-                        {!!heading && <Text variant="heading">{heading}</Text>}
-                        {filteredRows}
+                <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
+                    {header}
+                    <View style={styles.innerContainer}>
+                        {!!avatar && <View style={styles.avatarContainer}>{avatar}</View>}
+                        <View style={styles.contentContainer}>
+                            {!!heading && (
+                                <Text variant="heading" numberOfLines={2}>
+                                    {heading}
+                                </Text>
+                            )}
+                            {filteredRows}
+                        </View>
                     </View>
+                    {footer}
                 </Pressable>
             </SwipeView>
         </View>
@@ -59,13 +72,8 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 ListItem.displayName = "ListItem";
 
-const createStyles = (
-    { styles: { listItem }, theme }: ThemedStyles,
-    { avatar, contentRows = [] }: Partial<ListItemProps>,
-) => {
-    const rowWidthValue = (contentRows.length + 1) * 4;
-
-    return StyleSheet.create({
+const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }: Partial<ListItemProps>) =>
+    StyleSheet.create({
         container: {
             marginBottom: listItem.spacingMargin,
             width: "100%",
@@ -73,23 +81,30 @@ const createStyles = (
             borderRadius: listItem.borderRadius,
             overflow: "hidden",
         },
-        innerContainer: {
-            flexDirection: "row",
+        pressableContainer: {
+            display: "flex",
+            flexDirection: "column",
             backgroundColor: theme.color.foreground,
         },
-        avatar: {
-            marginLeft: listItem.internalSpacing,
-            marginRight: listItem.internalSpacing / 2,
-            width: `${rowWidthValue}%`,
+        innerContainer: {
+            flexDirection: "row",
+        },
+        avatarContainer: {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
         },
+        avatar: {
+            marginLeft: listItem.internalSpacing,
+            marginRight: listItem.internalSpacing / 2,
+        },
         contentContainer: {
+            flex: 1,
             flexDirection: "column",
             alignItems: "flex-start",
             paddingVertical: listItem.internalSpacing,
             paddingLeft: avatar ? 0 : listItem.internalSpacing,
+            paddingRight: listItem.internalSpacing,
         },
         row: {
             marginTop: listItem.contentItemTopMargin,
@@ -100,8 +115,13 @@ const createStyles = (
         contentItem: {
             flexDirection: "row",
         },
+        footer: {
+            display: "flex",
+            marginBottom: listItem.internalSpacing,
+            marginLeft: listItem.internalSpacing,
+            marginRight: listItem.internalSpacing,
+        },
     });
-};
 
 export interface ListItemRowProps {
     contentItems?: Array<React.ReactNode> | React.ReactNode;
@@ -121,4 +141,24 @@ export const ListItemRow: React.FC<ListItemRowProps> = ({ contentItems }) => {
             ))}
         </View>
     );
+};
+
+export interface ListItemAvatarProps {
+    children?: React.ReactNode;
+}
+
+export const ListItemAvatar: React.FC<ListItemAvatarProps> = ({ children }) => {
+    const styles = useThemedStyles(createStyles, {});
+
+    return <View style={styles.avatar}>{children}</View>;
+};
+
+export interface ListItemFooterProps {
+    children?: React.ReactNode;
+}
+
+export const ListItemFooter: React.FC<ListItemFooterProps> = ({ children }) => {
+    const styles = useThemedStyles(createStyles, {});
+
+    return <View style={styles.footer}>{children}</View>;
 };

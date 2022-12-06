@@ -70,7 +70,7 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
 NavigationHeader.displayName = "NavigationHeader";
 
 const createStyles = (
-    { styles: { navigationHeader } }: ThemedStyles,
+    { styles: { navigationHeader }, theme: {color} }: ThemedStyles,
     { scrollPosition = 100 }: Partial<NavigationHeaderProps>,
 ) =>
     StyleSheet.create({
@@ -83,7 +83,7 @@ const createStyles = (
             paddingBottom: navigationHeader.paddingBottom,
             paddingLeft: navigationHeader.paddingLeft,
             paddingRight: navigationHeader.paddingRight,
-            shadowColor: "#555",
+            shadowColor: color.shadow,
             shadowOpacity: 0.2,
             shadowRadius: 5,
             shadowOffset: {
