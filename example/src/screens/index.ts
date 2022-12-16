@@ -11,3 +11,4 @@ export { ModalSheetPage } from "./ModalSheetPage";
 export { SelectionInputPage } from "./SelectionInputPage";
 export { TextInputPage } from "./TextInputPage";
 export { ToggleInputPage } from "./ToggleInputPage";
+export { NumberInputPage } from "./NumberInputPage";

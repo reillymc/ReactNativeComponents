@@ -17,6 +17,7 @@ export const DefaultTheme = {
             tiny: 12,
             small: 14,
             regular: 16,
+            emphasised: 18,
             large: 20,
             xLarge: 24,
             xxLarge: 32,
@@ -60,7 +61,7 @@ export const DefaultTheme = {
 
         border: "#E2E8F0",
 
-        inputBackground: "#718096",
+        inputBackground: "#e4d8d4",
         inputBackgroundDisabled: "#E2E8F0",
         inputText: "#12263A",
     },

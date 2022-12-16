@@ -34,6 +34,7 @@ export type Styles = {
             disabledTextColor: string;
             backgroundColor: string;
             backgroundColorDisabled: string;
+            labelMarginBottom: number;
         };
         action: {
             fontSize: {
@@ -79,6 +80,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
             placeholderTextColor: theme.color.textSecondary,
             backgroundColor: theme.color.inputBackground,
             backgroundColorDisabled: theme.color.inputBackgroundDisabled,
+            labelMarginBottom: 6,
         },
         action: {
             fontSize: {
@@ -90,11 +92,13 @@ export const createDefaultStyles: CreateStyles = theme => ({
         textColor: theme.color.textPrimary,
         fontFamilyWeight: {
             body: theme.font.familyWeight.regular400,
+            label: theme.font.familyWeight.bold600,
             heading: theme.font.familyWeight.bold600,
             title: theme.font.familyWeight.bold800,
         },
         fontFamilySize: {
             body: theme.font.size.regular,
+            label: theme.font.size.emphasised,
             heading: theme.font.size.large,
             title: theme.font.size.xxLarge,
         },

@@ -23,12 +23,13 @@ export interface ModalSheetStyles {
 
 interface ModalSheetProps {
     show: boolean;
+    preventDragToClose?: boolean;
     height?: ModalHeight;
     children?: React.ReactNode;
     onClose: () => void;
 }
 
-const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children, onClose }) => {
+const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children, preventDragToClose, onClose }) => {
     const ref = React.useRef<BottomSheet>(null);
 
     const styles = useThemedStyles(createStyles, {});
@@ -49,7 +50,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
                 ref={ref}
                 index={show ? 0 : -1}
                 enableOverDrag
-                enablePanDownToClose
+                enablePanDownToClose={!preventDragToClose}
                 backgroundStyle={styles.sheetBackground}
                 keyboardBlurBehavior={show ? "restore" : "none"}
                 snapPoints={[modalSheet.height[height]]}

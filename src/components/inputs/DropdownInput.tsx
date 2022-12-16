@@ -5,6 +5,7 @@ import { IsValidString } from "../../helpers";
 import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { FloatingContainer } from "../FloatingContainer";
 import { HighlightedText } from "../HighlightedText";
+import { BaseInput, BaseInputProps } from "./BaseInput";
 import { TextInput, TextInputProps } from "./TextInput";
 
 export type DropdownItem = {
@@ -18,9 +19,10 @@ export interface DropdownInputStyles {
 
 export interface DropdownInputProps
     extends Pick<
-        TextInputProps,
-        "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
-    > {
+            TextInputProps,
+            "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
+        >,
+        BaseInputProps {
     items?: Array<DropdownItem>;
     selectedItem?: DropdownItem;
 
@@ -52,7 +54,17 @@ export interface DropdownInputProps
 
 export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
     (
-        { items = [], selectedItem, minimumSearchLength = 1, maxSuggestionCount = 5, style, onSelect, onAdd, ...props },
+        {
+            items = [],
+            label,
+            selectedItem,
+            minimumSearchLength = 1,
+            maxSuggestionCount = 5,
+            style,
+            onSelect,
+            onAdd,
+            ...props
+        },
         ref,
     ) => {
         const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? "");
@@ -114,7 +126,7 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
         }, [viewRef.current, searchValue]);
 
         return (
-            <>
+            <BaseInput label={label}>
                 <View ref={viewRef} style={{ display: "flex", flexDirection: "column", ...style }}>
                     <TextInput
                         {...props}
@@ -152,7 +164,7 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
                             ))}
                     </FloatingContainer>
                 )}
-            </>
+            </BaseInput>
         );
     },
 );

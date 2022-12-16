@@ -16,6 +16,7 @@ import {
     IconActionPage,
     TextInputPage,
     ToggleInputPage,
+    NumberInputPage,
 } from "../screens";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
@@ -45,6 +46,7 @@ export const ComponentScreens = {
     DropdownInput: { name: "Dropdown Input", component: DropdownInputPage },
     SelectionInput: { name: "Selection Input", component: SelectionInputPage },
     TextInput: { name: "Text Input", component: TextInputPage },
+    NumberInput: { name: "Number Input", component: NumberInputPage },
     ToggleInput: { name: "Toggle Input", component: ToggleInputPage },
     ModalSheet: { name: "Modal Sheet", component: ModalSheetPage },
     ListPage: { name: "List Page", component: ListPagePage },

@@ -80,10 +80,8 @@ export const PropsPanel = <T extends Record<string, any>>({
                         case "string":
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
-                                    <Text variant="heading" style={styles.propHeading}>
-                                        {definition.label ?? propId}
-                                    </Text>
                                     <TextInput
+                                        label={definition.label ?? propId}
                                         value={currentValue}
                                         onChangeText={value => onChange(propId, value)}
                                         width="full"
@@ -103,10 +101,8 @@ export const PropsPanel = <T extends Record<string, any>>({
                         case "array":
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
-                                    <Text variant="heading" style={styles.propHeading}>
-                                        {definition.label ?? propId}
-                                    </Text>
                                     <SelectionInput
+                                        label={definition.label}
                                         items={definition.values.map(value => ({ value, label: value }))}
                                         onSelect={value => onChange(propId, value?.value)}
                                         selectedItem={{ label: currentValue, value: currentValue }}
@@ -124,9 +120,6 @@ export const PropsPanel = <T extends Record<string, any>>({
                             };
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
-                                    <Text variant="heading" style={styles.propHeading}>
-                                        {definition.label ?? propId}
-                                    </Text>
                                     <SelectionInput
                                         label={definition.label}
                                         items={definition.values}

@@ -6,6 +6,7 @@ import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { ModalHeader } from "../ModalHeader";
 import { ModalSheet, ModalSheetFlatList } from "../ModalSheet";
 import { Text } from "../Text";
+import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export type SelectionInputStyles = {};
 
@@ -14,8 +15,7 @@ export type SelectionItem<T> = {
     value: T;
 };
 
-export interface SelectionInputProps<T extends {} = string> {
-    label?: string;
+export interface SelectionInputProps<T extends {} = string> extends BaseInputProps {
     placeholder?: string;
     // variant?: Exclude<ActionVariant, "destructive">;
     width?: InputWidth;
@@ -47,7 +47,7 @@ export const SelectionInput = <T extends {} = string>({
     };
 
     return (
-        <>
+        <BaseInput label={label}>
             <Pressable
                 hitSlop={20}
                 disabled={disabled}
@@ -82,7 +82,7 @@ export const SelectionInput = <T extends {} = string>({
                     )}
                 />
             </ModalSheet>
-        </>
+        </BaseInput>
     );
 };
 

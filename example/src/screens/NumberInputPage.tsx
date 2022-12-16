@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, TextInput, TextInputProps } from "@reillymc/react-native-components";
+import { Text, NumberInput, NumberInputProps } from "@reillymc/react-native-components";
 
 import { ComponentPage } from "../components";
 import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 
-const propDefinitions: PropDefinitions<TextInputProps> = {
+const propDefinitions: PropDefinitions<NumberInputProps> = {
     placeholder: {
         type: "string",
         label: "Placeholder text",
@@ -35,19 +35,19 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
     },
 };
 
-const defaultProps: TextInputProps = {
-    placeholder: "Text Input",
+const defaultProps: NumberInputProps = {
+    placeholder: "0",
     width: "large",
     disabled: false,
 };
 
-export const TextInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TextInputProps>(defaultProps);
+export const NumberInputPage: React.FunctionComponent = () => {
+    const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Text Input"
-            component={<TextInput {...props} />}
+            componentName="Number Input"
+            component={<NumberInput {...props} />}
             propsPanel={
                 <PropsPanel
                     propValues={props}

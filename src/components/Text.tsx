@@ -3,7 +3,7 @@ import { StyleSheet, Text as RNText, TextProps as RNTextProps } from "react-nati
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
-export type TextVariant = "title" | "heading" | "body";
+export type TextVariant = "title" | "heading" | "body" | "label";
 
 export interface TextStyles {
     textColor: string;

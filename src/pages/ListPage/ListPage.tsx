@@ -5,7 +5,7 @@ import { FlatList } from "react-native-gesture-handler";
 
 import { Text, NavigationHeaderProps } from "../../components";
 
-interface ListPageProps<T> extends Omit<FlatListProps<T>, "ListHeaderComponent"> {
+interface ListPageProps<T> extends FlatListProps<T> {
     /**
      * Supports:
      * - `<NavigationHeader/>` component
@@ -19,7 +19,14 @@ interface ListPageProps<T> extends Omit<FlatListProps<T>, "ListHeaderComponent">
     modal?: React.ReactNode;
 }
 
-const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...flatListProps }: ListPageProps<T>) => {
+const ListPage = <T extends any>({
+    heading,
+    modal,
+    contentContainerStyle,
+    ListHeaderComponentStyle,
+    ListHeaderComponent,
+    ...flatListProps
+}: ListPageProps<T>) => {
     const navigation = useNavigation();
 
     const [scrollPosition, setScrollPosition] = React.useState(0);
@@ -45,8 +52,13 @@ const ListPage = <T extends any>({ heading, modal, contentContainerStyle, ...fla
             <FlatList
                 {...flatListProps}
                 contentContainerStyle={[styles.listContentContainer, contentContainerStyle]}
-                ListHeaderComponentStyle={styles.listHeader}
-                ListHeaderComponent={<Text variant="title">{heading.props.heading}</Text>}
+                ListHeaderComponentStyle={[styles.listHeader, ListHeaderComponentStyle]}
+                ListHeaderComponent={
+                    <>
+                        <Text variant="title">{heading.props.heading}</Text>
+                        {ListHeaderComponent}
+                    </>
+                }
                 onScroll={e => setScrollPosition(e.nativeEvent.contentOffset.y)}
             />
             {modal}

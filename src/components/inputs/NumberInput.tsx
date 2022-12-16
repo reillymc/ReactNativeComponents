@@ -1,50 +1,49 @@
 import React from "react";
-import { TextInput as RNTextInput, TextInputProps as RNTextInputProps, StyleSheet } from "react-native";
-import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
+import { StyleSheet, TextInput as RNTextInput } from "react-native";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { InputWidth } from ".";
-import { BaseInput, BaseInputProps } from "./BaseInput";
+import { TextInput, TextInputProps } from "./TextInput";
+import { BaseInput } from "./BaseInput";
 
-export interface TextInputStyles {
-    // textColor: string;
-    // placeholderTextColor: string;
-    // backgroundColor: string;
-    // backgroundColorDisabled: string;
-}
+export interface NumberInputStyles {}
 
-export interface TextInputProps extends Omit<RNTextInputProps, "editable">, BaseInputProps {
-    width?: InputWidth;
-    disabled?: boolean;
-    modalSupport?: boolean;
-}
+export interface NumberInputProps extends TextInputProps {}
 
-export const TextInput = React.forwardRef<RNTextInput, TextInputProps>(
-    ({ style, width, disabled = false, modalSupport, label, ...props }, ref) => {
+export const NumberInput = React.forwardRef<RNTextInput, NumberInputProps>(
+    ({ style, width, disabled = false, modalSupport, label, onChangeText, ...props }, ref) => {
         const styles = useThemedStyles(createStyles, { width, disabled });
         const {
             styles: { common },
         } = useTheme();
 
-        const Component = modalSupport ? BottomSheetTextInput : RNTextInput;
+        const handleChangeText = React.useCallback(
+            (text: string) => {
+                if (onChangeText) {
+                    onChangeText(text);
+                }
+            },
+            [onChangeText],
+        );
 
         return (
             <BaseInput label={label}>
-                <Component
+                <TextInput
                     ref={ref as any}
-                    editable={!disabled}
+                    disabled={disabled}
                     placeholderTextColor={common.input.placeholderTextColor}
                     style={[styles.input, style]}
+                    keyboardType="numeric"
                     {...props}
+                    onChangeText={handleChangeText}
                 />
             </BaseInput>
         );
     },
 );
 
-TextInput.displayName = "TextInput";
+NumberInput.displayName = "NumberInput";
 
-const createStyles = ({ styles: { common } }: ThemedStyles, { width = "large", disabled }: TextInputProps) =>
+const createStyles = ({ styles: { common } }: ThemedStyles, { width = "large", disabled }: NumberInputProps) =>
     StyleSheet.create({
         input: {
             display: "flex",
