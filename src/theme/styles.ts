@@ -5,7 +5,6 @@ import {
     DropdownInputStyles,
     HighlightedTextStyles,
     IconButtonStyles,
-    InputWidth,
     ModalSheetStyles,
     NavigationHeaderStyles,
     TextInputStyles,
@@ -14,28 +13,14 @@ import {
     ActionStyles,
     ListItemStyles,
     AvatarStyles,
+    BaseInputStyles,
 } from "../components";
 import { DeepPartial } from "../helpers";
 import { Theme } from "./theme";
 
 export type Styles = {
+    baseInput: BaseInputStyles;
     common: {
-        input: {
-            height: number | string;
-            width: {
-                [key in InputWidth]: string | number;
-            };
-            borderRadius: number;
-            padding: number;
-            fontSize: number;
-            fontFamilyWeight: string;
-            textColor: string;
-            placeholderTextColor: string;
-            disabledTextColor: string;
-            backgroundColor: string;
-            backgroundColorDisabled: string;
-            labelMarginBottom: number;
-        };
         action: {
             fontSize: {
                 [key in ActionSize]: number;
@@ -63,25 +48,25 @@ export type StyleOverrides = DeepPartial<Styles>;
 export type CreateStyles = (theme: Theme) => Styles;
 
 export const createDefaultStyles: CreateStyles = theme => ({
-    common: {
-        input: {
-            height: 48,
-            width: {
-                full: "100%",
-                large: "70%",
-                small: "50%",
-            },
-            borderRadius: 6,
-            padding: 8,
-            fontSize: theme.font.size.regular,
-            fontFamilyWeight: theme.font.familyWeight.regular400,
-            textColor: theme.color.textPrimary,
-            disabledTextColor: theme.color.textDisabled,
-            placeholderTextColor: theme.color.textSecondary,
-            backgroundColor: theme.color.inputBackground,
-            backgroundColorDisabled: theme.color.inputBackgroundDisabled,
-            labelMarginBottom: 6,
+    baseInput: {
+        height: 48,
+        width: {
+            full: "100%",
+            large: "70%",
+            small: "40%",
         },
+        borderRadius: 6,
+        padding: 8,
+        fontSize: theme.font.size.regular,
+        fontFamilyWeight: theme.font.familyWeight.regular400,
+        textColor: theme.color.textPrimary,
+        disabledTextColor: theme.color.textDisabled,
+        placeholderTextColor: theme.color.textSecondary,
+        backgroundColor: theme.color.inputBackground,
+        backgroundColorDisabled: theme.color.inputBackgroundDisabled,
+        labelMarginBottom: 6,
+    },
+    common: {
         action: {
             fontSize: {
                 ...theme.font.size,

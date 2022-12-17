@@ -14,9 +14,14 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
         label: "Placeholder text",
     },
     width: {
-        type: "array",
+        type: "enum",
         label: "Width",
-        values: ["small", "large", "full"],
+        default: "Large",
+        values: [
+            { label: "Small", value: "small" },
+            { label: "Large", value: "large" },
+            { label: "Full", value: "full" },
+        ],
     },
 };
 

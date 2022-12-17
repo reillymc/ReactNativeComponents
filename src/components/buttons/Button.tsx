@@ -84,7 +84,7 @@ Button.displayName = "Button";
 export { Button, ButtonProps, ButtonStyles };
 
 const createStyles = (
-    { styles: { button, common } }: ThemedStyles,
+    { styles: { button, common, baseInput } }: ThemedStyles,
     { size = "large", contentAlign, variant }: Partial<ButtonProps>,
 ) =>
     StyleSheet.create({
@@ -100,6 +100,6 @@ const createStyles = (
             fontFamily: button.fontFamilyWeight,
             fontSize: common.action.fontSize[size],
             textAlign: contentAlign,
-            paddingHorizontal: variant !== "flat" ? common.input.padding : 0,
+            paddingHorizontal: variant !== "flat" ? baseInput.padding : 0,
         },
     });

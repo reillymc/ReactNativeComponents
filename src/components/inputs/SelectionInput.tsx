@@ -47,49 +47,58 @@ export const SelectionInput = <T extends {} = string>({
     };
 
     return (
-        <BaseInput label={label}>
-            <Pressable
-                hitSlop={20}
-                disabled={disabled}
-                style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : undefined, style]}
-                onPress={() => setShowOptions(true)}
-            >
-                {() => (
-                    <View style={styles.container}>
-                        <Text style={disabled ? styles.labelDisabled : undefined}>
-                            {selectedItem?.label ?? placeholder}
-                        </Text>
-                        <AntDesign name="down" style={styles.icon} />
-                    </View>
-                )}
-            </Pressable>
-            <ModalSheet height="mid" onClose={() => setShowOptions(false)} show={showOptions}>
-                <ModalSheetFlatList
-                    ListHeaderComponent={<ModalHeader heading={label} />}
-                    data={items}
-                    renderItem={({ item, index }) => (
-                        <Pressable
-                            key={index}
-                            onPress={() => handleItemPress(item)}
-                            style={{
-                                borderRadius: 5,
-                                marginVertical: 2,
-                                padding: 10,
-                            }}
-                        >
-                            {selectedItem?.value === item.value ? <Text>{item.label}</Text> : <Text>{item.label}</Text>}
-                        </Pressable>
+        <BaseInput
+            label={label}
+            inputElement={
+                <Pressable
+                    hitSlop={20}
+                    disabled={disabled}
+                    style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : undefined, style]}
+                    onPress={() => setShowOptions(true)}
+                >
+                    {() => (
+                        <View style={styles.container}>
+                            <Text style={disabled ? styles.labelDisabled : undefined}>
+                                {selectedItem?.label ?? placeholder}
+                            </Text>
+                            <AntDesign name="down" style={styles.icon} />
+                        </View>
                     )}
-                />
-            </ModalSheet>
-        </BaseInput>
+                </Pressable>
+            }
+            modalElement={
+                <ModalSheet height="mid" onClose={() => setShowOptions(false)} show={showOptions}>
+                    <ModalSheetFlatList
+                        ListHeaderComponent={<ModalHeader heading={label} />}
+                        data={items}
+                        renderItem={({ item, index }) => (
+                            <Pressable
+                                key={index}
+                                onPress={() => handleItemPress(item)}
+                                style={{
+                                    borderRadius: 5,
+                                    marginVertical: 2,
+                                    padding: 10,
+                                }}
+                            >
+                                {selectedItem?.value === item.value ? (
+                                    <Text>{item.label}</Text>
+                                ) : (
+                                    <Text>{item.label}</Text>
+                                )}
+                            </Pressable>
+                        )}
+                    />
+                </ModalSheet>
+            }
+        />
     );
 };
 
 SelectionInput.displayName = "SelectionInput";
 
 const createStyles = (
-    { styles: { common }, theme }: ThemedStyles,
+    { styles: { baseInput }, theme }: ThemedStyles,
     { width = "full", disabled }: Partial<SelectionInputProps>,
 ) => {
     // const backgroundColor = {
@@ -121,29 +130,29 @@ const createStyles = (
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingHorizontal: common.input.padding, //variant !== "flat" ? common.input.padding : 0,
+            paddingHorizontal: baseInput.padding, //variant !== "flat" ? common.input.padding : 0,
             alignItems: "center",
         },
         button: {
             justifyContent: "center",
-            borderRadius: common.input.borderRadius,
-            width: common.input.width[width],
-            minWidth: common.input.width[width],
-            height: common.input.height,
-            backgroundColor: disabled ? common.input.backgroundColorDisabled : common.input.backgroundColor,
-            color: disabled ? common.input.disabledTextColor : common.input.textColor,
-            padding: common.input.padding,
-            fontSize: common.input.fontSize,
+            borderRadius: baseInput.borderRadius,
+            width: baseInput.width[width],
+            minWidth: baseInput.width[width],
+            height: baseInput.height,
+            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
+            padding: baseInput.padding,
+            fontSize: baseInput.fontSize,
         },
         buttonPressed: {
-            backgroundColor: disabled ? common.input.backgroundColorDisabled : theme.color.backgroundHighlight,
-            color: disabled ? common.input.disabledTextColor : theme.color.textHighlight,
+            backgroundColor: disabled ? baseInput.backgroundColorDisabled : theme.color.backgroundHighlight,
+            color: disabled ? baseInput.disabledTextColor : theme.color.textHighlight,
         },
         labelDisabled: {
-            color: common.input.disabledTextColor,
+            color: baseInput.disabledTextColor,
         },
         icon: {
-            color: disabled ? common.input.disabledTextColor : common.input.textColor,
+            color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
         },
     });
 };

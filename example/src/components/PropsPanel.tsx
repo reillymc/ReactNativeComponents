@@ -1,6 +1,14 @@
 import React from "react";
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
-import { SelectionInput, Text, TextInput, Theme, ToggleInput, useTheme } from "@reillymc/react-native-components";
+import {
+    NumberInput,
+    SelectionInput,
+    Text,
+    TextInput,
+    Theme,
+    ToggleInput,
+    useTheme,
+} from "@reillymc/react-native-components";
 import { SelectionItem } from "../../../src/components/inputs/SelectionInput";
 
 type PropDefinitionBase = {
@@ -9,6 +17,10 @@ type PropDefinitionBase = {
 
 type StringPropDefinition = {
     type: "string";
+};
+
+type NumberPropDefinition = {
+    type: "number";
 };
 
 type BooleanPropDefinition = {
@@ -33,6 +45,7 @@ interface EnumPropDefinition<T> {
 type PropDefinition<T> = PropDefinitionBase &
     (
         | StringPropDefinition
+        | NumberPropDefinition
         | BooleanPropDefinition
         | FunctionPropDefinition
         | ArrayPropDefinition
@@ -81,6 +94,17 @@ export const PropsPanel = <T extends Record<string, any>>({
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
                                     <TextInput
+                                        label={definition.label ?? propId}
+                                        value={currentValue}
+                                        onChangeText={value => onChange(propId, value)}
+                                        width="full"
+                                    />
+                                </View>
+                            );
+                        case "number":
+                            return (
+                                <View key={definition.label} style={styles.propContainer}>
+                                    <NumberInput
                                         label={definition.label ?? propId}
                                         value={currentValue}
                                         onChangeText={value => onChange(propId, value)}

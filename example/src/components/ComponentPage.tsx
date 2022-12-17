@@ -44,6 +44,8 @@ const createStyles = (theme: Theme) =>
         },
         componentContainer: {
             flex: 1,
+            marginTop: 40,
+            minHeight: 60,
         },
         centred: {
             alignItems: "center",

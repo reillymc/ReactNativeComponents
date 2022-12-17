@@ -1,60 +1,50 @@
 import React from "react";
-import { StyleSheet, TextInput as RNTextInput } from "react-native";
+import { NativeSyntheticEvent, TextInput as RNTextInput, TextInputChangeEventData } from "react-native";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { TextInput, TextInputProps } from "./TextInput";
-import { BaseInput } from "./BaseInput";
+import { BaseInput, BaseInputProps } from "./BaseInput";
 
 export interface NumberInputStyles {}
 
-export interface NumberInputProps extends TextInputProps {}
+export interface NumberInputProps extends BaseInputProps {
+    keyboardType?: "decimal-pad" | "number-pad";
+
+    min?: number;
+
+    max?: number;
+
+    /**
+     * Validates number entry and returns string.
+     */
+    onChangeText?: (text: string) => void;
+
+    /**
+     * Passes through raw event. No number validation performed.
+     */
+    onChange?: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+}
 
 export const NumberInput = React.forwardRef<RNTextInput, NumberInputProps>(
-    ({ style, width, disabled = false, modalSupport, label, onChangeText, ...props }, ref) => {
-        const styles = useThemedStyles(createStyles, { width, disabled });
-        const {
-            styles: { common },
-        } = useTheme();
-
+    ({ onChangeText, onChange, keyboardType = "number-pad", min, max, ...props }, ref) => {
         const handleChangeText = React.useCallback(
             (text: string) => {
                 if (onChangeText) {
-                    onChangeText(text);
+                    const regExp = keyboardType === "decimal-pad" ? /^([0-9]*\.*[0-9]*)/g : /^([0-9]*)/g;
+                    const validatedString = text.match(regExp)?.[0];
+                    let num = parseFloat(validatedString ?? "");
+
+                    if (Number.isNaN(num) || validatedString !== num.toString()) {
+                        if (onChangeText) onChangeText(validatedString ?? "");
+                        return;
+                    }
+
+                    if (onChangeText) onChangeText(num.toString());
                 }
             },
-            [onChangeText],
+            [onChangeText, keyboardType, min, max],
         );
 
-        return (
-            <BaseInput label={label}>
-                <TextInput
-                    ref={ref as any}
-                    disabled={disabled}
-                    placeholderTextColor={common.input.placeholderTextColor}
-                    style={[styles.input, style]}
-                    keyboardType="numeric"
-                    {...props}
-                    onChangeText={handleChangeText}
-                />
-            </BaseInput>
-        );
+        return <BaseInput {...props} ref={ref} keyboardType={keyboardType} onChangeText={handleChangeText} />;
     },
 );
 
 NumberInput.displayName = "NumberInput";
-
-const createStyles = ({ styles: { common } }: ThemedStyles, { width = "large", disabled }: NumberInputProps) =>
-    StyleSheet.create({
-        input: {
-            display: "flex",
-            width: common.input.width[width],
-            minWidth: common.input.width[width],
-            height: common.input.height,
-            borderRadius: common.input.borderRadius,
-            backgroundColor: disabled ? common.input.backgroundColorDisabled : common.input.backgroundColor,
-            padding: common.input.padding,
-            fontSize: common.input.fontSize,
-            fontFamily: common.input.fontFamilyWeight,
-            color: common.input.textColor,
-        },
-    });
