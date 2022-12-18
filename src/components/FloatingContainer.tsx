@@ -4,18 +4,17 @@ import { Portal } from "@gorhom/portal";
 import { BlurView } from "expo-blur";
 
 export interface FloatingContainerProps {
-    style?: StyleProp<ViewStyle>;
     position: {
         x?: number;
         y?: number;
-        inverted?: boolean;
     };
-
+    align?: "top" | "bottom";
+    style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
 }
 
 export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
-    ({ style, position, children }, ref) => {
+    ({ style, align = "top", position, children }, ref) => {
         const styles = createStyles({ position });
         const colorScheme = useColorScheme();
 
@@ -25,7 +24,7 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
                     ref={ref}
                     intensity={1}
                     tint={colorScheme === "dark" ? "dark" : "light"}
-                    style={[position.inverted ? styles.containerInverse : styles.container, style]}
+                    style={[align == "top" ? styles.container : styles.containerInverse, style]}
                 >
                     {children}
                 </BlurView>
@@ -36,8 +35,7 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
 
 FloatingContainer.displayName = "FloatingContainer";
 
-const createStyles = ({ position: { x = 0, y = 0 } }: FloatingContainerProps) => (
-    console.log(x, y),
+const createStyles = ({ position: { x = 0, y = 0 } }: FloatingContainerProps) =>
     StyleSheet.create({
         container: {
             position: "absolute",
@@ -49,5 +47,4 @@ const createStyles = ({ position: { x = 0, y = 0 } }: FloatingContainerProps) =>
             bottom: y,
             left: x,
         },
-    })
-);
+    });

@@ -53,20 +53,21 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             selectedItem,
             minimumSearchLength = 1,
             maxSuggestionCount = 5,
-            style,
             onSelect,
+            onChangeText,
             onAdd,
             width,
+            value,
             ...props
         },
         ref,
     ) => {
-        const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? "");
+        const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? value ?? "");
         const [hasFocus, setHasFocus] = React.useState(false);
 
         React.useEffect(() => {
-            setSearchValue(selectedItem?.label ?? "");
-        }, [selectedItem]);
+            setSearchValue(selectedItem?.label ?? value ?? "");
+        }, [selectedItem, value]);
 
         // const updateValue = (autoSelectHighlighted?: boolean) => {
         //     if (!IsValidString(searchValue)) {
@@ -99,6 +100,7 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
 
         const handleChangeText = (text: string) => {
             setSearchValue(text);
+            onChangeText?.(text);
         };
 
         const handleSubmitEditing = () => {
@@ -120,7 +122,6 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
                 panelElement={
                     <DropdownPanel
                         items={items}
-                        width={width}
                         maxSuggestionCount={maxSuggestionCount}
                         onSelect={onSelect}
                         searchValue={searchValue}

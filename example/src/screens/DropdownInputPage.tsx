@@ -1,8 +1,7 @@
 import React from "react";
 import { DropdownInput, DropdownInputProps } from "@reillymc/react-native-components";
 
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
     onSelect: {
@@ -42,7 +41,13 @@ export const DropdownInputPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Dropdown Input"
-            component={<DropdownInput {...props} onSelect={e => setProps(prev => ({ ...prev, selectedItem: e }))} />}
+            component={
+                <DropdownInput
+                    {...props}
+                    onSelect={e => setProps(prev => ({ ...prev, selectedItem: e }))}
+                    containerStyle={{ width: "50%", marginLeft: 20 }}
+                />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}

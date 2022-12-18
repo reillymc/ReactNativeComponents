@@ -1,14 +1,13 @@
 import React from "react";
-import { View, useWindowDimensions, Keyboard, StyleSheet } from "react-native";
+import { View, useWindowDimensions, StyleSheet } from "react-native";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../../hooks";
+import { ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../../../hooks";
 import { FloatingContainer } from "../../FloatingContainer";
 import { DropdownInputProps } from "./DropdownInput";
 import { DropdownItem } from ".";
 
 export interface DropdownPanelProps {
     items: DropdownInputProps["items"];
-    width: DropdownInputProps["width"];
     searchValue: string;
     maxSuggestionCount: number;
     visible: boolean;
@@ -17,7 +16,6 @@ export interface DropdownPanelProps {
 
 export const DropdownPanel: React.FC<DropdownPanelProps> = ({
     items = [],
-    width,
     maxSuggestionCount,
     searchValue,
     visible,
@@ -29,42 +27,30 @@ export const DropdownPanel: React.FC<DropdownPanelProps> = ({
     const [layout, setLayout] = React.useState<{
         x: number;
         y: number;
+        width: number;
     }>();
 
     const [inverted, setInverted] = React.useState(false);
-    const styles = useThemedStyles(createStyles, { width });
+    const styles = useThemedStyles(createStyles, {});
     const {
         styles: { baseInput, dropdownInput },
     } = useTheme();
 
     const { height: screenHeight } = useWindowDimensions();
-    const [keyboardHeight, setKeyboardHeight] = React.useState(0);
-
-    React.useEffect(() => {
-        const showListener = Keyboard.addListener("keyboardWillShow", e => {
-            setKeyboardHeight(e.endCoordinates.height);
-        });
-
-        const hideListener = Keyboard.addListener("keyboardWillHide", () => {
-            setKeyboardHeight(0);
-        });
-        return () => {
-            showListener.remove();
-            hideListener.remove();
-        };
-    }, []);
+    const { keyboardHeight } = useKeyboardHeight();
 
     React.useLayoutEffect(() => {
-        viewRef.current?.measure((_vx, _vy, _vw, _vh, viewX, viewY) => {
+        viewRef.current?.measure((_vx, _vy, viewWidth, _vh, viewX, viewY) => {
             containerRef.current?.measure((_cx, _cy, _cw, containerHeight) => {
                 if (inverted || viewY + (containerHeight || 35 * maxSuggestionCount) > screenHeight - keyboardHeight) {
                     setLayout({
                         x: viewX,
                         y: screenHeight - viewY + (dropdownInput.dropdownMarginTop + baseInput.height),
+                        width: viewWidth,
                     });
                     if (!inverted) setInverted(true);
                 } else {
-                    setLayout({ x: viewX, y: viewY });
+                    setLayout({ x: viewX, y: viewY, width: viewWidth });
                 }
             });
         });
@@ -76,11 +62,12 @@ export const DropdownPanel: React.FC<DropdownPanelProps> = ({
     displayItems = !inverted ? displayItems.reverse() : displayItems;
 
     return (
-        <View ref={viewRef} style={{ display: "flex", flexDirection: "column" }}>
+        <View ref={viewRef} style={{ display: "flex" }}>
             <FloatingContainer
                 ref={containerRef}
-                position={{ ...layout, inverted }}
-                style={[{ opacity: visible ? 0.9 : 0 }, styles.dropdownContainer]}
+                position={{ x: layout?.x, y: layout?.y }}
+                align={inverted ? "bottom" : "top"}
+                style={[{ opacity: visible ? 0.9 : 0, width: layout?.width }, styles.dropdownContainer]}
             >
                 {visible &&
                     displayItems.map(item => (
@@ -96,15 +83,11 @@ export const DropdownPanel: React.FC<DropdownPanelProps> = ({
     );
 };
 
-const createStyles = (
-    { styles: { dropdownInput, baseInput } }: ThemedStyles,
-    { width = "full" }: Partial<DropdownInputProps>,
-) =>
+const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles, {}: Partial<DropdownInputProps>) =>
     StyleSheet.create({
         dropdownContainer: {
             marginTop: dropdownInput.dropdownMarginTop,
             backgroundColor: baseInput.backgroundColor,
-            width: baseInput.width[width],
             borderRadius: baseInput.borderRadius,
             overflow: "hidden",
         },

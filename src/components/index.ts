@@ -12,3 +12,4 @@ export * from "./Avatar";
 export * from "./Icon";
 export * from "./ListItem";
 export * from "./swipeView";
+export * from "./KeyboardAccessory";

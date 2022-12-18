@@ -39,13 +39,11 @@ const createStyles = (theme: Theme) =>
     StyleSheet.create({
         container: {
             flex: 1,
-            justifyContent: "center",
             backgroundColor: theme.color.background,
         },
         componentContainer: {
-            flex: 1,
-            marginTop: 40,
-            minHeight: 60,
+            flex: 2,
+            paddingTop: 60,
         },
         centred: {
             alignItems: "center",
@@ -53,7 +51,7 @@ const createStyles = (theme: Theme) =>
         },
         propsContainer: {
             display: "flex",
-            flex: 3,
+            flex: 4,
         },
         heading: {
             marginLeft: 16,

@@ -1,6 +1,13 @@
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import React from "react";
-import { StyleSheet, View, TextInput as RNTextInput, TextInputProps as RNTextInputProps } from "react-native";
+import {
+    StyleSheet,
+    View,
+    TextInput as RNTextInput,
+    TextInputProps as RNTextInputProps,
+    StyleProp,
+    ViewStyle,
+} from "react-native";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Text } from "../Text";
@@ -44,10 +51,26 @@ export interface BaseInputProps extends Omit<RNTextInputProps, "editable"> {
     inputElement?: React.ReactNode;
     panelElement?: React.ReactNode;
     modalElement?: React.ReactNode;
+
+    containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const BaseInput = React.forwardRef<RNTextInput, BaseInputProps>(
-    ({ label, width, disabled, modalSupport, inputElement, panelElement, modalElement, style, ...props }, ref) => {
+    (
+        {
+            label,
+            width,
+            disabled,
+            modalSupport,
+            inputElement,
+            panelElement,
+            modalElement,
+            style,
+            containerStyle,
+            ...props
+        },
+        ref,
+    ) => {
         const styles = useThemedStyles(createStyles, { width, disabled });
         const {
             styles: { baseInput },
@@ -57,7 +80,7 @@ export const BaseInput = React.forwardRef<RNTextInput, BaseInputProps>(
 
         return (
             <>
-                <View style={styles.container}>
+                <View style={[styles.container, containerStyle]}>
                     {label && (
                         <View style={styles.label}>
                             {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
@@ -88,7 +111,6 @@ const createStyles = ({ styles: { baseInput } }: ThemedStyles, { width = "full",
     StyleSheet.create({
         container: {
             display: "flex",
-
             width: baseInput.width[width],
         },
         label: {
