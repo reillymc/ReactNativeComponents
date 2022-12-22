@@ -1,7 +1,7 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
 
-import { Text } from "./Text";
+import { Text } from "../Text";
 
 export interface ModalHeaderProps {
     /**
@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
-        marginTop: 8,
         marginBottom: 20,
     },
     headerItemLeft: {

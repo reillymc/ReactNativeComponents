@@ -10,7 +10,7 @@ export interface SwipeViewProps {
      */
     rightActions?: Array<React.ReactNode>;
     containerStyle?: ViewStyle;
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
 export interface SwipeActionProps extends Pick<IconButtonProps, "iconName" | "label" | "onPress" | "variant"> {}

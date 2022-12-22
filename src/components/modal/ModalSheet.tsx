@@ -8,7 +8,7 @@ import BottomSheet, {
 } from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../hooks";
+import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 
 export type ModalHeight = "small" | "mid" | "full";
 
@@ -25,11 +25,30 @@ interface ModalSheetProps {
     show: boolean;
     preventDragToClose?: boolean;
     height?: ModalHeight;
+
+    /**
+     * Supports
+     * - `<ModalHeader />`
+     */
+    header?: React.ReactNode;
+
+    /**
+     * Supports
+     * - `<ModalSheetScrollView />`
+     * - `<ModalSheetFlatList />`
+     */
     children?: React.ReactNode;
     onClose: () => void;
 }
 
-const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children, preventDragToClose, onClose }) => {
+const ModalSheet: React.FC<ModalSheetProps> = ({
+    show,
+    height = "mid",
+    children,
+    preventDragToClose,
+    header,
+    onClose,
+}) => {
     const ref = React.useRef<BottomSheet>(null);
 
     const styles = useThemedStyles(createStyles, {});
@@ -62,7 +81,8 @@ const ModalSheet: React.FC<ModalSheetProps> = ({ show, height = "mid", children,
                     </BottomSheetBackdrop>
                 )}
             >
-                {children}
+                {header}
+                {show && children}
             </BottomSheet>
         </Portal>
     );

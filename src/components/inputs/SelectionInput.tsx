@@ -3,8 +3,7 @@ import React from "react";
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { InputWidth } from ".";
 import { ThemedStyles, useThemedStyles } from "../../hooks";
-import { ModalHeader } from "../ModalHeader";
-import { ModalSheet, ModalSheetFlatList } from "../ModalSheet";
+import { ModalHeader, ModalSheet, ModalSheetFlatList } from "../modal/";
 import { Text } from "../Text";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
