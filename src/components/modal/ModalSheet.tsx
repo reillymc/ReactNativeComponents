@@ -24,6 +24,8 @@ export interface ModalSheetStyles {
 interface ModalSheetProps {
     show: boolean;
     preventDragToClose?: boolean;
+
+    keyboardBehavior?: "extend" | "interactive";
     height?: ModalHeight;
 
     /**
@@ -44,6 +46,7 @@ interface ModalSheetProps {
 const ModalSheet: React.FC<ModalSheetProps> = ({
     show,
     height = "mid",
+    keyboardBehavior = "extend",
     children,
     preventDragToClose,
     header,
@@ -73,7 +76,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
                 backgroundStyle={styles.sheetBackground}
                 keyboardBlurBehavior={show ? "restore" : "none"}
                 snapPoints={[modalSheet.height[height]]}
-                keyboardBehavior="extend"
+                keyboardBehavior={keyboardBehavior}
                 onClose={show ? onClose : undefined}
                 backdropComponent={props => (
                     <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0}>

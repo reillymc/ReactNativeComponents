@@ -103,9 +103,9 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             onChangeText?.(text);
         };
 
-        const handleSubmitEditing = () => {
-            // updateValue(true);
-        };
+        // const handleSubmitEditing = () => {
+        //     updateValue(true);
+        // };
 
         return (
             <BaseInput
@@ -117,7 +117,7 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onChangeText={handleChangeText}
-                onSubmitEditing={handleSubmitEditing}
+                // onSubmitEditing={handleSubmitEditing}
                 autoCorrect={false}
                 panelElement={
                     <DropdownPanel

@@ -7,6 +7,8 @@ import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 const defaultProps: AvatarProps = {
     firstName: "John",
     lastName: "Smith",
+    imageUri: undefined,
+    size: "regular",
     action: <IconAction iconName="closecircle" onPress={() => null} size={"regular"} />,
 };
 
@@ -18,6 +20,25 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
     lastName: {
         type: "string",
         label: "Last Name",
+    },
+    imageUri: {
+        type: "enum",
+        label: "Image URL",
+        values: [
+            { label: "None", value: undefined },
+            { label: "David", value: "https://randomuser.me/api/portraits/men/19.jpg" },
+            { label: "Mark", value: "https://randomuser.me/api/portraits/men/20.jpg" },
+        ],
+    },
+    size: {
+        type: "enum",
+        label: "Size",
+        default: "Regular",
+        values: [
+            { label: "Small", value: "small" },
+            { label: "Regular", value: "regular" },
+            { label: "Large", value: "large" },
+        ],
     },
     action: {
         type: "enum",

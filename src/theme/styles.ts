@@ -53,7 +53,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
         width: {
             full: "100%",
             large: "70%",
-            small: "40%",
+            small: "45%",
         },
         borderRadius: 6,
         padding: 8,
@@ -173,7 +173,11 @@ export const createDefaultStyles: CreateStyles = theme => ({
         contentItemTopMargin: 4,
     },
     avatar: {
-        size: 100,
+        size: {
+            large: 100,
+            regular: 40,
+            small: 28,
+        },
         initialsFontFamilyWeight: theme.font.familyWeight.bold600,
         initialsFontSize: theme.font.size.xxLarge,
         labelFontSize: theme.font.size.tiny,
