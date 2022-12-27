@@ -53,7 +53,7 @@ export const DefaultTheme = {
         textDisabled: "#B5EAD7",
 
         background: "#F4EDEA",
-        backgroundHighlight: "#E2F0CB",
+        backgroundHighlight: "#f7f3f2",
         foreground: "#ffffff",
         foregroundHighlight: "#B5EAD7",
         backgroundOverlay: "#000",

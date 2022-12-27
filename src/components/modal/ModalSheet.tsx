@@ -60,7 +60,9 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
     } = useTheme();
 
     React.useEffect(() => {
-        if (!show) {
+        if (show) {
+            if (ref.current) ref.current.expand();
+        } else {
             Keyboard.dismiss();
             if (ref.current) ref.current.close();
         }
@@ -70,14 +72,14 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
         <Portal>
             <BottomSheet
                 ref={ref}
-                index={show ? 0 : -1}
+                index={-1}
                 enableOverDrag
                 enablePanDownToClose={!preventDragToClose}
                 backgroundStyle={styles.sheetBackground}
                 keyboardBlurBehavior={show ? "restore" : "none"}
                 snapPoints={[modalSheet.height[height]]}
                 keyboardBehavior={keyboardBehavior}
-                onClose={show ? onClose : undefined}
+                onClose={onClose}
                 backdropComponent={props => (
                     <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
                         <View style={styles.backdrop} />

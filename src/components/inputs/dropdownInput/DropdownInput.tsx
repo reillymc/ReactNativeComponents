@@ -1,6 +1,7 @@
 import React from "react";
-import { TextInput as DefaultTextInput, ViewStyle } from "react-native";
+import { NativeSyntheticEvent, TextInput as DefaultTextInput, TextInputFocusEventData, ViewStyle } from "react-native";
 
+import { IsValidString } from "../../../helpers";
 import { BaseInput, BaseInputProps } from "../BaseInput";
 import { TextInputProps } from "../TextInput";
 import { DropdownItem } from "./DropdownItem";
@@ -35,14 +36,10 @@ export interface DropdownInputProps
 
     /**
      * Callback on selection of valid dropdown value.
+     * The automated flag indicates whether the selection was triggered by the user or by the component.
+     * Selection is triggered by the component when the user enters a value that matches an existing item, or clears out all text
      */
-    onSelect: (e: DropdownItem | undefined) => void;
-
-    /**
-     * If provided, will return the entered string to be used to create a new item in the case that
-     * the item does not exist in the list.
-     */
-    onAdd?: (e: string) => void;
+    onSelect: (e: DropdownItem | undefined, automated?: boolean) => void;
 }
 
 export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
@@ -55,7 +52,7 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             maxSuggestionCount = 5,
             onSelect,
             onChangeText,
-            onAdd,
+            onBlur,
             width,
             value,
             ...props
@@ -69,43 +66,34 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             setSearchValue(selectedItem?.label ?? value ?? "");
         }, [selectedItem, value]);
 
-        // const updateValue = (autoSelectHighlighted?: boolean) => {
-        //     if (!IsValidString(searchValue)) {
-        //         onSelect(undefined);
-        //     }
-
-        //     const item = items.find(({ label }) =>
-        //         autoSelectHighlighted
-        //             ? label.toLowerCase().includes(searchValue.toLowerCase())
-        //             : label.toLowerCase() === searchValue.toLowerCase(),
-        //     );
-        //     if (item) {
-        //         onSelect(item);
-        //         return;
-        //     }
-
-        //     if (onAdd) {
-        //         onAdd(searchValue);
-        //     }
-        // };
-
         const handleFocus = () => {
             setHasFocus(true);
         };
 
-        const handleBlur = () => {
+        const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             setHasFocus(false);
-            // updateValue(searchValue.length >= minimumSearchLength);
+            onBlur?.(e);
         };
 
         const handleChangeText = (text: string) => {
             setSearchValue(text);
             onChangeText?.(text);
+
+            if (!IsValidString(text)) onSelect?.(undefined, true);
+
+            const existingItem = items.find(item => item.label.toLowerCase() === text.toLowerCase());
+            if (existingItem) onSelect?.(existingItem, true);
         };
 
-        // const handleSubmitEditing = () => {
-        //     updateValue(true);
-        // };
+        const handleSelect = (e: DropdownItem | undefined) => {
+            onSelect?.(e);
+            setSearchValue(e?.label ?? "");
+        };
+
+        const showDropdownPanel =
+            hasFocus &&
+            searchValue.length >= minimumSearchLength &&
+            selectedItem?.label.toLowerCase() !== searchValue.toLowerCase();
 
         return (
             <BaseInput
@@ -117,15 +105,14 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onChangeText={handleChangeText}
-                // onSubmitEditing={handleSubmitEditing}
                 autoCorrect={false}
                 panelElement={
                     <DropdownPanel
                         items={items}
                         maxSuggestionCount={maxSuggestionCount}
-                        onSelect={onSelect}
+                        onSelect={handleSelect}
                         searchValue={searchValue}
-                        visible={hasFocus && searchValue.length >= minimumSearchLength}
+                        visible={showDropdownPanel}
                     />
                 }
             />

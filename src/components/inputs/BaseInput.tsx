@@ -1,13 +1,15 @@
-import { BottomSheetTextInput } from "@gorhom/bottom-sheet";
 import React from "react";
 import {
     StyleSheet,
     View,
-    TextInput as RNTextInput,
-    TextInputProps as RNTextInputProps,
+    TextInput,
+    TextInputProps,
     StyleProp,
     ViewStyle,
+    NativeSyntheticEvent,
+    TextInputFocusEventData,
 } from "react-native";
+import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Text } from "../Text";
@@ -31,7 +33,7 @@ export interface BaseInputStyles {
     labelMarginBottom: number;
 }
 
-export interface BaseInputProps extends Omit<RNTextInputProps, "editable"> {
+export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
     /**
      * Supports
      *
@@ -43,8 +45,6 @@ export interface BaseInputProps extends Omit<RNTextInputProps, "editable"> {
     width?: InputWidth;
     disabled?: boolean;
 
-    modalSupport?: boolean;
-
     /**
      * Input element component.
      */
@@ -55,18 +55,19 @@ export interface BaseInputProps extends Omit<RNTextInputProps, "editable"> {
     containerStyle?: StyleProp<ViewStyle>;
 }
 
-export const BaseInput = React.forwardRef<RNTextInput, BaseInputProps>(
+export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
     (
         {
             label,
             width,
             disabled,
-            modalSupport,
             inputElement,
             panelElement,
             modalElement,
             style,
             containerStyle,
+            onBlur,
+            onFocus,
             ...props
         },
         ref,
@@ -76,7 +77,28 @@ export const BaseInput = React.forwardRef<RNTextInput, BaseInputProps>(
             styles: { baseInput },
         } = useTheme();
 
-        const Component = modalSupport ? BottomSheetTextInput : RNTextInput;
+        const { shouldHandleKeyboardEvents } = useBottomSheetInternal(true) ?? {};
+
+        const handleOnFocus = React.useCallback(
+            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                if (shouldHandleKeyboardEvents) shouldHandleKeyboardEvents.value = true;
+                onFocus?.(e);
+            },
+            [onFocus, shouldHandleKeyboardEvents],
+        );
+        const handleOnBlur = React.useCallback(
+            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+                if (shouldHandleKeyboardEvents) shouldHandleKeyboardEvents.value = false;
+                onBlur?.(e);
+            },
+            [onBlur, shouldHandleKeyboardEvents],
+        );
+
+        React.useEffect(() => {
+            return () => {
+                if (shouldHandleKeyboardEvents) shouldHandleKeyboardEvents.value = false;
+            };
+        }, [shouldHandleKeyboardEvents]);
 
         return (
             <>
@@ -89,11 +111,13 @@ export const BaseInput = React.forwardRef<RNTextInput, BaseInputProps>(
                     {inputElement ? (
                         inputElement
                     ) : (
-                        <Component
-                            ref={ref as any}
+                        <TextInput
+                            ref={ref}
                             editable={!disabled}
                             placeholderTextColor={baseInput.placeholderTextColor}
                             style={[styles.input, style]}
+                            onFocus={handleOnFocus}
+                            onBlur={handleOnBlur}
                             {...props}
                         />
                     )}
