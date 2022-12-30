@@ -1,9 +1,8 @@
 import React from "react";
 import { IconAction, IconActionProps } from "@reillymc/react-native-components";
-
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
 import { AntDesign } from "@expo/vector-icons";
+
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: IconActionProps = {
     label: "Secondary IconAction",

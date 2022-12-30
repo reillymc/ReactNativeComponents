@@ -1,6 +1,6 @@
 import React from "react";
-
 import { Button, ListPage, NavigationHeader } from "@reillymc/react-native-components";
+
 import { ComponentPage } from "../components";
 
 type ExampleData = {

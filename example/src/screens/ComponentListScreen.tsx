@@ -1,7 +1,5 @@
 import React from "react";
-
 import { StyleSheet } from "react-native";
-
 import { ListItem, ListPage, NavigationHeader } from "@reillymc/react-native-components";
 
 import { ComponentsScreenProps, ComponentScreens } from "../navigation/ComponentsNavigator";

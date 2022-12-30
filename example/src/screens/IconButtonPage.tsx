@@ -1,6 +1,6 @@
 import React from "react";
-
 import { IconButton } from "@reillymc/react-native-components";
+
 import { ComponentPage } from "../components";
 
 export const IconButtonPage: React.FunctionComponent = () => {

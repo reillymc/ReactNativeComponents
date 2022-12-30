@@ -1,53 +1,78 @@
-import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { InputWidth } from ".";
+import { AntDesign } from "@expo/vector-icons";
+
 import { ThemedStyles, useThemedStyles } from "../../hooks";
-import { ModalHeader, ModalSheet, ModalSheetFlatList } from "../modal/";
+import { ModalHeader, ModalSheet, ModalSheetFlatList } from "../modal";
+import { Tag } from "../Tag";
 import { Text } from "../Text";
 import { BaseInput, BaseInputProps } from "./BaseInput";
+import { DropdownItem, InputWidth } from ".";
+import { Action } from "../buttons";
 
 export type SelectionInputStyles = {};
 
-export type SelectionItem<T> = {
+export type SelectionItem<T extends {} = string> = {
     label: string;
     value: T;
 };
 
-export interface SelectionInputProps<T extends {} = string> extends BaseInputProps {
+export type SelectionInputProps<T extends {} = string> = Omit<BaseInputProps, "selection" | "onChange"> & {
     placeholder?: string;
-    // variant?: Exclude<ActionVariant, "destructive">;
     width?: InputWidth;
     disabled?: boolean;
     items?: Array<SelectionItem<T>>;
-    selectedItem?: SelectionItem<T>;
     style?: StyleProp<ViewStyle>;
-    onSelect: (item: SelectionItem<T>) => void;
+} & (SingleSelection<T> | MultiSelection<T>);
+
+interface SingleSelection<T extends {} = string> {
+    selectionMode: "single";
+    selection?: SelectionItem<T>;
+    onChange?: (item: SelectionItem<T> | undefined) => void;
+}
+
+interface MultiSelection<T extends {} = string> {
+    selectionMode: "multi";
+    selection?: Array<SelectionItem<T>>;
+    onChange?: (items: Array<SelectionItem<T>>) => void;
 }
 
 export const SelectionInput = <T extends {} = string>({
     label,
-    // variant = "primary",
     width = "full",
     disabled,
     items = [],
-    selectedItem,
     placeholder,
     style,
-    onSelect,
+    selectionMode,
+    selection,
+    onChange,
+    ...props
 }: SelectionInputProps<T>) => {
     const [showOptions, setShowOptions] = React.useState(false);
 
-    const styles = useThemedStyles(createStyles, { width, disabled });
+    const selectedItems = (selection && (selectionMode === "single" ? [selection] : selection)) ?? [];
+
+    const styles = useThemedStyles(createStyles, { disabled, selectionMode });
 
     const handleItemPress = (item: SelectionItem<T>) => {
-        setShowOptions(false);
-        onSelect(item);
+        if (selectionMode === "single") {
+            onChange?.(selection?.value === item.value ? undefined : item);
+            setShowOptions(false);
+        } else {
+            onChange?.(
+                selectedItems.some(selectedItem => selectedItem.value === item.value)
+                    ? selectedItems.filter(selectedItem => selectedItem.value !== item.value)
+                    : [...selectedItems, item],
+            );
+        }
     };
 
     return (
         <BaseInput
             label={label}
+            width={width}
+            {...props}
             inputElement={
                 <Pressable
                     hitSlop={20}
@@ -57,35 +82,50 @@ export const SelectionInput = <T extends {} = string>({
                 >
                     {() => (
                         <View style={styles.container}>
-                            <Text style={disabled ? styles.labelDisabled : undefined}>
-                                {selectedItem?.label ?? placeholder}
-                            </Text>
+                            {selectionMode === "single" ? (
+                                <Text style={disabled ? styles.labelDisabled : undefined}>
+                                    {selection?.label ?? placeholder}
+                                </Text>
+                            ) : (
+                                <View style={styles.tagContainer}>
+                                    {selection?.length ? (
+                                        selection?.map(item => (
+                                            <Tag key={`${item.value}`} label={item.label} style={styles.tag} />
+                                        ))
+                                    ) : (
+                                        <Text style={disabled ? styles.labelDisabled : undefined}>{placeholder}</Text>
+                                    )}
+                                </View>
+                            )}
                             <AntDesign name="down" style={styles.icon} />
                         </View>
                     )}
                 </Pressable>
             }
             modalElement={
-                <ModalSheet height="mid" onClose={() => setShowOptions(false)} show={showOptions}>
+                <ModalSheet
+                    height="mid"
+                    onClose={() => setShowOptions(false)}
+                    show={showOptions}
+                    header={
+                        <ModalHeader
+                            heading={label}
+                            leftItem={<Action label="Close" onPress={() => setShowOptions(false)} />}
+                        />
+                    }
+                >
                     <ModalSheetFlatList
-                        ListHeaderComponent={<ModalHeader heading={label} />}
                         data={items}
-                        renderItem={({ item, index }) => (
-                            <Pressable
-                                key={index}
+                        contentContainerStyle={styles.pickerContainer}
+                        renderItem={({ item }) => (
+                            <DropdownItem
+                                key={`${item.value}`}
+                                item={{ label: item.label, value: item.value as any }}
+                                searchValue={
+                                    selectedItems.find(selectedItem => selectedItem.value === item.value)?.label
+                                }
                                 onPress={() => handleItemPress(item)}
-                                style={{
-                                    borderRadius: 5,
-                                    marginVertical: 2,
-                                    padding: 10,
-                                }}
-                            >
-                                {selectedItem?.value === item.value ? (
-                                    <Text>{item.label}</Text>
-                                ) : (
-                                    <Text>{item.label}</Text>
-                                )}
-                            </Pressable>
+                            />
                         )}
                     />
                 </ModalSheet>
@@ -98,49 +138,24 @@ SelectionInput.displayName = "SelectionInput";
 
 const createStyles = (
     { styles: { baseInput }, theme }: ThemedStyles,
-    { width = "full", disabled }: Partial<SelectionInputProps>,
-) => {
-    // const backgroundColor = {
-    //     primary: theme.color.grey200,
-    //     secondary: theme.color.grey200,
-    //     flat: "transparent",
-    // }[variant];
-
-    // const backgroundColorPressed = {
-    //     primary: theme.color.grey600,
-    //     secondary: theme.color.grey600,
-    //     flat: theme.color.grey600,
-    // }[variant];
-
-    // const color = {
-    //     primary: theme.color.textPrimary,
-    //     secondary: theme.color.textPrimary,
-    //     flat: theme.color.textInverted,
-    // }[variant];
-
-    // const colorPressed = {
-    //     primary: theme.color.textHighlight,
-    //     secondary: theme.color.textHighlight,
-    //     flat: theme.color.textInverted,
-    // }[variant];
-
-    return StyleSheet.create({
+    { disabled, selectionMode }: Partial<SelectionInputProps>,
+) =>
+    StyleSheet.create({
         container: {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            paddingHorizontal: baseInput.padding, //variant !== "flat" ? common.input.padding : 0,
+            paddingHorizontal: baseInput.padding,
             alignItems: "center",
         },
         button: {
             justifyContent: "center",
             borderRadius: baseInput.borderRadius,
-            width: baseInput.width[width],
-            minWidth: baseInput.width[width],
-            height: baseInput.height,
+            minHeight: baseInput.height,
             backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
             color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
-            padding: baseInput.padding,
+            paddingHorizontal: baseInput.padding,
+            paddingVertical: selectionMode === "single" ? baseInput.padding : 0,
             fontSize: baseInput.fontSize,
         },
         buttonPressed: {
@@ -153,5 +168,17 @@ const createStyles = (
         icon: {
             color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
         },
+        tagContainer: {
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            maxWidth: "92%",
+            marginVertical: 4,
+        },
+        tag: {
+            marginVertical: 2,
+        },
+        pickerContainer: {
+            paddingHorizontal: 16,
+        },
     });
-};

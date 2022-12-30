@@ -128,8 +128,9 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     <SelectionInput
                                         label={definition.label}
                                         items={definition.values.map(value => ({ value, label: value }))}
-                                        onSelect={value => onChange(propId, value?.value)}
-                                        selectedItem={{ label: currentValue, value: currentValue }}
+                                        selectionMode="single"
+                                        onChange={value => onChange(propId, value?.value)}
+                                        selection={{ label: currentValue, value: currentValue }}
                                     />
                                 </View>
                             );
@@ -147,11 +148,12 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     <SelectionInput
                                         label={definition.label}
                                         items={definition.values}
-                                        onSelect={value => {
+                                        selectionMode="single"
+                                        onChange={value => {
                                             onChange(propId, value?.value);
-                                            setCustomLabels(prev => ({ ...prev, [propId]: value.label }));
+                                            setCustomLabels(prev => ({ ...prev, [propId]: value?.label }));
                                         }}
-                                        selectedItem={selectedItem}
+                                        selection={selectedItem}
                                     />
                                 </View>
                             );

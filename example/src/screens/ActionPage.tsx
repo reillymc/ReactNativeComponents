@@ -1,8 +1,7 @@
 import React from "react";
 import { Action, ActionProps } from "@reillymc/react-native-components";
 
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: ActionProps = {
     label: "Secondary Action",

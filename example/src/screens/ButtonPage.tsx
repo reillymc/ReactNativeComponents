@@ -1,8 +1,7 @@
 import React from "react";
 import { Button, ButtonProps } from "@reillymc/react-native-components";
 
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: ButtonProps = {
     label: "Secondary Button",

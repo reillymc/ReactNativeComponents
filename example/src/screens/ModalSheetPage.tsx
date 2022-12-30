@@ -1,6 +1,6 @@
 import React from "react";
-
 import { Action, Button, Form, ModalHeader, ModalSheet, TextInput } from "@reillymc/react-native-components";
+
 import { ComponentPage } from "../components";
 
 export const ModalSheetPage: React.FunctionComponent = () => {
@@ -16,7 +16,7 @@ export const ModalSheetPage: React.FunctionComponent = () => {
                         rightItem={<Action onPress={() => setShow(false)} label="Close" />}
                     />
                     <Form>
-                        <TextInput modalSupport />
+                        <TextInput />
                     </Form>
                 </ModalSheet>
             }

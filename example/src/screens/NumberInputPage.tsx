@@ -1,8 +1,7 @@
 import React from "react";
 import { Text, NumberInput, NumberInputProps } from "@reillymc/react-native-components";
 
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
     placeholder: {

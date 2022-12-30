@@ -1,8 +1,7 @@
 import React from "react";
 import { Avatar, AvatarProps, IconAction } from "@reillymc/react-native-components";
 
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: AvatarProps = {
     firstName: "John",

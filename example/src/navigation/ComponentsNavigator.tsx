@@ -17,6 +17,7 @@ import {
     TextInputPage,
     ToggleInputPage,
     NumberInputPage,
+    TagPage,
 } from "../screens";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
@@ -52,6 +53,7 @@ export const ComponentScreens = {
     ListPage: { name: "List Page", component: ListPagePage },
     ListItem: { name: "List Item", component: ListItemPage },
     Avatar: { name: "Avatar", component: AvatarPage },
+    Tag: { name: "Tag", component: TagPage },
 } satisfies Record<string, {name: string, component: React.FunctionComponent}>;
 
 export const ComponentStackNavigator = () => (

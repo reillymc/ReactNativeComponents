@@ -1,8 +1,7 @@
 import React from "react";
 import { SelectionInput, SelectionInputProps } from "@reillymc/react-native-components";
 
-import { ComponentPage } from "../components";
-import { PropDefinitions, PropsPanel } from "../components/PropsPanel";
+import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<SelectionInputProps> = {
     label: {
@@ -14,33 +13,47 @@ const propDefinitions: PropDefinitions<SelectionInputProps> = {
         type: "string",
     },
     width: {
-        label: "Size",
-        type: "array",
-        values: ["small", "regular", "large"],
+        type: "enum",
+        label: "Width",
+        default: "Large",
+        values: [
+            { label: "Small", value: "small" },
+            { label: "Large", value: "large" },
+            { label: "Full", value: "full" },
+        ],
     },
     disabled: {
-        label: "Disabled",
         type: "boolean",
+        label: "Disabled",
     },
-
-    onSelect: {
+    selectionMode: {
+        type: "enum",
+        label: "Selection mode",
+        values: [
+            { label: "Single", value: "single" as any },
+            { label: "Multi", value: "multi" },
+        ],
+    },
+    onChange: {
         label: "Press action",
         type: "function",
     },
 };
 
 const defaultProps: SelectionInputProps = {
-    label: "Secondary SelectionInput",
+    label: "Selection Input",
     disabled: false,
     items: [
         { label: "Item", value: "item1" },
         { label: "Item 2", value: "item2" },
         { label: "Item 3", value: "item3" },
+        { label: "Item 4", value: "item4" },
+        { label: "Item 5", value: "item5" },
     ],
     placeholder: "Select an item",
-    selectedItem: { label: "Item 1", value: "item1" },
+    selectionMode: "single",
     width: "large",
-    onSelect: () => null,
+    onChange: () => null,
 };
 
 export const SelectionInputPage: React.FunctionComponent = () => {
@@ -49,12 +62,19 @@ export const SelectionInputPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Selection Input"
-            component={<SelectionInput {...props} onSelect={e => setProps(prev => ({ ...prev, selectedItem: e }))} />}
+            component={
+                <SelectionInput {...props} onChange={(e: any) => setProps(prev => ({ ...prev, selection: e }))} />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) => {
+                        if (propId === "selectionMode") {
+                            setProps(prev => ({ ...prev, selection: undefined }));
+                        }
+                        setProps(prev => ({ ...prev, [propId]: value }));
+                    }}
                 />
             }
         />

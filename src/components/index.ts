@@ -13,3 +13,4 @@ export * from "./Icon";
 export * from "./ListItem";
 export * from "./swipeView";
 export * from "./KeyboardAccessory";
+export * from "./Tag";
