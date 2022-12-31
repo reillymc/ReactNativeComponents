@@ -34,6 +34,8 @@ interface ModalSheetProps {
      */
     header?: React.ReactNode;
 
+    footer?: React.ReactNode;
+
     /**
      * Supports
      * - `<ModalSheetScrollView />`
@@ -50,6 +52,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
     children,
     preventDragToClose,
     header,
+    footer,
     onClose,
 }) => {
     const ref = React.useRef<BottomSheet>(null);
@@ -88,6 +91,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
             >
                 {header}
                 {show && children}
+                {footer}
             </BottomSheet>
         </Portal>
     );

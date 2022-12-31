@@ -59,9 +59,11 @@ export const IconAction: React.FC<IconActionProps> = ({
                         color={getLabelColor(theme, variant, pressed)}
                         style={[styles.icon, iconStyle]}
                     />
-                    <Text numberOfLines={1} style={styles.text}>
-                        {label}
-                    </Text>
+                    {label && (
+                        <Text numberOfLines={1} style={styles.text}>
+                            {label}
+                        </Text>
+                    )}
                 </View>
             )}
         </Pressable>

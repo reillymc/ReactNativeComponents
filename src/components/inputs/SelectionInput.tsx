@@ -1,14 +1,14 @@
 import React from "react";
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { FlatList, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { ModalHeader, ModalSheet, ModalSheetFlatList } from "../modal";
 import { Tag } from "../Tag";
 import { Text } from "../Text";
+import { Action } from "../buttons";
 import { BaseInput, BaseInputProps } from "./BaseInput";
 import { DropdownItem, InputWidth } from ".";
-import { Action } from "../buttons";
 
 export type SelectionInputStyles = {};
 
@@ -113,6 +113,33 @@ export const SelectionInput = <T extends {} = string>({
                             leftItem={<Action label="Close" onPress={() => setShowOptions(false)} />}
                         />
                     }
+                    footer={
+                        selectionMode === "multi" && (
+                            <View style={styles.selectionDisplay}>
+                                <View>
+                                    <FlatList
+                                        horizontal
+                                        showsHorizontalScrollIndicator={false}
+                                        keyExtractor={item => `${item.value}`}
+                                        data={selection}
+                                        contentContainerStyle={styles.previewTagContainer}
+                                        ListEmptyComponent={
+                                            <Text style={styles.previewPlaceholder}>{placeholder}</Text>
+                                        }
+                                        renderItem={({ item }) => (
+                                            <Tag
+                                                label={item.label}
+                                                style={styles.tag}
+                                                variant="light"
+                                                iconName="closecircle"
+                                                onPress={() => handleItemPress(item)}
+                                            />
+                                        )}
+                                    />
+                                </View>
+                            </View>
+                        )
+                    }
                 >
                     <ModalSheetFlatList
                         data={items}
@@ -137,7 +164,7 @@ export const SelectionInput = <T extends {} = string>({
 SelectionInput.displayName = "SelectionInput";
 
 const createStyles = (
-    { styles: { baseInput }, theme }: ThemedStyles,
+    { styles: { baseInput }, theme: { color } }: ThemedStyles,
     { disabled, selectionMode }: Partial<SelectionInputProps>,
 ) =>
     StyleSheet.create({
@@ -159,8 +186,8 @@ const createStyles = (
             fontSize: baseInput.fontSize,
         },
         buttonPressed: {
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : theme.color.backgroundHighlight,
-            color: disabled ? baseInput.disabledTextColor : theme.color.textHighlight,
+            backgroundColor: disabled ? baseInput.backgroundColorDisabled : color.backgroundHighlight,
+            color: disabled ? baseInput.disabledTextColor : color.textHighlight,
         },
         labelDisabled: {
             color: baseInput.disabledTextColor,
@@ -180,5 +207,23 @@ const createStyles = (
         },
         pickerContainer: {
             paddingHorizontal: 16,
+        },
+        selectionDisplay: {
+            justifyContent: "flex-start",
+            height: 200,
+            paddingHorizontal: 0,
+            paddingTop: baseInput.padding,
+            borderRadius: 0,
+            backgroundColor: baseInput.backgroundColor,
+            display: "flex",
+            marginBottom: -120,
+        },
+        previewTagContainer: {
+            paddingLeft: 16,
+            marginRight: 32,
+            paddingRight: 32,
+        },
+        previewPlaceholder: {
+            paddingTop: baseInput.padding,
         },
     });
