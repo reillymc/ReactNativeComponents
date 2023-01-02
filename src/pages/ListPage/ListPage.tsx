@@ -51,7 +51,12 @@ const ListPage = <T extends any>({
         <>
             <FlatList
                 {...flatListProps}
-                contentContainerStyle={[styles.listContentContainer, contentContainerStyle]}
+                scrollIndicatorInsets={flatListProps.scrollIndicatorInsets ?? { top: 38 }}
+                contentContainerStyle={[
+                    styles.listContentContainer,
+                    contentContainerStyle,
+                    !flatListProps.data?.length ? { flex: 1 } : undefined,
+                ]}
                 ListHeaderComponentStyle={[styles.listHeader, ListHeaderComponentStyle]}
                 ListHeaderComponent={
                     <>

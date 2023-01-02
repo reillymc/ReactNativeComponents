@@ -5,6 +5,7 @@ import BottomSheet, {
     BottomSheetScrollView,
     BottomSheetView,
     BottomSheetFlatList,
+    BottomSheetProps,
 } from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
 
@@ -21,11 +22,10 @@ export interface ModalSheetStyles {
     backdropColor: string;
 }
 
-interface ModalSheetProps {
+interface ModalSheetProps extends Pick<BottomSheetProps, "keyboardBehavior"> {
     show: boolean;
     preventDragToClose?: boolean;
 
-    keyboardBehavior?: "extend" | "interactive";
     height?: ModalHeight;
 
     /**
@@ -35,6 +35,8 @@ interface ModalSheetProps {
     header?: React.ReactNode;
 
     footer?: React.ReactNode;
+
+    handleComponent?: React.ReactElement;
 
     /**
      * Supports
@@ -53,6 +55,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
     preventDragToClose,
     header,
     footer,
+    handleComponent,
     onClose,
 }) => {
     const ref = React.useRef<BottomSheet>(null);
@@ -77,6 +80,11 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
                 ref={ref}
                 index={-1}
                 enableOverDrag
+                handleComponent={
+                    handleComponent
+                        ? () => <View style={{ flex: 1, alignItems: "center", paddingTop: 8 }}>{handleComponent}</View>
+                        : undefined
+                }
                 enablePanDownToClose={!preventDragToClose}
                 backgroundStyle={styles.sheetBackground}
                 keyboardBlurBehavior={show ? "restore" : "none"}

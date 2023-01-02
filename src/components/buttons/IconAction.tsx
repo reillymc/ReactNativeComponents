@@ -49,7 +49,7 @@ export const IconAction: React.FC<IconActionProps> = ({
     const { theme } = useTheme();
 
     return (
-        <Pressable hitSlop={30} disabled={disabled} style={containerStyle} onPress={onPress}>
+        <Pressable hitSlop={20} disabled={disabled} style={containerStyle} onPress={onPress}>
             {({ pressed }) => (
                 <View style={styles.container}>
                     <AntDesign

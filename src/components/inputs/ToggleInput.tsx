@@ -31,7 +31,7 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
     const styles = useThemedStyles(createStyles, { variant });
 
     return (
-        <Pressable style={[styles.container, style]} onPress={() => onChange(!value)} hitSlop={30}>
+        <Pressable style={[styles.container, style]} onPress={() => onChange(!value)} hitSlop={20}>
             {!!value && <AntDesign name={iconName} type="font-awesome" size={styles.icon.height} style={styles.icon} />}
         </Pressable>
     );

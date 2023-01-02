@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
     style,
     onPress,
 }) => {
-    const hitBuffer = size === "small" ? 60 : 30;
+    const hitBuffer = size === "small" ? 50 : 20;
 
     const styles = useThemedStyles(createStyles, { size, contentAlign, variant });
     const { theme } = useTheme();

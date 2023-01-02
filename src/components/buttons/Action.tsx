@@ -46,7 +46,7 @@ export const Action: React.FC<ActionProps> = ({
     const { theme } = useTheme();
 
     return (
-        <Pressable hitSlop={30} disabled={disabled} style={[styles.container, style]} onPress={onPress}>
+        <Pressable hitSlop={20} disabled={disabled} style={[styles.container, style]} onPress={onPress}>
             {({ pressed }) => (
                 <Text numberOfLines={1} style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>
                     {label}
