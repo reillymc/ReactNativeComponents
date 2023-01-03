@@ -76,16 +76,25 @@ export const createDefaultStyles: CreateStyles = theme => ({
     text: {
         textColor: theme.color.textPrimary,
         fontFamilyWeight: {
+            caption: theme.font.familyWeight.light200,
             body: theme.font.familyWeight.regular400,
             label: theme.font.familyWeight.bold600,
             heading: theme.font.familyWeight.bold600,
             title: theme.font.familyWeight.bold800,
         },
         fontFamilySize: {
+            caption: theme.font.size.small,
             body: theme.font.size.regular,
             label: theme.font.size.emphasised,
             heading: theme.font.size.large,
             title: theme.font.size.xxLarge,
+        },
+        lineHeight: {
+            caption: theme.font.size.small + 4,
+            body: theme.font.size.regular + 8,
+            label: theme.font.size.emphasised + 8,
+            heading: theme.font.size.large + 8,
+            title: theme.font.size.xxLarge + 8,
         },
     },
     highlightedText: {

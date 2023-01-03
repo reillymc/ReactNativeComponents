@@ -3,7 +3,7 @@ import { StyleSheet, Text as RNText, TextProps as RNTextProps } from "react-nati
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
-export type TextVariant = "title" | "heading" | "body" | "label";
+export type TextVariant = "title" | "heading" | "label" | "body" | "caption";
 
 export interface TextStyles {
     textColor: string;
@@ -14,6 +14,9 @@ export interface TextStyles {
         [key in TextVariant]: string;
     };
     fontFamilySize: {
+        [key in TextVariant]: number;
+    };
+    lineHeight: {
         [key in TextVariant]: number;
     };
 }
@@ -41,5 +44,6 @@ const createStyles = ({ styles: { text } }: ThemedStyles, { variant = "body" }: 
             fontFamily: text.fontFamilyWeight[variant],
             fontSize: text.fontFamilySize[variant],
             color: text.textColor,
+            lineHeight: text.lineHeight[variant],
         },
     });
