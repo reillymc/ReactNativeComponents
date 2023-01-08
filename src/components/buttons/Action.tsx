@@ -31,7 +31,7 @@ export interface ActionProps {
     style?: StyleProp<ViewStyle>;
     size?: ActionSize;
     disabled?: boolean;
-    onPress: () => void;
+    onPress?: () => void;
 }
 
 export const Action: React.FC<ActionProps> = ({
@@ -46,7 +46,7 @@ export const Action: React.FC<ActionProps> = ({
     const { theme } = useTheme();
 
     return (
-        <Pressable hitSlop={20} disabled={disabled} style={[styles.container, style]} onPress={onPress}>
+        <Pressable hitSlop={20} disabled={!onPress || disabled} style={[styles.container, style]} onPress={onPress}>
             {({ pressed }) => (
                 <Text numberOfLines={1} style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>
                     {label}

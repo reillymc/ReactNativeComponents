@@ -3,21 +3,22 @@ import { RouteProp } from "@react-navigation/native";
 import { createStackNavigator, StackNavigationProp } from "@react-navigation/stack";
 
 import {
-    ComponentListScreen,
-    ButtonPage,
-    IconButtonPage,
-    ModalSheetPage,
-    DropdownInputPage,
-    SelectionInputPage,
-    ListPagePage,
-    ListItemPage,
-    AvatarPage,
     ActionPage,
+    AvatarPage,
+    ButtonPage,
+    CollapsibleContainerPage,
+    ComponentListScreen,
+    DropdownInputPage,
     IconActionPage,
+    IconButtonPage,
+    ListItemPage,
+    ListPagePage,
+    ModalSheetPage,
+    NumberInputPage,
+    SelectionInputPage,
+    TagPage,
     TextInputPage,
     ToggleInputPage,
-    NumberInputPage,
-    TagPage,
 } from "../screens";
 
 type ComponentStackScreenProps<T extends keyof ComponentStackParamList> = {
@@ -54,6 +55,7 @@ export const ComponentScreens = {
     ListItem: { name: "List Item", component: ListItemPage },
     Avatar: { name: "Avatar", component: AvatarPage },
     Tag: { name: "Tag", component: TagPage },
+    CollapsibleContainer: { name: "Collapsible Container", component: CollapsibleContainerPage },
 } satisfies Record<string, {name: string, component: React.FunctionComponent}>;
 
 export const ComponentStackNavigator = () => (

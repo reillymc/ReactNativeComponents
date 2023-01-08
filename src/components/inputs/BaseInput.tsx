@@ -24,6 +24,7 @@ export interface BaseInputStyles {
     borderRadius: number;
     padding: number;
     fontSize: number;
+    multilineLineHeight: number;
     fontFamilyWeight: string;
     textColor: string;
     placeholderTextColor: string;
@@ -66,13 +67,15 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             modalElement,
             style,
             containerStyle,
+            multiline,
+            scrollEnabled,
             onBlur,
             onFocus,
             ...props
         },
         ref,
     ) => {
-        const styles = useThemedStyles(createStyles, { width, disabled });
+        const styles = useThemedStyles(createStyles, { width, disabled, multiline });
         const {
             styles: { baseInput },
         } = useTheme();
@@ -118,6 +121,8 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                             style={[styles.input, style]}
                             onFocus={handleOnFocus}
                             onBlur={handleOnBlur}
+                            multiline={multiline}
+                            scrollEnabled={scrollEnabled ?? false}
                             {...props}
                         />
                     )}
@@ -131,7 +136,10 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
 
 BaseInput.displayName = "BaseInput";
 
-const createStyles = ({ styles: { baseInput } }: ThemedStyles, { width = "full", disabled }: BaseInputProps) =>
+const createStyles = (
+    { styles: { baseInput } }: ThemedStyles,
+    { width = "full", disabled, multiline = false }: BaseInputProps,
+) =>
     StyleSheet.create({
         container: {
             display: "flex",
@@ -141,11 +149,12 @@ const createStyles = ({ styles: { baseInput } }: ThemedStyles, { width = "full",
             marginBottom: baseInput.labelMarginBottom,
         },
         input: {
-            height: baseInput.height,
+            height: multiline ? "auto" : baseInput.height,
             borderRadius: baseInput.borderRadius,
             backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
             padding: baseInput.padding,
             fontSize: baseInput.fontSize,
+            lineHeight: multiline ? baseInput.multilineLineHeight : undefined,
             fontFamily: baseInput.fontFamilyWeight,
             color: baseInput.textColor,
         },
