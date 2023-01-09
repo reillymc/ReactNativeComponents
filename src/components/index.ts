@@ -15,3 +15,4 @@ export * from "./swipeView";
 export * from "./KeyboardAccessory";
 export * from "./Tag";
 export * from "./CollapsibleContainer";
+export * from "./AlertIndicator";

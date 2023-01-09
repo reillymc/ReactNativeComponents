@@ -1,11 +1,27 @@
 import React from "react";
-import { IconAction, ListItem, ListItemProps, Text, ListItemRow, SwipeAction } from "@reillymc/react-native-components";
+import {
+    IconAction,
+    ListItem,
+    ListItemProps,
+    Text,
+    ListItemRow,
+    SwipeAction,
+    IconButton,
+    AlertIndicator,
+    ListItemAvatar,
+    ListItemAlert,
+} from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: ListItemProps = {
     heading: "Heading text",
-    avatar: <IconAction onPress={() => null} iconName="API" />,
+    avatar: (
+        <ListItemAvatar>
+            <IconAction onPress={() => null} iconName="API" />
+        </ListItemAvatar>
+    ),
+    alert: undefined,
     contentRows: [
         <ListItemRow key={1} contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]} />,
     ],
@@ -82,6 +98,22 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                     <SwipeAction key="1" iconName="delete" variant="destructive" label="" onPress={() => null} />,
                     <SwipeAction key="2" iconName="edit" variant="secondary" label="" onPress={() => null} />,
                 ],
+            },
+        ],
+    },
+    alert: {
+        type: "enum",
+        label: "Alert",
+        default: "None",
+        values: [
+            { label: "None", value: undefined },
+            {
+                label: "Alert",
+                value: (
+                    <ListItemAlert>
+                        <AlertIndicator style={{ marginRight: 20 }} variant="primary" label="3" />
+                    </ListItemAlert>
+                ),
             },
         ],
     },

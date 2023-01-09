@@ -18,6 +18,7 @@ export interface ListItemProps {
     heading?: string;
     header?: React.ReactNode;
     avatar?: React.ReactNode;
+    alert?: React.ReactNode;
 
     /**
      * Supports:
@@ -35,6 +36,7 @@ export interface ListItemProps {
 
 export const ListItem: React.FC<ListItemProps> = ({
     avatar,
+    alert,
     heading,
     footer,
     header,
@@ -62,6 +64,7 @@ export const ListItem: React.FC<ListItemProps> = ({
                             )}
                             {filteredRows}
                         </View>
+                        {!!alert && <View style={styles.avatarContainer}>{alert}</View>}
                     </View>
                     {footer}
                 </Pressable>
@@ -97,6 +100,10 @@ const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }:
         avatar: {
             marginLeft: listItem.internalSpacing,
             marginRight: listItem.internalSpacing / 2,
+        },
+        alert: {
+            marginLeft: listItem.internalSpacing / 2,
+            marginRight: listItem.internalSpacing,
         },
         contentContainer: {
             flex: 1,
@@ -151,6 +158,16 @@ export const ListItemAvatar: React.FC<ListItemAvatarProps> = ({ children }) => {
     const styles = useThemedStyles(createStyles, {});
 
     return <View style={styles.avatar}>{children}</View>;
+};
+
+export interface ListItemAlertProps {
+    children?: React.ReactNode;
+}
+
+export const ListItemAlert: React.FC<ListItemAlertProps> = ({ children }) => {
+    const styles = useThemedStyles(createStyles, {});
+
+    return <View style={styles.alert}>{children}</View>;
 };
 
 export interface ListItemFooterProps {
