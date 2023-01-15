@@ -4,7 +4,7 @@ import { View, useWindowDimensions, StyleSheet } from "react-native";
 import { ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../../../hooks";
 import { FloatingContainer } from "../../FloatingContainer";
 import { DropdownInputProps } from "./DropdownInput";
-import { DropdownItem } from ".";
+import { DropdownItem } from "./DropdownItem";
 
 export interface DropdownPanelProps {
     items: DropdownInputProps["items"];

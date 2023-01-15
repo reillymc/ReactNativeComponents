@@ -8,7 +8,8 @@ import { Tag } from "../Tag";
 import { Text } from "../Text";
 import { Action } from "../buttons";
 import { BaseInput, BaseInputProps } from "./BaseInput";
-import { DropdownItem, InputWidth } from ".";
+import { DropdownItem } from "./dropdownInput";
+import { InputWidth } from ".";
 
 export type SelectionInputStyles = {};
 

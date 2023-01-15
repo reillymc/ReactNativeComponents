@@ -71,6 +71,8 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
         };
 
         const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            const existingItem = items.find(item => item.label.toLowerCase() === searchValue.toLowerCase());
+            if (existingItem) onSelect?.(existingItem, true);
             setHasFocus(false);
             onBlur?.(e);
         };
@@ -80,9 +82,6 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             onChangeText?.(text);
 
             if (!IsValidString(text)) onSelect?.(undefined, true);
-
-            const existingItem = items.find(item => item.label.toLowerCase() === text.toLowerCase());
-            if (existingItem) onSelect?.(existingItem, true);
         };
 
         const handleSelect = (e: DropdownItem | undefined) => {
