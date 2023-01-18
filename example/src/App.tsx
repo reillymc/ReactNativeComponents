@@ -5,7 +5,6 @@ import { StatusBar } from "expo-status-bar";
 import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, Theme as NavigationTheme } from "@react-navigation/native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
 import {
     ThemeProvider,
     createDefaultStyles,
@@ -19,7 +18,7 @@ import {
 
 import { ComponentStackNavigator } from "./navigation/ComponentsNavigator";
 
-export default function App() {
+export const App = () => {
     const [fontsLoaded] = useFonts({
         "Comfortaa-Bold": require("../assets/fonts/Comfortaa-Bold.ttf"),
         "Comfortaa-Light": require("../assets/fonts/Comfortaa-Light.ttf"),
@@ -114,7 +113,7 @@ export default function App() {
             </ThemeProvider>
         </GestureHandlerRootView>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {

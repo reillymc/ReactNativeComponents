@@ -59,9 +59,11 @@ export type PropDefinitions<T> = {
 export interface PropsPanelProps<T> {
     propValues: T;
     propDefinitions: PropDefinitions<T>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange: (propName: keyof T, value: any) => void;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const PropsPanel = <T extends Record<string, any>>({
     propDefinitions,
     propValues,
@@ -168,8 +170,8 @@ export const PropsPanel = <T extends Record<string, any>>({
 
 PropsPanel.displayName = "PropsPanel";
 
-const createStyles = (theme: Theme) =>
-    StyleSheet.create({
+const createStyles = (theme: Theme) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             backgroundColor: theme.color.foreground,
@@ -195,3 +197,5 @@ const createStyles = (theme: Theme) =>
             marginBottom: 5,
         },
     });
+    return styles;
+};

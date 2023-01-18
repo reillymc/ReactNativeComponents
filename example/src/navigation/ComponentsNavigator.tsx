@@ -56,7 +56,7 @@ export const ComponentScreens = {
     Avatar: { name: "Avatar", component: AvatarPage },
     Tag: { name: "Tag", component: TagPage },
     CollapsibleContainer: { name: "Collapsible Container", component: CollapsibleContainerPage },
-} satisfies Record<string, {name: string, component: React.FunctionComponent}>;
+} satisfies Record<string, { name: string; component: React.FunctionComponent }>;
 
 export const ComponentStackNavigator = () => (
     <ComponentStack.Navigator

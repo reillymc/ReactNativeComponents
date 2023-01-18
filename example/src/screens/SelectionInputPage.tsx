@@ -30,6 +30,7 @@ const propDefinitions: PropDefinitions<SelectionInputProps> = {
         type: "enum",
         label: "Selection mode",
         values: [
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             { label: "Single", value: "single" as any },
             { label: "Multi", value: "multi" },
         ],

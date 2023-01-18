@@ -35,8 +35,8 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = (theme: Theme) =>
-    StyleSheet.create({
+const createStyles = (theme: Theme) => {
+    const styles = StyleSheet.create({
         container: {
             flex: 1,
             backgroundColor: theme.color.background,
@@ -57,3 +57,5 @@ const createStyles = (theme: Theme) =>
             marginLeft: 16,
         },
     });
+    return styles;
+};

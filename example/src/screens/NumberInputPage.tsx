@@ -64,12 +64,12 @@ const defaultProps: NumberInputProps = {
 
 export const NumberInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
-    const [value, setValue] = React.useState<string | undefined>(undefined);
+    const [inputValue, setInputValue] = React.useState<string | undefined>(undefined);
 
     return (
         <ComponentPage
             componentName="Number Input"
-            component={<NumberInput {...props} value={value} onChangeText={text => setValue(text)} />}
+            component={<NumberInput {...props} value={inputValue} onChangeText={text => setInputValue(text)} />}
             propsPanel={
                 <PropsPanel
                     propValues={props}

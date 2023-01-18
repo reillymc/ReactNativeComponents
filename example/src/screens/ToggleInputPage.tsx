@@ -1,17 +1,15 @@
 import React from "react";
 import { ToggleInput, ToggleInputProps } from "@reillymc/react-native-components";
-import { AntDesign } from "@expo/vector-icons";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { glyphMapValueItemsNullable } from "../helpers";
 
 const propDefinitions: PropDefinitions<ToggleInputProps> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
         default: "check",
-        values: Object.keys(AntDesign.glyphMap)
-            .sort()
-            .map((name: any) => ({ label: name, value: name })),
+        values: glyphMapValueItemsNullable,
     },
     onChange: {
         type: "function",

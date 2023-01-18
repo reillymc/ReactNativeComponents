@@ -1,8 +1,8 @@
 import React from "react";
 import { IconAction, IconActionProps } from "@reillymc/react-native-components";
-import { AntDesign } from "@expo/vector-icons";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { glyphMapValueItems } from "../helpers";
 
 const defaultProps: IconActionProps = {
     label: "Secondary IconAction",
@@ -20,7 +20,7 @@ const propDefinitions: PropDefinitions<IconActionProps> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
-        values: Object.keys(AntDesign.glyphMap).map((name: any) => ({ label: name, value: name })),
+        values: glyphMapValueItems,
     },
     variant: {
         type: "enum",

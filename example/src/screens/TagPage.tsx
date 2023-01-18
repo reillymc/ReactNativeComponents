@@ -1,8 +1,8 @@
 import React from "react";
-import { AntDesign } from "@expo/vector-icons";
 import { Tag, TagProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { glyphMapValueItemsNullable } from "../helpers";
 
 const defaultProps: TagProps = {
     label: "Example Tag",
@@ -19,10 +19,7 @@ const propDefinitions: PropDefinitions<TagProps> = {
         type: "enum",
         label: "Icon Name",
         default: "closecircleo",
-        values: [
-            { label: "None", value: undefined },
-            ...Object.keys(AntDesign.glyphMap).map((name: any) => ({ label: name, value: name })),
-        ],
+        values: glyphMapValueItemsNullable,
     },
     variant: {
         type: "enum",
