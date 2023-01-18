@@ -1,10 +1,12 @@
 import React from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+
 import { ThemedStyles, useThemedStyles } from "../hooks";
+
 import { ActionVariant } from "./buttons";
 import { Text } from "./Text";
 
-export type AlertIndicatorStyles = {};
+export interface AlertIndicatorStyles {}
 
 export interface AlertIndicatorProps {
     label?: string;
@@ -29,8 +31,8 @@ AlertIndicator.displayName = "AlertIndicator";
 const createStyles = (
     { styles: {}, theme: { color } }: ThemedStyles,
     { variant = "primary" }: Partial<AlertIndicatorProps>,
-) =>
-    StyleSheet.create({
+) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             alignItems: "center",
@@ -44,3 +46,5 @@ const createStyles = (
             color: color.textInverted,
         },
     });
+    return styles;
+};

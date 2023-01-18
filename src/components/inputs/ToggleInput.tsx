@@ -50,7 +50,7 @@ const createStyles = (
         destructive: color.destructive,
     }[variant];
 
-    return StyleSheet.create({
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             justifyContent: "center",
@@ -67,4 +67,5 @@ const createStyles = (
             width: toggleInput.iconSize,
         },
     });
+    return styles;
 };

@@ -38,8 +38,8 @@ export const Text: React.FC<TextProps> = ({ variant = "body", style, children, .
 
 Text.displayName = "Text";
 
-const createStyles = ({ styles: { text } }: ThemedStyles, { variant = "body" }: Partial<TextProps>) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { text } }: ThemedStyles, { variant = "body" }: Partial<TextProps>) => {
+    const styles = StyleSheet.create({
         text: {
             fontFamily: text.fontFamilyWeight[variant],
             fontSize: text.fontFamilySize[variant],
@@ -47,3 +47,5 @@ const createStyles = ({ styles: { text } }: ThemedStyles, { variant = "body" }: 
             lineHeight: text.lineHeight[variant],
         },
     });
+    return styles;
+};

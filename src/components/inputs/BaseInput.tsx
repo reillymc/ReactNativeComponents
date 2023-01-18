@@ -84,14 +84,18 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
 
         const handleOnFocus = React.useCallback(
             (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                if (shouldHandleKeyboardEvents) shouldHandleKeyboardEvents.value = true;
+                if (shouldHandleKeyboardEvents) {
+                    shouldHandleKeyboardEvents.value = true;
+                }
                 onFocus?.(e);
             },
             [onFocus, shouldHandleKeyboardEvents],
         );
         const handleOnBlur = React.useCallback(
             (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                if (shouldHandleKeyboardEvents) shouldHandleKeyboardEvents.value = false;
+                if (shouldHandleKeyboardEvents) {
+                    shouldHandleKeyboardEvents.value = false;
+                }
                 onBlur?.(e);
             },
             [onBlur, shouldHandleKeyboardEvents],
@@ -99,7 +103,9 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
 
         React.useEffect(() => {
             return () => {
-                if (shouldHandleKeyboardEvents) shouldHandleKeyboardEvents.value = false;
+                if (shouldHandleKeyboardEvents) {
+                    shouldHandleKeyboardEvents.value = false;
+                }
             };
         }, [shouldHandleKeyboardEvents]);
 

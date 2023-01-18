@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
+
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
 import { Text } from "./Text";
@@ -10,13 +11,17 @@ export interface HighlightedTextStyles {
      */
     highlightedFontFamilyWeight: string;
 }
-interface HighlightedTextProps {
+export interface HighlightedTextProps {
     text?: string;
     highlight?: string;
     style?: StyleProp<TextStyle>;
 }
 
-const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({ text = "", highlight = "", style }) => {
+export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
+    text = "",
+    highlight = "",
+    style,
+}) => {
     const styles = useThemedStyles(createStyles, {});
 
     const highlightedText = highlight?.toLowerCase();
@@ -38,10 +43,8 @@ const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({ text =
 
 HighlightedText.displayName = "HighlightedText";
 
-export { HighlightedText as default, HighlightedText, HighlightedTextProps };
-
-const createStyles = ({ theme: { font }, styles: { highlightedText } }: ThemedStyles) =>
-    StyleSheet.create({
+const createStyles = ({ theme: { font }, styles: { highlightedText } }: ThemedStyles) => {
+    const styles = StyleSheet.create({
         default: {
             fontFamily: font.familyWeight.regular400,
         },
@@ -49,3 +52,5 @@ const createStyles = ({ theme: { font }, styles: { highlightedText } }: ThemedSt
             fontFamily: highlightedText.highlightedFontFamilyWeight,
         },
     });
+    return styles;
+};

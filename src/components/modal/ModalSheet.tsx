@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unstable-nested-components */
 import React from "react";
 import { Keyboard, StyleSheet, View } from "react-native";
 import BottomSheet, {
@@ -67,10 +68,10 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
 
     React.useEffect(() => {
         if (show) {
-            if (ref.current) ref.current.expand();
+            ref.current?.expand();
         } else {
             Keyboard.dismiss();
-            if (ref.current) ref.current.close();
+            ref.current?.close();
         }
     }, [show, ref]);
 
@@ -115,8 +116,8 @@ export {
     BottomSheetView as ModalSheetView,
 };
 
-const createStyles = ({ styles: { modalSheet } }: ThemedStyles) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { modalSheet } }: ThemedStyles) => {
+    const styles = StyleSheet.create({
         sheetBackground: {
             flex: 1,
             borderRadius: modalSheet.borderRadius,
@@ -128,3 +129,5 @@ const createStyles = ({ styles: { modalSheet } }: ThemedStyles) =>
             backgroundColor: modalSheet.backdropColor,
         },
     });
+    return styles;
+};

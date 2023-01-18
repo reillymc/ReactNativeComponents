@@ -2,9 +2,11 @@ import React from "react";
 import { ColorValue, Pressable, StyleSheet, Text } from "react-native";
 
 import { Theme } from "../../theme";
-import { ActionProps } from "./Action";
-import { ActionSize, ActionVariant } from ".";
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+
+import { ActionProps } from "./Action";
+
+import { ActionSize, ActionVariant } from ".";
 
 export const getBackgroundColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
@@ -86,8 +88,8 @@ export { Button, ButtonProps, ButtonStyles };
 const createStyles = (
     { styles: { button, common, baseInput } }: ThemedStyles,
     { size = "large", contentAlign, variant }: Partial<ButtonProps>,
-) =>
-    StyleSheet.create({
+) => {
+    const styles = StyleSheet.create({
         button: {
             justifyContent: "center",
             borderRadius: button.borderRadius,
@@ -103,3 +105,5 @@ const createStyles = (
             paddingHorizontal: variant !== "flat" ? baseInput.padding : 0,
         },
     });
+    return styles;
+};

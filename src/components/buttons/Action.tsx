@@ -1,9 +1,11 @@
 import React from "react";
 import { ColorValue, Pressable, StyleProp, StyleSheet, ViewStyle } from "react-native";
-import { ActionSize, ActionVariant } from ".";
+
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Theme } from "../../theme";
 import { Text } from "../Text";
+
+import { ActionSize, ActionVariant } from ".";
 
 const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
@@ -58,11 +60,13 @@ export const Action: React.FC<ActionProps> = ({
 
 Action.displayName = "Action";
 
-const createStyles = ({ styles: { action, common } }: ThemedStyles, { size = "regular" }: Partial<ActionProps>) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { action, common } }: ThemedStyles, { size = "regular" }: Partial<ActionProps>) => {
+    const styles = StyleSheet.create({
         container: {},
         label: {
             fontFamily: action.fontFamilyWeight,
             fontSize: common.action.fontSize[size],
         },
     });
+    return styles;
+};

@@ -2,8 +2,9 @@ import React from "react";
 import { StyleProp, StyleSheet, Pressable, ViewStyle } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
-import { Text } from "./Text";
 import { ThemedStyles, useThemedStyles } from "../hooks";
+
+import { Text } from "./Text";
 
 export interface TagProps {
     label: string | undefined;
@@ -26,8 +27,8 @@ export const Tag: React.FC<TagProps> = ({ label, onPress, iconName, variant, sty
     );
 };
 
-const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "dark" }: Partial<TagProps>) =>
-    StyleSheet.create({
+const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "dark" }: Partial<TagProps>) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             flexDirection: "row",
@@ -49,3 +50,5 @@ const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "dark" }: 
             color: color.textPrimary,
         },
     });
+    return styles;
+};

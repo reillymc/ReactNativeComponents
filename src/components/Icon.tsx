@@ -25,15 +25,12 @@ export const Icon: React.FC<IconProps> = ({ style, color, size = 20, iconName })
 
 Icon.displayName = "Icon";
 
-const createStyles = ({}: ThemedStyles, { size }: Partial<IconProps>) =>
-    StyleSheet.create({
-        container: {
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center",
-        },
+const createStyles = ({}: ThemedStyles, { size }: Partial<IconProps>) => {
+    const styles = StyleSheet.create({
         icon: {
             width: size,
             height: size,
         },
     });
+    return styles;
+};

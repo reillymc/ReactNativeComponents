@@ -3,7 +3,9 @@ import { Text, StyleSheet, Pressable } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+
 import { ButtonProps, getBackgroundColor, getLabelColor } from "./Button";
+
 import { ActionSize } from ".";
 
 export type IconButtonStyles = {
@@ -69,8 +71,8 @@ IconButton.displayName = "IconButton";
 const createStyles = (
     { styles: { button, iconButton } }: ThemedStyles,
     { size = "regular", rounded = true }: Partial<IconButtonProps>,
-) =>
-    StyleSheet.create({
+) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             alignItems: "center",
@@ -86,3 +88,5 @@ const createStyles = (
             paddingTop: size === "large" ? 6 : 3,
         },
     });
+    return styles;
+};

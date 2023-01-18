@@ -3,6 +3,7 @@ import { Text, StyleSheet, View, StyleProp, ViewStyle, Image } from "react-nativ
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../hooks";
 import { Theme } from "../theme";
+
 import { ActionSize } from "./buttons";
 
 const getBackgroundColor = (theme: Theme, firstName: string | undefined, lastName: string | undefined) => {
@@ -67,8 +68,8 @@ Avatar.displayName = "Avatar";
 const createStyles = (
     { styles: { avatar }, theme: { font } }: ThemedStyles,
     { size = "regular" }: Partial<AvatarProps>,
-) =>
-    StyleSheet.create({
+) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             alignItems: "center",
@@ -98,3 +99,5 @@ const createStyles = (
             right: -12,
         },
     });
+    return styles;
+};

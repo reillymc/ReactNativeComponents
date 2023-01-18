@@ -19,7 +19,7 @@ interface ListPageProps<T> extends FlatListProps<T> {
     modal?: React.ReactNode;
 }
 
-const ListPage = <T extends any>({
+const ListPage = <T,>({
     heading,
     modal,
     contentContainerStyle,
@@ -46,7 +46,7 @@ const ListPage = <T extends any>({
         } else {
             console.warn("ListPage: navigation is not defined");
         }
-    }, [navigation, navigationHeader]);
+    }, [heading, navigation, navigationHeader]);
     return (
         <>
             <FlatList

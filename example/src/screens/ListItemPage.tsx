@@ -6,7 +6,6 @@ import {
     Text,
     ListItemRow,
     SwipeAction,
-    IconButton,
     AlertIndicator,
     ListItemAvatar,
     ListItemAlert,

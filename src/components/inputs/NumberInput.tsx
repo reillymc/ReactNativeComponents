@@ -24,27 +24,31 @@ export interface NumberInputProps extends BaseInputProps {
 }
 
 export const NumberInput = React.forwardRef<RNTextInput, NumberInputProps>(
-    ({ onChangeText, onChange, keyboardType = "number-pad", min, max, ...props }, ref) => {
+    ({ onChangeText, keyboardType = "number-pad", ...props }, ref) => {
         const handleChangeText = React.useCallback(
             (text: string) => {
                 if (onChangeText) {
                     const regExp = keyboardType === "decimal-pad" ? /^([0-9]*\.*[0-9]*)/g : /^([0-9]*)/g;
                     const validatedString = text.match(regExp)?.[0];
-                    let num = parseFloat(validatedString ?? "");
+                    const num = parseFloat(validatedString ?? "");
 
                     if (Number.isNaN(num) || validatedString !== num.toString()) {
-                        if (onChangeText) onChangeText(validatedString ?? "");
+                        if (onChangeText) {
+                            onChangeText(validatedString ?? "");
+                        }
                         return;
                     }
 
-                    if (onChangeText) onChangeText(num.toString());
+                    if (onChangeText) {
+                        onChangeText(num.toString());
+                    }
                 }
             },
-            [onChangeText, keyboardType, min, max],
+            [onChangeText, keyboardType],
         );
 
         return <BaseInput {...props} ref={ref} keyboardType={keyboardType} onChangeText={handleChangeText} />;
     },
 );
 
-NumberInput.displayName = "NumberInput";
+(NumberInput as React.FunctionComponent).displayName = "NumberInput";

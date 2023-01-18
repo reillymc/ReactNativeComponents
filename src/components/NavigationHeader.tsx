@@ -3,6 +3,7 @@ import { View, StyleSheet, StyleProp, ViewStyle, useColorScheme } from "react-na
 import { BlurView } from "expo-blur";
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
+
 import { Text } from "./Text";
 
 const headerStartPos = 40;
@@ -23,7 +24,8 @@ export interface NavigationHeaderProps {
     heading: string;
 
     /**
-     * Allows the heading text to fade in dynamically based on scroll position. If not provided, the heading text will always be shown.
+     * Allows the heading text to fade in dynamically based on scroll position.
+     * If not provided, the heading text will always be shown.
      */
     scrollPosition?: number;
 
@@ -70,10 +72,10 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
 NavigationHeader.displayName = "NavigationHeader";
 
 const createStyles = (
-    { styles: { navigationHeader }, theme: {color} }: ThemedStyles,
+    { styles: { navigationHeader }, theme: { color } }: ThemedStyles,
     { scrollPosition = 100 }: Partial<NavigationHeaderProps>,
-) =>
-    StyleSheet.create({
+) => {
+    const styles = StyleSheet.create({
         headerContainer: {
             display: "flex",
             flexDirection: "row",
@@ -104,3 +106,5 @@ const createStyles = (
             opacity: (scrollPosition - headerStartPos) / 30,
         },
     });
+    return styles;
+};

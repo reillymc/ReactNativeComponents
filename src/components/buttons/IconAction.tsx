@@ -2,10 +2,11 @@ import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { ColorValue, Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
-import { ActionSize, ActionVariant } from ".";
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Theme } from "../../theme";
 import { Text } from "../Text";
+
+import { ActionSize, ActionVariant } from ".";
 
 const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
@@ -72,8 +73,8 @@ export const IconAction: React.FC<IconActionProps> = ({
 
 IconAction.displayName = "IconAction";
 
-const createStyles = ({ styles: { iconAction } }: ThemedStyles, { size = "regular" }: Partial<IconActionProps>) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { iconAction } }: ThemedStyles, { size = "regular" }: Partial<IconActionProps>) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             flexDirection: "row",
@@ -87,3 +88,5 @@ const createStyles = ({ styles: { iconAction } }: ThemedStyles, { size = "regula
             marginLeft: 6,
         },
     });
+    return styles;
+};

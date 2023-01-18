@@ -1,6 +1,6 @@
 import React from "react";
-import { DeepPartial } from "../helpers";
 
+import { DeepPartial } from "../helpers";
 import { createDefaultStyles, DefaultTheme, Styles, Theme, MergeTheme } from "../theme";
 
 export interface ThemeContextDefinition {

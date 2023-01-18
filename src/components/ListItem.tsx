@@ -3,6 +3,7 @@ import { View, StyleSheet, Pressable, StyleProp, ViewStyle } from "react-native"
 
 import { Undefined } from "../helpers";
 import { ThemedStyles, useThemedStyles } from "../hooks";
+
 import { SwipeView, SwipeViewProps } from "./swipeView";
 import { Text } from "./Text";
 
@@ -75,8 +76,8 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 ListItem.displayName = "ListItem";
 
-const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }: Partial<ListItemProps>) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }: Partial<ListItemProps>) => {
+    const styles = StyleSheet.create({
         container: {
             marginBottom: listItem.spacingMargin,
             width: "100%",
@@ -113,9 +114,6 @@ const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }:
             paddingLeft: avatar ? 0 : listItem.internalSpacing,
             paddingRight: listItem.internalSpacing,
         },
-        row: {
-            marginTop: listItem.contentItemTopMargin,
-        },
         spacer: {
             marginHorizontal: listItem.contentItemSpacing,
         },
@@ -129,6 +127,8 @@ const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }:
             marginRight: listItem.internalSpacing,
         },
     });
+    return styles;
+};
 
 export interface ListItemRowProps {
     contentItems?: Array<React.ReactNode> | React.ReactNode;

@@ -24,7 +24,7 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
                     ref={ref}
                     intensity={1}
                     tint={colorScheme === "dark" ? "dark" : "light"}
-                    style={[align == "top" ? styles.container : styles.containerInverse, style]}
+                    style={[align === "top" ? styles.container : styles.containerInverse, style]}
                 >
                     {children}
                 </BlurView>
@@ -33,7 +33,7 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
     },
 );
 
-FloatingContainer.displayName = "FloatingContainer";
+(FloatingContainer as React.FunctionComponent).displayName = "FloatingContainer";
 
 const createStyles = ({ position: { x = 0, y = 0 } }: FloatingContainerProps) =>
     StyleSheet.create({
