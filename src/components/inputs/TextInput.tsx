@@ -11,4 +11,4 @@ export const TextInput = React.forwardRef<RNTextInput, TextInputProps>((props, r
     return <BaseInput ref={ref} {...props} />;
 });
 
-TextInput.displayName = "TextInput";
+(TextInput as React.FunctionComponent).displayName = "TextInput";

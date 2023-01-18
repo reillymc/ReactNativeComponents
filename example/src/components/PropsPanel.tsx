@@ -8,8 +8,8 @@ import {
     Theme,
     ToggleInput,
     useTheme,
+    ValueItem,
 } from "@reillymc/react-native-components";
-import { SelectionItem } from "../../../src/components/inputs/SelectionInput";
 
 type PropDefinitionBase = {
     label?: string;
@@ -38,7 +38,7 @@ type ArrayPropDefinition = {
 
 interface EnumPropDefinition<T> {
     type: "enum";
-    values: Array<SelectionItem<T>>;
+    values: Array<ValueItem<T>>;
     default?: this["values"][number]["label"];
 }
 

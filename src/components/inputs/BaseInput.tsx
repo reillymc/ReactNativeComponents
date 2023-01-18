@@ -140,7 +140,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
     },
 );
 
-BaseInput.displayName = "BaseInput";
+(BaseInput as React.FunctionComponent).displayName = "BaseInput";
 
 const createStyles = (
     { styles: { baseInput } }: ThemedStyles,

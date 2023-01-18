@@ -38,8 +38,8 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
         label: "Avatar",
         default: "Icon",
         values: [
-            { label: "None", value: undefined },
-            { label: "Icon", value: defaultProps.avatar },
+            { id: "None", label: "None", value: undefined },
+            { id: "Icon", label: "Icon", value: defaultProps.avatar },
         ],
     },
     contentRows: {
@@ -47,12 +47,10 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
         label: "Content rows",
         default: "One",
         values: [
-            { label: "None", value: undefined },
+            { id: "None", label: "None", value: undefined },
+            { id: "One", label: "One", value: defaultProps.contentRows },
             {
-                label: "One",
-                value: defaultProps.contentRows,
-            },
-            {
+                id: "Two",
                 label: "Two",
                 value: [
                     <ListItemRow
@@ -66,6 +64,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 ],
             },
             {
+                id: "Three",
                 label: "Three",
                 value: [
                     <ListItemRow
@@ -86,12 +85,10 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
         label: "Swipe actions",
         default: "Delete",
         values: [
-            { label: "None", value: undefined },
+            { id: "None", label: "None", value: undefined },
+            { id: "Delete", label: "Delete", value: defaultProps.swipeActions },
             {
-                label: "Delete",
-                value: defaultProps.swipeActions,
-            },
-            {
+                id: "DeleteAndEdit",
                 label: "Delete and Edit",
                 value: [
                     <SwipeAction key="1" iconName="delete" variant="destructive" label="" onPress={() => null} />,
@@ -105,8 +102,9 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
         label: "Alert",
         default: "None",
         values: [
-            { label: "None", value: undefined },
+            { id: "None", label: "None", value: undefined },
             {
+                id: "Alert",
                 label: "Alert",
                 value: (
                     <ListItemAlert>

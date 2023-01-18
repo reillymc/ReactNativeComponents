@@ -7,38 +7,36 @@ import { ModalHeader, ModalSheet, ModalSheetFlatList } from "../modal";
 import { Tag } from "../Tag";
 import { Text } from "../Text";
 import { Action } from "../buttons";
+
 import { BaseInput, BaseInputProps } from "./BaseInput";
 import { DropdownItem } from "./dropdownInput";
+import { ValueItem } from "./valueItem";
+
 import { InputWidth } from ".";
 
-export type SelectionInputStyles = {};
+export interface SelectionInputStyles {}
 
-export type SelectionItem<T extends {} = string> = {
-    label: string;
-    value: T;
-};
-
-export type SelectionInputProps<T extends {} = string> = Omit<BaseInputProps, "selection" | "onChange"> & {
+export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange"> & {
     placeholder?: string;
     width?: InputWidth;
     disabled?: boolean;
-    items?: Array<SelectionItem<T>>;
+    items?: Array<ValueItem<T>>;
     style?: StyleProp<ViewStyle>;
 } & (SingleSelection<T> | MultiSelection<T>);
 
-interface SingleSelection<T extends {} = string> {
+interface SingleSelection<T> {
     selectionMode: "single";
-    selection?: SelectionItem<T>;
-    onChange?: (item: SelectionItem<T> | undefined) => void;
+    selection?: ValueItem<T>;
+    onChange?: (item: ValueItem<T> | undefined) => void;
 }
 
-interface MultiSelection<T extends {} = string> {
+interface MultiSelection<T> {
     selectionMode: "multi";
-    selection?: Array<SelectionItem<T>>;
-    onChange?: (items: Array<SelectionItem<T>>) => void;
+    selection?: Array<ValueItem<T>>;
+    onChange?: (items: Array<ValueItem<T>>) => void;
 }
 
-export const SelectionInput = <T extends {} = string>({
+export const SelectionInput = <T,>({
     label,
     width = "full",
     disabled,
@@ -56,7 +54,7 @@ export const SelectionInput = <T extends {} = string>({
 
     const styles = useThemedStyles(createStyles, { disabled, selectionMode });
 
-    const handleItemPress = (item: SelectionItem<T>) => {
+    const handleItemPress = (item: ValueItem<T>) => {
         if (selectionMode === "single") {
             onChange?.(selection?.value === item.value ? undefined : item);
             setShowOptions(false);
@@ -147,8 +145,8 @@ export const SelectionInput = <T extends {} = string>({
                         contentContainerStyle={styles.pickerContainer}
                         renderItem={({ item }) => (
                             <DropdownItem
-                                key={`${item.value}`}
-                                item={{ label: item.label, value: item.value as any }}
+                                key={"id" in item ? item.id : item.value}
+                                item={item}
                                 searchValue={
                                     selectedItems.find(selectedItem => selectedItem.value === item.value)?.label
                                 }
@@ -167,8 +165,8 @@ SelectionInput.displayName = "SelectionInput";
 const createStyles = (
     { styles: { baseInput }, theme: { color } }: ThemedStyles,
     { disabled, selectionMode }: Partial<SelectionInputProps>,
-) =>
-    StyleSheet.create({
+) => {
+    const styles = StyleSheet.create({
         container: {
             display: "flex",
             flexDirection: "row",
@@ -228,3 +226,5 @@ const createStyles = (
             paddingTop: baseInput.padding,
         },
     });
+    return styles;
+};

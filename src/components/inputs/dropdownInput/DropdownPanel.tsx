@@ -3,24 +3,26 @@ import { View, useWindowDimensions, StyleSheet } from "react-native";
 
 import { ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../../../hooks";
 import { FloatingContainer } from "../../FloatingContainer";
+import { ValueItem } from "../valueItem";
+
 import { DropdownInputProps } from "./DropdownInput";
 import { DropdownItem } from "./DropdownItem";
 
-export interface DropdownPanelProps {
-    items: DropdownInputProps["items"];
+export interface DropdownPanelProps<T = string> {
+    items: Array<ValueItem<T>>;
     searchValue: string;
     maxSuggestionCount: number;
     visible: boolean;
-    onSelect: DropdownInputProps["onSelect"];
+    onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
 }
 
-export const DropdownPanel: React.FC<DropdownPanelProps> = ({
+export const DropdownPanel = <T,>({
     items = [],
     maxSuggestionCount,
     searchValue,
     visible,
     onSelect,
-}) => {
+}: DropdownPanelProps<T>) => {
     const viewRef = React.useRef<View>(null);
     const containerRef = React.useRef<View>(null);
 
@@ -48,13 +50,23 @@ export const DropdownPanel: React.FC<DropdownPanelProps> = ({
                         y: screenHeight - viewY + (dropdownInput.dropdownMarginTop + baseInput.height),
                         width: viewWidth,
                     });
-                    if (!inverted) setInverted(true);
+                    if (!inverted) {
+                        setInverted(true);
+                    }
                 } else {
                     setLayout({ x: viewX, y: viewY, width: viewWidth });
                 }
             });
         });
-    }, [viewRef.current, containerRef.current, keyboardHeight, searchValue, inverted]);
+    }, [
+        keyboardHeight,
+        searchValue,
+        inverted,
+        maxSuggestionCount,
+        screenHeight,
+        dropdownInput.dropdownMarginTop,
+        baseInput.height,
+    ]);
 
     let displayItems = items
         .filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase()))
@@ -72,7 +84,7 @@ export const DropdownPanel: React.FC<DropdownPanelProps> = ({
                 {visible &&
                     displayItems.map(item => (
                         <DropdownItem
-                            key={item.value}
+                            key={"id" in item ? item.id : item.value}
                             item={item}
                             searchValue={searchValue}
                             onPress={() => onSelect(item)}
@@ -83,8 +95,8 @@ export const DropdownPanel: React.FC<DropdownPanelProps> = ({
     );
 };
 
-const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles, {}: Partial<DropdownInputProps>) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles, {}: Partial<DropdownInputProps>) => {
+    const styles = StyleSheet.create({
         dropdownContainer: {
             marginTop: dropdownInput.dropdownMarginTop,
             backgroundColor: baseInput.backgroundColor,
@@ -92,3 +104,5 @@ const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles, {}
             overflow: "hidden",
         },
     });
+    return styles;
+};

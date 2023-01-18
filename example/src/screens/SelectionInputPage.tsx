@@ -69,6 +69,7 @@ export const SelectionInputPage: React.FunctionComponent = () => {
         <ComponentPage
             componentName="Selection Input"
             component={
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 <SelectionInput {...props} onChange={(e: any) => setProps(prev => ({ ...prev, selection: e }))} />
             }
             propsPanel={

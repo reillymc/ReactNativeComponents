@@ -36,7 +36,7 @@ const defaultProps: DropdownInputProps = {
 };
 
 export const DropdownInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<DropdownInputProps>(defaultProps);
+    const [props, setProps] = React.useState(defaultProps);
 
     return (
         <ComponentPage

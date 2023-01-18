@@ -4,46 +4,54 @@ import { NativeSyntheticEvent, TextInput as DefaultTextInput, TextInputFocusEven
 import { IsValidString } from "../../../helpers";
 import { BaseInput, BaseInputProps } from "../BaseInput";
 import { TextInputProps } from "../TextInput";
-import { DropdownItem } from "./DropdownItem";
+import { ValueItem } from "../valueItem";
+
 import { DropdownPanel } from "./DropdownPanel";
+
+// Override forwardRef to allow generic typing.
+declare module "react" {
+    function forwardRef<T, P = Record<string, unknown>>(
+        render: (props: P, ref: React.Ref<T>) => React.ReactElement | null,
+    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
+}
 
 export interface DropdownInputStyles {
     dropdownMarginTop: number;
 }
 
-export interface DropdownInputProps
-    extends Pick<
-            TextInputProps,
-            "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
-        >,
-        BaseInputProps {
-    items?: Array<DropdownItem>;
-    selectedItem?: DropdownItem;
+export type DropdownInputProps<T = string> = Pick<
+    TextInputProps,
+    "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
+> &
+    BaseInputProps & {
+        items?: Array<ValueItem<T>>;
+        selectedItem?: ValueItem<T>;
 
-    /**
-     * Minimum number of characters that need to be entered before the dropdown is shown.
-     * @default 1
-     */
-    minimumSearchLength?: number;
+        /**
+         * Minimum number of characters that need to be entered before the dropdown is shown.
+         * @default 1
+         */
+        minimumSearchLength?: number;
 
-    /**
-     * Maximum number of dropdown items to show.
-     * @default 5
-     */
-    maxSuggestionCount?: number;
+        /**
+         * Maximum number of dropdown items to show.
+         * @default 5
+         */
+        maxSuggestionCount?: number;
 
-    style?: ViewStyle;
+        style?: ViewStyle;
 
-    /**
-     * Callback on selection of valid dropdown value.
-     * The automated flag indicates whether the selection was triggered by the user or by the component.
-     * Selection is triggered by the component when the user enters a value that matches an existing item, or clears out all text
-     */
-    onSelect: (e: DropdownItem | undefined, automated?: boolean) => void;
-}
+        /**
+         * Callback on selection of valid dropdown value.
+         * The automated flag indicates whether the selection was triggered by the user or by the component.
+         * Selection is triggered by the component when the user enters a value that matches an existing item,
+         * or clears out all text
+         */
+        onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
+    };
 
-export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputProps>(
-    (
+export const DropdownInput = React.forwardRef(
+    <T,>(
         {
             items = [],
             label,
@@ -56,8 +64,8 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             width,
             value,
             ...props
-        },
-        ref,
+        }: DropdownInputProps<T>,
+        ref: React.Ref<DefaultTextInput>,
     ) => {
         const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? value ?? "");
         const [hasFocus, setHasFocus] = React.useState(false);
@@ -72,7 +80,9 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
 
         const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
             const existingItem = items.find(item => item.label.toLowerCase() === searchValue.toLowerCase());
-            if (existingItem) onSelect?.(existingItem, true);
+            if (existingItem) {
+                onSelect?.(existingItem, true);
+            }
             setHasFocus(false);
             onBlur?.(e);
         };
@@ -81,12 +91,9 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
             setSearchValue(text);
             onChangeText?.(text);
 
-            if (!IsValidString(text)) onSelect?.(undefined, true);
-        };
-
-        const handleSelect = (e: DropdownItem | undefined) => {
-            onSelect?.(e);
-            setSearchValue(e?.label ?? "");
+            if (!IsValidString(text)) {
+                onSelect?.(undefined, true);
+            }
         };
 
         const showDropdownPanel =
@@ -109,7 +116,7 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
                     <DropdownPanel
                         items={items}
                         maxSuggestionCount={maxSuggestionCount}
-                        onSelect={handleSelect}
+                        onSelect={onSelect}
                         searchValue={searchValue}
                         visible={showDropdownPanel}
                     />
@@ -119,4 +126,4 @@ export const DropdownInput = React.forwardRef<DefaultTextInput, DropdownInputPro
     },
 );
 
-DropdownInput.displayName = "DropdownInput";
+(DropdownInput as React.FunctionComponent).displayName = "DropdownInput";

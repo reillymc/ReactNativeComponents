@@ -3,19 +3,15 @@ import { Pressable, StyleSheet } from "react-native";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../../hooks";
 import { HighlightedText } from "../../HighlightedText";
+import { ValueItem } from "../valueItem";
 
-export type DropdownItem = {
-    label: string;
-    value: string;
-};
-
-interface DropdownItemProps {
-    item: DropdownItem;
+interface DropdownItemProps<T = string> {
+    item: ValueItem<T>;
     searchValue?: string;
     onPress: () => void;
 }
 
-export const DropdownItem: React.FC<DropdownItemProps> = ({ item, searchValue, onPress }) => {
+export const DropdownItem = <T,>({ item, searchValue, onPress }: DropdownItemProps<T>) => {
     const {
         theme: { color },
     } = useTheme();
@@ -24,7 +20,7 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({ item, searchValue, o
 
     return (
         <Pressable
-            key={item.value}
+            key={"id" in item ? item.id : item.value}
             onPress={onPress}
             style={({ pressed }) => [
                 styles.dropdownItem,
@@ -40,11 +36,13 @@ export const DropdownItem: React.FC<DropdownItemProps> = ({ item, searchValue, o
 
 DropdownItem.displayName = "DropdownItem";
 
-const createStyles = ({ styles: { baseInput } }: ThemedStyles, {}: Partial<DropdownItemProps>) =>
-    StyleSheet.create({
+const createStyles = ({ styles: { baseInput } }: ThemedStyles, {}: Partial<DropdownItemProps>) => {
+    const styles = StyleSheet.create({
         dropdownItem: {
             padding: baseInput.padding,
             paddingVertical: 10,
             borderRadius: baseInput.borderRadius / 2,
         },
     });
+    return styles;
+};

@@ -27,9 +27,13 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
         label: "Label",
         default: "None",
         values: [
-            { label: "None", value: undefined },
-            { label: "Text", value: "Example label" },
-            { label: "Text Component", value: <Text variant="label">Example component label</Text> },
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: "Example label" },
+            {
+                id: "TextComponent",
+                label: "Text Component",
+                value: <Text variant="label">Example component label</Text>,
+            },
         ],
     },
 };

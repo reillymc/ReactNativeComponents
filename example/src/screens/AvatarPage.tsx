@@ -24,7 +24,7 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
         type: "enum",
         label: "Image URL",
         values: [
-            { label: "None", value: undefined },
+            { id: "None", label: "None", value: undefined },
             { label: "David", value: "https://randomuser.me/api/portraits/men/19.jpg" },
             { label: "Mark", value: "https://randomuser.me/api/portraits/men/20.jpg" },
         ],
@@ -43,12 +43,9 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
         type: "enum",
         label: "Action",
         values: [
-            { label: "None", value: undefined },
-            { label: "Close", value: defaultProps.action },
-            {
-                label: "Edit",
-                value: <IconAction iconName="edit" onPress={() => null} size={"regular"} />,
-            },
+            { id: "None", label: "None", value: undefined },
+            { id: "Close", label: "Close", value: defaultProps.action },
+            { id: "Edit", label: "Edit", value: <IconAction iconName="edit" onPress={() => null} size={"regular"} /> },
         ],
     },
 };
