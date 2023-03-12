@@ -38,7 +38,7 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
     },
     helpText: {
         type: "string",
-        label: "Placeholder text",
+        label: "Help text",
     },
 };
 

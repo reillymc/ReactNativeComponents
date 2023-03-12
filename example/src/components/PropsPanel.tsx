@@ -118,10 +118,11 @@ export const PropsPanel = <T extends Record<string, any>>({
                         case "boolean":
                             return (
                                 <View key={definition.label} style={styles.propContainer}>
-                                    <Text variant="heading" style={styles.propHeading}>
-                                        {definition.label ?? propId}
-                                    </Text>
-                                    <ToggleInput value={currentValue} onChange={value => onChange(propId, value)} />
+                                    <ToggleInput
+                                        value={currentValue}
+                                        label={definition.label ?? propId}
+                                        onChange={value => onChange(propId, value)}
+                                    />
                                 </View>
                             );
                         case "array":

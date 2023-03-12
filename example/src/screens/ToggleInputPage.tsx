@@ -1,5 +1,5 @@
 import React from "react";
-import { ToggleInput, ToggleInputProps } from "@reillymc/react-native-components";
+import { Text, ToggleInput, ToggleInputProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 import { glyphMapValueItemsNullable } from "../helpers";
@@ -11,9 +11,19 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
         default: "check",
         values: glyphMapValueItemsNullable,
     },
-    onChange: {
-        type: "function",
-        label: "Change action",
+    label: {
+        type: "enum",
+        label: "Label",
+        default: "None",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "String", label: "String label", value: "String label" },
+            {
+                id: "Component",
+                label: "Text Component",
+                value: <Text variant="body">Text component label</Text>,
+            },
+        ],
     },
     disabled: {
         type: "boolean",
@@ -38,6 +48,14 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
             { label: "Regular", value: "regular" },
             { label: "Large", value: "large" },
         ],
+    },
+    helpText: {
+        type: "string",
+        label: "Help text",
+    },
+    onChange: {
+        type: "function",
+        label: "Change action",
     },
 };
 
