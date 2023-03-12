@@ -188,6 +188,7 @@ const createStyles = (theme: Theme) => {
             width: "60%",
             alignSelf: "center",
             flexGrow: 1,
+            paddingBottom: 120,
         },
         propContainer: {
             display: "flex",

@@ -29,6 +29,16 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
             { label: "Flat", value: "flat" },
         ],
     },
+    size: {
+        type: "enum",
+        label: "Size",
+        default: "Regular",
+        values: [
+            { label: "Small", value: "small" },
+            { label: "Regular", value: "regular" },
+            { label: "Large", value: "large" },
+        ],
+    },
 };
 
 const defaultProps: ToggleInputProps = {

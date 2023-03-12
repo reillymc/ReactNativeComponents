@@ -161,8 +161,16 @@ export const createDefaultStyles: CreateStyles = theme => ({
         dropdownMarginTop: 4,
     },
     toggleInput: {
-        size: 32,
-        iconSize: 20,
+        size: {
+            small: 20,
+            regular: 32,
+            large: 48,
+        },
+        iconSize: {
+            small: 14,
+            regular: 20,
+            large: 28,
+        },
         borderRadius: 16,
         borderWidth: 2,
     },
