@@ -1,9 +1,9 @@
 import React from "react";
-import { Text, NumberInput, NumberInputProps } from "@reillymc/react-native-components";
+import { Text, CounterInput, CounterInputProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
-const propDefinitions: PropDefinitions<NumberInputProps> = {
+const propDefinitions: PropDefinitions<CounterInputProps> = {
     placeholder: {
         type: "string",
         label: "Placeholder text",
@@ -55,20 +55,20 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
     },
 };
 
-const defaultProps: NumberInputProps = {
+const defaultProps: CounterInputProps = {
     placeholder: "0",
     width: "large",
     disabled: false,
 };
 
-export const NumberInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
+export const CounterInputPage: React.FunctionComponent = () => {
+    const [props, setProps] = React.useState<CounterInputProps>(defaultProps);
     const [inputValue, setInputValue] = React.useState<string | undefined>(undefined);
 
     return (
         <ComponentPage
-            componentName="Number Input"
-            component={<NumberInput {...props} value={inputValue} onChangeText={text => setInputValue(text)} />}
+            componentName="Counter Input"
+            component={<CounterInput {...props} value={inputValue} onChangeText={text => setInputValue(text)} />}
             propsPanel={
                 <PropsPanel
                     propValues={props}

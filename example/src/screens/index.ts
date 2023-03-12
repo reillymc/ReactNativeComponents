@@ -1,6 +1,7 @@
 export { ActionPage } from "./ActionPage";
 export { AvatarPage } from "./AvatarPage";
 export { ButtonPage } from "./ButtonPage";
+export { CounterInputPage } from "./CounterInputPage";
 export { CollapsibleContainerPage } from "./CollapsibleContainerPage";
 export { ComponentListScreen } from "./ComponentListScreen";
 export { DropdownInputPage } from "./DropdownInputPage";

@@ -14,6 +14,7 @@ import {
     ListItemStyles,
     AvatarStyles,
     BaseInputStyles,
+    CounterInputStyles,
 } from "../components";
 import { DeepPartial } from "../helpers";
 
@@ -36,6 +37,7 @@ export type Styles = {
     navigationHeader: NavigationHeaderStyles;
     modalSheet: ModalSheetStyles;
     toggleInput: ToggleInputStyles;
+    counterInput: CounterInputStyles;
     dropdownInput: DropdownInputStyles;
     listItem: ListItemStyles;
     avatar: AvatarStyles;
@@ -133,7 +135,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
     },
     button: {
         height: {
-            large: 50,
+            large: 48,
             regular: 40,
             small: 30,
         },
@@ -149,7 +151,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
         size: {
             large: 80,
             regular: 60,
-            small: 50,
+            small: 48,
         },
         fontSize: {
             ...theme.font.size,
@@ -163,6 +165,9 @@ export const createDefaultStyles: CreateStyles = theme => ({
         iconSize: 20,
         borderRadius: 16,
         borderWidth: 2,
+    },
+    counterInput: {
+        width: 48,
     },
     title: {
         fontFamilyWeight: theme.font.familyWeight.bold600,

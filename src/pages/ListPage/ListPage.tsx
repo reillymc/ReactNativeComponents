@@ -75,7 +75,7 @@ export { ListPage };
 
 const styles = StyleSheet.create({
     listHeader: {
-        paddingBottom: 12,
+        paddingBottom: 24,
     },
     listContentContainer: {
         paddingLeft: 16,
