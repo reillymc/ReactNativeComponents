@@ -31,7 +31,7 @@ export interface BaseInputStyles {
     disabledTextColor: string;
     backgroundColor: string;
     backgroundColorDisabled: string;
-    labelMarginBottom: number;
+    labelMargin: number;
 }
 
 export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
@@ -45,6 +45,8 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
 
     width?: InputWidth;
     disabled?: boolean;
+
+    helpText?: string;
 
     /**
      * Input element component.
@@ -62,6 +64,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             label,
             width,
             disabled,
+            helpText,
             inputElement,
             panelElement,
             modalElement,
@@ -132,6 +135,11 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                             {...props}
                         />
                     )}
+                    {helpText && (
+                        <View style={styles.helpText}>
+                            {typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText}
+                        </View>
+                    )}
                     {panelElement}
                 </View>
                 {modalElement}
@@ -152,7 +160,7 @@ const createStyles = (
             width: baseInput.width[width],
         },
         label: {
-            marginBottom: baseInput.labelMarginBottom,
+            marginBottom: baseInput.labelMargin,
         },
         input: {
             height: multiline ? "auto" : baseInput.height,
@@ -163,5 +171,8 @@ const createStyles = (
             lineHeight: multiline ? baseInput.multilineLineHeight : undefined,
             fontFamily: baseInput.fontFamilyWeight,
             color: baseInput.textColor,
+        },
+        helpText: {
+            marginTop: baseInput.labelMargin,
         },
     });

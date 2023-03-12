@@ -1,103 +1,103 @@
 {
-  "name": "@reillymc/react-native-components",
-  "version": "0.1.43",
-  "description": "A collection of React Native components and resources",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
-  "types": "lib/typescript/src/index.d.ts",
-  "react-native": "src/index",
-  "source": "src/index",
-  "files": [
-    "src",
-    "lib",
-    "android",
-    "ios",
-    "cpp",
-    "*.podspec",
-    "!lib/typescript/example",
-    "!ios/build",
-    "!android/build",
-    "!android/gradle",
-    "!android/gradlew",
-    "!android/gradlew.bat",
-    "!android/local.properties",
-    "!**/__tests__",
-    "!**/__fixtures__",
-    "!**/__mocks__",
-    "!**/.*"
-  ],
-  "scripts": {
-    "test": "jest",
-    "lint": "tsc --noEmit -p ./tsconfig.build.json && eslint src/**/*.{ts,tsx}",
-    "build": "bob build",
-    "prepare": "npm run build",
-    "release": "release-it",
-    "start": "cd example && npm start",
-    "bootstrap": "yarn example && yarn install"
-  },
-  "keywords": [
-    "react-native",
-    "ios",
-    "android"
-  ],
-  "repository": "https://github.com/reillymc/ReactNativeComponents",
-  "author": "reillymc",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/reillymc/ReactNativeComponents/issues"
-  },
-  "homepage": "https://github.com/reillymc/ReactNativeComponents#readme",
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
-  },
-  "devDependencies": {
-    "@react-native-community/eslint-config": "^3.2.0",
-    "@types/jest": "^28.1.2",
-    "@types/react": "~18.0.24",
-    "@types/react-native": "~0.70.6",
-    "eslint": "^8.4.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.27.5",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^28.1.1",
-    "pod-install": "^0.1.0",
-    "prettier": "^2.8.3",
-    "react": "18.1.0",
-    "react-native": "0.70.5",
-    "react-native-builder-bob": "^0.20.0",
-    "release-it": "^15.0.0",
-    "typescript": "^4.9.3"
-  },
-  "peerDependencies": {
-    "@expo/vector-icons": "^13.0",
-    "@gorhom/bottom-sheet": "^4.4",
-    "@gorhom/portal": "^1.0",
-    "@react-navigation/native": "^6.0",
-    "expo-blur": "^12.0",
-    "react": "*",
-    "react-native": "*",
-    "react-native-gesture-handler": "^2.8",
-    "react-native-reanimated": "^2.12"
-  },
-  "jest": {
-    "preset": "react-native",
-    "modulePathIgnorePatterns": [
-      "<rootDir>/example/node_modules",
-      "<rootDir>/lib/"
-    ]
-  },
-  "react-native-builder-bob": {
-    "source": "src",
-    "output": "lib",
-    "targets": [
-      "commonjs",
-      "module",
-      [
-        "typescript",
-        {
-          "project": "tsconfig.build.json"
-        }
-      ]
-    ]
-  }
+    "name": "@reillymc/react-native-components",
+    "version": "0.1.47",
+    "description": "A collection of React Native components and resources",
+    "main": "lib/commonjs/index",
+    "module": "lib/module/index",
+    "types": "lib/typescript/src/index.d.ts",
+    "react-native": "src/index",
+    "source": "src/index",
+    "files": [
+        "src",
+        "lib",
+        "android",
+        "ios",
+        "cpp",
+        "*.podspec",
+        "!lib/typescript/example",
+        "!ios/build",
+        "!android/build",
+        "!android/gradle",
+        "!android/gradlew",
+        "!android/gradlew.bat",
+        "!android/local.properties",
+        "!**/__tests__",
+        "!**/__fixtures__",
+        "!**/__mocks__",
+        "!**/.*"
+    ],
+    "scripts": {
+        "test": "jest",
+        "lint": "tsc --noEmit -p ./tsconfig.build.json && eslint src/**/*.{ts,tsx}",
+        "build": "bob build",
+        "prepare": "npm run build",
+        "release": "release-it",
+        "start": "cd example && npm start",
+        "bootstrap": "yarn example && yarn install"
+    },
+    "keywords": [
+        "react-native",
+        "ios",
+        "android"
+    ],
+    "repository": "https://github.com/reillymc/ReactNativeComponents",
+    "author": "reillymc",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/reillymc/ReactNativeComponents/issues"
+    },
+    "homepage": "https://github.com/reillymc/ReactNativeComponents#readme",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "devDependencies": {
+        "@react-native-community/eslint-config": "^3.2.0",
+        "@types/jest": "^28.1.2",
+        "@types/react": "~18.0.24",
+        "@types/react-native": "~0.70.6",
+        "eslint": "^8.4.1",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-import": "^2.27.5",
+        "eslint-plugin-prettier": "^4.0.0",
+        "jest": "^28.1.1",
+        "pod-install": "^0.1.0",
+        "prettier": "^2.8.3",
+        "react": "18.1.0",
+        "react-native": "0.70.5",
+        "react-native-builder-bob": "^0.20.0",
+        "release-it": "^15.0.0",
+        "typescript": "^4.9.3"
+    },
+    "peerDependencies": {
+        "@expo/vector-icons": "^13.0",
+        "@gorhom/bottom-sheet": "^4.4",
+        "@gorhom/portal": "^1.0",
+        "@react-navigation/native": "^6.0",
+        "expo-blur": "^12.0",
+        "react": "*",
+        "react-native": "*",
+        "react-native-gesture-handler": "^2.8",
+        "react-native-reanimated": "^2.12"
+    },
+    "jest": {
+        "preset": "react-native",
+        "modulePathIgnorePatterns": [
+            "<rootDir>/example/node_modules",
+            "<rootDir>/lib/"
+        ]
+    },
+    "react-native-builder-bob": {
+        "source": "src",
+        "output": "lib",
+        "targets": [
+            "commonjs",
+            "module",
+            [
+                "typescript",
+                {
+                    "project": "tsconfig.build.json"
+                }
+            ]
+        ]
+    }
 }

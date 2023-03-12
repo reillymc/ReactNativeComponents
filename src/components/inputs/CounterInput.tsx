@@ -59,7 +59,7 @@ const createStyles = ({ styles: { counterInput, baseInput } }: ThemedStyles, {}:
             width: counterInput.width,
         },
         label: {
-            marginBottom: baseInput.labelMarginBottom,
+            marginBottom: baseInput.labelMargin,
         },
         input: {
             borderRadius: 0,

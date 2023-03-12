@@ -70,7 +70,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
         placeholderTextColor: theme.color.textSecondary,
         backgroundColor: theme.color.inputBackground,
         backgroundColorDisabled: theme.color.inputBackgroundDisabled,
-        labelMarginBottom: 6,
+        labelMargin: 6,
     },
     common: {
         action: {

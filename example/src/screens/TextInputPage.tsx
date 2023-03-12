@@ -36,6 +36,10 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
             },
         ],
     },
+    helpText: {
+        type: "string",
+        label: "Placeholder text",
+    },
 };
 
 const defaultProps: TextInputProps = {
