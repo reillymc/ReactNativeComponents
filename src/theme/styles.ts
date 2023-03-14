@@ -87,13 +87,15 @@ export const createDefaultStyles: CreateStyles = theme => ({
             label: theme.font.familyWeight.bold600,
             heading: theme.font.familyWeight.bold600,
             title: theme.font.familyWeight.bold800,
+            display: theme.font.familyWeight.bold800,
         },
         fontFamilySize: {
             caption: theme.font.size.small,
             body: theme.font.size.regular,
             label: theme.font.size.emphasised,
             heading: theme.font.size.large,
-            title: theme.font.size.xxLarge,
+            title: theme.font.size.xLarge,
+            display: theme.font.size.xxLarge,
         },
         lineHeight: {
             caption: theme.font.size.small + 4,
@@ -101,6 +103,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
             label: theme.font.size.emphasised + LINE_HEIGHT_MODIFIER,
             heading: theme.font.size.large + LINE_HEIGHT_MODIFIER,
             title: theme.font.size.xxLarge + LINE_HEIGHT_MODIFIER,
+            display: theme.font.size.xxLarge + LINE_HEIGHT_MODIFIER,
         },
     },
     highlightedText: {

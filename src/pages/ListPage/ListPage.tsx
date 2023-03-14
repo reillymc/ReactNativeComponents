@@ -60,7 +60,7 @@ const ListPage = <T,>({
                 ListHeaderComponentStyle={[styles.listHeader, ListHeaderComponentStyle]}
                 ListHeaderComponent={
                     <>
-                        <Text variant="title">{heading.props.heading}</Text>
+                        <Text variant="display">{heading.props.heading}</Text>
                         {ListHeaderComponent}
                     </>
                 }

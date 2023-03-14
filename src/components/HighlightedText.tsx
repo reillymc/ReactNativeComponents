@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
 
+import { EscapeForRegexProcessing } from "../helpers";
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
 import { Text } from "./Text";
@@ -24,7 +25,7 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
 }) => {
     const styles = useThemedStyles(createStyles, {});
 
-    const highlightedText = highlight?.toLowerCase();
+    const highlightedText = EscapeForRegexProcessing(highlight.toLowerCase());
     const parts = text.split(new RegExp(`(${highlightedText})`, "gi"));
 
     return (

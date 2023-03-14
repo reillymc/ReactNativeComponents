@@ -23,7 +23,7 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
             <View style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}>{component}</View>
             {!fullscreen && (
                 <View style={styles.propsContainer}>
-                    <Text variant="title" style={styles.heading}>
+                    <Text variant="display" style={styles.heading}>
                         {componentName}
                     </Text>
                     {propsPanel}
