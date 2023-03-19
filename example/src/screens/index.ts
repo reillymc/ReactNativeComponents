@@ -1,9 +1,9 @@
 export { ActionPage } from "./ActionPage";
 export { AvatarPage } from "./AvatarPage";
 export { ButtonPage } from "./ButtonPage";
-export { CounterInputPage } from "./CounterInputPage";
 export { CollapsibleContainerPage } from "./CollapsibleContainerPage";
 export { ComponentListScreen } from "./ComponentListScreen";
+export { CounterInputPage } from "./CounterInputPage";
 export { DropdownInputPage } from "./DropdownInputPage";
 export { IconActionPage } from "./IconActionPage";
 export { IconButtonPage } from "./IconButtonPage";
@@ -11,6 +11,7 @@ export { ListItemPage } from "./ListItemPage";
 export { ListPagePage } from "./ListPagePage";
 export { ModalSheetPage } from "./ModalSheetPage";
 export { NumberInputPage } from "./NumberInputPage";
+export { ScrollPagePage } from "./ScrollPagePage";
 export { SelectionInputPage } from "./SelectionInputPage";
 export { TagPage } from "./TagPage";
 export { TextInputPage } from "./TextInputPage";

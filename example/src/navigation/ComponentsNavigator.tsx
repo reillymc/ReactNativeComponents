@@ -16,6 +16,7 @@ import {
     ListPagePage,
     ModalSheetPage,
     NumberInputPage,
+    ScrollPagePage,
     SelectionInputPage,
     TagPage,
     TextInputPage,
@@ -58,6 +59,7 @@ export const ComponentScreens = {
     Avatar: { name: "Avatar", component: AvatarPage },
     Tag: { name: "Tag", component: TagPage },
     CollapsibleContainer: { name: "Collapsible Container", component: CollapsibleContainerPage },
+    ScrollPage: { name: "Scroll Page", component: ScrollPagePage },
 } satisfies Record<string, { name: string; component: React.FunctionComponent }>;
 
 export const ComponentStackNavigator = () => (
