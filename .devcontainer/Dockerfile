@@ -1,7 +1,7 @@
 FROM node:18-bullseye
 
-WORKDIR /app
+WORKDIR /home/node/workspace
 
-RUN npm install -g eslint tslint-to-eslint-config typescript expo-cli np
+# RUN chown node:node /home/node/workspace -R
 
-CMD ["npm", "start"]
+RUN npm install -g eslint typescript expo-cli

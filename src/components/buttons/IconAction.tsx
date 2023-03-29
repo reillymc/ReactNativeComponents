@@ -30,6 +30,7 @@ export interface IconActionProps {
     label?: string;
     variant?: ActionVariant;
     size?: ActionSize;
+    labelPosition?: "left" | "right";
     disabled?: boolean;
     containerStyle?: StyleProp<ViewStyle>;
     iconStyle?: StyleProp<TextStyle>;
@@ -41,12 +42,13 @@ export const IconAction: React.FC<IconActionProps> = ({
     label,
     variant = "flat",
     size = "regular",
+    labelPosition = "right",
     disabled,
     containerStyle,
     iconStyle,
     onPress,
 }) => {
-    const styles = useThemedStyles(createStyles, { variant, size });
+    const styles = useThemedStyles(createStyles, { size, labelPosition });
     const { theme } = useTheme();
 
     return (
@@ -73,11 +75,14 @@ export const IconAction: React.FC<IconActionProps> = ({
 
 IconAction.displayName = "IconAction";
 
-const createStyles = ({ styles: { iconAction } }: ThemedStyles, { size = "regular" }: Partial<IconActionProps>) => {
+const createStyles = (
+    { styles: { iconAction } }: ThemedStyles,
+    { size = "regular", labelPosition = "right" }: Partial<IconActionProps>,
+) => {
     const styles = StyleSheet.create({
         container: {
             display: "flex",
-            flexDirection: "row",
+            flexDirection: labelPosition === "left" ? "row-reverse" : "row",
             alignItems: "center",
         },
         icon: {
@@ -85,7 +90,8 @@ const createStyles = ({ styles: { iconAction } }: ThemedStyles, { size = "regula
             width: iconAction.size[size],
         },
         text: {
-            marginLeft: 6,
+            marginLeft: labelPosition === "left" ? 0 : 6,
+            marginRight: labelPosition === "left" ? 6 : 0,
         },
     });
     return styles;

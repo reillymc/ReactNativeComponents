@@ -3,7 +3,7 @@
     "tabWidth": 4,
     "semi": true,
     "singleQuote": false,
-    "endOfLine": "auto",
+    "endOfLine": "lf",
     "arrowParens": "avoid",
     "printWidth": 120
 }
