@@ -1,32 +1,32 @@
 {
-  "name": "example",
-  "version": "1.0.0",
-  "main": "node_modules/expo/AppEntry.js",
-  "scripts": {
-    "start": "expo start --port=19005",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web",
-    "lint": "tsc --noEmit -p ./tsconfig.json && eslint src/**/*.{ts,tsx}"
-  },
-  "dependencies": {
-    "@expo/vector-icons": "^13.0.0",
-    "@gorhom/bottom-sheet": "^4.4.5",
-    "@gorhom/portal": "^1.0.14",
-    "@react-navigation/native": "^6.0.13",
-    "@react-navigation/stack": "^6.3.2",
-    "expo": "^47.0.0",
-    "expo-blur": "~12.0.1",
-    "expo-font": "~11.0.1",
-    "expo-status-bar": "~1.4.2",
-    "react": "18.1.0",
-    "react-native": "0.70.5",
-    "react-native-gesture-handler": "2.8",
-    "react-native-reanimated": "~2.12.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.19.3",
-    "babel-plugin-module-resolver": "^4.1.0"
-  },
-  "private": true
+    "name": "example",
+    "version": "1.0.0",
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+        "start": "expo start --port=19005",
+        "android": "expo start --android",
+        "ios": "expo start --ios",
+        "web": "expo start --web",
+        "lint": "tsc --noEmit -p ./tsconfig.json && eslint src/**/*.{ts,tsx}"
+    },
+    "dependencies": {
+        "@expo/vector-icons": "^13.0.0",
+        "@gorhom/bottom-sheet": "^4.4.5",
+        "@gorhom/portal": "^1.0.14",
+        "@react-navigation/native": "^6.0.13",
+        "@react-navigation/stack": "^6.3.2",
+        "expo": "^48.0.9",
+        "expo-blur": "~12.2.2",
+        "expo-font": "~11.1.1",
+        "expo-status-bar": "~1.4.4",
+        "react": "18.2.0",
+        "react-native": "0.71.4",
+        "react-native-gesture-handler": "~2.9.0",
+        "react-native-reanimated": "~2.14.4"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.19.3",
+        "babel-plugin-module-resolver": "^4.1.0"
+    },
+    "private": true
 }
