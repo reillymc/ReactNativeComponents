@@ -52,7 +52,7 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
 };
 
-export const ButtonPage: React.FunctionComponent = () => {
+const ButtonPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<ButtonProps>(defaultProps);
 
     return (
@@ -69,3 +69,5 @@ export const ButtonPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ButtonPage;

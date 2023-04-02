@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import { Stack } from "expo-router";
 import { Text, Theme, useTheme } from "@reillymc/react-native-components";
 
 export interface ComponentPageProps {
@@ -20,6 +21,7 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
     const styles = createStyles(theme);
     return (
         <View style={styles.container}>
+            <Stack.Screen options={{ title: componentName }} />
             <View style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}>{component}</View>
             {!fullscreen && (
                 <View style={styles.propsContainer}>

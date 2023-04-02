@@ -40,7 +40,7 @@ const propDefinitions: PropDefinitions<ActionProps> = {
     },
 };
 
-export const ActionPage: React.FunctionComponent = () => {
+const ActionPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<ActionProps>(defaultProps);
 
     return (
@@ -57,3 +57,5 @@ export const ActionPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ActionPage;

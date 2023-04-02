@@ -47,7 +47,7 @@ const propDefinitions: PropDefinitions<IconActionProps> = {
     },
 };
 
-export const IconActionPage: React.FunctionComponent = () => {
+const IconActionPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<IconActionProps>(defaultProps);
 
     return (
@@ -64,3 +64,5 @@ export const IconActionPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default IconActionPage;

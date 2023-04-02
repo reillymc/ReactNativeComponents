@@ -3,7 +3,7 @@ import { Action, Button, Form, ModalHeader, ModalSheet, TextInput } from "@reill
 
 import { ComponentPage } from "../components";
 
-export const ModalSheetPage: React.FunctionComponent = () => {
+const ModalSheetPage: React.FunctionComponent = () => {
     const [show, setShow] = React.useState(true);
 
     return (
@@ -24,3 +24,5 @@ export const ModalSheetPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ModalSheetPage;

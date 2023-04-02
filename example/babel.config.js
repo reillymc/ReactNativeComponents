@@ -1,9 +1,9 @@
 const path = require("path");
+
 const pak = require("../package.json");
 
 module.exports = function (api) {
     api.cache(true);
-
     return {
         presets: ["babel-preset-expo"],
         plugins: [
@@ -17,7 +17,9 @@ module.exports = function (api) {
                     },
                 },
             ],
-            ["react-native-reanimated/plugin"],
+            "@babel/plugin-proposal-export-namespace-from",
+            "react-native-reanimated/plugin",
+            require.resolve("expo-router/babel"),
         ],
     };
 };

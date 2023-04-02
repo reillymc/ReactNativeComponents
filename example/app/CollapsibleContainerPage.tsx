@@ -25,7 +25,7 @@ const propDefinitions: PropDefinitions<CollapsibleContainerProps> = {
     },
 };
 
-export const CollapsibleContainerPage: React.FunctionComponent = () => {
+const CollapsibleContainerPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<CollapsibleContainerProps>(defaultProps);
 
     return (
@@ -46,3 +46,5 @@ export const CollapsibleContainerPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default CollapsibleContainerPage;

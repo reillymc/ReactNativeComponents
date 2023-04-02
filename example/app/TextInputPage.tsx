@@ -48,7 +48,7 @@ const defaultProps: TextInputProps = {
     disabled: false,
 };
 
-export const TextInputPage: React.FunctionComponent = () => {
+const TextInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<TextInputProps>(defaultProps);
 
     return (
@@ -65,3 +65,5 @@ export const TextInputPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default TextInputPage;

@@ -61,7 +61,7 @@ const defaultProps: CounterInputProps = {
     disabled: false,
 };
 
-export const CounterInputPage: React.FunctionComponent = () => {
+const CounterInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<CounterInputProps>(defaultProps);
     const [inputValue, setInputValue] = React.useState<string | undefined>(undefined);
 
@@ -79,3 +79,5 @@ export const CounterInputPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default CounterInputPage;

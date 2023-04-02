@@ -32,7 +32,7 @@ const propDefinitions: PropDefinitions<TagProps> = {
     },
 };
 
-export const TagPage: React.FunctionComponent = () => {
+const TagPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<TagProps>(defaultProps);
 
     return (
@@ -49,3 +49,5 @@ export const TagPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default TagPage;

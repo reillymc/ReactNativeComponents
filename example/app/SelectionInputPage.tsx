@@ -63,7 +63,7 @@ const defaultProps: SelectionInputProps = {
     onChange: () => null,
 };
 
-export const SelectionInputPage: React.FunctionComponent = () => {
+const SelectionInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<SelectionInputProps>(defaultProps);
 
     return (
@@ -88,3 +88,5 @@ export const SelectionInputPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default SelectionInputPage;

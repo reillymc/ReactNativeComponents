@@ -50,7 +50,7 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
     },
 };
 
-export const AvatarPage: React.FunctionComponent = () => {
+const AvatarPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<AvatarProps>(defaultProps);
 
     return (
@@ -67,3 +67,5 @@ export const AvatarPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default AvatarPage;

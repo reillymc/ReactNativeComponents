@@ -27,7 +27,7 @@ const exampleData: ExampleData[] = [
     },
 ];
 
-export const ListPagePage: React.FunctionComponent = () => {
+const ListPagePage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="List Page"
@@ -42,3 +42,5 @@ export const ListPagePage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ListPagePage;

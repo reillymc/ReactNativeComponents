@@ -1,10 +1,7 @@
 import React from "react";
-import { StyleSheet, useColorScheme, useWindowDimensions } from "react-native";
+import { Stack } from "expo-router/stack";
 import { useFonts } from "expo-font";
 import { StatusBar } from "expo-status-bar";
-import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer, Theme as NavigationTheme } from "@react-navigation/native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
 import {
     ThemeProvider,
     createDefaultStyles,
@@ -15,10 +12,9 @@ import {
     scaleFont,
     MergeTheme,
 } from "@reillymc/react-native-components";
+import { useColorScheme, useWindowDimensions } from "react-native";
 
-import { ComponentStackNavigator } from "./navigation/ComponentsNavigator";
-
-export const App = () => {
+const Layout: React.FC = () => {
     const [fontsLoaded] = useFonts({
         "Comfortaa-Bold": require("../assets/fonts/Comfortaa-Bold.ttf"),
         "Comfortaa-Light": require("../assets/fonts/Comfortaa-Light.ttf"),
@@ -81,42 +77,15 @@ export const App = () => {
         },
     };
 
-    const RootStack = createStackNavigator();
-
-    const navigationTheme: NavigationTheme = {
-        dark: colorScheme === "dark",
-        colors: {
-            background: theme.color.background,
-            border: theme.color.border,
-            card: theme.color.foreground,
-            notification: theme.color.primary,
-            primary: theme.color.textPrimary,
-            text: theme.color.textPrimary,
-        },
-    };
-
     return (
-        <GestureHandlerRootView style={styles.container}>
-            <ThemeProvider theme={theme} styles={appStyles}>
+        <ThemeProvider theme={theme} styles={appStyles}>
+            <PortalProvider>
                 <StatusBar style="auto" />
-                <PortalProvider>
-                    <NavigationContainer theme={navigationTheme}>
-                        <RootStack.Navigator>
-                            <RootStack.Screen
-                                name="Examples"
-                                options={{ headerShown: false }}
-                                component={ComponentStackNavigator}
-                            />
-                        </RootStack.Navigator>
-                    </NavigationContainer>
-                </PortalProvider>
-            </ThemeProvider>
-        </GestureHandlerRootView>
+
+                <Stack initialRouteName="index" id="index" />
+            </PortalProvider>
+        </ThemeProvider>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-});
+export default Layout;

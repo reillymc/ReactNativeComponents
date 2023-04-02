@@ -61,7 +61,7 @@ const defaultProps: NumberInputProps = {
     disabled: false,
 };
 
-export const NumberInputPage: React.FunctionComponent = () => {
+const NumberInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
     const [inputValue, setInputValue] = React.useState<string | undefined>(undefined);
 
@@ -79,3 +79,5 @@ export const NumberInputPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default NumberInputPage;

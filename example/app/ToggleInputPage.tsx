@@ -66,7 +66,7 @@ const defaultProps: ToggleInputProps = {
     variant: "primary",
 };
 
-export const ToggleInputPage: React.FunctionComponent = () => {
+const ToggleInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<ToggleInputProps>(defaultProps);
 
     const [toggled, setToggled] = React.useState(false);
@@ -85,3 +85,5 @@ export const ToggleInputPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ToggleInputPage;

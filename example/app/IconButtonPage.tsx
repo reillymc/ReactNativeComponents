@@ -3,7 +3,7 @@ import { IconButton } from "@reillymc/react-native-components";
 
 import { ComponentPage } from "../components";
 
-export const IconButtonPage: React.FunctionComponent = () => {
+const IconButtonPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Icon Button"
@@ -13,3 +13,5 @@ export const IconButtonPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default IconButtonPage;

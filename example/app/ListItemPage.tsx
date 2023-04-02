@@ -120,7 +120,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
     },
 };
 
-export const ListItemPage: React.FunctionComponent = () => {
+const ListItemPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<ListItemProps>(defaultProps);
 
     return (
@@ -139,3 +139,5 @@ export const ListItemPage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ListItemPage;

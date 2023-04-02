@@ -3,7 +3,7 @@ import { ScrollPage, NavigationHeader } from "@reillymc/react-native-components"
 
 import { ComponentPage } from "../components";
 
-export const ScrollPagePage: React.FunctionComponent = () => {
+const ScrollPagePage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Scroll Page"
@@ -12,3 +12,5 @@ export const ScrollPagePage: React.FunctionComponent = () => {
         />
     );
 };
+
+export default ScrollPagePage;
