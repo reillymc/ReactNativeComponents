@@ -52,17 +52,10 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     rightItem,
     style,
 }) => {
-    const [headerHeight, setHeaderHeight] = React.useState(0);
     const ref = React.useRef<View>(null);
     const statusBarHeight = useStatusBarHeight();
-    const styles = useThemedStyles(createStyles, { scrollPosition, statusBarHeight, headerHeight });
+    const styles = useThemedStyles(createStyles, { scrollPosition, statusBarHeight });
     const colorScheme = useColorScheme();
-
-    React.useEffect(() => {
-        ref.current?.measure((_x, _y, _width, height) => {
-            setHeaderHeight(height);
-        });
-    });
 
     const intensity = Math.min(scrollPosition * 2, 85);
 
@@ -84,11 +77,7 @@ NavigationHeader.displayName = "NavigationHeader";
 
 const createStyles = (
     { styles: { navigationHeader }, theme: { color } }: ThemedStyles,
-    {
-        scrollPosition = 100,
-        statusBarHeight,
-        headerHeight,
-    }: Partial<NavigationHeaderProps> & { statusBarHeight: number; headerHeight: number },
+    { scrollPosition = 100, statusBarHeight }: Partial<NavigationHeaderProps> & { statusBarHeight: number },
 ) => {
     const offset = scrollPosition - headerStartPos - statusBarHeight;
     const styles = StyleSheet.create({
