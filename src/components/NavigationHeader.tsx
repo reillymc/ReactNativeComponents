@@ -5,8 +5,9 @@ import { BlurView } from "expo-blur";
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
 import { Text } from "./Text";
+import { useStatusBarHeight } from "./StatusBarBlur";
 
-const headerStartPos = 40;
+const headerStartPos = 0;
 
 export type NavigationHeaderStyles = {
     /**
@@ -51,13 +52,23 @@ export const NavigationHeader: React.FC<NavigationHeaderProps> = ({
     rightItem,
     style,
 }) => {
-    const styles = useThemedStyles(createStyles, { scrollPosition });
+    const [headerHeight, setHeaderHeight] = React.useState(0);
+    const ref = React.useRef<View>(null);
+    const statusBarHeight = useStatusBarHeight();
+    const styles = useThemedStyles(createStyles, { scrollPosition, statusBarHeight, headerHeight });
     const colorScheme = useColorScheme();
+
+    React.useEffect(() => {
+        ref.current?.measure((_x, _y, _width, height) => {
+            setHeaderHeight(height);
+        });
+    });
 
     const intensity = Math.min(scrollPosition * 2, 85);
 
     return (
         <BlurView
+            ref={ref}
             intensity={intensity}
             tint={colorScheme === "dark" ? "dark" : "light"}
             style={[styles.headerContainer, style]}
@@ -73,15 +84,20 @@ NavigationHeader.displayName = "NavigationHeader";
 
 const createStyles = (
     { styles: { navigationHeader }, theme: { color } }: ThemedStyles,
-    { scrollPosition = 100 }: Partial<NavigationHeaderProps>,
+    {
+        scrollPosition = 100,
+        statusBarHeight,
+        headerHeight,
+    }: Partial<NavigationHeaderProps> & { statusBarHeight: number; headerHeight: number },
 ) => {
+    const offset = scrollPosition - headerStartPos - statusBarHeight;
     const styles = StyleSheet.create({
         headerContainer: {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            paddingTop: navigationHeader.paddingTop,
+            paddingTop: navigationHeader.paddingTop + statusBarHeight,
             paddingBottom: navigationHeader.paddingBottom,
             paddingLeft: navigationHeader.paddingLeft,
             paddingRight: navigationHeader.paddingRight,
@@ -90,7 +106,7 @@ const createStyles = (
             shadowRadius: 5,
             shadowOffset: {
                 width: 0,
-                height: Math.min((scrollPosition - headerStartPos) * 0.2, 5),
+                height: Math.min(offset * 0.2, 5),
             },
         },
         headerItemLeft: {
@@ -103,7 +119,7 @@ const createStyles = (
         heading: {
             fontFamily: navigationHeader.fontFamilyWeight,
             fontSize: navigationHeader.fontSize,
-            opacity: (scrollPosition - headerStartPos) / 30,
+            opacity: (scrollPosition - statusBarHeight) / 30,
         },
     });
     return styles;

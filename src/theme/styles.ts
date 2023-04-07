@@ -189,7 +189,7 @@ export const createDefaultStyles: CreateStyles = theme => ({
     navigationHeader: {
         fontFamilyWeight: theme.font.familyWeight.regular400,
         fontSize: theme.font.size.large,
-        paddingTop: 56,
+        paddingTop: 8,
         paddingBottom: 16,
         paddingLeft: theme.padding.pageHorizontal,
         paddingRight: theme.padding.pageHorizontal,
