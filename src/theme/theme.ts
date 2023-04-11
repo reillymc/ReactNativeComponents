@@ -69,6 +69,12 @@ export const DefaultTheme = {
     },
     padding: {
         pageHorizontal: 16,
+        pageTop: 16,
+
+        large: 24,
+        regular: 16,
+        small: 8,
+        tiny: 4,
     },
 };
 

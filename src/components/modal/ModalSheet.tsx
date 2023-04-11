@@ -12,6 +12,17 @@ import { Portal } from "@gorhom/portal";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 
+// react-native-screens is an optional peer dependency
+let RNS: {
+    FullWindowOverlay: React.ComponentType<{
+        children: React.ReactNode;
+    }>;
+} | null = null;
+
+try {
+    RNS = require("react-native-screens");
+} catch {}
+
 export type ModalHeight = "small" | "mid" | "full";
 
 export interface ModalSheetStyles {
@@ -61,6 +72,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
 }) => {
     const ref = React.useRef<BottomSheet>(null);
 
+    const [isHide, setIsHide] = React.useState(true);
     const styles = useThemedStyles(createStyles, {});
     const {
         styles: { modalSheet },
@@ -75,33 +87,48 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
         }
     }, [show, ref]);
 
+    // Temporary fix to avoid bottom sheet appearing under modal from react-native-screens.
+    setTimeout(() => setIsHide(false), 1);
+
+    if (isHide) {
+        return null;
+    }
+
+    const WrapperElement = RNS?.FullWindowOverlay || React.Fragment;
+
     return (
         <Portal>
-            <BottomSheet
-                ref={ref}
-                index={-1}
-                enableOverDrag
-                handleComponent={
-                    handleComponent
-                        ? () => <View style={{ flex: 1, alignItems: "center", paddingTop: 8 }}>{handleComponent}</View>
-                        : undefined
-                }
-                enablePanDownToClose={!preventDragToClose}
-                backgroundStyle={styles.sheetBackground}
-                keyboardBlurBehavior={show ? "restore" : "none"}
-                snapPoints={[modalSheet.height[height]]}
-                keyboardBehavior={keyboardBehavior}
-                onClose={onClose}
-                backdropComponent={props => (
-                    <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
-                        <View style={styles.backdrop} />
-                    </BottomSheetBackdrop>
-                )}
-            >
-                {header}
-                {show && children}
-                {footer}
-            </BottomSheet>
+            <WrapperElement>
+                <BottomSheet
+                    ref={ref}
+                    index={-1}
+                    enableOverDrag
+                    handleComponent={
+                        handleComponent
+                            ? () => (
+                                  <View style={{ flex: 1, alignItems: "center", paddingTop: 8 }}>
+                                      {handleComponent}
+                                  </View>
+                              )
+                            : undefined
+                    }
+                    enablePanDownToClose={!preventDragToClose}
+                    backgroundStyle={styles.sheetBackground}
+                    keyboardBlurBehavior={show ? "restore" : "none"}
+                    snapPoints={[modalSheet.height[height]]}
+                    keyboardBehavior={keyboardBehavior}
+                    onClose={onClose}
+                    backdropComponent={props => (
+                        <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
+                            <View style={styles.backdrop} />
+                        </BottomSheetBackdrop>
+                    )}
+                >
+                    {header}
+                    {show && children}
+                    {footer}
+                </BottomSheet>
+            </WrapperElement>
         </Portal>
     );
 };
