@@ -3,6 +3,8 @@ import { StyleProp, StyleSheet, useColorScheme, View, ViewStyle } from "react-na
 import { Portal } from "@gorhom/portal";
 import { BlurView } from "expo-blur";
 
+import { FullWindowOverlayWrapper } from "./FullWindowOverlayWrapper";
+
 export interface FloatingContainerProps {
     position: {
         x?: number;
@@ -20,14 +22,16 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
 
         return (
             <Portal>
-                <BlurView
-                    ref={ref}
-                    intensity={1}
-                    tint={colorScheme === "dark" ? "dark" : "light"}
-                    style={[align === "top" ? styles.container : styles.containerInverse, style]}
-                >
-                    {children}
-                </BlurView>
+                <FullWindowOverlayWrapper>
+                    <BlurView
+                        ref={ref}
+                        intensity={1}
+                        tint={colorScheme === "dark" ? "dark" : "light"}
+                        style={[align === "top" ? styles.container : styles.containerInverse, style]}
+                    >
+                        {children}
+                    </BlurView>
+                </FullWindowOverlayWrapper>
             </Portal>
         );
     },

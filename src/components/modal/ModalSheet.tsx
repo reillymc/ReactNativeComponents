@@ -11,17 +11,7 @@ import BottomSheet, {
 import { Portal } from "@gorhom/portal";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-
-// react-native-screens is an optional peer dependency
-let RNS: {
-    FullWindowOverlay: React.ComponentType<{
-        children: React.ReactNode;
-    }>;
-} | null = null;
-
-try {
-    RNS = require("react-native-screens");
-} catch {}
+import { FullWindowOverlayWrapper } from "../FullWindowOverlayWrapper";
 
 export type ModalHeight = "small" | "mid" | "full";
 
@@ -94,11 +84,9 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
         return null;
     }
 
-    const WrapperElement = RNS?.FullWindowOverlay || React.Fragment;
-
     return (
         <Portal>
-            <WrapperElement>
+            <FullWindowOverlayWrapper>
                 <BottomSheet
                     ref={ref}
                     index={-1}
@@ -128,7 +116,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
                     {show && children}
                     {footer}
                 </BottomSheet>
-            </WrapperElement>
+            </FullWindowOverlayWrapper>
         </Portal>
     );
 };
