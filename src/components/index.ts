@@ -17,3 +17,4 @@ export * from "./Tag";
 export * from "./CollapsibleContainer";
 export * from "./AlertIndicator";
 export { StatusBarBlur, StatusBarBlurProps } from "./StatusBarBlur";
+export { Icon } from "./Icon";

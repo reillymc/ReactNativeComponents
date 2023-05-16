@@ -48,28 +48,32 @@ export const ListItem: React.FC<ListItemProps> = ({
 }) => {
     const filteredRows = contentRows.filter(Undefined);
 
+    const filteredActions = swipeActions?.filter(Undefined);
+
     const styles = useThemedStyles(createStyles, { avatar, contentRows: filteredRows });
+
+    const innerContent = (
+        <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
+            {header}
+            <View style={styles.innerContainer}>
+                {!!avatar && <View style={styles.avatarContainer}>{avatar}</View>}
+                <View style={styles.contentContainer}>
+                    {!!heading && (
+                        <Text variant="heading" numberOfLines={2}>
+                            {heading}
+                        </Text>
+                    )}
+                    {filteredRows}
+                </View>
+                {!!alert && <View style={styles.avatarContainer}>{alert}</View>}
+            </View>
+            {footer}
+        </Pressable>
+    );
 
     return (
         <View style={styles.container}>
-            <SwipeView rightActions={swipeActions}>
-                <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
-                    {header}
-                    <View style={styles.innerContainer}>
-                        {!!avatar && <View style={styles.avatarContainer}>{avatar}</View>}
-                        <View style={styles.contentContainer}>
-                            {!!heading && (
-                                <Text variant="heading" numberOfLines={2}>
-                                    {heading}
-                                </Text>
-                            )}
-                            {filteredRows}
-                        </View>
-                        {!!alert && <View style={styles.avatarContainer}>{alert}</View>}
-                    </View>
-                    {footer}
-                </Pressable>
-            </SwipeView>
+            {filteredActions?.length ? <SwipeView rightActions={swipeActions}>{innerContent}</SwipeView> : innerContent}
         </View>
     );
 };

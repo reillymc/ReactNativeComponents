@@ -69,7 +69,11 @@ export const DropdownPanel = <T,>({
     ]);
 
     let displayItems = items
-        .filter(({ label }) => label.toLowerCase().includes(searchValue.toLowerCase()))
+        .filter(
+            ({ label, description }) =>
+                label.toLowerCase().includes(searchValue.toLowerCase()) ||
+                (description && description.toLowerCase().includes(searchValue.toLowerCase())),
+        )
         .slice(0, maxSuggestionCount);
     displayItems = !inverted ? displayItems.reverse() : displayItems;
 
@@ -79,7 +83,7 @@ export const DropdownPanel = <T,>({
                 ref={containerRef}
                 position={{ x: layout?.x, y: layout?.y }}
                 align={inverted ? "bottom" : "top"}
-                style={[{ opacity: visible ? 0.9 : 0, width: layout?.width }, styles.dropdownContainer]}
+                style={[{ opacity: visible ? 0.95 : 0, width: layout?.width }, styles.dropdownContainer]}
             >
                 {visible &&
                     displayItems.map(item => (

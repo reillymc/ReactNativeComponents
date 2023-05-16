@@ -30,6 +30,7 @@ export const DropdownItem = <T,>({ item, searchValue, onPress }: DropdownItemPro
             ]}
         >
             <HighlightedText text={item.label} highlight={searchValue} />
+            {item.description && <HighlightedText variant="caption" text={item.description} highlight={searchValue} />}
         </Pressable>
     );
 };

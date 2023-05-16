@@ -1,10 +1,10 @@
 import React from "react";
-import { StyleProp, StyleSheet, TextStyle, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
 import { EscapeForRegexProcessing } from "../helpers";
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
-import { Text } from "./Text";
+import { Text, TextProps } from "./Text";
 
 export interface HighlightedTextStyles {
     /**
@@ -12,16 +12,16 @@ export interface HighlightedTextStyles {
      */
     highlightedFontFamilyWeight: string;
 }
-export interface HighlightedTextProps {
+export interface HighlightedTextProps extends Pick<TextProps, "variant" | "style"> {
     text?: string;
     highlight?: string;
-    style?: StyleProp<TextStyle>;
 }
 
 export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
     text = "",
     highlight = "",
     style,
+    ...props
 }) => {
     const styles = useThemedStyles(createStyles, {});
 
@@ -32,6 +32,7 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
         <View style={{ display: "flex", flexDirection: "row" }}>
             {parts.map((part, idx) => (
                 <Text
+                    {...props}
                     key={`${part}${idx}`}
                     style={[part.toLowerCase() === highlightedText ? styles.highlighted : styles.default, style]}
                 >

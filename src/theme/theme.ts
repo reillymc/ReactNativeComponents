@@ -52,6 +52,9 @@ export const DefaultTheme = {
         textInverted: "#F4EDEA",
         textDisabled: "#B5EAD7",
 
+        textOnPrimary: "#12263A",
+        textOnSecondary: "#F4EDEA",
+
         background: "#F4EDEA",
         backgroundHighlight: "#f7f3f2",
         foreground: "#ffffff",

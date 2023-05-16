@@ -22,11 +22,16 @@ export const getBackgroundColor = ({ color }: Theme, variant: ActionVariant, pre
 };
 
 export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: boolean): ColorValue => {
-    if (type !== "flat") {
-        return color.textInverted;
+    switch (type) {
+        case "primary":
+            return color.textOnPrimary;
+        case "secondary":
+            return color.textOnSecondary;
+        case "flat":
+            return pressed ? color.textHighlight : color.textPrimary;
     }
 
-    return pressed ? color.textHighlight : color.textPrimary;
+    return color.textInverted;
 };
 
 type ButtonStyles = {
