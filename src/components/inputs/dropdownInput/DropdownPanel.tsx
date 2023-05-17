@@ -5,7 +5,6 @@ import { ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../.
 import { FloatingContainer } from "../../FloatingContainer";
 import { ValueItem } from "../valueItem";
 
-import { DropdownInputProps } from "./DropdownInput";
 import { DropdownItem } from "./DropdownItem";
 
 export interface DropdownPanelProps<T = string> {
@@ -13,6 +12,8 @@ export interface DropdownPanelProps<T = string> {
     searchValue: string;
     maxSuggestionCount: number;
     visible: boolean;
+    hideItemDescriptions?: boolean;
+    searchInDescriptions?: boolean;
     onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
 }
 
@@ -21,6 +22,8 @@ export const DropdownPanel = <T,>({
     maxSuggestionCount,
     searchValue,
     visible,
+    hideItemDescriptions,
+    searchInDescriptions,
     onSelect,
 }: DropdownPanelProps<T>) => {
     const viewRef = React.useRef<View>(null);
@@ -72,7 +75,7 @@ export const DropdownPanel = <T,>({
         .filter(
             ({ label, description }) =>
                 label.toLowerCase().includes(searchValue.toLowerCase()) ||
-                (description && description.toLowerCase().includes(searchValue.toLowerCase())),
+                (searchInDescriptions && description && description.toLowerCase().includes(searchValue.toLowerCase())),
         )
         .slice(0, maxSuggestionCount);
     displayItems = !inverted ? displayItems.reverse() : displayItems;
@@ -91,6 +94,7 @@ export const DropdownPanel = <T,>({
                             key={"id" in item ? item.id : item.value}
                             item={item}
                             searchValue={searchValue}
+                            hideItemDescriptions={hideItemDescriptions}
                             onPress={() => onSelect(item)}
                         />
                     ))}
@@ -99,7 +103,7 @@ export const DropdownPanel = <T,>({
     );
 };
 
-const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles, {}: Partial<DropdownInputProps>) => {
+const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         dropdownContainer: {
             marginTop: dropdownInput.dropdownMarginTop,

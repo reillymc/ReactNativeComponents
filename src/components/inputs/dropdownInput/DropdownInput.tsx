@@ -6,7 +6,7 @@ import { BaseInput, BaseInputProps } from "../BaseInput";
 import { TextInputProps } from "../TextInput";
 import { ValueItem } from "../valueItem";
 
-import { DropdownPanel } from "./DropdownPanel";
+import { DropdownPanel, DropdownPanelProps } from "./DropdownPanel";
 
 // Override forwardRef to allow generic typing.
 declare module "react" {
@@ -23,6 +23,7 @@ export type DropdownInputProps<T = string> = Pick<
     TextInputProps,
     "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
 > &
+    Pick<DropdownPanelProps, "hideItemDescriptions" | "searchInDescriptions"> &
     BaseInputProps & {
         items?: Array<ValueItem<T>>;
         selectedItem?: ValueItem<T>;

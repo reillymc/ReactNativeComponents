@@ -1,8 +1,16 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 
-import { SwipeViewProps } from ".";
+export interface SwipeViewProps {
+    /**
+     * Supports:
+     * - `SwipeAction`
+     */
+    rightActions?: Array<React.ReactNode>;
+    containerStyle?: ViewStyle;
+    children?: React.ReactNode;
+}
 
 export const SwipeView: React.FunctionComponent<SwipeViewProps> = ({ rightActions = [], containerStyle, children }) => {
     const swipeableRef = React.useRef<Swipeable>(null);

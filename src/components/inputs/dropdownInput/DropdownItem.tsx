@@ -8,10 +8,11 @@ import { ValueItem } from "../valueItem";
 interface DropdownItemProps<T = string> {
     item: ValueItem<T>;
     searchValue?: string;
+    hideItemDescriptions?: boolean;
     onPress: () => void;
 }
 
-export const DropdownItem = <T,>({ item, searchValue, onPress }: DropdownItemProps<T>) => {
+export const DropdownItem = <T,>({ item, searchValue, hideItemDescriptions, onPress }: DropdownItemProps<T>) => {
     const {
         theme: { color },
     } = useTheme();
@@ -30,7 +31,9 @@ export const DropdownItem = <T,>({ item, searchValue, onPress }: DropdownItemPro
             ]}
         >
             <HighlightedText text={item.label} highlight={searchValue} />
-            {item.description && <HighlightedText variant="caption" text={item.description} highlight={searchValue} />}
+            {!hideItemDescriptions && item.description && (
+                <HighlightedText variant="caption" text={item.description} highlight={searchValue} />
+            )}
         </Pressable>
     );
 };

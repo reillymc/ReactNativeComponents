@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { IconButton } from "../buttons";
+import { IconButton, IconButtonProps } from "../buttons";
 
-import { SwipeActionProps } from ".";
+export interface SwipeActionProps extends Pick<IconButtonProps, "iconName" | "label" | "onPress" | "variant"> {}
 
 export const SwipeAction: React.FunctionComponent<SwipeActionProps> = actionProps => (
     <IconButton {...actionProps} rounded={false} style={styles.actionButton} />
