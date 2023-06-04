@@ -7,6 +7,8 @@ import { ThemedStyles, useThemedStyles } from "../hooks";
 import { SwipeView, SwipeViewProps } from "./swipeView";
 import { Text } from "./Text";
 
+type ListItemVariant = "default" | "compact";
+
 export interface ListItemStyles {
     spacingMargin: number;
     internalSpacing: number;
@@ -20,6 +22,7 @@ export interface ListItemProps {
     header?: React.ReactNode;
     avatar?: React.ReactNode;
     alert?: React.ReactNode;
+    variant?: ListItemVariant;
 
     /**
      * Supports:
@@ -41,6 +44,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     heading,
     footer,
     header,
+    variant,
     contentRows = [],
     swipeActions,
     style,
@@ -50,7 +54,7 @@ export const ListItem: React.FC<ListItemProps> = ({
 
     const filteredActions = swipeActions?.filter(Undefined);
 
-    const styles = useThemedStyles(createStyles, { avatar, contentRows: filteredRows });
+    const styles = useThemedStyles(createStyles, { avatar, variant });
 
     const innerContent = (
         <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
@@ -80,13 +84,13 @@ export const ListItem: React.FC<ListItemProps> = ({
 
 ListItem.displayName = "ListItem";
 
-const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar }: Partial<ListItemProps>) => {
+const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar, variant }: Partial<ListItemProps>) => {
     const styles = StyleSheet.create({
         container: {
-            marginBottom: listItem.spacingMargin,
+            marginBottom: variant === "compact" ? undefined : listItem.spacingMargin,
             width: "100%",
             backgroundColor: theme.color.foreground,
-            borderRadius: listItem.borderRadius,
+            borderRadius: variant === "compact" ? undefined : listItem.borderRadius,
             overflow: "hidden",
         },
         pressableContainer: {

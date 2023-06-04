@@ -40,7 +40,7 @@ export interface IconActionProps {
 export const IconAction: React.FC<IconActionProps> = ({
     iconName,
     label,
-    variant = "flat",
+    variant = "secondary",
     size = "regular",
     labelPosition = "right",
     disabled,

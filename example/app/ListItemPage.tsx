@@ -114,6 +114,15 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             },
         ],
     },
+    variant: {
+        type: "enum",
+        label: "Variant",
+        default: "Default",
+        values: [
+            { label: "Default", value: "default" },
+            { label: "Compact", value: "compact" },
+        ],
+    },
     onPress: {
         type: "function",
         label: "On press",

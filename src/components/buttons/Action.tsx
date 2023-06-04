@@ -38,7 +38,7 @@ export interface ActionProps {
 
 export const Action: React.FC<ActionProps> = ({
     label = "",
-    variant = "flat",
+    variant = "secondary",
     size = "regular",
     disabled,
     style,
