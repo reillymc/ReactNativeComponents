@@ -21,9 +21,11 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
         const styles = createStyles({ position });
         const colorScheme = useColorScheme();
 
+        const uniqueKey = React.useMemo(() => Math.random().toString(36).substr(2, 9), []);
+
         return (
             <Portal>
-                <FullWindowOverlayWrapper key={`${visible}`}>
+                <FullWindowOverlayWrapper key={`${uniqueKey}${visible}`}>
                     <BlurView
                         ref={ref}
                         intensity={1}

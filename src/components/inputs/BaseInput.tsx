@@ -122,32 +122,33 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
         return (
             <>
                 <View style={[styles.container, containerStyle]}>
-                    {(mandatory || label) && (
+                    {label && (
                         <View style={styles.labelContainer}>
-                            {mandatory && (
-                                <Text variant="label" style={styles.mandatoryIndicator}>
-                                    {"\u2022"}
-                                </Text>
-                            )}
-                            {label && (typeof label === "string" ? <Text variant="label">{label}</Text> : label)}
+                            {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
                         </View>
                     )}
-                    {inputElement ? (
-                        inputElement
-                    ) : (
-                        <TextInput
-                            ref={ref}
-                            editable={!disabled}
-                            placeholderTextColor={baseInput.placeholderTextColor}
-                            style={[styles.input, style]}
-                            onFocus={handleOnFocus}
-                            onBlur={handleOnBlur}
-                            multiline={multiline}
-                            scrollEnabled={scrollEnabled ?? false}
-                            {...props}
-                        />
-                    )}
-
+                    <View>
+                        {inputElement ? (
+                            inputElement
+                        ) : (
+                            <TextInput
+                                ref={ref}
+                                editable={!disabled}
+                                placeholderTextColor={baseInput.placeholderTextColor}
+                                style={[styles.input, style]}
+                                onFocus={handleOnFocus}
+                                onBlur={handleOnBlur}
+                                multiline={multiline}
+                                scrollEnabled={scrollEnabled ?? false}
+                                {...props}
+                            />
+                        )}
+                        {mandatory && (
+                            <Text variant="title" style={styles.mandatoryIndicator}>
+                                {"\u2022"}
+                            </Text>
+                        )}
+                    </View>
                     {panelElement}
                     {(helpText || hasError) && (
                         <View style={styles.helpText}>
@@ -181,12 +182,13 @@ const createStyles = (
             width: baseInput.width[width],
         },
         labelContainer: {
-            flexDirection: "row",
-            gap: padding.tiny,
             marginBottom: baseInput.labelMargin,
         },
         mandatoryIndicator: {
+            position: "absolute",
             color: baseInput.mandatoryColor,
+            top: -7,
+            left: 7,
         },
         input: {
             height: multiline ? "auto" : baseInput.height,
