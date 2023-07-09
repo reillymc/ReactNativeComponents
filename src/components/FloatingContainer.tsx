@@ -10,19 +10,20 @@ export interface FloatingContainerProps {
         x?: number;
         y?: number;
     };
+    visible?: boolean;
     align?: "top" | "bottom";
     style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
 }
 
 export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
-    ({ style, align = "top", position, children }, ref) => {
+    ({ style, align = "top", position, visible = true, children }, ref) => {
         const styles = createStyles({ position });
         const colorScheme = useColorScheme();
 
         return (
             <Portal>
-                <FullWindowOverlayWrapper>
+                <FullWindowOverlayWrapper key={`${visible}`}>
                     <BlurView
                         ref={ref}
                         intensity={1}

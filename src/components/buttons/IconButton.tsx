@@ -5,8 +5,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 
 import { ButtonProps, getBackgroundColor, getLabelColor } from "./Button";
-
-import { ActionSize } from ".";
+import { ActionSize } from "./types";
 
 export type IconButtonStyles = {
     size: { [key in ActionSize]: number };
@@ -38,7 +37,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
             disabled={disabled}
             style={({ pressed }) => [
                 styles.container,
-                { backgroundColor: getBackgroundColor(theme, variant, pressed) },
+                { backgroundColor: getBackgroundColor(theme, variant, pressed, disabled) },
                 style,
             ]}
             onPress={onPress}

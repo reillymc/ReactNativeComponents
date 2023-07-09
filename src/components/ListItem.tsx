@@ -88,7 +88,7 @@ const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar, v
     const styles = StyleSheet.create({
         container: {
             marginBottom: variant === "compact" ? undefined : listItem.spacingMargin,
-            width: "100%",
+            flex: 1,
             backgroundColor: theme.color.foreground,
             borderRadius: variant === "compact" ? undefined : listItem.borderRadius,
             overflow: "hidden",

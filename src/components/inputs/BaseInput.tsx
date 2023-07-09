@@ -13,8 +13,9 @@ import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Text } from "../Text";
+import { Icon } from "../Icon";
 
-export type InputWidth = "small" | "large" | "full";
+import { InputWidth } from "./types";
 
 export interface BaseInputStyles {
     height: number;
@@ -32,6 +33,8 @@ export interface BaseInputStyles {
     backgroundColor: string;
     backgroundColorDisabled: string;
     labelMargin: number;
+    mandatoryColor: string;
+    errorColor: string;
 }
 
 export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
@@ -47,6 +50,8 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
     disabled?: boolean;
 
     helpText?: string;
+    hasError?: boolean;
+    mandatory?: boolean;
 
     /**
      * Input element component.
@@ -65,6 +70,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             width,
             disabled,
             helpText,
+            mandatory,
             inputElement,
             panelElement,
             modalElement,
@@ -72,6 +78,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             containerStyle,
             multiline,
             scrollEnabled,
+            hasError,
             onBlur,
             onFocus,
             ...props
@@ -80,7 +87,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
     ) => {
         const styles = useThemedStyles(createStyles, { width, disabled, multiline });
         const {
-            styles: { baseInput },
+            styles: { baseInput, text },
         } = useTheme();
 
         const { shouldHandleKeyboardEvents } = useBottomSheetInternal(true) ?? {};
@@ -115,9 +122,14 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
         return (
             <>
                 <View style={[styles.container, containerStyle]}>
-                    {label && (
-                        <View style={styles.label}>
-                            {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
+                    {(mandatory || label) && (
+                        <View style={styles.labelContainer}>
+                            {mandatory && (
+                                <Text variant="label" style={styles.mandatoryIndicator}>
+                                    {"\u2022"}
+                                </Text>
+                            )}
+                            {label && (typeof label === "string" ? <Text variant="label">{label}</Text> : label)}
                         </View>
                     )}
                     {inputElement ? (
@@ -135,12 +147,21 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                             {...props}
                         />
                     )}
-                    {helpText && (
+
+                    {panelElement}
+                    {(helpText || hasError) && (
                         <View style={styles.helpText}>
-                            {typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText}
+                            {hasError && (
+                                <Icon
+                                    size={text.fontFamilySize.caption}
+                                    iconName="exclamationcircle"
+                                    style={styles.errorIndicator}
+                                />
+                            )}
+                            {helpText &&
+                                (typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText)}
                         </View>
                     )}
-                    {panelElement}
                 </View>
                 {modalElement}
             </>
@@ -151,7 +172,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
 (BaseInput as React.FunctionComponent).displayName = "BaseInput";
 
 const createStyles = (
-    { styles: { baseInput } }: ThemedStyles,
+    { styles: { baseInput }, theme: { padding } }: ThemedStyles,
     { width = "full", disabled, multiline = false }: BaseInputProps,
 ) =>
     StyleSheet.create({
@@ -159,8 +180,13 @@ const createStyles = (
             display: "flex",
             width: baseInput.width[width],
         },
-        label: {
+        labelContainer: {
+            flexDirection: "row",
+            gap: padding.tiny,
             marginBottom: baseInput.labelMargin,
+        },
+        mandatoryIndicator: {
+            color: baseInput.mandatoryColor,
         },
         input: {
             height: multiline ? "auto" : baseInput.height,
@@ -173,6 +199,11 @@ const createStyles = (
             color: baseInput.textColor,
         },
         helpText: {
+            flexDirection: "row",
+            gap: padding.tiny,
             marginTop: baseInput.labelMargin,
+        },
+        errorIndicator: {
+            color: baseInput.errorColor,
         },
     });

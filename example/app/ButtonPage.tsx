@@ -3,7 +3,7 @@ import { Button, ButtonProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
-const defaultProps: ButtonProps = {
+export const defaultProps: ButtonProps = {
     label: "Secondary Button",
     contentAlign: "center",
     variant: "secondary",
@@ -35,6 +35,10 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
             { label: "Secondary", value: "secondary" },
             { label: "Flat", value: "flat" },
         ],
+    },
+    disabled: {
+        type: "boolean",
+        label: "Disabled",
     },
     size: {
         type: "enum",

@@ -5,7 +5,7 @@ import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Theme } from "../../theme";
 import { Text } from "../Text";
 
-import { ActionSize, ActionVariant } from ".";
+import { ActionSize, ActionVariant } from "./types";
 
 const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {

@@ -1,7 +1,9 @@
 import React from "react";
-import { StyleSheet } from "react-native";
-import { ListItem, ListPage, NavigationHeader } from "@reillymc/react-native-components";
-import { useRouter } from "expo-router";
+import { FlatList, StyleSheet } from "react-native";
+import { ListItem, useTheme } from "@reillymc/react-native-components";
+import { Stack, useRouter } from "expo-router";
+
+import { ThemedStyles, useThemedStyles } from "../../src/hooks/useThemedStyles";
 
 /**
  * Map of all components to their respective screen
@@ -28,21 +30,42 @@ export const ComponentScreens: Record<string, { name: string; page: string }> = 
 
 const ComponentListScreen: React.FC = () => {
     const router = useRouter();
+    const { theme } = useTheme();
+
+    const styles = useThemedStyles(createStyles, undefined);
 
     return (
-        <ListPage
-            data={Object.values(ComponentScreens)}
-            heading={<NavigationHeader heading="Components" />}
-            renderItem={({ item }) => <ListItem heading={item.name} onPress={() => router.push(`/${item.page}`)} />}
-            contentContainerStyle={styles.page}
-        />
+        <>
+            <Stack.Screen
+                options={{
+                    title: "Components",
+                    headerLargeTitle: true,
+                    headerLargeTitleShadowVisible: false,
+                    headerLargeTitleStyle: { fontFamily: theme.font.familyWeight.bold800 },
+                    headerBackTitleStyle: { fontFamily: theme.font.familyWeight.regular400 },
+                    headerLargeStyle: { backgroundColor: theme.color.background },
+                }}
+            />
+            <FlatList
+                contentInsetAdjustmentBehavior="automatic"
+                data={Object.values(ComponentScreens)}
+                renderItem={({ item }) => {
+                    return <ListItem heading={item.name} onPress={() => router.push(`/${item.page}`)} />;
+                }}
+                contentContainerStyle={styles.page}
+            />
+        </>
     );
 };
 
-const styles = StyleSheet.create({
-    page: {
-        paddingBottom: 48,
-    },
-});
+const createStyles = ({ theme: { padding, color } }: ThemedStyles) =>
+    StyleSheet.create({
+        page: {
+            backgroundColor: color.background,
+            paddingHorizontal: padding.pageHorizontal,
+            paddingTop: padding.pageTop,
+            paddingBottom: 64,
+        },
+    });
 
 export default ComponentListScreen;

@@ -12,14 +12,9 @@ import { BaseInput, BaseInputProps } from "./BaseInput";
 import { DropdownItem } from "./dropdownInput";
 import { ValueItem } from "./valueItem";
 
-import { InputWidth } from ".";
-
 export interface SelectionInputStyles {}
 
 export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange"> & {
-    placeholder?: string;
-    width?: InputWidth;
-    disabled?: boolean;
     items?: Array<ValueItem<T>>;
     style?: StyleProp<ViewStyle>;
 } & (SingleSelection<T> | MultiSelection<T>);

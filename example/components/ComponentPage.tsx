@@ -1,7 +1,10 @@
 import React from "react";
 import { View, StyleSheet } from "react-native";
+import Animated, { Layout } from "react-native-reanimated";
 import { Stack } from "expo-router";
-import { Text, Theme, useTheme } from "@reillymc/react-native-components";
+import { IconButton, Text, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
+import BottomSheet from "@gorhom/bottom-sheet";
+import { Portal } from "@gorhom/portal";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -18,34 +21,64 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
 }) => {
     const { theme } = useTheme();
 
-    const styles = createStyles(theme);
+    const [showModal, setShowModal] = React.useState(!fullscreen);
+    const [modalHeight, setModalHeight] = React.useState(2);
+
+    const styles = useThemedStyles(createStyles, { modalHeight });
+
     return (
-        <View style={styles.container}>
-            <Stack.Screen options={{ title: componentName }} />
-            <View style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}>{component}</View>
-            {!fullscreen && (
-                <View style={styles.propsContainer}>
-                    <Text variant="display" style={styles.heading}>
-                        {componentName}
-                    </Text>
-                    {propsPanel}
-                </View>
+        <>
+            <Stack.Screen
+                options={{
+                    title: componentName,
+                    headerLargeTitle: true,
+                    headerLargeTitleShadowVisible: false,
+                    headerLargeTitleStyle: { fontFamily: theme.font.familyWeight.bold800 },
+                    headerBackTitleStyle: { fontFamily: theme.font.familyWeight.regular400 },
+                    headerLargeStyle: { backgroundColor: theme.color.background },
+                }}
+            />
+            <Animated.View
+                layout={Layout.springify()}
+                style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}
+            >
+                {component}
+            </Animated.View>
+            {!showModal && (
+                <IconButton iconName="up" onPress={() => setShowModal(prev => !prev)} style={styles.showModalButton} />
             )}
-        </View>
+            <Animated.View style={styles.bottomPadding} layout={Layout.springify()} />
+
+            <Portal>
+                <BottomSheet
+                    onChange={setModalHeight}
+                    snapPoints={["12%", "40%", "60%"]}
+                    index={showModal ? 2 : -1}
+                    keyboardBehavior="extend"
+                >
+                    <View style={styles.propsContainer}>
+                        <Text variant="display" style={styles.heading}>
+                            {componentName}
+                        </Text>
+                        {propsPanel}
+                    </View>
+                </BottomSheet>
+            </Portal>
+        </>
     );
 };
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = (theme: Theme) => {
+const createStyles = ({ theme: { color } }: ThemedStyles, { modalHeight }: { modalHeight: number }) => {
     const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: theme.color.background,
-        },
         componentContainer: {
             flex: 2,
-            paddingTop: 60,
+            paddingTop: 20,
+            backgroundColor: color.background,
+        },
+        bottomPadding: {
+            flex: modalHeight,
         },
         centred: {
             alignItems: "center",
@@ -57,6 +90,12 @@ const createStyles = (theme: Theme) => {
         },
         heading: {
             marginLeft: 16,
+            marginBottom: 8,
+        },
+        showModalButton: {
+            position: "absolute",
+            bottom: 40,
+            right: 40,
         },
     });
     return styles;

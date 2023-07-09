@@ -18,6 +18,10 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
             { label: "Full", value: "full" },
         ],
     },
+    mandatory: {
+        type: "boolean",
+        label: "Mandatory",
+    },
     disabled: {
         type: "boolean",
         label: "Disabled",
@@ -39,6 +43,21 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
     helpText: {
         type: "string",
         label: "Help text",
+    },
+    clearButtonMode: {
+        type: "enum",
+        label: "Clear button mode",
+        default: "Never",
+        values: [
+            { label: "Never", value: "never" },
+            { label: "While editing", value: "while-editing" },
+            { label: "Unless editing", value: "unless-editing" },
+            { label: "Always", value: "always" },
+        ],
+    },
+    hasError: {
+        type: "boolean",
+        label: "Has error",
     },
 };
 

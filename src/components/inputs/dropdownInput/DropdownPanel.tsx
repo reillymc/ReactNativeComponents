@@ -86,6 +86,7 @@ export const DropdownPanel = <T,>({
                 ref={containerRef}
                 position={{ x: layout?.x, y: layout?.y }}
                 align={inverted ? "bottom" : "top"}
+                visible={visible}
                 style={[{ opacity: visible ? 0.95 : 0, width: layout?.width }, styles.dropdownContainer]}
             >
                 {visible &&

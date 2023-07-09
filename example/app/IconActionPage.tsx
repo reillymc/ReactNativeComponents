@@ -32,6 +32,10 @@ const propDefinitions: PropDefinitions<IconActionProps> = {
             { label: "Flat", value: "flat" },
         ],
     },
+    disabled: {
+        type: "boolean",
+        label: "Disabled",
+    },
     size: {
         type: "enum",
         label: "Size",

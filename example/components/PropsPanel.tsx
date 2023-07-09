@@ -1,15 +1,15 @@
 import React from "react";
-import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { View, StyleSheet } from "react-native";
 import {
     NumberInput,
     SelectionInput,
-    Text,
     TextInput,
     Theme,
     ToggleInput,
     useTheme,
     ValueItem,
 } from "@reillymc/react-native-components";
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 
 type PropDefinitionBase = {
     label?: string;
@@ -76,96 +76,90 @@ export const PropsPanel = <T extends Record<string, any>>({
     const styles = createStyles(theme);
 
     return (
-        <KeyboardAvoidingView
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
-            style={styles.keyContainer}
-            keyboardVerticalOffset={294}
+        <BottomSheetScrollView
+            style={styles.container}
+            contentContainerStyle={styles.contentContainer}
+            keyboardDismissMode="on-drag"
         >
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
-                keyboardDismissMode="on-drag"
-            >
-                {Object.entries(propDefinitions).map(([key, def]) => {
-                    const definition = def as PropDefinition<T[keyof T]>;
-                    const propId = key;
-                    const currentValue = propValues[propId];
+            {Object.entries(propDefinitions).map(([key, def]) => {
+                const definition = def as PropDefinition<T[keyof T]>;
+                const propId = key;
+                const currentValue = propValues[propId];
 
-                    switch (definition.type) {
-                        case "string":
-                            return (
-                                <View key={definition.label} style={styles.propContainer}>
-                                    <TextInput
-                                        label={definition.label ?? propId}
-                                        value={currentValue}
-                                        onChangeText={value => onChange(propId, value)}
-                                        width="full"
-                                    />
-                                </View>
-                            );
-                        case "number":
-                            return (
-                                <View key={definition.label} style={styles.propContainer}>
-                                    <NumberInput
-                                        label={definition.label ?? propId}
-                                        value={currentValue}
-                                        onChangeText={value => onChange(propId, value)}
-                                        width="full"
-                                        autoCapitalize="none"
-                                    />
-                                </View>
-                            );
-                        case "boolean":
-                            return (
-                                <View key={definition.label} style={styles.propContainer}>
-                                    <ToggleInput
-                                        value={currentValue}
-                                        label={definition.label ?? propId}
-                                        onChange={value => onChange(propId, value)}
-                                    />
-                                </View>
-                            );
-                        case "array":
-                            return (
-                                <View key={definition.label} style={styles.propContainer}>
-                                    <SelectionInput
-                                        label={definition.label}
-                                        items={definition.values.map(value => ({ value, label: value }))}
-                                        selectionMode="single"
-                                        onChange={value => onChange(propId, value?.value)}
-                                        selection={{ label: currentValue, value: currentValue }}
-                                    />
-                                </View>
-                            );
-                        case "enum":
-                            const selectedItem = {
-                                label:
-                                    customLabels[propId] ??
-                                    definition.values.find(({ label }) => label === definition.default)?.label ??
-                                    definition.values[0]?.label ??
-                                    "",
-                                value: currentValue,
-                            };
-                            return (
-                                <View key={definition.label} style={styles.propContainer}>
-                                    <SelectionInput
-                                        label={definition.label}
-                                        items={definition.values}
-                                        selectionMode="single"
-                                        onChange={value => {
-                                            onChange(propId, value?.value);
-                                            setCustomLabels(prev => ({ ...prev, [propId]: value?.label }));
-                                        }}
-                                        selection={selectedItem}
-                                    />
-                                </View>
-                            );
-                        default:
-                            return null;
-                    }
-                })}
-            </ScrollView>
-        </KeyboardAvoidingView>
+                switch (definition.type) {
+                    case "string":
+                        return (
+                            <View key={definition.label} style={styles.propContainer}>
+                                <TextInput
+                                    label={definition.label ?? propId}
+                                    value={currentValue}
+                                    onChangeText={value => onChange(propId, value)}
+                                    width="full"
+                                />
+                            </View>
+                        );
+                    case "number":
+                        return (
+                            <View key={definition.label} style={styles.propContainer}>
+                                <NumberInput
+                                    label={definition.label ?? propId}
+                                    value={currentValue}
+                                    onChangeText={value => onChange(propId, value)}
+                                    width="full"
+                                    autoCapitalize="none"
+                                />
+                            </View>
+                        );
+                    case "boolean":
+                        return (
+                            <View key={definition.label} style={styles.propContainer}>
+                                <ToggleInput
+                                    value={currentValue}
+                                    label={definition.label ?? propId}
+                                    onChange={value => onChange(propId, value)}
+                                />
+                            </View>
+                        );
+                    case "array":
+                        return (
+                            <View key={definition.label} style={styles.propContainer}>
+                                <SelectionInput
+                                    label={definition.label}
+                                    items={definition.values.map(value => ({ value, label: value }))}
+                                    selectionMode="single"
+                                    onChange={value => onChange(propId, value?.value)}
+                                    selection={{ label: currentValue, value: currentValue }}
+                                />
+                            </View>
+                        );
+                    case "enum":
+                        const selectedItem = {
+                            label:
+                                customLabels[propId] ??
+                                definition.values.find(({ label }) => label === definition.default)?.label ??
+                                definition.values[0]?.label ??
+                                "",
+                            value: currentValue,
+                        };
+                        return (
+                            <View key={definition.label} style={styles.propContainer}>
+                                <SelectionInput
+                                    label={definition.label}
+                                    items={definition.values}
+                                    selectionMode="single"
+                                    onChange={value => {
+                                        onChange(propId, value?.value);
+                                        setCustomLabels(prev => ({ ...prev, [propId]: value?.label }));
+                                    }}
+                                    selection={selectedItem}
+                                />
+                            </View>
+                        );
+                    default:
+                        return null;
+                }
+            })}
+        </BottomSheetScrollView>
     );
 };
 
@@ -180,11 +174,7 @@ const createStyles = (theme: Theme) => {
             borderTopStartRadius: 20,
             borderTopEndRadius: 20,
         },
-        keyContainer: {
-            flex: 1,
-            flexDirection: "column",
-            justifyContent: "center",
-        },
+
         contentContainer: {
             width: "60%",
             alignSelf: "center",
@@ -194,9 +184,6 @@ const createStyles = (theme: Theme) => {
         propContainer: {
             display: "flex",
             marginTop: 24,
-        },
-        propHeading: {
-            marginBottom: 5,
         },
     });
     return styles;

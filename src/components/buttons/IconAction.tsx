@@ -6,18 +6,39 @@ import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Theme } from "../../theme";
 import { Text } from "../Text";
 
-import { ActionSize, ActionVariant } from ".";
+import { ActionSize, ActionVariant } from "./types";
 
-const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
+const getIconColor = (
+    { color }: Theme,
+    variant: ActionVariant,
+    pressed: boolean,
+    disabled: boolean | undefined,
+): ColorValue => {
     switch (variant) {
-        case "primary":
+        case "primary": {
+            if (disabled) {
+                return color.primaryDisabled;
+            }
             return pressed ? color.primaryHighlight : color.primary;
-        case "secondary":
+        }
+        case "secondary": {
+            if (disabled) {
+                return color.secondaryDisabled;
+            }
             return pressed ? color.secondaryHighlight : color.secondary;
-        case "destructive":
+        }
+        case "destructive": {
+            if (disabled) {
+                return color.destructiveDisabled;
+            }
             return pressed ? color.destructiveHighlight : color.destructive;
-        case "flat":
+        }
+        case "flat": {
+            if (disabled) {
+                return color.textDisabled;
+            }
             return pressed ? color.textHighlight : color.textPrimary;
+        }
     }
 };
 
@@ -59,7 +80,7 @@ export const IconAction: React.FC<IconActionProps> = ({
                         name={iconName}
                         type="font-awesome"
                         size={styles.icon.height}
-                        color={getLabelColor(theme, variant, pressed)}
+                        color={getIconColor(theme, variant, pressed, disabled)}
                         style={[styles.icon, iconStyle]}
                     />
                     {label && (

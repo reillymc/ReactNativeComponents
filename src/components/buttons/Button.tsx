@@ -5,17 +5,33 @@ import { Theme } from "../../theme";
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 
 import { ActionProps } from "./Action";
+import { ActionSize, ActionVariant } from "./types";
 
-import { ActionSize, ActionVariant } from ".";
-
-export const getBackgroundColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
+export const getBackgroundColor = (
+    { color }: Theme,
+    variant: ActionVariant,
+    pressed: boolean,
+    disabled: boolean | undefined,
+): ColorValue => {
     switch (variant) {
-        case "primary":
+        case "primary": {
+            if (disabled) {
+                return color.primaryDisabled;
+            }
             return pressed ? color.primaryHighlight : color.primary;
-        case "secondary":
+        }
+        case "secondary": {
+            if (disabled) {
+                return color.secondaryDisabled;
+            }
             return pressed ? color.secondaryHighlight : color.secondary;
-        case "destructive":
+        }
+        case "destructive": {
+            if (disabled) {
+                return color.destructiveDisabled;
+            }
             return pressed ? color.destructiveHighlight : color.destructive;
+        }
         case "flat":
             return "transparent";
     }
@@ -70,7 +86,7 @@ const Button: React.FC<ButtonProps> = ({
             style={({ pressed }) => [
                 styles.button,
                 {
-                    backgroundColor: getBackgroundColor(theme, variant, pressed),
+                    backgroundColor: getBackgroundColor(theme, variant, pressed, disabled),
                     color: getLabelColor(theme, variant, pressed),
                 },
                 style,

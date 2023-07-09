@@ -16,7 +16,7 @@ export interface CounterInputProps extends NumberInputProps {}
 
 export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
     ({ onChangeText, label, ...props }, ref) => {
-        const styles = useThemedStyles(createStyles, {});
+        const styles = useThemedStyles(createStyles, { disabled: props.disabled });
 
         const value = parseInt(props.value ?? "0", 10);
 
@@ -27,11 +27,12 @@ export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
                         {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
                     </View>
                 )}
-                <View style={{ flexDirection: "row", alignItems: "flex-end" }}>
+                <View style={styles.container}>
                     <IconButton
                         iconName="minus"
                         size="small"
-                        variant="secondary"
+                        variant="flat"
+                        disabled={props.disabled}
                         rounded={false}
                         onPress={() => onChangeText?.(Math.max(value - 1, props.min ?? 0).toString())}
                         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
@@ -40,7 +41,8 @@ export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
                     <IconButton
                         iconName="plus"
                         size="small"
-                        variant="secondary"
+                        variant="flat"
+                        disabled={props.disabled}
                         rounded={false}
                         onPress={() => onChangeText?.(Math.min(value + 1, props.max ?? Number.MAX_VALUE).toString())}
                         style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
@@ -53,8 +55,17 @@ export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
 
 (CounterInput as React.FunctionComponent).displayName = "CounterInput";
 
-const createStyles = ({ styles: { counterInput, baseInput } }: ThemedStyles, {}: Partial<ToggleInputProps>) => {
+const createStyles = (
+    { styles: { counterInput, baseInput } }: ThemedStyles,
+    { disabled }: Partial<ToggleInputProps>,
+) => {
     const styles = StyleSheet.create({
+        container: {
+            flexDirection: "row",
+            alignSelf: "flex-start",
+            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            borderRadius: baseInput.borderRadius,
+        },
         inputContainer: {
             width: counterInput.width,
         },

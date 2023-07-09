@@ -26,13 +26,16 @@ export const DefaultTheme = {
     color: {
         // Palette
         primary: "#FF4242",
-        secondary: "#12263A",
         primaryHighlight: "#ff8585",
+        primaryDisabled: "#ffbdbd",
+        secondary: "#12263A",
         secondaryHighlight: "#22476D",
+        secondaryDisabled: "#B5EAD7",
         tertiary: "#06bcc1",
 
         destructive: "#ff382e",
         destructiveHighlight: "#ff5c54",
+        destructiveDisabled: "#ff9e96",
 
         light: "#F4EDEA",
 
@@ -79,6 +82,13 @@ export const DefaultTheme = {
         small: 8,
         tiny: 4,
     },
+    border: {
+        radius: {
+            tight: 4,
+            regular: 8,
+            loose: 16,
+        },
+    },
 };
 
 export const MergeTheme = (first: ThemeOverrides, second: ThemeOverrides | undefined): Theme => ({
@@ -109,5 +119,15 @@ export const MergeTheme = (first: ThemeOverrides, second: ThemeOverrides | undef
         ...DefaultTheme.padding,
         ...first.padding,
         ...second?.padding,
+    },
+    border: {
+        ...DefaultTheme.border,
+        ...first.border,
+        ...second?.border,
+        radius: {
+            ...DefaultTheme.border.radius,
+            ...first.border?.radius,
+            ...second?.border?.radius,
+        },
     },
 });
