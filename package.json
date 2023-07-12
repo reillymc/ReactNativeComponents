@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.1.69",
+    "version": "0.2.0",
     "description": "A collection of React Native components and resources",
     "main": "lib/commonjs/index",
     "module": "lib/module/index",
@@ -53,7 +53,7 @@
     "devDependencies": {
         "@react-native-community/eslint-config": "^3.2.0",
         "@types/jest": "^28.1.2",
-        "@types/react": "~18.0.27",
+        "@types/react": "~18.2.14",
         "@types/react-native": "~0.70.6",
         "eslint": "^8.4.1",
         "eslint-config-prettier": "^8.5.0",
@@ -63,7 +63,7 @@
         "pod-install": "^0.1.0",
         "prettier": "^2.8.3",
         "react": "18.2.0",
-        "react-native": "0.71.4",
+        "react-native": "0.72.1",
         "react-native-builder-bob": "^0.20.0",
         "release-it": "^15.0.0",
         "typescript": "^4.9.4"
@@ -76,8 +76,8 @@
         "expo-blur": "^12.0",
         "react": "*",
         "react-native": "*",
-        "react-native-gesture-handler": "^2.8",
-        "react-native-reanimated": "^2.12"
+        "react-native-gesture-handler": "^2.12",
+        "react-native-reanimated": "^3.3"
     },
     "jest": {
         "preset": "react-native",
