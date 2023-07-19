@@ -80,6 +80,8 @@ export const DropdownInput = React.forwardRef(
         };
 
         const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+            onChangeText?.(e.nativeEvent.text.trim());
+
             const existingItem = items.find(item => item.label.toLowerCase() === searchValue.toLowerCase());
             if (existingItem) {
                 onSelect?.(existingItem, true);
@@ -113,6 +115,7 @@ export const DropdownInput = React.forwardRef(
                 onBlur={handleBlur}
                 onChangeText={handleChangeText}
                 autoCorrect={false}
+                preventAutoTrim
                 panelElement={
                     <DropdownPanel
                         items={items}

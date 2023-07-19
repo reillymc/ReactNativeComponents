@@ -54,6 +54,11 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
     mandatory?: boolean;
 
     /**
+     * Prevents auto trimming of text. (Can interfere with inputs that handle onChangeText)
+     */
+    preventAutoTrim?: boolean;
+
+    /**
      * Input element component.
      */
     inputElement?: React.ReactNode;
@@ -79,8 +84,10 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             multiline,
             scrollEnabled,
             hasError,
+            preventAutoTrim,
             onBlur,
             onFocus,
+            onChangeText,
             ...props
         },
         ref,
@@ -106,9 +113,14 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                 if (shouldHandleKeyboardEvents) {
                     shouldHandleKeyboardEvents.value = false;
                 }
+
+                if (!preventAutoTrim) {
+                    onChangeText?.(e.nativeEvent.text.trim());
+                }
+
                 onBlur?.(e);
             },
-            [onBlur, shouldHandleKeyboardEvents],
+            [onBlur, onChangeText, preventAutoTrim, shouldHandleKeyboardEvents],
         );
 
         React.useEffect(() => {
@@ -136,10 +148,11 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                                 editable={!disabled}
                                 placeholderTextColor={baseInput.placeholderTextColor}
                                 style={[styles.input, style]}
-                                onFocus={handleOnFocus}
-                                onBlur={handleOnBlur}
                                 multiline={multiline}
                                 scrollEnabled={scrollEnabled ?? false}
+                                onFocus={handleOnFocus}
+                                onBlur={handleOnBlur}
+                                onChangeText={onChangeText}
                                 {...props}
                             />
                         )}
