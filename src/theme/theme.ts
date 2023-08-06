@@ -74,9 +74,17 @@ export const DefaultTheme = {
         pressOverlay: "rgba(0, 0, 0, 0.1)",
     },
     padding: {
+        // Screen
+        screenContentTop: 0,
+
+        // Page
         pageHorizontal: 16,
         pageTop: 16,
 
+        // Navigation
+        navigationActionHorizontal: 0,
+
+        // Body
         large: 24,
         regular: 16,
         small: 8,

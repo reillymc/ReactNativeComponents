@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { DimensionValue, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
@@ -10,7 +10,7 @@ import { Text } from "../Text";
 import { BaseInputProps } from "./BaseInput";
 
 export type ToggleInputStyles = {
-    size: { [key in ActionSize]: number | string };
+    size: { [key in ActionSize]: DimensionValue };
     iconSize: { [key in ActionSize]: number };
     borderRadius: number;
     borderWidth: number;

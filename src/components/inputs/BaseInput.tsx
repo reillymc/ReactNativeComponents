@@ -8,6 +8,7 @@ import {
     ViewStyle,
     NativeSyntheticEvent,
     TextInputFocusEventData,
+    DimensionValue,
 } from "react-native";
 import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
@@ -20,7 +21,7 @@ import { InputWidth } from "./types";
 export interface BaseInputStyles {
     height: number;
     width: {
-        [key in InputWidth]: string | number;
+        [key in InputWidth]: DimensionValue;
     };
     borderRadius: number;
     padding: number;

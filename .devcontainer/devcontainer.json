@@ -9,7 +9,7 @@
         "vscode": {
             // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
-                "bycedric.vscode-expo",
+                "expo.vscode-expo-tools",
                 "dbaeumer.vscode-eslint",
                 "editorconfig.editorconfig",
                 "esbenp.prettier-vscode",

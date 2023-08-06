@@ -26,14 +26,11 @@ export const FloatingContainer = React.forwardRef<View, FloatingContainerProps>(
         return (
             <Portal>
                 <FullWindowOverlayWrapper key={`${uniqueKey}${visible}`}>
-                    <BlurView
-                        ref={ref}
-                        intensity={1}
-                        tint={colorScheme === "dark" ? "dark" : "light"}
-                        style={[align === "top" ? styles.container : styles.containerInverse, style]}
-                    >
-                        {children}
-                    </BlurView>
+                    <View ref={ref} style={[align === "top" ? styles.container : styles.containerInverse, style]}>
+                        <BlurView intensity={1} tint={colorScheme === "dark" ? "dark" : "light"}>
+                            {children}
+                        </BlurView>
+                    </View>
                 </FullWindowOverlayWrapper>
             </Portal>
         );

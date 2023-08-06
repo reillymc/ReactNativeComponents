@@ -1,5 +1,5 @@
 import React from "react";
-import { ColorValue, Pressable, StyleSheet, Text } from "react-native";
+import { ColorValue, DimensionValue, Pressable, StyleSheet, Text } from "react-native";
 
 import { Theme } from "../../theme";
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
@@ -51,8 +51,8 @@ export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: bo
 };
 
 type ButtonStyles = {
-    height: { [key in ActionSize]: number | string };
-    width: { [key in ActionSize]: number | string };
+    height: { [key in ActionSize]: DimensionValue };
+    width: { [key in ActionSize]: DimensionValue };
     borderRadius: number;
 
     /**
