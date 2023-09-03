@@ -1,13 +1,14 @@
 version: "3.5"
 
+name: "react-native-components"
 services:
     react-native-components:
         image: app:latest
         build: .
         container_name: react-native-components
-        ports:
-            - 19005:19005
         volumes:
-            - ..:/home/node/workspace
+            - ..:/workspace
             - ~/.npmrc:/home/node/.npmrc
+        network_mode: "host"
+        env_file: .env
         command: sleep infinity

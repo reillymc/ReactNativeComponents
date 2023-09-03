@@ -20,11 +20,7 @@
             }
         }
     },
-    "remoteEnv": {
-        "EXPO_DEVTOOLS_LISTEN_ADDRESS": "0.0.0.0",
-        "REACT_NATIVE_PACKAGER_HOSTNAME": "192.168.0.2"
-    },
     "remoteUser": "node",
-    "workspaceFolder": "/home/node/workspace",
+    "workspaceFolder": "/workspace",
     "service": "react-native-components"
 }
