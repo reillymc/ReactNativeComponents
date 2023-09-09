@@ -2,30 +2,25 @@ import React from "react";
 import { IconButton, IconButtonProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import { glyphMapValueItemsOcticons } from "../helpers";
 
 const defaultProps: IconButtonProps = {
-    label: "Action",
-    iconName: "close",
-    variant: "secondary",
-    size: "regular",
+    iconName: "arrow-both",
+    variant: "primary",
     onPress: () => null,
 };
 
 const propDefinitions: PropDefinitions<IconButtonProps> = {
-    label: {
-        type: "string",
-        label: "Label",
-    },
     iconName: {
         type: "enum",
         label: "Icon Name",
-        values: glyphMapValueItems,
+        default: defaultProps.iconName,
+        values: glyphMapValueItemsOcticons,
     },
     variant: {
         type: "enum",
         label: "Style variant",
-        default: "Secondary",
+        default: defaultProps.variant,
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
@@ -35,15 +30,6 @@ const propDefinitions: PropDefinitions<IconButtonProps> = {
     disabled: {
         type: "boolean",
         label: "Disabled",
-    },
-    size: {
-        type: "enum",
-        label: "Size",
-        values: [
-            { label: "Small", value: "small" },
-            { label: "Regular", value: "regular" },
-            { label: "Large", value: "large" },
-        ],
     },
     onPress: {
         type: "function",

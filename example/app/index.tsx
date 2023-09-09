@@ -28,6 +28,7 @@ export const ComponentScreens: Record<string, { name: string; page: string }> = 
     CollapsibleContainer: { name: "Collapsible Container", page: "CollapsibleContainerPage" },
     InlineSelectionInput: { name: "Inline Selection Input", page: "InlineSelectionInputPage" },
     ScrollPage: { name: "Scroll Page", page: "ScrollPagePage" },
+    FeatureButton: { name: "Feature Button", page: "FeatureButtonPage" },
 };
 
 const ComponentListScreen: React.FC = () => {

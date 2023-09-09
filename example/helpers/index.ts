@@ -1,1 +1,1 @@
-export { glyphMapValueItems, glyphMapValueItemsNullable } from "./glyphMapValueItems";
+export * from "./glyphMapValueItems";

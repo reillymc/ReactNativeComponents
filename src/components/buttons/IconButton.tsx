@@ -1,19 +1,46 @@
 import React from "react";
-import { Text, StyleSheet, Pressable } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { StyleSheet, Pressable, ViewStyle, StyleProp, ColorValue } from "react-native";
+import { Octicons } from "@expo/vector-icons";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { Theme } from "../../theme";
 
-import { ButtonProps, getBackgroundColor, getLabelColor } from "./Button";
-import { ActionSize } from "./types";
+import { ActionSize, ActionVariant } from "./types";
+import { ActionProps } from "./Action";
+
+export const getBackgroundColor = ({ color }: Theme, pressed: boolean, disabled: boolean | undefined): ColorValue => {
+    if (disabled) {
+        return color.inputBackgroundDisabled;
+    }
+
+    if (pressed) {
+        return color.backgroundHighlight;
+    }
+
+    return color.inputBackground;
+};
+
+export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: boolean): ColorValue => {
+    switch (type) {
+        case "primary":
+            return pressed ? color.primaryHighlight : color.primary;
+        case "secondary":
+            return pressed ? color.secondaryHighlight : color.secondary;
+        case "flat":
+            return pressed ? color.textHighlight : color.textPrimary;
+    }
+
+    return color.textInverted;
+};
 
 export type IconButtonStyles = {
     size: { [key in ActionSize]: number };
     fontSize: { [key in ActionSize]: number };
 };
 
-export interface IconButtonProps extends ButtonProps {
-    iconName: keyof typeof AntDesign.glyphMap;
+export interface IconButtonProps extends Omit<ActionProps, "label" | "size"> {
+    iconName: keyof typeof Octicons.glyphMap;
+    iconStyle?: StyleProp<ViewStyle>;
     rounded?: boolean;
 
     onPress: () => void;
@@ -21,15 +48,14 @@ export interface IconButtonProps extends ButtonProps {
 
 export const IconButton: React.FC<IconButtonProps> = ({
     iconName,
-    label,
     variant = "primary",
-    size = "regular",
     rounded = true,
     disabled,
     style,
+    iconStyle,
     onPress,
 }) => {
-    const styles = useThemedStyles(createStyles, { size, rounded });
+    const styles = useThemedStyles(createStyles, { rounded });
     const { theme } = useTheme();
 
     return (
@@ -37,29 +63,18 @@ export const IconButton: React.FC<IconButtonProps> = ({
             disabled={disabled}
             style={({ pressed }) => [
                 styles.container,
-                { backgroundColor: getBackgroundColor(theme, variant, pressed, disabled) },
+                { backgroundColor: getBackgroundColor(theme, pressed, disabled) },
                 style,
             ]}
             onPress={onPress}
         >
             {({ pressed }) => (
-                <>
-                    <AntDesign
-                        name={iconName}
-                        type="font-awesome"
-                        size={styles.container.height * 0.4}
-                        color={getLabelColor(theme, variant, pressed)}
-                        style={styles.icon}
-                    />
-                    {size !== "small" && label && (
-                        <Text
-                            numberOfLines={1}
-                            style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}
-                        >
-                            {label}
-                        </Text>
-                    )}
-                </>
+                <Octicons
+                    name={iconName}
+                    style={[styles.icon, iconStyle]}
+                    size={20}
+                    color={getLabelColor(theme, variant, pressed)}
+                />
             )}
         </Pressable>
     );
@@ -67,25 +82,19 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
 IconButton.displayName = "IconButton";
 
-const createStyles = (
-    { styles: { button, iconButton } }: ThemedStyles,
-    { size = "regular", rounded = true }: Partial<IconButtonProps>,
-) => {
+const createStyles = ({ theme: { color } }: ThemedStyles) => {
+    const size = 28;
+
     const styles = StyleSheet.create({
         container: {
-            display: "flex",
-            alignItems: "center",
+            backgroundColor: color.inputBackground,
+            borderRadius: size / 2,
+            height: size,
+            width: size,
             justifyContent: "center",
-            height: iconButton.size[size],
-            width: iconButton.size[size],
-            borderRadius: rounded ? iconButton.size[size] / 2 : button.borderRadius,
+            alignItems: "center",
         },
         icon: {},
-        label: {
-            fontFamily: button.fontFamilyWeight,
-            fontSize: iconButton.fontSize[size],
-            paddingTop: size === "large" ? 6 : 3,
-        },
     });
     return styles;
 };

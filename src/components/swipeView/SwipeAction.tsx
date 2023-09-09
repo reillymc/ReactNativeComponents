@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { IconButton, IconButtonProps } from "../buttons";
+import { FeatureButton, FeatureButtonProps } from "../buttons";
 
-export interface SwipeActionProps extends Pick<IconButtonProps, "iconName" | "label" | "onPress" | "variant"> {}
+export interface SwipeActionProps extends Pick<FeatureButtonProps, "iconName" | "label" | "onPress" | "variant"> {}
 
 export const SwipeAction: React.FunctionComponent<SwipeActionProps> = actionProps => (
-    <IconButton {...actionProps} rounded={false} style={styles.actionButton} />
+    <FeatureButton {...actionProps} rounded={false} style={styles.actionButton} />
 );
 const styles = StyleSheet.create({
     actionButton: {

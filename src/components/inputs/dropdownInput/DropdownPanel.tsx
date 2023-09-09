@@ -10,7 +10,7 @@ import { DropdownItem } from "./DropdownItem";
 export interface DropdownPanelProps<T = string> {
     items: Array<ValueItem<T>>;
     searchValue: string;
-    maxSuggestionCount: number;
+    maxSuggestionCount?: number;
     visible: boolean;
     hideItemDescriptions?: boolean;
     searchInDescriptions?: boolean;
@@ -19,7 +19,7 @@ export interface DropdownPanelProps<T = string> {
 
 export const DropdownPanel = <T,>({
     items = [],
-    maxSuggestionCount,
+    maxSuggestionCount = 5,
     searchValue,
     visible,
     hideItemDescriptions,

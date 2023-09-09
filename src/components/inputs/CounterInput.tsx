@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, TextInput as RNTextInput, View } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton } from "../buttons";
+import { FeatureButton } from "../buttons";
 import { Text } from "../Text";
 
 import { NumberInput, NumberInputProps } from "./NumberInput";
@@ -28,7 +28,7 @@ export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
                     </View>
                 )}
                 <View style={styles.container}>
-                    <IconButton
+                    <FeatureButton
                         iconName="minus"
                         size="small"
                         variant="flat"
@@ -38,7 +38,7 @@ export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
                         style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                     />
                     <NumberInput {...props} ref={ref} style={styles.input} containerStyle={styles.inputContainer} />
-                    <IconButton
+                    <FeatureButton
                         iconName="plus"
                         size="small"
                         variant="flat"
