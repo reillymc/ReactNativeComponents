@@ -55,14 +55,12 @@ export const DropdownInput = React.forwardRef(
     <T,>(
         {
             items = [],
-            label,
             selectedItem,
             minimumSearchLength = 1,
             maxSuggestionCount = 5,
             onSelect,
             onChangeText,
             onBlur,
-            width,
             value,
             ...props
         }: DropdownInputProps<T>,
@@ -106,10 +104,8 @@ export const DropdownInput = React.forwardRef(
 
         return (
             <BaseInput
-                label={label}
                 {...props}
                 ref={ref}
-                width={width}
                 value={searchValue}
                 onFocus={handleFocus}
                 onBlur={handleBlur}

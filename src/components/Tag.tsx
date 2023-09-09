@@ -7,7 +7,7 @@ import { ThemedStyles, useThemedStyles } from "../hooks";
 import { Text } from "./Text";
 
 export interface TagProps {
-    label: string | undefined;
+    label?: string;
     iconName?: keyof typeof AntDesign.glyphMap;
     variant?: "light" | "dark";
     style?: StyleProp<ViewStyle>;
@@ -15,7 +15,7 @@ export interface TagProps {
 }
 
 export const Tag: React.FC<TagProps> = ({ label, onPress, iconName, variant, style }) => {
-    const styles = useThemedStyles(createStyles, { variant });
+    const styles = useThemedStyles(createStyles, { variant, label });
 
     return (
         <Pressable disabled={!onPress} onPress={onPress} style={[styles.container, style]}>
@@ -27,7 +27,10 @@ export const Tag: React.FC<TagProps> = ({ label, onPress, iconName, variant, sty
     );
 };
 
-const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "dark" }: Partial<TagProps>) => {
+const createStyles = (
+    { theme: { color }, styles: { text } }: ThemedStyles,
+    { variant = "dark", label }: Partial<TagProps>,
+) => {
     const styles = StyleSheet.create({
         container: {
             display: "flex",
@@ -41,9 +44,10 @@ const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "dark" }: 
             width: "auto",
         },
         icon: {
-            height: 12,
-            width: 12,
-            marginRight: 6,
+            height: text.fontFamilySize.body,
+            width: text.fontFamilySize.body,
+            marginRight: label === undefined ? 0 : 6,
+            marginVertical: 6,
             color: color.textPrimary,
         },
         text: {

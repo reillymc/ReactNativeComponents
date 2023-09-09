@@ -74,7 +74,7 @@ const createStyles = ({ theme: { color } }: ThemedStyles, { modalHeight }: { mod
     const styles = StyleSheet.create({
         componentContainer: {
             flex: 2,
-            paddingTop: 20,
+            paddingTop: 200,
             backgroundColor: color.background,
         },
         bottomPadding: {
@@ -82,7 +82,6 @@ const createStyles = ({ theme: { color } }: ThemedStyles, { modalHeight }: { mod
         },
         centred: {
             alignItems: "center",
-            justifyContent: "center",
         },
         propsContainer: {
             display: "flex",

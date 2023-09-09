@@ -55,7 +55,7 @@ export interface IconActionProps {
     disabled?: boolean;
     containerStyle?: StyleProp<ViewStyle>;
     iconStyle?: StyleProp<TextStyle>;
-    onPress: () => void;
+    onPress?: () => void;
 }
 
 export const IconAction: React.FC<IconActionProps> = ({

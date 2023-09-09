@@ -188,12 +188,13 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
 
 const createStyles = (
     { styles: { baseInput }, theme: { padding } }: ThemedStyles,
-    { width = "full", disabled, multiline = false }: BaseInputProps,
+    { width, disabled, multiline = false }: BaseInputProps,
 ) =>
     StyleSheet.create({
         container: {
             display: "flex",
-            width: baseInput.width[width],
+            width: width ? baseInput.width[width] : undefined,
+            flex: width ? undefined : 1,
         },
         labelContainer: {
             marginBottom: baseInput.labelMargin,

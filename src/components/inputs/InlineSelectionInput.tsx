@@ -1,53 +1,37 @@
 import React from "react";
-import { FlatList, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { FlatList, Pressable, ScrollView, StyleSheet, View } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { ModalHeader, ModalSheet, ModalSheetFlatList } from "../modal";
-import { Tag } from "../Tag";
+import { Tag, TagProps } from "../Tag";
 import { Text } from "../Text";
 import { Action } from "../buttons";
 
-import { BaseInput, BaseInputProps } from "./BaseInput";
+import { BaseInput } from "./BaseInput";
 import { DropdownItem } from "./dropdownInput";
 import { ValueItem } from "./valueItem";
+import { SelectionInputProps } from "./SelectionInput";
 
-export interface SelectionInputStyles {}
+export type InlineSelectionInputProps<T = string> = SelectionInputProps<T> & Pick<TagProps, "variant">;
 
-export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange"> & {
-    items?: Array<ValueItem<T>>;
-    style?: StyleProp<ViewStyle>;
-} & (SingleSelection<T> | MultiSelection<T>);
-
-interface SingleSelection<T> {
-    selectionMode: "single";
-    selection?: ValueItem<T>;
-    onChange?: (item: ValueItem<T> | undefined) => void;
-}
-
-interface MultiSelection<T> {
-    selectionMode: "multi";
-    selection?: Array<ValueItem<T>>;
-    onChange?: (items: Array<ValueItem<T>>) => void;
-}
-
-export const SelectionInput = <T,>({
+export const InlineSelectionInput = <T,>({
     label,
     width,
     disabled,
     items = [],
+    variant,
     placeholder,
     style,
     selectionMode,
     selection,
     onChange,
     ...props
-}: SelectionInputProps<T>) => {
+}: InlineSelectionInputProps<T>) => {
     const [showOptions, setShowOptions] = React.useState(false);
 
     const selectedItems = (selection && (selectionMode === "single" ? [selection] : selection)) ?? [];
 
-    const styles = useThemedStyles(createStyles, { disabled, selectionMode });
+    const styles = useThemedStyles(createStyles, { disabled, selectionMode, variant });
 
     const handleItemPress = (item: ValueItem<T>) => {
         if (selectionMode === "single") {
@@ -62,39 +46,62 @@ export const SelectionInput = <T,>({
         }
     };
 
+    const addButton = (
+        <Tag iconName="plus" variant={variant} onPress={disabled ? undefined : () => setShowOptions(true)} />
+    );
+
     return (
         <BaseInput
-            label={label}
             width={width}
             {...props}
             inputElement={
-                <Pressable
-                    hitSlop={20}
-                    disabled={disabled}
-                    style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : undefined, style]}
-                    onPress={() => setShowOptions(true)}
-                >
-                    {() => (
-                        <View style={styles.container}>
-                            {selectionMode === "single" ? (
-                                <Text style={disabled ? styles.labelDisabled : undefined}>
-                                    {selection?.label ?? placeholder}
-                                </Text>
-                            ) : (
-                                <View style={styles.tagContainer}>
-                                    {selection?.length ? (
-                                        selection?.map(item => (
-                                            <Tag key={`${item.value}`} label={item.label} style={styles.tag} />
-                                        ))
-                                    ) : (
-                                        <Text style={disabled ? styles.labelDisabled : undefined}>{placeholder}</Text>
-                                    )}
-                                </View>
-                            )}
-                            <AntDesign name="down" style={styles.icon} />
-                        </View>
-                    )}
-                </Pressable>
+                <View style={[styles.container, style]}>
+                    <ScrollView
+                        contentContainerStyle={styles.tagContainer}
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        scrollEnabled={selectionMode === "multi"}
+                    >
+                        {label && (
+                            <Pressable
+                                style={styles.labelContainer}
+                                onPress={disabled ? undefined : () => setShowOptions(true)}
+                            >
+                                {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
+                            </Pressable>
+                        )}
+                        {selectionMode === "single" ? (
+                            <Text style={disabled ? styles.labelDisabled : undefined}>
+                                {selection ? (
+                                    <Tag
+                                        key={`${selection?.value}`}
+                                        label={selection?.label}
+                                        iconName="closecircle"
+                                        style={styles.tag}
+                                        variant={variant}
+                                        onPress={disabled ? undefined : () => handleItemPress(selection)}
+                                    />
+                                ) : (
+                                    addButton
+                                )}
+                            </Text>
+                        ) : (
+                            <>
+                                {selection?.map(item => (
+                                    <Tag
+                                        key={`${item.value}`}
+                                        label={item.label}
+                                        iconName="closecircle"
+                                        style={styles.tag}
+                                        variant={variant}
+                                        onPress={disabled ? undefined : () => handleItemPress(item)}
+                                    />
+                                ))}
+                                {addButton}
+                            </>
+                        )}
+                    </ScrollView>
+                </View>
             }
             modalElement={
                 <ModalSheet
@@ -155,46 +162,40 @@ export const SelectionInput = <T,>({
     );
 };
 
-SelectionInput.displayName = "SelectionInput";
+InlineSelectionInput.displayName = "InlineSelectionInput";
 
 const createStyles = (
-    { styles: { baseInput }, theme: { color } }: ThemedStyles,
-    { disabled, selectionMode }: Partial<SelectionInputProps>,
+    { styles: { baseInput } }: ThemedStyles,
+    { disabled, selectionMode, variant }: Partial<InlineSelectionInputProps>,
 ) => {
+    const backgroundColor = variant === "dark" ? baseInput.backgroundColor : undefined;
     const styles = StyleSheet.create({
         container: {
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
-            paddingHorizontal: baseInput.padding,
             alignItems: "center",
-        },
-        button: {
             justifyContent: "center",
             borderRadius: baseInput.borderRadius,
             minHeight: baseInput.height,
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            backgroundColor: disabled ? baseInput.backgroundColorDisabled : backgroundColor,
             color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
-            paddingHorizontal: baseInput.padding,
             paddingVertical: selectionMode === "single" ? baseInput.padding : 0,
             fontSize: baseInput.fontSize,
-        },
-        buttonPressed: {
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : color.backgroundHighlight,
-            color: disabled ? baseInput.disabledTextColor : color.textHighlight,
         },
         labelDisabled: {
             color: baseInput.disabledTextColor,
         },
-        icon: {
-            color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
+        labelContainer: {
+            marginRight: baseInput.padding,
+            justifyContent: "center",
         },
         tagContainer: {
             display: "flex",
             flexDirection: "row",
             flexWrap: "wrap",
-            maxWidth: "92%",
             marginVertical: 4,
+            paddingHorizontal: baseInput.padding,
+            alignItems: "center",
         },
         tag: {
             marginVertical: 2,
