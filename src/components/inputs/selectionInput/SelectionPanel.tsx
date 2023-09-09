@@ -25,6 +25,9 @@ interface MultiSelection<T> {
 export type SelectionPanelProps<T = string> = Pick<BaseInputProps, "label" | "placeholder"> &
     (SingleSelection<T> | MultiSelection<T>) & { items?: Array<ValueItem<T>> };
 
+type InternalSelectionPanelProps<T> = Pick<ModalSheetProps, "onClose" | "show"> &
+    SelectionPanelProps<T> & { singleFooter?: React.ReactNode };
+
 export const SelectionPanel = <T,>({
     label,
     show,
@@ -32,9 +35,10 @@ export const SelectionPanel = <T,>({
     placeholder,
     selection,
     selectionMode,
+    singleFooter,
     onChange,
     onClose,
-}: Pick<ModalSheetProps, "onClose" | "show"> & SelectionPanelProps<T>) => {
+}: InternalSelectionPanelProps<T>) => {
     const styles = useThemedStyles(createStyles, {});
 
     const selectedItems = (selection && (selectionMode === "single" ? [selection] : selection)) ?? [];
@@ -59,7 +63,7 @@ export const SelectionPanel = <T,>({
             show={show}
             header={<ModalHeader heading={label} leftItem={<Action label="Close" onPress={onClose} />} />}
             footer={
-                selectionMode === "multi" && (
+                selectionMode === "multi" ? (
                     <View style={styles.selectionDisplay}>
                         <View>
                             <FlatList
@@ -81,6 +85,8 @@ export const SelectionPanel = <T,>({
                             />
                         </View>
                     </View>
+                ) : (
+                    singleFooter
                 )
             }
         >
