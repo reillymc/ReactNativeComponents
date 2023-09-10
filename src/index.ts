@@ -1,6 +1,5 @@
 export * from "./components";
 export * from "./providers";
-export * from "./pages";
 export * from "./helpers";
 export * from "./theme";
 export * from "./hooks";

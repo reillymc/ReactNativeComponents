@@ -20,14 +20,12 @@ export const ComponentScreens: Record<string, { name: string; page: string }> = 
     NumberInput: { name: "Number Input", page: "NumberInputPage" },
     ToggleInput: { name: "Toggle Input", page: "ToggleInputPage" },
     ModalSheet: { name: "Modal Sheet", page: "ModalSheetPage" },
-    ListPage: { name: "List Page", page: "ListPagePage" },
     ListItem: { name: "List Item", page: "ListItemPage" },
     Avatar: { name: "Avatar", page: "AvatarPage" },
     Tag: { name: "Tag", page: "TagPage" },
     Panel: { name: "Panel", page: "PanelPage" },
     CollapsibleContainer: { name: "Collapsible Container", page: "CollapsibleContainerPage" },
     InlineSelectionInput: { name: "Inline Selection Input", page: "InlineSelectionInputPage" },
-    ScrollPage: { name: "Scroll Page", page: "ScrollPagePage" },
     FeatureButton: { name: "Feature Button", page: "FeatureButtonPage" },
 };
 

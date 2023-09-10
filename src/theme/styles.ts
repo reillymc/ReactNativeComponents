@@ -6,7 +6,6 @@ import type {
     HighlightedTextStyles,
     IconButtonStyles,
     ModalSheetStyles,
-    NavigationHeaderStyles,
     TextInputStyles,
     TextStyles,
     ToggleInputStyles,
@@ -34,7 +33,6 @@ export type Styles = {
     text: TextStyles;
     highlightedText: HighlightedTextStyles;
     textInput: TextInputStyles;
-    navigationHeader: NavigationHeaderStyles;
     modalSheet: ModalSheetStyles;
     toggleInput: ToggleInputStyles;
     counterInput: CounterInputStyles;
