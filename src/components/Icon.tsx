@@ -1,26 +1,51 @@
 import React from "react";
 import { StyleProp, StyleSheet, TextStyle } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Octicons } from "@expo/vector-icons";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../hooks";
 
 export interface IconStyles {}
 
-export interface IconProps {
+interface AntDesignProps {
+    set?: never | "antdesign";
     iconName?: keyof typeof AntDesign.glyphMap;
+}
+
+interface OcticonsProps {
+    set: "octicons";
+    iconName?: keyof typeof Octicons.glyphMap;
+}
+
+export type IconProps = (AntDesignProps | OcticonsProps) & {
     size?: number;
     color?: string;
     style?: StyleProp<TextStyle>;
-}
+};
 
-export const Icon: React.FC<IconProps> = ({ style, color, size = 20, iconName }) => {
+export const Icon: React.FC<IconProps> = ({ style, color, size = 20, iconName, set }) => {
     const styles = useThemedStyles(createStyles, { size });
 
     const { theme } = useTheme();
 
-    return (
-        <AntDesign size={size} color={color ?? theme.color.textPrimary} name={iconName} style={[styles.icon, style]} />
-    );
+    if (set === "octicons") {
+        return (
+            <Octicons
+                size={size}
+                color={color ?? theme.color.textPrimary}
+                name={iconName}
+                style={[styles.icon, style]}
+            />
+        );
+    } else {
+        return (
+            <AntDesign
+                size={size}
+                color={color ?? theme.color.textPrimary}
+                name={iconName}
+                style={[styles.icon, style]}
+            />
+        );
+    }
 };
 
 Icon.displayName = "Icon";

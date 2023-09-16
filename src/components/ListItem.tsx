@@ -35,7 +35,7 @@ export interface ListItemProps {
 
     swipeActions?: SwipeViewProps["rightActions"];
     style?: StyleProp<ViewStyle>;
-    onPress: () => void;
+    onPress?: () => void;
 }
 
 export const ListItem: React.FC<ListItemProps> = ({
@@ -118,6 +118,7 @@ const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar, v
             flex: 1,
             flexDirection: "column",
             alignItems: "flex-start",
+            justifyContent: "center",
             paddingVertical: listItem.internalSpacing,
             paddingLeft: avatar ? 0 : listItem.internalSpacing,
             paddingRight: listItem.internalSpacing,
