@@ -18,6 +18,8 @@ export const ComponentScreens: Record<string, { name: string; page: string }> = 
     CounterInput: { name: "Counter Input", page: "CounterInputPage" },
     TextInput: { name: "Text Input", page: "TextInputPage" },
     NumberInput: { name: "Number Input", page: "NumberInputPage" },
+    MultiNumberInput: { name: "Multi-Number Input", page: "MultiNumberInputPage" },
+    TimeInput: { name: "Time Input", page: "TimeInputPage" },
     ToggleInput: { name: "Toggle Input", page: "ToggleInputPage" },
     ModalSheet: { name: "Modal Sheet", page: "ModalSheetPage" },
     ListItem: { name: "List Item", page: "ListItemPage" },

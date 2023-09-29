@@ -33,15 +33,12 @@ export const NumberInput = React.forwardRef<RNTextInput, NumberInputProps>(
                     const num = parseFloat(validatedString ?? "");
 
                     if (Number.isNaN(num) || validatedString !== num.toString()) {
-                        if (onChangeText) {
-                            onChangeText(validatedString ?? "");
-                        }
+                        onChangeText?.(validatedString ?? "");
+
                         return;
                     }
 
-                    if (onChangeText) {
-                        onChangeText(num.toString());
-                    }
+                    onChangeText?.(num.toString());
                 }
             },
             [onChangeText, keyboardType],

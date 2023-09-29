@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Pressable, ViewStyle, StyleProp, ColorValue } from "react-native";
+import { StyleSheet, Pressable, StyleProp, ColorValue, TextStyle, OpaqueColorValue } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
@@ -40,10 +40,11 @@ export type IconButtonStyles = {
 
 export interface IconButtonProps extends Omit<ActionProps, "label" | "size"> {
     iconName: keyof typeof Octicons.glyphMap;
-    iconStyle?: StyleProp<ViewStyle>;
+    iconStyle?: StyleProp<TextStyle>;
     rounded?: boolean;
+    color?: string | OpaqueColorValue | undefined;
 
-    onPress: () => void;
+    onPress?: () => void;
 }
 
 export const IconButton: React.FC<IconButtonProps> = ({
@@ -53,6 +54,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
     disabled,
     style,
     iconStyle,
+    color,
     onPress,
 }) => {
     const styles = useThemedStyles(createStyles, { rounded });
@@ -73,7 +75,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
                     name={iconName}
                     style={[styles.icon, iconStyle]}
                     size={20}
-                    color={getLabelColor(theme, variant, pressed)}
+                    color={color ?? getLabelColor(theme, variant, pressed)}
                 />
             )}
         </Pressable>
@@ -82,13 +84,13 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
 IconButton.displayName = "IconButton";
 
-const createStyles = ({ theme: { color } }: ThemedStyles) => {
+const createStyles = ({ theme: { color, border } }: ThemedStyles, { rounded }: Partial<IconButtonProps>) => {
     const size = 28;
 
     const styles = StyleSheet.create({
         container: {
             backgroundColor: color.inputBackground,
-            borderRadius: size / 2,
+            borderRadius: rounded === false ? border.radius.tight : size / 2,
             height: size,
             width: size,
             justifyContent: "center",
