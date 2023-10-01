@@ -148,7 +148,7 @@ export const MultiNumberInput = React.forwardRef<RNTextInput, MultiNumberInputPr
                         <NumberInput
                             ref={ref}
                             disabled={disabled}
-                            placeholder={value.representation === "number" ? placeholder : placeholder2}
+                            placeholder={value.representation !== "range" ? placeholder : placeholder2}
                             maxLength={maxLength}
                             clearButtonMode={clearButtonMode}
                             value={value.representation === "number" ? value.value : value.value?.[0]}

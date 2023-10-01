@@ -70,7 +70,7 @@
     },
     "peerDependencies": {
         "@expo/vector-icons": "^13.0",
-        "@gorhom/bottom-sheet": "^5.0.0-alpha.3",
+        "@gorhom/bottom-sheet": "^5.0.0-alpha.4",
         "@gorhom/portal": "^1.0",
         "@react-navigation/native": "^6.0",
         "expo-blur": "^12.0",

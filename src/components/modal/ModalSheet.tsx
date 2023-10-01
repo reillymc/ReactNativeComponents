@@ -73,12 +73,22 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
             ref.current?.expand();
         } else {
             Keyboard.dismiss();
-            ref.current?.close();
+            setTimeout(() => {
+                ref.current?.close();
+            }, 1);
         }
     }, [show, ref]);
 
     // Temporary fix to avoid bottom sheet appearing under modal from react-native-screens.
     setTimeout(() => setIsHide(false), 1);
+
+    const handleClose = () => {
+        onClose();
+        Keyboard.dismiss();
+        setTimeout(() => {
+            ref.current?.close();
+        }, 10);
+    };
 
     if (isHide) {
         return null;
@@ -105,7 +115,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
                     keyboardBlurBehavior={show ? "restore" : "none"}
                     snapPoints={[modalSheet.height[height]]}
                     keyboardBehavior={keyboardBehavior}
-                    onClose={onClose}
+                    onClose={handleClose}
                     backdropComponent={props => (
                         <BottomSheetBackdrop {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
                             <View style={styles.backdrop} />
