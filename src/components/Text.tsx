@@ -1,9 +1,9 @@
 import React from "react";
-import { StyleSheet, Text as RNText, TextProps as RNTextProps } from "react-native";
+import { Text as RNText, TextProps as RNTextProps, StyleSheet } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
-export type TextVariant = "display" | "title" | "heading" | "label" | "body" | "caption";
+export type TextVariant = "display" | "title" | "heading" | "label" | "body" | "caption" | "bodyEmphasized";
 
 export interface TextStyles {
     textColor: string;

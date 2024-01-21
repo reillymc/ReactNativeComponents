@@ -1,19 +1,20 @@
 import type {
     ActionSize,
-    IconActionStyles,
+    ActionStyles,
+    AvatarStyles,
+    BaseInputStyles,
     ButtonStyles,
+    CounterInputStyles,
     DropdownInputStyles,
     HighlightedTextStyles,
+    IconActionStyles,
     IconButtonStyles,
+    ListItemStyles,
     ModalSheetStyles,
     TextInputStyles,
     TextStyles,
+    ToastStyles,
     ToggleInputStyles,
-    ActionStyles,
-    ListItemStyles,
-    AvatarStyles,
-    BaseInputStyles,
-    CounterInputStyles,
 } from "../components";
 import { DeepPartial } from "../helpers";
 
@@ -44,6 +45,7 @@ export type Styles = {
     iconAction: IconActionStyles;
     button: ButtonStyles;
     iconButton: IconButtonStyles;
+    toast: ToastStyles;
 };
 
 export type StyleOverrides = DeepPartial<Styles>;
@@ -84,6 +86,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         fontFamilyWeight: {
             caption: font.familyWeight.light200,
             body: font.familyWeight.regular400,
+            bodyEmphasized: font.familyWeight.bold600,
             label: font.familyWeight.bold600,
             heading: font.familyWeight.bold600,
             title: font.familyWeight.bold800,
@@ -92,6 +95,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         fontFamilySize: {
             caption: font.size.small,
             body: font.size.regular,
+            bodyEmphasized: font.size.regular,
             label: font.size.emphasised,
             heading: font.size.large,
             title: font.size.xLarge,
@@ -100,6 +104,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         lineHeight: {
             caption: font.size.small + 4,
             body: font.size.regular + LINE_HEIGHT_MODIFIER,
+            bodyEmphasized: font.size.regular + LINE_HEIGHT_MODIFIER,
             label: font.size.emphasised + LINE_HEIGHT_MODIFIER,
             heading: font.size.large + LINE_HEIGHT_MODIFIER,
             title: font.size.xxLarge + LINE_HEIGHT_MODIFIER,
@@ -210,5 +215,9 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         initialsFontFamilyWeight: font.familyWeight.bold600,
         initialsFontSize: font.size.xxLarge,
         labelFontSize: font.size.tiny,
+    },
+    toast: {
+        horizontalInset: padding.pageHorizontal + padding.regular,
+        bottomInset: 100,
     },
 });

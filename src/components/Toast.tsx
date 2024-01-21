@@ -1,20 +1,25 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import Animated, { Layout, SlideInDown, SlideOutDown } from "react-native-reanimated";
 
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
+export interface ToastStyles {
+    horizontalInset: number;
+    bottomInset: number;
+}
 export interface ToastProps {
     action?: React.ReactNode;
+    style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
 }
 
-export const Toast: React.FunctionComponent<ToastProps> = ({ action, children }) => {
+export const Toast: React.FunctionComponent<ToastProps> = ({ action, style, children }) => {
     const styles = useThemedStyles(createStyles, {});
 
     return (
         <Animated.View
-            style={styles.container}
+            style={[styles.container, style]}
             entering={SlideInDown.springify().mass(0.5)}
             exiting={SlideOutDown.springify().mass(0.5)}
             layout={Layout.springify().mass(0.5)}
@@ -34,13 +39,13 @@ export const Toast: React.FunctionComponent<ToastProps> = ({ action, children })
     );
 };
 
-const createStyles = ({ theme: { color, padding, border } }: ThemedStyles) =>
+const createStyles = ({ theme: { color, padding, border }, styles: { toast } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
             position: "absolute",
-            bottom: 100,
-            left: padding.pageHorizontal + padding.regular,
-            right: padding.pageHorizontal + padding.regular,
+            bottom: toast.bottomInset,
+            left: toast.horizontalInset,
+            right: toast.horizontalInset,
             backgroundColor: color.backgroundHighlight,
             padding: padding.regular,
             borderRadius: border.radius.loose,
