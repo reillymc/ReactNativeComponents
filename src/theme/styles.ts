@@ -117,9 +117,9 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
     modalSheet: {
         borderRadius: border.radius.loose,
         height: {
-            full: "94%",
-            mid: "52%",
-            small: "24%",
+            full: "92.2%",
+            mid: "54%",
+            small: "26%",
         },
         backgroundColor: color.background,
         backdropColor: color.backgroundOverlay,

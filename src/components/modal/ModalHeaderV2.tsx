@@ -2,8 +2,9 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 
 import { Text } from "../Text";
+import { IconActionV2 } from "../buttons";
 
-export interface ModalHeaderProps {
+export interface ModalHeaderV2Props {
     /**
      * Supports
      *
@@ -12,31 +13,20 @@ export interface ModalHeaderProps {
      */
     heading?: React.ReactNode;
 
-    /**
-     * Supports
-     *
-     * - `<Action />`
-     * - `<IconAction />`
-     */
-    leftItem?: React.ReactNode;
-
-    /**
-     * Supports
-     *
-     * - `<Action />`
-     * - `<IconAction />`
-     */
-    rightItem?: React.ReactNode;
+    onClose?: () => void;
 }
 
-export const ModalHeader: React.FC<ModalHeaderProps> = ({ heading, leftItem, rightItem }) => {
+export const ModalHeaderV2: React.FC<ModalHeaderV2Props> = ({ heading, onClose }) => {
     return (
         <View style={styles.headerContainer}>
-            <View style={styles.headerItemLeft}>{leftItem}</View>
-            <Text variant="heading">
-                {typeof heading === "string" ? <Text variant="heading">{heading}</Text> : heading}
-            </Text>
-            <View style={styles.headerItemRight}>{rightItem}</View>
+            <View style={styles.headerItemLeft}>
+                <Text variant="heading">
+                    {typeof heading === "string" ? <Text variant="heading">{heading}</Text> : heading}
+                </Text>
+            </View>
+            <View style={styles.headerItemRight}>
+                <IconActionV2 iconName="x" variant="flat" onPress={onClose} />
+            </View>
         </View>
     );
 };
@@ -55,7 +45,6 @@ const styles = StyleSheet.create({
         alignItems: "flex-start",
     },
     headerItemRight: {
-        flex: 1,
         marginRight: 16,
         alignItems: "flex-end",
     },

@@ -1,9 +1,10 @@
 export * from "./components";
-export * from "./providers";
 export * from "./helpers";
-export * from "./theme";
 export * from "./hooks";
+export * from "./providers";
+export * from "./theme";
 
-import { PortalProvider, Portal } from "@gorhom/portal";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { Portal, PortalProvider } from "@gorhom/portal";
 
-export { PortalProvider, Portal };
+export { BottomSheetModalProvider, Portal, PortalProvider };

@@ -1,18 +1,32 @@
-import React from "react";
-import { Stack } from "expo-router/stack";
-import { useFonts } from "expo-font";
-import { StatusBar } from "expo-status-bar";
 import {
-    ThemeProvider,
-    createDefaultStyles,
+    BottomSheetModalProvider,
+    DeepPartial,
+    MergeTheme,
     Styles,
     Theme,
-    PortalProvider,
-    DeepPartial,
+    ThemeProvider,
+    createDefaultStyles,
     scaleFont,
-    MergeTheme,
 } from "@reillymc/react-native-components";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router/stack";
+import * as SplashScreen from "expo-splash-screen";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
 import { useColorScheme, useWindowDimensions } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
+export {
+    // Catch any errors thrown by the Layout component.
+    ErrorBoundary,
+} from "expo-router";
+
+export const unstable_settings = {
+    // Ensure that reloading on `/modal` keeps a back button present.
+    initialRouteName: "index",
+};
+
+SplashScreen.preventAutoHideAsync();
 
 const Layout: React.FC = () => {
     const [fontsLoaded] = useFonts({
@@ -24,6 +38,12 @@ const Layout: React.FC = () => {
 
     const colorScheme = useColorScheme();
     const { fontScale } = useWindowDimensions();
+
+    useEffect(() => {
+        if (fontsLoaded) {
+            SplashScreen.hideAsync();
+        }
+    }, [fontsLoaded]);
 
     if (!fontsLoaded) {
         return null;
@@ -78,13 +98,15 @@ const Layout: React.FC = () => {
     };
 
     return (
-        <ThemeProvider theme={theme} styles={appStyles}>
-            <PortalProvider>
-                <StatusBar style="auto" />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <ThemeProvider theme={theme} styles={appStyles}>
+                <BottomSheetModalProvider>
+                    <StatusBar style="auto" />
 
-                <Stack initialRouteName="index" id="index" />
-            </PortalProvider>
-        </ThemeProvider>
+                    <Stack initialRouteName="index" id="index" />
+                </BottomSheetModalProvider>
+            </ThemeProvider>
+        </GestureHandlerRootView>
     );
 };
 

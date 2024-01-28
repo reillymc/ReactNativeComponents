@@ -1,6 +1,6 @@
+import { AntDesign } from "@expo/vector-icons";
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 
 import { ThemedStyles, useThemedStyles } from "../../../hooks";
 import { Tag } from "../../Tag";
@@ -11,7 +11,10 @@ import { SelectionPanel, SelectionPanelProps } from "./SelectionPanel";
 
 export interface SelectionInputStyles {}
 
-export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange"> & SelectionPanelProps<T>;
+export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange"> &
+    SelectionPanelProps<T> & {
+        hideLabel?: boolean;
+    };
 
 export const SelectionInput = <T,>({
     label,
@@ -20,6 +23,7 @@ export const SelectionInput = <T,>({
     items = [],
     placeholder,
     style,
+    hideLabel,
     selectionMode,
     selection,
     onChange,
@@ -31,7 +35,7 @@ export const SelectionInput = <T,>({
 
     return (
         <BaseInput
-            label={label}
+            label={!hideLabel && label}
             width={width}
             {...props}
             inputElement={
@@ -66,7 +70,9 @@ export const SelectionInput = <T,>({
             modalElement={
                 <SelectionPanel
                     show={showOptions}
+                    label={label}
                     items={items}
+                    placeholder={placeholder}
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     selectionMode={selectionMode as any}
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any

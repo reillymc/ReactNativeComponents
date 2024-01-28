@@ -1,9 +1,7 @@
+import { ListItem, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
+import { Stack, useRouter } from "expo-router";
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";
-import { ListItem, useTheme } from "@reillymc/react-native-components";
-import { Stack, useRouter } from "expo-router";
-
-import { ThemedStyles, useThemedStyles } from "../../src/hooks/useThemedStyles";
 
 /**
  * Map of all components to their respective screen

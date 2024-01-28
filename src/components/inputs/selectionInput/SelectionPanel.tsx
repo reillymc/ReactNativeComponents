@@ -1,14 +1,15 @@
+import { BlurView } from "expo-blur";
 import React from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, StyleSheet, View, useColorScheme } from "react-native";
 
-import { ModalHeader, ModalSheet, ModalSheetFlatList, ModalSheetProps } from "../../modal";
-import { Text } from "../../Text";
-import { Action } from "../../buttons";
-import { DropdownItem } from "../dropdownInput";
-import { BaseInputProps } from "../BaseInput";
-import { ValueItem } from "../valueItem";
-import { Tag } from "../../Tag";
 import { ThemedStyles, useThemedStyles } from "../../../hooks";
+import { Tag } from "../../Tag";
+import { Text } from "../../Text";
+import { Action, IconActionV2 } from "../../buttons";
+import { ModalHeader, ModalSheet, ModalSheetFlatList, ModalSheetProps } from "../../modal";
+import { BaseInputProps } from "../BaseInput";
+import { DropdownItem } from "../dropdownInput";
+import { ValueItem } from "../valueItem";
 
 interface SingleSelection<T> {
     selectionMode: "single";
@@ -40,6 +41,7 @@ export const SelectionPanel = <T,>({
     onClose,
 }: InternalSelectionPanelProps<T>) => {
     const styles = useThemedStyles(createStyles, {});
+    const colorScheme = useColorScheme();
 
     const selectedItems = (selection && (selectionMode === "single" ? [selection] : selection)) ?? [];
 
@@ -58,33 +60,45 @@ export const SelectionPanel = <T,>({
 
     return (
         <ModalSheet
-            height="mid"
+            height={["mid", "full"]}
             onClose={onClose}
             show={show}
-            header={<ModalHeader heading={label} leftItem={<Action label="Close" onPress={onClose} />} />}
+            header={
+                <ModalHeader
+                    leftItem={<Text variant="heading">{label}</Text>}
+                    rightItem={<IconActionV2 iconName="x" variant="flat" onPress={onClose} />}
+                />
+            }
             footer={
                 selectionMode === "multi" ? (
-                    <View style={styles.selectionDisplay}>
-                        <View>
-                            <FlatList
-                                horizontal
-                                showsHorizontalScrollIndicator={false}
-                                keyExtractor={item => `${item.value}`}
-                                data={selection}
-                                contentContainerStyle={styles.previewTagContainer}
-                                ListEmptyComponent={<Text style={styles.previewPlaceholder}>{placeholder}</Text>}
-                                renderItem={({ item }) => (
-                                    <Tag
-                                        label={item.label}
-                                        style={styles.tag}
-                                        variant="light"
-                                        iconName="closecircle"
-                                        onPress={() => handleItemPress(item)}
-                                    />
-                                )}
-                            />
-                        </View>
-                    </View>
+                    <BlurView
+                        intensity={100}
+                        tint={colorScheme === "light" ? "extraLight" : "systemMaterialDark"}
+                        style={styles.selectionDisplay}
+                    >
+                        <FlatList
+                            horizontal
+                            showsHorizontalScrollIndicator={false}
+                            keyExtractor={item => `${item.value}`}
+                            data={selection}
+                            contentContainerStyle={styles.previewTagContainer}
+                            ListEmptyComponent={<Text style={styles.previewPlaceholder}>{placeholder}</Text>}
+                            renderItem={({ item }) => (
+                                <Tag
+                                    label={item.label}
+                                    style={styles.tag}
+                                    variant="light"
+                                    iconName="closecircle"
+                                    onPress={() => handleItemPress(item)}
+                                />
+                            )}
+                        />
+                        {!!selectedItems.length && (
+                            <View style={styles.clearButton}>
+                                <Action label="Clear" onPress={() => onChange?.([])} />
+                            </View>
+                        )}
+                    </BlurView>
                 ) : (
                     singleFooter
                 )
@@ -108,7 +122,7 @@ export const SelectionPanel = <T,>({
 
 SelectionPanel.displayName = "SelectionPanel";
 
-const createStyles = ({ styles: { baseInput }, theme: { padding } }: ThemedStyles) => {
+const createStyles = ({ styles: { baseInput }, theme: { padding, color } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         tag: {
             marginVertical: 2,
@@ -117,22 +131,27 @@ const createStyles = ({ styles: { baseInput }, theme: { padding } }: ThemedStyle
             paddingHorizontal: padding.pageHorizontal,
         },
         selectionDisplay: {
-            justifyContent: "flex-start",
-            height: 200,
-            paddingHorizontal: 0,
-            paddingTop: baseInput.padding,
-            borderRadius: 0,
-            backgroundColor: baseInput.backgroundColor,
-            display: "flex",
-            marginBottom: -120,
+            flexDirection: "row",
+            marginHorizontal: padding.pageHorizontal - baseInput.padding,
+            borderRadius: 50,
+            marginBottom: 40,
+            overflow: "hidden",
         },
         previewTagContainer: {
-            paddingLeft: padding.pageHorizontal,
-            marginRight: 32,
-            paddingRight: 32,
+            paddingLeft: baseInput.padding,
+            paddingVertical: padding.tiny,
+            height: 48,
         },
         previewPlaceholder: {
-            paddingTop: baseInput.padding,
+            alignSelf: "center",
+            paddingLeft: baseInput.padding,
+        },
+        clearButton: {
+            paddingHorizontal: padding.pageHorizontal,
+            marginVertical: padding.tiny + 2,
+            borderLeftColor: color.border,
+            borderLeftWidth: 1,
+            justifyContent: "center",
         },
     });
     return styles;
