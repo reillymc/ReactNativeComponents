@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.3.5",
+    "version": "0.3.11",
     "description": "A collection of React Native components and resources",
     "main": "lib/commonjs/index",
     "module": "lib/module/index",

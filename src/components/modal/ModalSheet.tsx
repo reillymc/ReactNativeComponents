@@ -1,16 +1,16 @@
 /* eslint-disable react/no-unstable-nested-components */
-import {
+import BottomSheet, {
     BottomSheetBackdrop,
     BottomSheetFlatList,
     BottomSheetFooter,
-    BottomSheetModal,
     BottomSheetProps,
     BottomSheetScrollView,
     BottomSheetView,
 } from "@gorhom/bottom-sheet";
+import { Portal } from "@gorhom/portal";
 import { BlurView } from "expo-blur";
 import React from "react";
-import { Keyboard, StyleSheet, View, useColorScheme } from "react-native";
+import { StyleSheet, View, useColorScheme } from "react-native";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { FullWindowOverlayWrapper } from "../FullWindowOverlayWrapper";
@@ -63,7 +63,7 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
     footer,
     onClose,
 }) => {
-    const ref = React.useRef<BottomSheetModal>(null);
+    const ref = React.useRef<BottomSheet>(null);
     const colorScheme = useColorScheme();
 
     const styles = useThemedStyles(createStyles, {});
@@ -72,23 +72,10 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
     } = useTheme();
 
     React.useEffect(() => {
-        if (show) {
-            ref.current?.present();
-        } else {
-            Keyboard.dismiss();
-            setTimeout(() => {
-                ref.current?.close();
-            }, 1);
+        if (!show) {
+            ref.current?.close();
         }
     }, [show, ref]);
-
-    const handleClose = () => {
-        onClose();
-        Keyboard.dismiss();
-        setTimeout(() => {
-            ref.current?.close();
-        }, 10);
-    };
 
     const snapPoints = React.useMemo(() => {
         if (Array.isArray(height)) {
@@ -98,60 +85,68 @@ const ModalSheet: React.FC<ModalSheetProps> = ({
     }, [height, modalSheet.height]);
 
     return (
-        <FullWindowOverlayWrapper>
-            <BottomSheetModal
-                ref={ref}
-                index={show ? 0 : -1}
-                enableOverDrag
-                handleComponent={
-                    handleComponent
-                        ? () => <View style={{ flex: 1, alignItems: "center", paddingTop: 8 }}>{handleComponent}</View>
-                        : undefined
-                }
-                footerComponent={({ animatedFooterPosition }) => {
-                    return (
-                        <BottomSheetFooter
-                            bottomInset={0}
-                            animatedFooterPosition={animatedFooterPosition}
-                            style={styles.footer}
+        <Portal>
+            <FullWindowOverlayWrapper>
+                <BottomSheet
+                    ref={ref}
+                    index={show ? 0 : -1}
+                    enableOverDrag
+                    handleComponent={
+                        handleComponent
+                            ? () => (
+                                  <View style={{ flex: 1, alignItems: "center", paddingTop: 8 }}>
+                                      {handleComponent}
+                                  </View>
+                              )
+                            : undefined
+                    }
+                    footerComponent={({ animatedFooterPosition }) => {
+                        if (!footer) {
+                            return null;
+                        }
+
+                        return (
+                            <BottomSheetFooter
+                                bottomInset={0}
+                                animatedFooterPosition={animatedFooterPosition}
+                                style={styles.footer}
+                            >
+                                <View>{footer}</View>
+                            </BottomSheetFooter>
+                        );
+                    }}
+                    enablePanDownToClose={!preventDragToClose}
+                    enableDynamicSizing={enableDynamicSizing}
+                    onClose={onClose}
+                    keyboardBlurBehavior={show ? "restore" : "none"}
+                    snapPoints={snapPoints}
+                    keyboardBehavior={keyboardBehavior}
+                    backgroundComponent={({ pointerEvents, style }) => (
+                        <View
+                            pointerEvents={pointerEvents}
+                            accessible={true}
+                            accessibilityRole="adjustable"
+                            accessibilityLabel="Bottom Sheet"
+                            style={[styles.sheetBackground, style]}
                         >
-                            <View>{footer}</View>
-                        </BottomSheetFooter>
-                    );
-                }}
-                enablePanDownToClose={!preventDragToClose}
-                enableDynamicSizing={enableDynamicSizing}
-                stackBehavior="push"
-                enableDismissOnClose
-                onDismiss={handleClose}
-                keyboardBlurBehavior={show ? "restore" : "none"}
-                snapPoints={snapPoints}
-                keyboardBehavior={keyboardBehavior}
-                backgroundComponent={({ pointerEvents, style }) => (
-                    <View
-                        pointerEvents={pointerEvents}
-                        accessible={true}
-                        accessibilityRole="adjustable"
-                        accessibilityLabel="Bottom Sheet"
-                        style={[styles.sheetBackground, style]}
-                    >
-                        <BlurView
-                            intensity={80}
-                            tint={colorScheme === "light" ? "extraLight" : "dark"}
-                            style={{ flex: 1 }}
-                        />
-                    </View>
-                )}
-                backdropComponent={props => (
-                    <BottomSheetBackdrop opacity={0.25} {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
-                        <View style={styles.backdrop} />
-                    </BottomSheetBackdrop>
-                )}
-            >
-                {header}
-                {show && children}
-            </BottomSheetModal>
-        </FullWindowOverlayWrapper>
+                            <BlurView
+                                intensity={80}
+                                tint={colorScheme === "light" ? "extraLight" : "dark"}
+                                style={{ flex: 1 }}
+                            />
+                        </View>
+                    )}
+                    backdropComponent={props => (
+                        <BottomSheetBackdrop opacity={0.25} {...props} disappearsOnIndex={-1} appearsOnIndex={0}>
+                            <View style={styles.backdrop} />
+                        </BottomSheetBackdrop>
+                    )}
+                >
+                    {header}
+                    {show && children}
+                </BottomSheet>
+            </FullWindowOverlayWrapper>
+        </Portal>
     );
 };
 

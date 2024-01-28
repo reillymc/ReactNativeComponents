@@ -101,6 +101,8 @@ export const InlineSelectionInput = <T,>({
             modalElement={
                 <SelectionPanel
                     show={showOptions}
+                    label={label}
+                    placeholder={props.placeholder}
                     items={items}
                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                     selectionMode={selectionMode as any}
