@@ -20,6 +20,13 @@
             }
         }
     },
+    "features": {
+        "docker-from-docker": {
+            "version": "latest",
+            "moby": false,
+            "dockerDashComposeVersion": "v2"
+        }
+    },
     "remoteUser": "node",
     "workspaceFolder": "/workspace",
     "service": "react-native-components"

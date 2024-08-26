@@ -28,10 +28,7 @@ export const AlertIndicator: React.FC<AlertIndicatorProps> = ({ label = "", vari
 
 AlertIndicator.displayName = "AlertIndicator";
 
-const createStyles = (
-    { styles: {}, theme: { color } }: ThemedStyles,
-    { variant = "primary" }: Partial<AlertIndicatorProps>,
-) => {
+const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "primary" }: Partial<AlertIndicatorProps>) => {
     const styles = StyleSheet.create({
         container: {
             display: "flex",

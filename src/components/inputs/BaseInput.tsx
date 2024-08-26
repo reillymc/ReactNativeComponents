@@ -1,20 +1,20 @@
+import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import React from "react";
 import {
-    StyleSheet,
-    View,
-    TextInput,
-    TextInputProps,
-    StyleProp,
-    ViewStyle,
-    NativeSyntheticEvent,
-    TextInputFocusEventData,
     DimensionValue,
+    NativeSyntheticEvent,
+    StyleProp,
+    StyleSheet,
+    TextInput,
+    TextInputFocusEventData,
+    TextInputProps,
+    View,
+    ViewStyle,
 } from "react-native";
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { Text } from "../Text";
 import { Icon } from "../Icon";
+import { Text } from "../Text";
 
 import { InputWidth } from "./types";
 
@@ -198,6 +198,7 @@ const createStyles = (
         },
         labelContainer: {
             marginBottom: baseInput.labelMargin,
+            marginLeft: baseInput.padding, // Try out??
         },
         mandatoryIndicator: {
             position: "absolute",

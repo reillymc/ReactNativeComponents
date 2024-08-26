@@ -79,7 +79,7 @@ export const SelectionPanel = <T,>({
                         <FlatList
                             horizontal
                             showsHorizontalScrollIndicator={false}
-                            keyExtractor={item => `${item.value}`}
+                            keyExtractor={item => "id" in item ? item.id : item.value.toString()}
                             data={selection}
                             contentContainerStyle={styles.previewTagContainer}
                             ListEmptyComponent={<Text style={styles.previewPlaceholder}>{placeholder}</Text>}

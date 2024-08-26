@@ -40,7 +40,7 @@ export const DropdownItem = <T,>({ item, searchValue, hideItemDescriptions, onPr
 
 DropdownItem.displayName = "DropdownItem";
 
-const createStyles = ({ styles: { baseInput } }: ThemedStyles, {}: Partial<DropdownItemProps>) => {
+const createStyles = ({ styles: { baseInput } }: ThemedStyles, _: Partial<DropdownItemProps>) => {
     const styles = StyleSheet.create({
         dropdownItem: {
             padding: baseInput.padding,

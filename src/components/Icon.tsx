@@ -1,6 +1,6 @@
+import { AntDesign, Octicons } from "@expo/vector-icons";
 import React from "react";
 import { StyleProp, StyleSheet, TextStyle } from "react-native";
-import { AntDesign, Octicons } from "@expo/vector-icons";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../hooks";
 
@@ -50,7 +50,7 @@ export const Icon: React.FC<IconProps> = ({ style, color, size = 20, iconName, s
 
 Icon.displayName = "Icon";
 
-const createStyles = ({}: ThemedStyles, { size }: Partial<IconProps>) => {
+const createStyles = (_: ThemedStyles, { size }: Partial<IconProps>) => {
     const styles = StyleSheet.create({
         icon: {
             width: size,

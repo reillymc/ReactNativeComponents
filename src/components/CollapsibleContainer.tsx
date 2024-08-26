@@ -59,7 +59,7 @@ export const CollapsibleContainer: React.FunctionComponent<CollapsibleContainerP
 
 CollapsibleContainer.displayName = "CollapsibleContainer";
 
-const createStyles = ({}: CollapsibleContainerProps) => {
+const createStyles = (_: CollapsibleContainerProps) => {
     const styles = StyleSheet.create({
         collapsible: {},
     });

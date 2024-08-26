@@ -55,7 +55,7 @@ export const SelectionInput = <T,>({
                                 <View style={styles.tagContainer}>
                                     {selection?.length ? (
                                         selection?.map(item => (
-                                            <Tag key={`${item.value}`} label={item.label} style={styles.tag} />
+                                            <Tag key={"id" in item ? item.id : item.value} label={item.label} style={styles.tag} />
                                         ))
                                     ) : (
                                         <Text style={disabled ? styles.labelDisabled : undefined}>{placeholder}</Text>
