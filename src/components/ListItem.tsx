@@ -1,5 +1,5 @@
 import React from "react";
-import { View, StyleSheet, Pressable, StyleProp, ViewStyle } from "react-native";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
 import { Undefined } from "../helpers";
 import { ThemedStyles, useThemedStyles } from "../hooks";
@@ -35,6 +35,7 @@ export interface ListItemProps {
 
     swipeActions?: SwipeViewProps["rightActions"];
     style?: StyleProp<ViewStyle>;
+    contentContainerStyle?: StyleProp<ViewStyle>;
     onPress?: () => void;
 }
 
@@ -48,6 +49,7 @@ export const ListItem: React.FC<ListItemProps> = ({
     contentRows = [],
     swipeActions,
     style,
+    contentContainerStyle,
     onPress,
 }) => {
     const filteredRows = contentRows.filter(Undefined);
@@ -61,7 +63,7 @@ export const ListItem: React.FC<ListItemProps> = ({
             {header}
             <View style={styles.innerContainer}>
                 {!!avatar && <View style={styles.avatarContainer}>{avatar}</View>}
-                <View style={styles.contentContainer}>
+                <View style={[styles.contentContainer, contentContainerStyle]}>
                     {!!heading && (
                         <Text variant="heading" numberOfLines={2}>
                             {heading}
