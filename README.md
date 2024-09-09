@@ -22,6 +22,8 @@ See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the 
 
 This package is published to github npm packages and requires [authentication](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
 
+New package versions are published automatically via the [publish](.github/workflows/publish.yml) GitHub workflow. A [pre-commit hook](.git/hooks/pre-commit) increments the patch version each commit automatically, while minor/major branches are created manually.
+
 ### Running Locally
 
 To generate the Expo Go QR code which correctly links to the Metro server, the `REACT_NATIVE_PACKAGER_HOSTNAME` variable in the dev container [.env](.devcontainer/.env) file must be set. An example is provided.

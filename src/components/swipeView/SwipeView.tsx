@@ -30,6 +30,7 @@ export const SwipeView: React.FunctionComponent<SwipeViewProps> = ({ rightAction
 
     return (
         <Swipeable
+            hitSlop={{ left: -80 }}
             ref={swipeableRef}
             renderRightActions={renderRightActions}
             enableTrackpadTwoFingerGesture

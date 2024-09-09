@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.4.3",
+    "version": "0.4.4",
     "description": "A collection of React Native components and resources",
     "main": "lib/commonjs/index",
     "module": "lib/module/index",
@@ -28,7 +28,7 @@
     ],
     "scripts": {
         "test": "jest",
-        "lint": "tsc --noEmit -p ./tsconfig.build.json && eslint src/**/*.{ts,tsx}",
+        "lint": "tsc --noEmit -p ./tsconfig.build.json && biome lint",
         "build": "bob build",
         "prepare": "npm run build",
         "start": "cd example && npm start",
@@ -50,6 +50,7 @@
         "registry": "https://registry.npmjs.org/"
     },
     "devDependencies": {
+        "@biomejs/biome": "^1.8.3",
         "@expo/vector-icons": "^14.0.2",
         "@react-native-community/eslint-config": "^3.2.0",
         "@react-navigation/native": "^6.0",

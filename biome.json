@@ -1,0 +1,70 @@
+{
+    "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+    "organizeImports": {
+        "enabled": true
+    },
+    "files": {
+        "ignore": ["*.d.ts", ".expo"]
+    },
+    "formatter": {
+        "enabled": true,
+        "indentStyle": "space",
+        "indentWidth": 4
+    },
+    "linter": {
+        "enabled": true,
+        "rules": {
+            "recommended": true,
+            "complexity": {
+                "noExcessiveCognitiveComplexity": {
+                    "level": "warn",
+                    "options": {
+                        "maxAllowedComplexity": 15
+                    }
+                },
+                "useSimplifiedLogicExpression": "warn"
+            },
+            "correctness": {
+                "useHookAtTopLevel": "error",
+                "noConstantMathMinMaxClamp": "warn",
+                "noUnusedImports": "warn",
+                "noUnusedVariables": "warn"
+            },
+            "performance": {
+                "noReExportAll": "warn"
+            },
+            "style": {
+                "noNamespaceImport": "warn",
+                "noNegationElse": "warn",
+                "useCollapsedElseIf": "warn",
+                "useFragmentSyntax": "warn",
+                "useNamingConvention": {
+                    "level": "warn",
+                    "options": {
+                        "strictCase": true,
+                        "requireAscii": true
+                    }
+                },
+                "noDefaultExport": "warn"
+            },
+            "suspicious": {
+                "useAwait": "warn",
+                "noEmptyBlockStatements": "warn"
+            }
+        }
+    },
+    "overrides": [
+        {
+            "include": ["example/app/**"],
+            "linter": {
+                "rules": {
+                    "style": {
+                        "noDefaultExport": {
+                            "level": "off"
+                        }
+                    }
+                }
+            }
+        }
+    ]
+}
