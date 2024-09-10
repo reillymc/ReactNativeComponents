@@ -1,4 +1,4 @@
-import { ListItem, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
+import { ListItem, useTheme, useThemedStyles, type ThemedStyles } from "@reillymc/react-native-components";
 import { Stack, useRouter } from "expo-router";
 import React from "react";
 import { FlatList, StyleSheet } from "react-native";

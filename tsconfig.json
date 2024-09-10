@@ -1,4 +1,5 @@
 {
+    "extends": "expo/tsconfig.base",
     "compilerOptions": {
         "paths": {
             "@reillymc/react-native-components": ["./src/index"]
@@ -7,7 +8,7 @@
         "allowUnusedLabels": false,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
-        "jsx": "react",
+        "jsx": "react-native",
         "lib": ["esnext"],
         "module": "esnext",
         "moduleResolution": "node",
@@ -24,5 +25,5 @@
         "target": "esnext",
         "noEmit": false
     },
-    "extends": "expo/tsconfig.base"
+    "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

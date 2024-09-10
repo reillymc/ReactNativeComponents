@@ -1,10 +1,10 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import Animated, { Layout } from "react-native-reanimated";
-import { Stack } from "expo-router";
-import { IconButton, Text, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Portal } from "@gorhom/portal";
+import { IconButton, Text, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
+import { Stack } from "expo-router";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import Animated, { Layout } from "react-native-reanimated";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -45,7 +45,11 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
                 {component}
             </Animated.View>
             {!showModal && (
-                <IconButton iconName="up" onPress={() => setShowModal(prev => !prev)} style={styles.showModalButton} />
+                <IconButton
+                    iconName="chevron-up"
+                    onPress={() => setShowModal(prev => !prev)}
+                    style={styles.showModalButton}
+                />
             )}
             <Animated.View style={styles.bottomPadding} layout={Layout.springify()} />
 
