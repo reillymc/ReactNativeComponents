@@ -1,2 +1,2 @@
-export { Theme, ThemeOverrides, DefaultTheme, MergeTheme } from "./theme";
-export { Styles, CreateStyles, createDefaultStyles } from "./styles";
+export { CreateStyles, MergeStyles, Styles, createDefaultStyles } from "./styles";
+export { DefaultTheme, MergeTheme, Theme, ThemeOverrides } from "./theme";

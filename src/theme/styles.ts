@@ -221,3 +221,136 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         bottomInset: 100,
     },
 });
+
+export const MergeStyles = (styles: Styles, overrides: StyleOverrides | undefined = {}): Styles => ({
+    ...styles,
+    ...overrides,
+    baseInput: {
+        ...styles.baseInput,
+        ...overrides?.baseInput,
+        width: {
+            ...styles.baseInput.width,
+            ...(overrides?.baseInput?.width as BaseInputStyles["width"]),
+        },
+    },
+    common: {
+        ...styles.common,
+        ...overrides?.common,
+        action: {
+            ...styles.common.action,
+            ...overrides?.common?.action,
+            fontSize: {
+                ...styles.common.action.fontSize,
+                ...overrides?.common?.action?.fontSize,
+            },
+        },
+    },
+    text: {
+        ...styles.text,
+        ...overrides?.text,
+        fontFamilySize: {
+            ...styles.text.fontFamilySize,
+            ...overrides?.text?.fontFamilySize,
+        },
+        fontFamilyWeight: {
+            ...styles.text.fontFamilyWeight,
+            ...overrides?.text?.fontFamilyWeight,
+        },
+        lineHeight: {
+            ...styles.text.lineHeight,
+            ...overrides?.text?.lineHeight,
+        },
+    },
+    highlightedText: {
+        ...styles.highlightedText,
+        ...overrides?.highlightedText,
+    },
+    modalSheet: {
+        ...styles.modalSheet,
+        ...overrides?.modalSheet,
+        height: {
+            ...styles.modalSheet.height,
+            ...overrides?.modalSheet?.height,
+        },
+    },
+    textInput: {
+        ...styles.textInput,
+        ...overrides?.textInput,
+    },
+    action: {
+        ...styles.action,
+        ...overrides?.action,
+    },
+    iconAction: {
+        ...styles.iconAction,
+        ...overrides?.iconAction,
+        size: {
+            ...styles.iconAction.size,
+            ...overrides?.iconAction?.size,
+        },
+    },
+    button: {
+        ...styles.button,
+        ...overrides?.button,
+        height: {
+            ...styles.button.height,
+            ...(overrides?.button?.height as ButtonStyles["height"]),
+        },
+        width: {
+            ...styles.button.width,
+            ...(overrides?.button?.width as ButtonStyles["width"]),
+        },
+    },
+
+    iconButton: {
+        ...styles.iconButton,
+        ...overrides?.iconButton,
+        size: {
+            ...styles.iconButton.size,
+            ...overrides?.iconButton?.size,
+        },
+        fontSize: {
+            ...styles.iconButton.fontSize,
+            ...overrides?.iconButton?.fontSize,
+        },
+    },
+    dropdownInput: {
+        ...styles.dropdownInput,
+        ...overrides?.dropdownInput,
+    },
+    toggleInput: {
+        ...styles.toggleInput,
+        ...overrides?.toggleInput,
+        size: {
+            ...styles.toggleInput.size,
+            ...(overrides?.toggleInput?.size as ToggleInputStyles["size"]),
+        },
+        iconSize: {
+            ...styles.toggleInput.iconSize,
+            ...overrides?.toggleInput?.iconSize,
+        },
+    },
+    counterInput: {
+        ...styles.counterInput,
+        ...overrides?.counterInput,
+    },
+    //
+    //
+    //
+    listItem: {
+        ...styles.listItem,
+        ...overrides?.listItem,
+    },
+    avatar: {
+        ...styles.avatar,
+        ...overrides?.avatar,
+        size: {
+            ...styles.avatar.size,
+            ...overrides?.avatar?.size,
+        },
+    },
+    toast: {
+        ...styles.toast,
+        ...overrides?.toast,
+    },
+});
