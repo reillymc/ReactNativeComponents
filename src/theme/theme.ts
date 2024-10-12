@@ -79,6 +79,7 @@ export const DefaultTheme = {
 
         // Page
         pageHorizontal: 16,
+        pageBottom: 80,
         pageTop: 16,
 
         // Navigation
