@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { EscapeForRegexProcessing } from "../helpers";
 import { ThemedStyles, useThemedStyles } from "../hooks";
@@ -29,7 +29,7 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
     const parts = text.split(new RegExp(`(${highlightedText})`, "gi"));
 
     return (
-        <View style={{ display: "flex", flexDirection: "row" }}>
+        <Text style={{ display: "flex", flexDirection: "row" }}>
             {parts.map((part, idx) => (
                 <Text
                     {...props}
@@ -39,7 +39,7 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
                     {part}
                 </Text>
             ))}
-        </View>
+        </Text>
     );
 };
 
