@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.5.1",
+    "version": "0.5.3",
     "description": "A collection of React Native components and resources",
     "module": "lib/module/index",
     "types": "lib/typescript/src/index.d.ts",
@@ -30,12 +30,13 @@
         "!**/.*"
     ],
     "scripts": {
-        "test": "jest",
-        "lint": "tsc --noEmit -p ./tsconfig.build.json && biome lint",
+        "bootstrap": "yarn example && yarn install",
         "build": "bob build",
+        "lint": "tsc --noEmit -p ./tsconfig.build.json && biome lint",
         "prepare": "npm run build",
         "start": "expo start",
-        "bootstrap": "yarn example && yarn install"
+        "test": "jest",
+        "typecheck": "tsc --noEmit"
     },
     "keywords": [
         "react-native",
@@ -86,8 +87,6 @@
         "typescript": "~5.3.3"
     },
     "peerDependencies": {
-        "@gorhom/bottom-sheet": "^5.0",
-        "@gorhom/portal": "^1.0",
         "expo-blur": "^14.0",
         "react-native-gesture-handler": "^2.20",
         "react-native-reanimated": "^3.16"

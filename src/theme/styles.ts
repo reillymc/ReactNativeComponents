@@ -10,7 +10,6 @@ import type {
     IconActionStyles,
     IconButtonStyles,
     ListItemStyles,
-    ModalSheetStyles,
     TextInputStyles,
     TextStyles,
     ToastStyles,
@@ -34,7 +33,6 @@ export type Styles = {
     text: TextStyles;
     highlightedText: HighlightedTextStyles;
     textInput: TextInputStyles;
-    modalSheet: ModalSheetStyles;
     toggleInput: ToggleInputStyles;
     counterInput: CounterInputStyles;
     dropdownInput: DropdownInputStyles;
@@ -113,16 +111,6 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
     },
     highlightedText: {
         highlightedFontFamilyWeight: font.familyWeight.bold600,
-    },
-    modalSheet: {
-        borderRadius: border.radius.loose,
-        height: {
-            full: "92.2%",
-            mid: "54%",
-            small: "26%",
-        },
-        backgroundColor: color.background,
-        backdropColor: color.backgroundOverlay,
     },
     textInput: {},
     action: {
@@ -265,14 +253,6 @@ export const MergeStyles = (styles: Styles, overrides: StyleOverrides | undefine
         ...styles.highlightedText,
         ...overrides?.highlightedText,
     },
-    modalSheet: {
-        ...styles.modalSheet,
-        ...overrides?.modalSheet,
-        height: {
-            ...styles.modalSheet.height,
-            ...overrides?.modalSheet?.height,
-        },
-    },
     textInput: {
         ...styles.textInput,
         ...overrides?.textInput,
@@ -334,9 +314,6 @@ export const MergeStyles = (styles: Styles, overrides: StyleOverrides | undefine
         ...styles.counterInput,
         ...overrides?.counterInput,
     },
-    //
-    //
-    //
     listItem: {
         ...styles.listItem,
         ...overrides?.listItem,

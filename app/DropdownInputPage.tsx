@@ -1,5 +1,5 @@
-import React from "react";
 import { DropdownInput, DropdownInputProps } from "@reillymc/react-native-components";
+import React from "react";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
@@ -11,6 +11,10 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
     placeholder: {
         type: "string",
         label: "Placeholder text",
+    },
+    label: {
+        type: "string",
+        label: "Label",
     },
     width: {
         type: "enum",

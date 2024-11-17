@@ -1,36 +1,45 @@
 import { AntDesign } from "@expo/vector-icons";
-import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-
-import { ThemedStyles, useThemedStyles } from "../../../hooks";
+import { useThemedStyles, type ThemedStyles } from "../../../hooks";
 import { Tag } from "../../Tag";
 import { Text } from "../../Text";
-import { BaseInput, BaseInputProps } from "../BaseInput";
-
-import { SelectionPanel, SelectionPanelProps } from "./SelectionPanel";
+import { BaseInput, type BaseInputProps } from "../BaseInput";
+import type { ValueItem } from "../valueItem";
 
 export interface SelectionInputStyles {}
 
-export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange"> &
-    SelectionPanelProps<T> & {
+interface SingleSelection<T> {
+    selectionMode: "single";
+    selection?: ValueItem<T>;
+}
+
+interface MultiSelection<T> {
+    selectionMode: "multi";
+    selection?: Array<ValueItem<T>>;
+}
+
+export type SelectionProps<T = string> = Pick<BaseInputProps, "label" | "placeholder"> &
+    (SingleSelection<T> | MultiSelection<T>) & { items?: Array<ValueItem<T>> };
+
+export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange" | "style"> &
+    SelectionProps<T> & {
         hideLabel?: boolean;
+        onRemoveItem?: (item: ValueItem<T> | undefined) => void;
+        onAdd?: () => void;
     };
 
 export const SelectionInput = <T,>({
     label,
     width,
     disabled,
-    items = [],
+    items,
     placeholder,
-    style,
     hideLabel,
     selectionMode,
     selection,
-    onChange,
+    onAdd,
     ...props
 }: SelectionInputProps<T>) => {
-    const [showOptions, setShowOptions] = React.useState(false);
-
     const styles = useThemedStyles(createStyles, { disabled, selectionMode });
 
     return (
@@ -42,8 +51,8 @@ export const SelectionInput = <T,>({
                 <Pressable
                     hitSlop={20}
                     disabled={disabled}
-                    style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : undefined, style]}
-                    onPress={() => setShowOptions(true)}
+                    style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : undefined]}
+                    onPress={onAdd}
                 >
                     {() => (
                         <View style={styles.container}>
@@ -55,7 +64,11 @@ export const SelectionInput = <T,>({
                                 <View style={styles.tagContainer}>
                                     {selection?.length ? (
                                         selection?.map(item => (
-                                            <Tag key={"id" in item ? item.id : item.value} label={item.label} style={styles.tag} />
+                                            <Tag
+                                                key={"id" in item ? item.id : item.value}
+                                                label={item.label}
+                                                style={styles.tag}
+                                            />
                                         ))
                                     ) : (
                                         <Text style={disabled ? styles.labelDisabled : undefined}>{placeholder}</Text>
@@ -66,21 +79,6 @@ export const SelectionInput = <T,>({
                         </View>
                     )}
                 </Pressable>
-            }
-            modalElement={
-                <SelectionPanel
-                    show={showOptions}
-                    label={label}
-                    items={items}
-                    placeholder={placeholder}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    selectionMode={selectionMode as any}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    selection={selection as any}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    onChange={onChange as any}
-                    onClose={() => setShowOptions(false)}
-                />
             }
         />
     );

@@ -1,5 +1,3 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
 import {
     NumberInput,
     SelectionInput,
@@ -9,7 +7,8 @@ import {
     useTheme,
     ValueItem,
 } from "@reillymc/react-native-components";
-import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import React from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 
 type PropDefinitionBase = {
     label?: string;
@@ -76,7 +75,7 @@ export const PropsPanel = <T extends Record<string, any>>({
     const styles = createStyles(theme);
 
     return (
-        <BottomSheetScrollView
+        <ScrollView
             style={styles.container}
             contentContainerStyle={styles.contentContainer}
             keyboardDismissMode="on-drag"
@@ -127,7 +126,14 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     label={definition.label}
                                     items={definition.values.map(value => ({ value, label: value }))}
                                     selectionMode="single"
-                                    onChange={value => onChange(propId, value?.value)}
+                                    onRemoveItem={value =>
+                                        onChange(
+                                            propId,
+                                            (Array.isArray(currentValue)
+                                                ? currentValue.filter(x => x != value)
+                                                : undefined) as any,
+                                        )
+                                    }
                                     selection={{ label: currentValue, value: currentValue }}
                                 />
                             </View>
@@ -147,8 +153,13 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     label={definition.label}
                                     items={definition.values}
                                     selectionMode="single"
-                                    onChange={value => {
-                                        onChange(propId, value?.value);
+                                    onRemoveItem={value => {
+                                        onChange(
+                                            propId,
+                                            (Array.isArray(currentValue)
+                                                ? currentValue.filter(x => x != value)
+                                                : undefined) as any,
+                                        );
                                         setCustomLabels(prev => ({ ...prev, [propId]: value?.label }));
                                     }}
                                     selection={selectedItem}
@@ -159,7 +170,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                         return null;
                 }
             })}
-        </BottomSheetScrollView>
+        </ScrollView>
     );
 };
 

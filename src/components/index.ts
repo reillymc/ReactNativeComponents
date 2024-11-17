@@ -1,11 +1,9 @@
 export * from "./buttons";
 export * from "./inputs";
-export * from "./modal";
 
 export * from "./AlertIndicator";
 export * from "./Avatar";
 export * from "./CollapsibleContainer";
-export { FloatingContainer, FloatingContainerProps } from "./FloatingContainer";
 export { Form, FormProps } from "./Form";
 export { HighlightedText, HighlightedTextProps, HighlightedTextStyles } from "./HighlightedText";
 export * from "./Icon";

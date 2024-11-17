@@ -1,5 +1,4 @@
 import {
-    BottomSheetModalProvider,
     DeepPartial,
     MergeTheme,
     Styles,
@@ -100,11 +99,8 @@ const Layout: React.FC = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider theme={theme} styles={appStyles}>
-                <BottomSheetModalProvider>
-                    <StatusBar style="auto" />
-
-                    <Stack initialRouteName="index" id="index" />
-                </BottomSheetModalProvider>
+                <StatusBar style="auto" />
+                <Stack initialRouteName="index" />
             </ThemeProvider>
         </GestureHandlerRootView>
     );

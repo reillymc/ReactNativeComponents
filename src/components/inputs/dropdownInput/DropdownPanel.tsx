@@ -1,10 +1,10 @@
-import React from "react";
-import { View, useWindowDimensions, StyleSheet } from "react-native";
+import { useLayoutEffect, useRef, useState } from "react";
+import { StyleSheet, View, useWindowDimensions } from "react-native";
 
-import { ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../../../hooks";
-import { FloatingContainer } from "../../FloatingContainer";
-import { ValueItem } from "../valueItem";
+import { type ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../../../hooks";
+import type { ValueItem } from "../valueItem";
 
+import { BlurView } from "expo-blur";
 import { DropdownItem } from "./DropdownItem";
 
 export interface DropdownPanelProps<T = string> {
@@ -26,17 +26,17 @@ export const DropdownPanel = <T,>({
     searchInDescriptions,
     onSelect,
 }: DropdownPanelProps<T>) => {
-    const viewRef = React.useRef<View>(null);
-    const containerRef = React.useRef<View>(null);
+    const containerRef = useRef<View>(null);
 
-    const [layout, setLayout] = React.useState<{
-        x: number;
-        y: number;
-        width: number;
+    const [layout, setLayout] = useState<{
+        height: number;
     }>();
 
-    const [inverted, setInverted] = React.useState(false);
-    const styles = useThemedStyles(createStyles, {});
+    const [inverted, setInverted] = useState(false);
+    const styles = useThemedStyles(createStyles, {
+        inverted,
+        height: layout?.height,
+    });
     const {
         styles: { baseInput, dropdownInput },
     } = useTheme();
@@ -44,29 +44,31 @@ export const DropdownPanel = <T,>({
     const { height: screenHeight } = useWindowDimensions();
     const { keyboardHeight } = useKeyboardHeight();
 
-    React.useLayoutEffect(() => {
-        viewRef.current?.measure((_vx, _vy, viewWidth, _vh, viewX, viewY) => {
-            containerRef.current?.measure((_cx, _cy, _cw, containerHeight) => {
-                if (inverted || viewY + (containerHeight || 35 * maxSuggestionCount) > screenHeight - keyboardHeight) {
-                    setLayout({
-                        x: viewX,
-                        y: screenHeight - viewY + (dropdownInput.dropdownMarginTop + baseInput.height),
-                        width: viewWidth,
-                    });
-                    if (!inverted) {
-                        setInverted(true);
-                    }
-                } else {
-                    setLayout({ x: viewX, y: viewY, width: viewWidth });
-                }
-            });
+    useLayoutEffect(() => {
+        containerRef.current?.measure((_cx, _cy, _cw, containerHeight, _pageX, pageY) => {
+            setLayout({ height: containerHeight });
+
+            if (inverted) {
+                const remainInverted = pageY + containerHeight > screenHeight - keyboardHeight - 100;
+
+                if (remainInverted) return;
+
+                setInverted(false);
+                return;
+            }
+
+            const shouldInvert = pageY > screenHeight - keyboardHeight - 200;
+
+            if (shouldInvert) {
+                setInverted(true);
+            }
         });
     }, [
         keyboardHeight,
         searchValue,
-        inverted,
         maxSuggestionCount,
         screenHeight,
+        inverted,
         dropdownInput.dropdownMarginTop,
         baseInput.height,
     ]);
@@ -78,39 +80,42 @@ export const DropdownPanel = <T,>({
                 (searchInDescriptions && description && description.toLowerCase().includes(searchValue.toLowerCase())),
         )
         .slice(0, maxSuggestionCount);
-    displayItems = !inverted ? displayItems.reverse() : displayItems;
+    displayItems = inverted ? displayItems : displayItems.reverse();
+
+    if (!(visible && displayItems.length)) return;
 
     return (
-        <View ref={viewRef} style={{ display: "flex" }}>
-            <FloatingContainer
-                ref={containerRef}
-                position={{ x: layout?.x, y: layout?.y }}
-                align={inverted ? "bottom" : "top"}
-                visible={visible}
-                style={[{ opacity: visible ? 0.95 : 0, width: layout?.width }, styles.dropdownContainer]}
-            >
-                {visible &&
-                    displayItems.map(item => (
-                        <DropdownItem
-                            key={"id" in item ? item.id : item.value}
-                            item={item}
-                            searchValue={searchValue}
-                            hideItemDescriptions={hideItemDescriptions}
-                            onPress={() => onSelect(item)}
-                        />
-                    ))}
-            </FloatingContainer>
+        <View ref={containerRef} style={styles.dropdownContainer}>
+            <BlurView intensity={75} tint={"default"}>
+                {displayItems.map(item => (
+                    <DropdownItem
+                        key={"id" in item ? item.id : item.value}
+                        item={item}
+                        searchValue={searchValue}
+                        hideItemDescriptions={hideItemDescriptions}
+                        onPress={() => onSelect(item)}
+                    />
+                ))}
+            </BlurView>
         </View>
     );
 };
 
-const createStyles = ({ styles: { dropdownInput, baseInput } }: ThemedStyles) => {
+const createStyles = (
+    { styles: { dropdownInput, baseInput }, theme: { color } }: ThemedStyles,
+    { inverted, height = 0 }: { inverted: boolean; height: number | undefined },
+) => {
     const styles = StyleSheet.create({
         dropdownContainer: {
-            marginTop: dropdownInput.dropdownMarginTop,
-            backgroundColor: baseInput.backgroundColor,
+            marginTop: inverted ? undefined : dropdownInput.dropdownMarginTop,
             borderRadius: baseInput.borderRadius,
             overflow: "hidden",
+            position: "absolute",
+            top: inverted ? -(height + baseInput.height + dropdownInput.dropdownMarginTop) : undefined,
+            zIndex: 10,
+            width: "100%",
+            borderColor: color.inputBackground,
+            borderWidth: 2,
         },
     });
     return styles;

@@ -6,7 +6,7 @@ import { FlatList, StyleSheet } from "react-native";
 /**
  * Map of all components to their respective screen
  */
-export const ComponentScreens: Record<string, { name: string; page: string }> = {
+export const ComponentScreens = {
     Action: { name: "Action", page: "ActionPage" },
     Button: { name: "Button", page: "ButtonPage" },
     IconAction: { name: "Icon Action", page: "IconActionPage" },
@@ -19,7 +19,6 @@ export const ComponentScreens: Record<string, { name: string; page: string }> = 
     MultiNumberInput: { name: "Multi-Number Input", page: "MultiNumberInputPage" },
     TimeInput: { name: "Time Input", page: "TimeInputPage" },
     ToggleInput: { name: "Toggle Input", page: "ToggleInputPage" },
-    ModalSheet: { name: "Modal Sheet", page: "ModalSheetPage" },
     ListItem: { name: "List Item", page: "ListItemPage" },
     Avatar: { name: "Avatar", page: "AvatarPage" },
     Tag: { name: "Tag", page: "TagPage" },
@@ -27,7 +26,7 @@ export const ComponentScreens: Record<string, { name: string; page: string }> = 
     CollapsibleContainer: { name: "Collapsible Container", page: "CollapsibleContainerPage" },
     InlineSelectionInput: { name: "Inline Selection Input", page: "InlineSelectionInputPage" },
     FeatureButton: { name: "Feature Button", page: "FeatureButtonPage" },
-};
+} as const satisfies Record<string, { name: string; page: string }>;
 
 const ComponentListScreen: React.FC = () => {
     const router = useRouter();

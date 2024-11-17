@@ -1,16 +1,5 @@
-import { useBottomSheetInternal } from "@gorhom/bottom-sheet";
 import React from "react";
-import {
-    DimensionValue,
-    NativeSyntheticEvent,
-    StyleProp,
-    StyleSheet,
-    TextInput,
-    TextInputFocusEventData,
-    TextInputProps,
-    View,
-    ViewStyle,
-} from "react-native";
+import { DimensionValue, StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from "react-native";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { Icon } from "../Icon";
@@ -86,8 +75,6 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             scrollEnabled,
             hasError,
             preventAutoTrim,
-            onBlur,
-            onFocus,
             onChangeText,
             ...props
         },
@@ -97,40 +84,6 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
         const {
             styles: { baseInput, text },
         } = useTheme();
-
-        const { shouldHandleKeyboardEvents } = useBottomSheetInternal(true) ?? {};
-
-        const handleOnFocus = React.useCallback(
-            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                if (shouldHandleKeyboardEvents) {
-                    shouldHandleKeyboardEvents.value = true;
-                }
-                onFocus?.(e);
-            },
-            [onFocus, shouldHandleKeyboardEvents],
-        );
-        const handleOnBlur = React.useCallback(
-            (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-                if (shouldHandleKeyboardEvents) {
-                    shouldHandleKeyboardEvents.value = false;
-                }
-
-                if (!preventAutoTrim) {
-                    onChangeText?.(e.nativeEvent.text.trim());
-                }
-
-                onBlur?.(e);
-            },
-            [onBlur, onChangeText, preventAutoTrim, shouldHandleKeyboardEvents],
-        );
-
-        React.useEffect(() => {
-            return () => {
-                if (shouldHandleKeyboardEvents) {
-                    shouldHandleKeyboardEvents.value = false;
-                }
-            };
-        }, [shouldHandleKeyboardEvents]);
 
         return (
             <>
@@ -151,8 +104,6 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                                 style={[styles.input, style]}
                                 multiline={multiline}
                                 scrollEnabled={scrollEnabled ?? false}
-                                onFocus={handleOnFocus}
-                                onBlur={handleOnBlur}
                                 onChangeText={onChangeText}
                                 {...props}
                             />
@@ -162,8 +113,8 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                                 {"\u2022"}
                             </Text>
                         )}
+                        <View>{panelElement}</View>
                     </View>
-                    {panelElement}
                     {(helpText || hasError) && (
                         <View style={styles.helpText}>
                             {hasError && (

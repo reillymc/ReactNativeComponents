@@ -1,5 +1,5 @@
-import React from "react";
 import { SelectionInput, SelectionInputProps } from "@reillymc/react-native-components";
+import React from "react";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
 
@@ -35,7 +35,7 @@ const propDefinitions: PropDefinitions<SelectionInputProps> = {
             { label: "Multi", value: "multi" },
         ],
     },
-    onChange: {
+    onRemoveItem: {
         label: "Press action",
         type: "function",
     },
@@ -60,7 +60,7 @@ const defaultProps: SelectionInputProps = {
     placeholder: "Select an item",
     selectionMode: "single",
     width: "large",
-    onChange: () => null,
+    onRemoveItem: () => null,
 };
 
 const SelectionInputPage: React.FunctionComponent = () => {
@@ -71,7 +71,17 @@ const SelectionInputPage: React.FunctionComponent = () => {
             componentName="Selection Input"
             component={
                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                <SelectionInput {...props} onChange={(e: any) => setProps(prev => ({ ...prev, selection: e }))} />
+                <SelectionInput
+                    {...props}
+                    onRemoveItem={(e: any) =>
+                        setProps(prev => ({
+                            ...prev,
+                            selection: (Array.isArray(prev.selection)
+                                ? prev.selection.filter(x => x != e)
+                                : undefined) as any,
+                        }))
+                    }
+                />
             }
             propsPanel={
                 <PropsPanel

@@ -1,16 +1,17 @@
 import React from "react";
-import { Pressable, ScrollView, StyleSheet } from "react-native";
+import { Pressable, ScrollView, StyleSheet, type StyleProp, type ViewStyle } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../../../hooks";
 import { Tag, TagProps } from "../../Tag";
 import { Text } from "../../Text";
 import { BaseInput } from "../BaseInput";
-import { ValueItem } from "../valueItem";
 
 import { SelectionInputProps } from "./SelectionInput";
-import { SelectionPanel } from "./SelectionPanel";
 
-export type InlineSelectionInputProps<T = string> = SelectionInputProps<T> & Pick<TagProps, "variant">;
+export type InlineSelectionInputProps<T = string> = SelectionInputProps<T> &
+    Pick<TagProps, "variant"> & {
+        scrollContainerStyles?: StyleProp<ViewStyle>;
+    };
 
 export const InlineSelectionInput = <T,>({
     label,
@@ -18,34 +19,16 @@ export const InlineSelectionInput = <T,>({
     disabled,
     items = [],
     variant,
-    style,
     selectionMode,
     selection,
-    onChange,
+    scrollContainerStyles,
+    onAdd,
+    onRemoveItem,
     ...props
 }: InlineSelectionInputProps<T>) => {
-    const [showOptions, setShowOptions] = React.useState(false);
-
-    const selectedItems = (selection && (selectionMode === "single" ? [selection] : selection)) ?? [];
-
     const styles = useThemedStyles(createStyles, { disabled, selectionMode, variant });
 
-    const handleItemPress = (item: ValueItem<T>) => {
-        if (selectionMode === "single") {
-            onChange?.(selection?.value === item.value ? undefined : item);
-            setShowOptions(false);
-        } else {
-            onChange?.(
-                selectedItems.some(selectedItem => selectedItem.value === item.value)
-                    ? selectedItems.filter(selectedItem => selectedItem.value !== item.value)
-                    : [...selectedItems, item],
-            );
-        }
-    };
-
-    const addButton = (
-        <Tag iconName="plus" variant={variant} onPress={disabled ? undefined : () => setShowOptions(true)} />
-    );
+    const addButton = <Tag iconName="plus" variant={variant} onPress={disabled ? undefined : onAdd} />;
 
     return (
         <BaseInput
@@ -53,16 +36,13 @@ export const InlineSelectionInput = <T,>({
             {...props}
             inputElement={
                 <ScrollView
-                    contentContainerStyle={[styles.container, style]}
+                    contentContainerStyle={[styles.container, scrollContainerStyles]}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={selectionMode === "multi"}
                 >
                     {label && (
-                        <Pressable
-                            style={styles.labelContainer}
-                            onPress={disabled ? undefined : () => setShowOptions(true)}
-                        >
+                        <Pressable style={styles.labelContainer} onPress={disabled ? undefined : onAdd}>
                             {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
                         </Pressable>
                     )}
@@ -75,7 +55,7 @@ export const InlineSelectionInput = <T,>({
                                     iconName="closecircle"
                                     style={styles.tag}
                                     variant={variant}
-                                    onPress={disabled ? undefined : () => handleItemPress(selection)}
+                                    onPress={disabled ? undefined : () => onRemoveItem?.(selection)}
                                 />
                             ) : (
                                 addButton
@@ -90,28 +70,13 @@ export const InlineSelectionInput = <T,>({
                                     iconName="closecircle"
                                     style={styles.tag}
                                     variant={variant}
-                                    onPress={disabled ? undefined : () => handleItemPress(item)}
+                                    onPress={disabled ? undefined : () => onRemoveItem?.(item)}
                                 />
                             ))}
                             {addButton}
                         </>
                     )}
                 </ScrollView>
-            }
-            modalElement={
-                <SelectionPanel
-                    show={showOptions}
-                    label={label}
-                    placeholder={props.placeholder}
-                    items={items}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    selectionMode={selectionMode as any}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    selection={selection as any}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    onChange={onChange as any}
-                    onClose={() => setShowOptions(false)}
-                />
             }
         />
     );

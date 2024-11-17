@@ -1,5 +1,3 @@
-import BottomSheet from "@gorhom/bottom-sheet";
-import { Portal } from "@gorhom/portal";
 import { IconButton, Text, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
 import { Stack } from "expo-router";
 import React from "react";
@@ -22,9 +20,8 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
     const { theme } = useTheme();
 
     const [showModal, setShowModal] = React.useState(!fullscreen);
-    const [modalHeight, setModalHeight] = React.useState(2);
 
-    const styles = useThemedStyles(createStyles, { modalHeight });
+    const styles = useThemedStyles(createStyles, {});
 
     return (
         <>
@@ -51,39 +48,28 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
                     style={styles.showModalButton}
                 />
             )}
-            <Animated.View style={styles.bottomPadding} layout={Layout.springify()} />
+            <Animated.View layout={Layout.springify()} />
 
-            <Portal>
-                <BottomSheet
-                    onChange={setModalHeight}
-                    snapPoints={["12%", "40%", "60%"]}
-                    index={showModal ? 2 : -1}
-                    keyboardBehavior="extend"
-                >
-                    <View style={styles.propsContainer}>
-                        <Text variant="display" style={styles.heading}>
-                            {componentName}
-                        </Text>
-                        {propsPanel}
-                    </View>
-                </BottomSheet>
-            </Portal>
+            <View style={styles.propsContainer}>
+                <Text variant="display" style={styles.heading}>
+                    {componentName}
+                </Text>
+                {propsPanel}
+            </View>
         </>
     );
 };
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = ({ theme: { color } }: ThemedStyles, { modalHeight }: { modalHeight: number }) => {
+const createStyles = ({ theme: { color } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         componentContainer: {
             flex: 2,
             paddingTop: 200,
             backgroundColor: color.background,
         },
-        bottomPadding: {
-            flex: modalHeight,
-        },
+
         centred: {
             alignItems: "center",
         },
