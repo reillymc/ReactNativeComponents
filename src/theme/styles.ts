@@ -154,7 +154,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         },
     },
     dropdownInput: {
-        dropdownMarginTop: 4,
+        panelGap: 4,
     },
     toggleInput: {
         size: {

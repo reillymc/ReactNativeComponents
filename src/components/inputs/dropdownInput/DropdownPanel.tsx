@@ -1,13 +1,15 @@
-import { useLayoutEffect, useRef, useState } from "react";
-import { StyleSheet, View, useWindowDimensions } from "react-native";
+import { BlurView } from "expo-blur";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import { StyleSheet, type TextInput, View, useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { type ThemedStyles, useKeyboardHeight, useTheme, useThemedStyles } from "../../../hooks";
+import { type ThemedStyles, usePersistentKeyboardHeight, useThemedStyles } from "../../../hooks";
 import type { ValueItem } from "../valueItem";
 
-import { BlurView } from "expo-blur";
 import { DropdownItem } from "./DropdownItem";
 
 export interface DropdownPanelProps<T = string> {
+    parentRef: React.RefObject<TextInput>;
     items: Array<ValueItem<T>>;
     searchValue: string;
     maxSuggestionCount?: number;
@@ -17,7 +19,13 @@ export interface DropdownPanelProps<T = string> {
     onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
 }
 
+type PanelLayout = {
+    inputHeight: number;
+    inverted: boolean;
+};
+
 export const DropdownPanel = <T,>({
+    parentRef,
     items = [],
     maxSuggestionCount = 5,
     searchValue,
@@ -28,65 +36,54 @@ export const DropdownPanel = <T,>({
 }: DropdownPanelProps<T>) => {
     const containerRef = useRef<View>(null);
 
-    const [layout, setLayout] = useState<{
-        height: number;
-    }>();
+    const [layout, setLayout] = useState<PanelLayout>();
 
-    const [inverted, setInverted] = useState(false);
-    const styles = useThemedStyles(createStyles, {
-        inverted,
-        height: layout?.height,
-    });
-    const {
-        styles: { baseInput, dropdownInput },
-    } = useTheme();
+    const styles = useThemedStyles(createStyles, layout);
 
     const { height: screenHeight } = useWindowDimensions();
-    const { keyboardHeight } = useKeyboardHeight();
+    const { top } = useSafeAreaInsets();
+
+    const { keyboardHeight } = usePersistentKeyboardHeight();
+
+    const displayItems = useMemo(() => {
+        const search = searchValue.toLowerCase();
+
+        const filteredItems = items
+            .filter(
+                ({ label, description }) =>
+                    label.toLowerCase().includes(search) ||
+                    (searchInDescriptions && description && description.toLowerCase().includes(search)),
+            )
+            .slice(0, maxSuggestionCount);
+
+        if (layout?.inverted) {
+            return filteredItems;
+        }
+
+        return filteredItems.reverse();
+    }, [items, layout?.inverted, maxSuggestionCount, searchValue, searchInDescriptions]);
 
     useLayoutEffect(() => {
-        containerRef.current?.measure((_cx, _cy, _cw, containerHeight, _pageX, pageY) => {
-            setLayout({ height: containerHeight });
+        if (keyboardHeight === undefined) return;
 
-            if (inverted) {
-                const remainInverted = pageY + containerHeight > screenHeight - keyboardHeight - 100;
+        parentRef.current?.measureInWindow((_ix, inputY, _iw, inputHeight) => {
+            containerRef.current?.measureInWindow((_px, _py, _pw, panelHeight) => {
+                const size = inputY + inputHeight + panelHeight;
+                const screenMaxHeight = screenHeight - keyboardHeight - top;
 
-                if (remainInverted) return;
-
-                setInverted(false);
-                return;
-            }
-
-            const shouldInvert = pageY > screenHeight - keyboardHeight - 200;
-
-            if (shouldInvert) {
-                setInverted(true);
-            }
+                setLayout({
+                    inputHeight: inputHeight,
+                    inverted: size > screenMaxHeight,
+                });
+            });
         });
-    }, [
-        keyboardHeight,
-        searchValue,
-        maxSuggestionCount,
-        screenHeight,
-        inverted,
-        dropdownInput.dropdownMarginTop,
-        baseInput.height,
-    ]);
-
-    let displayItems = items
-        .filter(
-            ({ label, description }) =>
-                label.toLowerCase().includes(searchValue.toLowerCase()) ||
-                (searchInDescriptions && description && description.toLowerCase().includes(searchValue.toLowerCase())),
-        )
-        .slice(0, maxSuggestionCount);
-    displayItems = inverted ? displayItems : displayItems.reverse();
+    }, [keyboardHeight, screenHeight, displayItems.length, parentRef, top]);
 
     if (!(visible && displayItems.length)) return;
 
     return (
-        <View ref={containerRef} style={styles.dropdownContainer}>
-            <BlurView intensity={75} tint={"default"}>
+        <View ref={containerRef} style={styles.dropdownPanel}>
+            <BlurView intensity={75} tint="default" style={styles.itemsContainer}>
                 {displayItems.map(item => (
                     <DropdownItem
                         key={"id" in item ? item.id : item.value}
@@ -103,18 +100,22 @@ export const DropdownPanel = <T,>({
 
 const createStyles = (
     { styles: { dropdownInput, baseInput }, theme: { color } }: ThemedStyles,
-    { inverted, height = 0 }: { inverted: boolean; height: number | undefined },
+    panelLayout: PanelLayout | undefined,
 ) => {
     const styles = StyleSheet.create({
-        dropdownContainer: {
-            marginTop: inverted ? undefined : dropdownInput.dropdownMarginTop,
-            borderRadius: baseInput.borderRadius,
-            overflow: "hidden",
+        dropdownPanel: {
             position: "absolute",
-            top: inverted ? -(height + baseInput.height + dropdownInput.dropdownMarginTop) : undefined,
+            bottom: panelLayout?.inverted ? panelLayout.inputHeight : undefined,
+            opacity: panelLayout ? 1 : 0,
             zIndex: 10,
             width: "100%",
+        },
+        itemsContainer: {
+            overflow: "hidden",
+            marginTop: panelLayout?.inverted ? undefined : dropdownInput.panelGap,
+            marginBottom: panelLayout?.inverted ? dropdownInput.panelGap : undefined,
             borderColor: color.inputBackground,
+            borderRadius: baseInput.borderRadius,
             borderWidth: 2,
         },
     });

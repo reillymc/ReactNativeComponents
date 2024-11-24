@@ -1,11 +1,12 @@
 import React from "react";
-import { NativeSyntheticEvent, TextInput as DefaultTextInput, TextInputFocusEventData, ViewStyle } from "react-native";
+import { TextInput as DefaultTextInput, NativeSyntheticEvent, TextInputFocusEventData, ViewStyle } from "react-native";
 
 import { IsValidString } from "../../../helpers";
 import { BaseInput, BaseInputProps } from "../BaseInput";
 import { TextInputProps } from "../TextInput";
 import { ValueItem } from "../valueItem";
 
+import { useForwardedRef } from "../../../hooks";
 import { DropdownPanel, DropdownPanelProps } from "./DropdownPanel";
 
 // Override forwardRef to allow generic typing.
@@ -16,7 +17,7 @@ declare module "react" {
 }
 
 export interface DropdownInputStyles {
-    dropdownMarginTop: number;
+    panelGap: number;
 }
 
 export type DropdownInputProps<T = string> = Pick<
@@ -69,6 +70,8 @@ export const DropdownInput = React.forwardRef(
         const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? value ?? "");
         const [hasFocus, setHasFocus] = React.useState(false);
 
+        const inputRef = useForwardedRef(ref);
+
         React.useEffect(() => {
             setSearchValue(selectedItem?.label ?? value ?? "");
         }, [selectedItem, value]);
@@ -105,7 +108,7 @@ export const DropdownInput = React.forwardRef(
         return (
             <BaseInput
                 {...props}
-                ref={ref}
+                ref={inputRef}
                 value={searchValue}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
@@ -114,6 +117,7 @@ export const DropdownInput = React.forwardRef(
                 preventAutoTrim
                 panelElement={
                     <DropdownPanel
+                        parentRef={inputRef}
                         items={items}
                         maxSuggestionCount={maxSuggestionCount}
                         onSelect={onSelect}
