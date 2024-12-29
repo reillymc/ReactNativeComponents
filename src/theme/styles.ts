@@ -1,3 +1,5 @@
+import merge from "lodash.merge";
+
 import type {
     ActionSize,
     ActionStyles,
@@ -16,7 +18,6 @@ import type {
     ToggleInputStyles,
 } from "../components";
 import { DeepPartial } from "../helpers";
-
 import { Theme } from "./theme";
 
 const LINE_HEIGHT_MODIFIER = 8;
@@ -157,18 +158,24 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         panelGap: 4,
     },
     toggleInput: {
-        size: {
-            small: 20,
-            regular: 32,
-            large: 48,
+        indicator: {
+            size: {
+                small: 16,
+                regular: 20,
+                large: 28,
+            },
+            color: color.border,
+            selectedColor: {
+                flat: color.textPrimary,
+                primary: color.primary,
+                secondary: color.secondary,
+                destructive: color.destructive,
+            },
+            disabledColor: color.textDisabled,
         },
-        iconSize: {
-            small: 14,
-            regular: 20,
-            large: 28,
+        label: {
+            gap: padding.small,
         },
-        borderRadius: border.radius.loose,
-        borderWidth: 2,
     },
     counterInput: {
         width: 48,
@@ -210,124 +217,5 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
     },
 });
 
-export const MergeStyles = (styles: Styles, overrides: StyleOverrides | undefined = {}): Styles => ({
-    ...styles,
-    ...overrides,
-    baseInput: {
-        ...styles.baseInput,
-        ...overrides?.baseInput,
-        width: {
-            ...styles.baseInput.width,
-            ...(overrides?.baseInput?.width as BaseInputStyles["width"]),
-        },
-    },
-    common: {
-        ...styles.common,
-        ...overrides?.common,
-        action: {
-            ...styles.common.action,
-            ...overrides?.common?.action,
-            fontSize: {
-                ...styles.common.action.fontSize,
-                ...overrides?.common?.action?.fontSize,
-            },
-        },
-    },
-    text: {
-        ...styles.text,
-        ...overrides?.text,
-        fontFamilySize: {
-            ...styles.text.fontFamilySize,
-            ...overrides?.text?.fontFamilySize,
-        },
-        fontFamilyWeight: {
-            ...styles.text.fontFamilyWeight,
-            ...overrides?.text?.fontFamilyWeight,
-        },
-        lineHeight: {
-            ...styles.text.lineHeight,
-            ...overrides?.text?.lineHeight,
-        },
-    },
-    highlightedText: {
-        ...styles.highlightedText,
-        ...overrides?.highlightedText,
-    },
-    textInput: {
-        ...styles.textInput,
-        ...overrides?.textInput,
-    },
-    action: {
-        ...styles.action,
-        ...overrides?.action,
-    },
-    iconAction: {
-        ...styles.iconAction,
-        ...overrides?.iconAction,
-        size: {
-            ...styles.iconAction.size,
-            ...overrides?.iconAction?.size,
-        },
-    },
-    button: {
-        ...styles.button,
-        ...overrides?.button,
-        height: {
-            ...styles.button.height,
-            ...(overrides?.button?.height as ButtonStyles["height"]),
-        },
-        width: {
-            ...styles.button.width,
-            ...(overrides?.button?.width as ButtonStyles["width"]),
-        },
-    },
-
-    iconButton: {
-        ...styles.iconButton,
-        ...overrides?.iconButton,
-        size: {
-            ...styles.iconButton.size,
-            ...overrides?.iconButton?.size,
-        },
-        fontSize: {
-            ...styles.iconButton.fontSize,
-            ...overrides?.iconButton?.fontSize,
-        },
-    },
-    dropdownInput: {
-        ...styles.dropdownInput,
-        ...overrides?.dropdownInput,
-    },
-    toggleInput: {
-        ...styles.toggleInput,
-        ...overrides?.toggleInput,
-        size: {
-            ...styles.toggleInput.size,
-            ...(overrides?.toggleInput?.size as ToggleInputStyles["size"]),
-        },
-        iconSize: {
-            ...styles.toggleInput.iconSize,
-            ...overrides?.toggleInput?.iconSize,
-        },
-    },
-    counterInput: {
-        ...styles.counterInput,
-        ...overrides?.counterInput,
-    },
-    listItem: {
-        ...styles.listItem,
-        ...overrides?.listItem,
-    },
-    avatar: {
-        ...styles.avatar,
-        ...overrides?.avatar,
-        size: {
-            ...styles.avatar.size,
-            ...overrides?.avatar?.size,
-        },
-    },
-    toast: {
-        ...styles.toast,
-        ...overrides?.toast,
-    },
-});
+export const MergeStyles = (styles: Styles, overrides: StyleOverrides | undefined = {}): Styles =>
+    merge({}, styles, overrides);

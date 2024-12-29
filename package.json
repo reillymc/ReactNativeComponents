@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.5.4",
+    "version": "0.5.5",
     "description": "A collection of React Native components and resources",
     "module": "lib/module/index",
     "types": "lib/typescript/src/index.d.ts",
@@ -61,6 +61,7 @@
         "@react-native/metro-config": "^0.76.2",
         "@react-navigation/native": "^6.0",
         "@types/jest": "^28.1.2",
+        "@types/lodash.merge": "^4.6.9",
         "@types/react": "~18.3.12",
         "eslint": "^8.57.0",
         "eslint-config-expo": "~8.0.1",
@@ -111,5 +112,8 @@
                 }
             ]
         ]
+    },
+    "dependencies": {
+        "lodash.merge": "^4.6.2"
     }
 }

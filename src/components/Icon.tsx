@@ -28,22 +28,10 @@ export const Icon: React.FC<IconProps> = ({ style, color, size = 20, iconName, s
     const { theme } = useTheme();
 
     if (set === "octicons") {
-        return (
-            <Octicons
-                size={size}
-                color={color ?? theme.color.textPrimary}
-                name={iconName}
-                style={[styles.icon, style]}
-            />
-        );
+        return <Octicons size={size} color={color ?? theme.color.textPrimary} name={iconName} style={style} />;
     } else {
         return (
-            <AntDesign
-                size={size}
-                color={color ?? theme.color.textPrimary}
-                name={iconName}
-                style={[styles.icon, style]}
-            />
+            <AntDesign size={size} color={color ?? theme.color.textPrimary} name={iconName} iconStyle={styles.icon} />
         );
     }
 };

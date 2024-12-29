@@ -1,8 +1,7 @@
-import { IconButton, Text, ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
+import { ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
 import { Stack } from "expo-router";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import Animated, { Layout } from "react-native-reanimated";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -19,8 +18,6 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
 }) => {
     const { theme } = useTheme();
 
-    const [showModal, setShowModal] = React.useState(!fullscreen);
-
     const styles = useThemedStyles(createStyles, {});
 
     return (
@@ -35,56 +32,38 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
                     headerLargeStyle: { backgroundColor: theme.color.background },
                 }}
             />
-            <Animated.View
-                layout={Layout.springify()}
-                style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}
-            >
-                {component}
-            </Animated.View>
-            {!showModal && (
-                <IconButton
-                    iconName="chevron-up"
-                    onPress={() => setShowModal(prev => !prev)}
-                    style={styles.showModalButton}
-                />
-            )}
-            <Animated.View layout={Layout.springify()} />
-
-            <View style={styles.propsContainer}>
-                <Text variant="display" style={styles.heading}>
-                    {componentName}
-                </Text>
-                {propsPanel}
+            <View style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}>
+                <View style={styles.component}>{component}</View>
             </View>
+            <View style={styles.propsContainer}>{propsPanel}</View>
         </>
     );
 };
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = ({ theme: { color } }: ThemedStyles) => {
+const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         componentContainer: {
-            flex: 2,
-            paddingTop: 200,
+            flex: 1,
             backgroundColor: color.background,
+            paddingTop: 200,
         },
-
+        component: {
+            backgroundColor: color.foreground,
+            width: "80%",
+            minHeight: 80,
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: border.radius.loose,
+        },
         centred: {
             alignItems: "center",
         },
         propsContainer: {
             display: "flex",
-            flex: 4,
-        },
-        heading: {
-            marginLeft: 16,
-            marginBottom: 8,
-        },
-        showModalButton: {
-            position: "absolute",
-            bottom: 40,
-            right: 40,
+            flex: 2,
+            backgroundColor: color.background,
         },
     });
     return styles;

@@ -14,6 +14,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useColorScheme, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ComponentScreens } from "./index";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -100,7 +101,20 @@ const Layout: React.FC = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ThemeProvider theme={theme} styles={appStyles}>
                 <StatusBar style="auto" />
-                <Stack initialRouteName="index" />
+                <Stack initialRouteName="index">
+                    <Stack.Screen
+                        name="selectionModal"
+                        options={{
+                            presentation: "formSheet",
+                            sheetAllowedDetents: [0.5, 1.0],
+                            sheetGrabberVisible: true,
+                            sheetExpandsWhenScrolledToEdge: true,
+                        }}
+                    />
+                    {Object.values(ComponentScreens).map(screen => (
+                        <Stack.Screen key={screen.page} name={screen.page} />
+                    ))}
+                </Stack>
             </ThemeProvider>
         </GestureHandlerRootView>
     );

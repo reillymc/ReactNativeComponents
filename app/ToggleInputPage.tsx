@@ -1,29 +1,12 @@
+import { ToggleInput, ToggleInputProps } from "@reillymc/react-native-components";
 import React from "react";
-import { Text, ToggleInput, ToggleInputProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItemsNullable } from "../helpers";
 
 const propDefinitions: PropDefinitions<ToggleInputProps> = {
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        default: "check",
-        values: glyphMapValueItemsNullable,
-    },
     label: {
-        type: "enum",
+        type: "string",
         label: "Label",
-        default: "None",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "String", label: "String label", value: "String label" },
-            {
-                id: "Component",
-                label: "Text Component",
-                value: <Text variant="body">Text component label</Text>,
-            },
-        ],
     },
     disabled: {
         type: "boolean",
@@ -37,6 +20,15 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
             { label: "Flat", value: "flat" },
+        ],
+    },
+    iconVariant: {
+        type: "enum",
+        label: "Icon variant",
+        default: "Dot",
+        values: [
+            { label: "Check", value: "check" },
+            { label: "Dot", value: "dot" },
         ],
     },
     size: {
@@ -60,10 +52,10 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
 };
 
 const defaultProps: ToggleInputProps = {
-    iconName: "check",
     disabled: false,
     onChange: () => null,
     variant: "primary",
+    label: "Toggle input label",
 };
 
 const ToggleInputPage: React.FunctionComponent = () => {

@@ -7,8 +7,9 @@ import {
     useTheme,
     ValueItem,
 } from "@reillymc/react-native-components";
-import React from "react";
+import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import { useSelectionModal } from "../app/selectionModal";
 
 type PropDefinitionBase = {
     label?: string;
@@ -74,6 +75,26 @@ export const PropsPanel = <T extends Record<string, any>>({
 
     const styles = createStyles(theme);
 
+    const [selectionId, setSelectionId] = React.useState<string>();
+    const [selectionItems, setSelectionItems] = React.useState<ValueItem[]>([]);
+    const [initialSelection, setInitialSelection] = React.useState<ValueItem>();
+
+    const { selectedItems, openSelectionModal } = useSelectionModal({
+        key: selectionId ?? "",
+        selectionMode: "single",
+        label: selectionId ?? ":(",
+        items: selectionItems,
+        initialSelection: initialSelection ? [initialSelection] : [],
+    });
+
+    const selectedValue = useMemo(() => selectedItems[0]?.value, [selectedItems]);
+
+    useEffect(() => {
+        if (!selectionId || !selectedValue) return;
+        onChange(selectionId, selectedValue);
+        // setSelectionId(undefined);
+    }, [selectionId, selectedValue]);
+
     return (
         <ScrollView
             style={styles.container}
@@ -135,6 +156,13 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         )
                                     }
                                     selection={{ label: currentValue, value: currentValue }}
+                                    onAdd={() => {
+                                        setSelectionId(propId);
+                                        setSelectionItems(definition.values.map(value => ({ value, label: value })));
+                                        openSelectionModal();
+
+                                        setInitialSelection({ label: currentValue, value: currentValue });
+                                    }}
                                 />
                             </View>
                         );
@@ -142,11 +170,13 @@ export const PropsPanel = <T extends Record<string, any>>({
                         const selectedItem = {
                             label:
                                 customLabels[propId] ??
+                                definition.values.find(({ value }) => value === currentValue)?.label ??
                                 definition.values.find(({ label }) => label === definition.default)?.label ??
                                 definition.values[0]?.label ??
                                 "",
                             value: currentValue,
                         };
+
                         return (
                             <View key={definition.label} style={styles.propContainer}>
                                 <SelectionInput
@@ -163,6 +193,13 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         setCustomLabels(prev => ({ ...prev, [propId]: value?.label }));
                                     }}
                                     selection={selectedItem}
+                                    onAdd={() => {
+                                        openSelectionModal();
+                                        setSelectionId(propId);
+                                        setSelectionItems(definition.values);
+
+                                        setInitialSelection({ label: currentValue, value: currentValue });
+                                    }}
                                 />
                             </View>
                         );
@@ -181,11 +218,9 @@ const createStyles = (theme: Theme) => {
         container: {
             display: "flex",
             backgroundColor: theme.color.foreground,
-            marginTop: 16,
             borderTopStartRadius: 20,
             borderTopEndRadius: 20,
         },
-
         contentContainer: {
             width: "60%",
             alignSelf: "center",

@@ -1,27 +1,34 @@
 import React from "react";
-import { DimensionValue, Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Pressable, StyleProp, StyleSheet, View, ViewStyle, type ColorValue } from "react-native";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { ThemedStyles } from "../../hooks";
 import { ActionSize, ActionVariant } from "../buttons";
 import { Icon } from "../Icon";
 import { Text } from "../Text";
 
+import type { DeepPartial } from "../../helpers";
+import { useThemedStylesWithOverride } from "../../hooks";
 import { BaseInputProps } from "./BaseInput";
 
 export type ToggleInputStyles = {
-    size: { [key in ActionSize]: DimensionValue };
-    iconSize: { [key in ActionSize]: number };
-    borderRadius: number;
-    borderWidth: number;
+    indicator: {
+        size: { [key in ActionSize]: number };
+        color: ColorValue;
+        selectedColor: { [key in ActionVariant]: ColorValue };
+    };
+    label: {
+        gap: number;
+    };
 };
 
-export interface ToggleInputProps extends Pick<BaseInputProps, "label" | "disabled" | "helpText"> {
+export interface ToggleInputProps extends Pick<BaseInputProps, "disabled" | "helpText"> {
+    label?: string;
     value?: boolean;
-    iconName?: keyof typeof AntDesign.glyphMap;
+    iconVariant?: "check" | "dot";
     variant?: ActionVariant;
     size?: ActionSize;
-    style?: StyleProp<ViewStyle>;
+    containerStyle?: StyleProp<ViewStyle>;
+    styles?: DeepPartial<ToggleInputStyles>;
     onChange: (value: boolean) => void | null | React.SetStateAction<boolean>;
 }
 
@@ -29,27 +36,54 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
     label,
     helpText,
     value = false,
-    iconName = "check",
+    iconVariant = "dot",
     variant = "primary",
     size = "regular",
-    style,
+    containerStyle,
+    disabled,
+    styles: styleOverrides,
     onChange,
 }) => {
-    const styles = useThemedStyles(createStyles, { variant, size });
-    const {
-        styles: { toggleInput },
-    } = useTheme();
+    const [styles, { toggleInput }] = useThemedStylesWithOverride(
+        createStyles,
+        { toggleInput: styleOverrides },
+        { variant, size, value, disabled },
+    );
 
     return (
-        <View style={style}>
-            <Pressable hitSlop={16} style={styles.container} onPress={() => onChange(!value)}>
+        <View style={containerStyle}>
+            <Pressable disabled={disabled} hitSlop={16} style={styles.container} onPress={() => onChange(!value)}>
                 <View style={styles.iconContainer}>
-                    {!!value && <Icon iconName={iconName} size={toggleInput.iconSize[size]} style={styles.icon} />}
+                    {iconVariant === "check" ? (
+                        <Icon
+                            set="octicons"
+                            iconName={!!value ? "check-circle-fill" : "circle"}
+                            size={toggleInput.indicator.size[size]}
+                            style={styles.icon}
+                        />
+                    ) : (
+                        <>
+                            <Icon
+                                set="octicons"
+                                iconName="circle"
+                                size={toggleInput.indicator.size[size]}
+                                style={styles.icon}
+                            />
+                            {!!value && (
+                                <Icon
+                                    set="octicons"
+                                    iconName="dot-fill"
+                                    size={toggleInput.indicator.size[size]}
+                                    style={styles.icon}
+                                />
+                            )}
+                        </>
+                    )}
                 </View>
                 {label && (
-                    <View style={styles.label}>
-                        {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
-                    </View>
+                    <Text variant="label" style={styles.label}>
+                        {label}
+                    </Text>
                 )}
             </Pressable>
             {helpText && (
@@ -65,14 +99,11 @@ ToggleInput.displayName = "ToggleInput";
 
 const createStyles = (
     { theme: { color }, styles: { toggleInput, baseInput } }: ThemedStyles,
-    { variant = "primary", size = "regular" }: Partial<ToggleInputProps>,
+    { variant = "primary", size = "regular", value, disabled }: Partial<ToggleInputProps>,
 ) => {
-    const mainColor = {
-        flat: color.textPrimary,
-        primary: color.primary,
-        secondary: color.secondary,
-        destructive: color.destructive,
-    }[variant];
+    let iconColor = toggleInput.indicator.color;
+    if (value) iconColor = toggleInput.indicator.selectedColor[variant];
+    if (disabled) iconColor = color.textDisabled;
 
     const styles = StyleSheet.create({
         container: {
@@ -80,19 +111,17 @@ const createStyles = (
             alignItems: "center",
         },
         iconContainer: {
-            width: toggleInput.size[size],
-            height: toggleInput.size[size],
-            borderRadius: toggleInput.borderRadius,
-            borderWidth: size === "small" ? 1 : toggleInput.borderWidth,
-            borderColor: mainColor,
-            justifyContent: "center",
+            width: toggleInput.indicator.size[size],
+            height: toggleInput.indicator.size[size],
             alignItems: "center",
         },
         icon: {
-            color: mainColor,
+            color: iconColor,
+            position: "absolute",
         },
         label: {
-            marginLeft: 8,
+            marginLeft: toggleInput.label.gap,
+            color: disabled ? color.textDisabled : color.textPrimary,
         },
         helpText: {
             marginTop: baseInput.labelMargin,
