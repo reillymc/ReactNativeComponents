@@ -48,6 +48,7 @@ const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
             flex: 1,
             backgroundColor: color.background,
             paddingTop: 200,
+            paddingBottom: 50,
         },
         component: {
             backgroundColor: color.foreground,

@@ -77,7 +77,7 @@ export const DropdownPanel = <T,>({
                 });
             });
         });
-    }, [keyboardHeight, screenHeight, displayItems.length, parentRef, top]);
+    }, [keyboardHeight, screenHeight, searchValue, parentRef, top]);
 
     if (!(visible && displayItems.length)) return;
 

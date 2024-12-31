@@ -51,8 +51,13 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
     );
 
     return (
-        <View style={containerStyle}>
-            <Pressable disabled={disabled} hitSlop={16} style={styles.container} onPress={() => onChange(!value)}>
+        <Pressable
+            disabled={disabled}
+            hitSlop={16}
+            style={[styles.container, containerStyle]}
+            onPress={() => onChange(!value)}
+        >
+            <View style={styles.labelIconContainer}>
                 <View style={styles.iconContainer}>
                     {iconVariant === "check" ? (
                         <Icon
@@ -74,7 +79,7 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                                     set="octicons"
                                     iconName="dot-fill"
                                     size={toggleInput.indicator.size[size]}
-                                    style={styles.icon}
+                                    style={[styles.icon, styles.innerIcon]}
                                 />
                             )}
                         </>
@@ -85,13 +90,13 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                         {label}
                     </Text>
                 )}
-            </Pressable>
+            </View>
             {helpText && (
                 <View style={styles.helpText}>
                     {typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText}
                 </View>
             )}
-        </View>
+        </Pressable>
     );
 };
 
@@ -107,23 +112,29 @@ const createStyles = (
 
     const styles = StyleSheet.create({
         container: {
+            justifyContent: "center",
+        },
+        labelIconContainer: {
             flexDirection: "row",
             alignItems: "center",
         },
         iconContainer: {
             width: toggleInput.indicator.size[size],
             height: toggleInput.indicator.size[size],
-            alignItems: "center",
         },
         icon: {
             color: iconColor,
             position: "absolute",
+        },
+        innerIcon: {
+            alignSelf: "center",
         },
         label: {
             marginLeft: toggleInput.label.gap,
             color: disabled ? color.textDisabled : color.textPrimary,
         },
         helpText: {
+            marginLeft: toggleInput.indicator.size[size] + toggleInput.label.gap,
             marginTop: baseInput.labelMargin,
         },
     });
