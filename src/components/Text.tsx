@@ -23,11 +23,20 @@ export interface TextStyles {
 
 export interface TextProps extends RNTextProps {
     variant?: TextVariant;
+    alignLineHeightWithVariant?: TextVariant;
+    compactLineHeight?: boolean;
     children?: React.ReactNode;
 }
 
-export const Text: React.FC<TextProps> = ({ variant = "body", style, children, ...props }) => {
-    const styles = useThemedStyles(createStyles, { variant });
+export const Text: React.FC<TextProps> = ({
+    variant = "body",
+    compactLineHeight,
+    alignLineHeightWithVariant,
+    style,
+    children,
+    ...props
+}) => {
+    const styles = useThemedStyles(createStyles, { variant, compactLineHeight, alignLineHeightWithVariant });
 
     return (
         <RNText {...props} style={[styles.text, style]}>
@@ -38,13 +47,18 @@ export const Text: React.FC<TextProps> = ({ variant = "body", style, children, .
 
 Text.displayName = "Text";
 
-const createStyles = ({ styles: { text } }: ThemedStyles, { variant = "body" }: Partial<TextProps>) => {
+const createStyles = (
+    { styles: { text } }: ThemedStyles,
+    { variant = "body", compactLineHeight = false, alignLineHeightWithVariant = variant }: Partial<TextProps>,
+) => {
     const styles = StyleSheet.create({
         text: {
             fontFamily: text.fontFamilyWeight[variant],
             fontSize: text.fontFamilySize[variant],
             color: text.textColor,
-            lineHeight: text.lineHeight[variant],
+            lineHeight: compactLineHeight
+                ? text.fontFamilySize[alignLineHeightWithVariant]
+                : text.lineHeight[alignLineHeightWithVariant],
         },
     });
     return styles;
