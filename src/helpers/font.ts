@@ -3,5 +3,5 @@ export const scaleFont = (size: number, scale: number, appScale: number) => {
         return size;
     }
 
-    return (size / appScale) * (appScale > 1 ? Math.max(1, appScale * scale) : 1);
+    return Math.round((size / appScale) * (appScale > 1 ? Math.max(1, appScale * scale) : 1));
 };
