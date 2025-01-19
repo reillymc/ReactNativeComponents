@@ -138,7 +138,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
 (BaseInput as React.FunctionComponent).displayName = "BaseInput";
 
 const createStyles = (
-    { styles: { baseInput }, theme: { padding } }: ThemedStyles,
+    { styles: { baseInput }, theme: { spacing } }: ThemedStyles,
     { width, disabled, multiline = false }: BaseInputProps,
 ) =>
     StyleSheet.create({
@@ -169,7 +169,7 @@ const createStyles = (
         },
         helpText: {
             flexDirection: "row",
-            gap: padding.tiny,
+            gap: spacing.tiny,
             marginTop: baseInput.labelMargin,
         },
         errorIndicator: {

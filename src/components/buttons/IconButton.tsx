@@ -23,7 +23,7 @@ export const getBackgroundColor = ({ color }: Theme, pressed: boolean, disabled:
 export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: boolean): ColorValue => {
     switch (type) {
         case "primary":
-            return pressed ? color.primaryHighlight : color.primary;
+            return pressed ? color.primaryDark : color.primary;
         case "secondary":
             return pressed ? color.secondaryHighlight : color.secondary;
         case "flat":

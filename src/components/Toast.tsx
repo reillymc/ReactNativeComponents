@@ -39,7 +39,7 @@ export const Toast: React.FunctionComponent<ToastProps> = ({ action, style, chil
     );
 };
 
-const createStyles = ({ theme: { color, padding, border }, styles: { toast } }: ThemedStyles) =>
+const createStyles = ({ theme: { color, spacing, border }, styles: { toast } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
             position: "absolute",
@@ -47,7 +47,7 @@ const createStyles = ({ theme: { color, padding, border }, styles: { toast } }: 
             left: toast.horizontalInset,
             right: toast.horizontalInset,
             backgroundColor: color.backgroundHighlight,
-            padding: padding.regular,
+            padding: spacing.medium,
             borderRadius: border.radius.loose,
         },
         innerContainer: {
@@ -67,6 +67,6 @@ const createStyles = ({ theme: { color, padding, border }, styles: { toast } }: 
             borderLeftWidth: StyleSheet.hairlineWidth,
             borderLeftColor: color.textSecondary,
             height: "100%",
-            marginHorizontal: padding.regular,
+            marginHorizontal: spacing.medium,
         },
     });

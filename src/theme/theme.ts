@@ -26,8 +26,8 @@ export const DefaultTheme = {
     color: {
         // Palette
         primary: "#FF4242",
-        primaryHighlight: "#ff8585",
-        primaryDisabled: "#ffbdbd",
+        primaryDark: "#ff8585",
+        primaryLight: "#ffbdbd",
         secondary: "#12263A",
         secondaryHighlight: "#22476D",
         secondaryDisabled: "#B5EAD7",
@@ -72,8 +72,13 @@ export const DefaultTheme = {
         inputText: "#12263A",
 
         pressOverlay: "rgba(0, 0, 0, 0.1)",
+
+        alert: "#d63333",
+        error: "#d63333",
+        success: "#4ed633",
+        warning: "#f5c61d",
     },
-    padding: {
+    spacing: {
         // Screen
         screenContentTop: 0,
 
@@ -87,7 +92,7 @@ export const DefaultTheme = {
 
         // Body
         large: 24,
-        regular: 16,
+        medium: 16,
         small: 8,
         tiny: 4,
     },
@@ -96,6 +101,11 @@ export const DefaultTheme = {
             tight: 4,
             regular: 8,
             loose: 16,
+        },
+        width: {
+            thick: 4,
+            regular: 2,
+            thin: 1,
         },
     },
 };
@@ -124,10 +134,10 @@ export const MergeTheme = (first: ThemeOverrides, second: ThemeOverrides | undef
             ...second?.font?.size,
         },
     },
-    padding: {
-        ...DefaultTheme.padding,
-        ...first.padding,
-        ...second?.padding,
+    spacing: {
+        ...DefaultTheme.spacing,
+        ...first.spacing,
+        ...second?.spacing,
     },
     border: {
         ...DefaultTheme.border,
@@ -137,6 +147,11 @@ export const MergeTheme = (first: ThemeOverrides, second: ThemeOverrides | undef
             ...DefaultTheme.border.radius,
             ...first.border?.radius,
             ...second?.border?.radius,
+        },
+        width: {
+            ...DefaultTheme.border.width,
+            ...first.border?.width,
+            ...second?.border?.width,
         },
     },
 });

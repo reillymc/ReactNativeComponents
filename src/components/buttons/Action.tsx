@@ -10,7 +10,7 @@ import { ActionSize, ActionVariant } from "./types";
 const getLabelColor = ({ color }: Theme, variant: ActionVariant, pressed: boolean): ColorValue => {
     switch (variant) {
         case "primary":
-            return pressed ? color.primaryHighlight : color.primary;
+            return pressed ? color.primaryDark : color.primary;
         case "secondary":
             return pressed ? color.secondaryHighlight : color.secondary;
         case "destructive":

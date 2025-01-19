@@ -17,9 +17,9 @@ const getIconColor = (
     switch (variant) {
         case "primary": {
             if (disabled) {
-                return color.primaryDisabled;
+                return color.primaryLight;
             }
-            return pressed ? color.primaryHighlight : color.primary;
+            return pressed ? color.primaryDark : color.primary;
         }
         case "secondary": {
             if (disabled) {

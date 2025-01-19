@@ -137,7 +137,7 @@ export const TimeInput = React.forwardRef<RNTextInput, TimeInputProps>(
 (TimeInput as React.FunctionComponent).displayName = "TimeInput";
 
 const createStyles = (
-    { styles: { baseInput }, theme: { padding, color } }: ThemedStyles,
+    { styles: { baseInput }, theme: { spacing, color } }: ThemedStyles,
     { disabled }: Partial<TimeInputProps>,
 ) => {
     const styles = StyleSheet.create({
@@ -150,11 +150,11 @@ const createStyles = (
         },
         input: {
             textAlign: "right",
-            paddingRight: padding.tiny,
+            paddingRight: spacing.tiny,
         },
         clearInput: {
             width: 28,
-            marginRight: padding.small,
+            marginRight: spacing.small,
         },
         timeLabel: {
             paddingRight: baseInput.padding,

@@ -51,7 +51,7 @@ export type StyleOverrides = DeepPartial<Styles>;
 
 export type CreateStyles = (theme: Theme) => Styles;
 
-export const createDefaultStyles: CreateStyles = ({ border, color, font, padding }) => ({
+export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing }) => ({
     baseInput: {
         height: 48,
         width: {
@@ -60,7 +60,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
             small: "45%",
         },
         borderRadius: border.radius.regular,
-        padding: padding.small,
+        padding: spacing.small,
         fontSize: font.size.regular,
         multilineLineHeight: font.size.regular + LINE_HEIGHT_MODIFIER,
         fontFamilyWeight: font.familyWeight.regular400,
@@ -70,7 +70,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         backgroundColor: color.inputBackground,
         backgroundColorDisabled: color.inputBackgroundDisabled,
         labelMargin: 6,
-        mandatoryColor: color.primaryHighlight,
+        mandatoryColor: color.primaryDark,
         errorColor: color.destructive,
     },
     common: {
@@ -174,7 +174,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
             disabledColor: color.textDisabled,
         },
         label: {
-            gap: padding.small,
+            gap: spacing.small,
         },
     },
     counterInput: {
@@ -191,8 +191,8 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         fontSize: font.size.large,
         paddingTop: 8,
         paddingBottom: 16,
-        paddingLeft: padding.pageHorizontal,
-        paddingRight: padding.pageHorizontal,
+        paddingLeft: spacing.pageHorizontal,
+        paddingRight: spacing.pageHorizontal,
     },
     listItem: {
         spacingMargin: 12,
@@ -212,7 +212,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, padding
         labelFontSize: font.size.tiny,
     },
     toast: {
-        horizontalInset: padding.pageHorizontal + padding.regular,
+        horizontalInset: spacing.pageHorizontal + spacing.medium,
         bottomInset: 100,
     },
 });
