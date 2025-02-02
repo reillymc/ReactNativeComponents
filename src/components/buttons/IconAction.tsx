@@ -82,6 +82,11 @@ export const IconAction: React.FC<IconActionProps> = ({
                         size={styles.icon.height}
                         color={getIconColor(theme, variant, pressed, disabled)}
                         style={[styles.icon, iconStyle]}
+                        android_ripple={{
+                            color: theme.color.border,
+                            borderless: true,
+                            radius: styles.icon.height - theme.spacing.tiny,
+                        }}
                     />
                     {label && (
                         <Text numberOfLines={1} style={styles.text}>
