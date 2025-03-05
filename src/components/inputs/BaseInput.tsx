@@ -52,7 +52,8 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
      * Input element component.
      */
     inputElement?: React.ReactNode;
-    panelElement?: React.ReactNode;
+    panelAboveElement?: React.ReactNode;
+    panelBelowElement?: React.ReactNode;
     modalElement?: React.ReactNode;
 
     containerStyle?: StyleProp<ViewStyle>;
@@ -67,7 +68,8 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
             helpText,
             mandatory,
             inputElement,
-            panelElement,
+            panelAboveElement,
+            panelBelowElement,
             modalElement,
             style,
             containerStyle,
@@ -93,6 +95,8 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                             {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
                         </View>
                     )}
+                    {panelAboveElement && <View>{panelAboveElement}</View>}
+
                     <View>
                         {inputElement ? (
                             inputElement
@@ -113,7 +117,7 @@ export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
                                 {"\u2022"}
                             </Text>
                         )}
-                        <View>{panelElement}</View>
+                        {panelBelowElement && <View>{panelBelowElement}</View>}
                     </View>
                     {(helpText || hasError) && (
                         <View style={styles.helpText}>

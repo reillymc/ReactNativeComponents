@@ -1,8 +1,8 @@
 import React from "react";
-import { TextInput as RNTextInput, View, StyleSheet } from "react-native";
+import { TextInput as RNTextInput, StyleSheet, View } from "react-native";
 
-import { IconButton, IconButtonProps } from "../buttons";
 import { ThemedStyles, useThemedStyles } from "../../hooks";
+import { IconButton, IconButtonProps } from "../buttons";
 import { Text } from "../Text";
 
 import { BaseInput, BaseInputProps } from "./BaseInput";
@@ -153,8 +153,6 @@ export const MultiNumberInput = React.forwardRef<RNTextInput, MultiNumberInputPr
                             clearButtonMode={clearButtonMode}
                             value={value.representation === "number" ? value.value : value.value?.[0]}
                             keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
-                            returnKeyLabel={value.representation === "number" ? "done" : "next"}
-                            returnKeyType={value.representation === "number" ? "default" : "next"}
                             style={styles.primaryInput}
                             onChangeText={handlePrimaryInputChangeText}
                             onSubmitEditing={value.representation === "number" ? onSubmitEditing : undefined}

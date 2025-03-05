@@ -16,6 +16,7 @@ export interface DropdownPanelProps<T = string> {
     visible: boolean;
     hideItemDescriptions?: boolean;
     searchInDescriptions?: boolean;
+    panelBehaviour?: "absoluteAuto" | "inlineAbove" | "inlineBelow";
     onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
 }
 
@@ -32,13 +33,14 @@ export const DropdownPanel = <T,>({
     visible,
     hideItemDescriptions,
     searchInDescriptions,
+    panelBehaviour = "absoluteAuto",
     onSelect,
 }: DropdownPanelProps<T>) => {
     const containerRef = useRef<View>(null);
 
     const [layout, setLayout] = useState<PanelLayout>();
 
-    const styles = useThemedStyles(createStyles, layout);
+    const styles = useThemedStyles(createStyles, { layout, panelBehaviour });
 
     const { height: screenHeight } = useWindowDimensions();
     const { top } = useSafeAreaInsets();
@@ -100,20 +102,23 @@ export const DropdownPanel = <T,>({
 
 const createStyles = (
     { styles: { dropdownInput, baseInput }, theme: { color } }: ThemedStyles,
-    panelLayout: PanelLayout | undefined,
+    {
+        layout,
+        panelBehaviour,
+    }: { layout: PanelLayout | undefined; panelBehaviour: DropdownPanelProps["panelBehaviour"] },
 ) => {
     const styles = StyleSheet.create({
         dropdownPanel: {
-            position: "absolute",
-            bottom: panelLayout?.inverted ? panelLayout.inputHeight : undefined,
-            opacity: panelLayout ? 1 : 0,
+            position: panelBehaviour === "absoluteAuto" ? "absolute" : "relative",
+            bottom: panelBehaviour === "absoluteAuto" && layout?.inverted ? layout.inputHeight : undefined,
+            opacity: layout ? 1 : 0,
             zIndex: 10,
             width: "100%",
         },
         itemsContainer: {
             overflow: "hidden",
-            marginTop: panelLayout?.inverted ? undefined : dropdownInput.panelGap,
-            marginBottom: panelLayout?.inverted ? dropdownInput.panelGap : undefined,
+            marginTop: layout?.inverted ? undefined : dropdownInput.panelGap,
+            marginBottom: layout?.inverted ? dropdownInput.panelGap : undefined,
             borderColor: color.inputBackground,
             borderRadius: baseInput.borderRadius,
             borderWidth: 2,

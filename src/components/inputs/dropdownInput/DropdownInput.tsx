@@ -24,7 +24,7 @@ export type DropdownInputProps<T = string> = Pick<
     TextInputProps,
     "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
 > &
-    Pick<DropdownPanelProps, "hideItemDescriptions" | "searchInDescriptions"> &
+    Pick<DropdownPanelProps, "hideItemDescriptions" | "searchInDescriptions" | "panelBehaviour"> &
     BaseInputProps & {
         items?: Array<ValueItem<T>>;
         selectedItem?: ValueItem<T>;
@@ -59,6 +59,7 @@ export const DropdownInput = React.forwardRef(
             selectedItem,
             minimumSearchLength = 1,
             maxSuggestionCount = 5,
+            panelBehaviour,
             onSelect,
             onChangeText,
             onBlur,
@@ -115,15 +116,31 @@ export const DropdownInput = React.forwardRef(
                 onChangeText={handleChangeText}
                 autoCorrect={false}
                 preventAutoTrim
-                panelElement={
-                    <DropdownPanel
-                        parentRef={inputRef}
-                        items={items}
-                        maxSuggestionCount={maxSuggestionCount}
-                        onSelect={onSelect}
-                        searchValue={searchValue}
-                        visible={showDropdownPanel}
-                    />
+                panelAboveElement={
+                    panelBehaviour === "inlineAbove" ? (
+                        <DropdownPanel
+                            parentRef={inputRef}
+                            items={items}
+                            maxSuggestionCount={maxSuggestionCount}
+                            onSelect={onSelect}
+                            searchValue={searchValue}
+                            visible={showDropdownPanel}
+                            panelBehaviour={panelBehaviour}
+                        />
+                    ) : undefined
+                }
+                panelBelowElement={
+                    panelBehaviour !== "inlineAbove" ? (
+                        <DropdownPanel
+                            parentRef={inputRef}
+                            items={items}
+                            maxSuggestionCount={maxSuggestionCount}
+                            onSelect={onSelect}
+                            searchValue={searchValue}
+                            visible={showDropdownPanel}
+                            panelBehaviour={panelBehaviour}
+                        />
+                    ) : undefined
                 }
             />
         );
