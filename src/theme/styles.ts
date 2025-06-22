@@ -20,8 +20,6 @@ import type {
 import { DeepPartial } from "../helpers";
 import { Theme } from "./theme";
 
-const LINE_HEIGHT_MODIFIER = 8;
-
 export type Styles = {
     baseInput: BaseInputStyles;
     common: {
@@ -62,7 +60,6 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing
         borderRadius: border.radius.regular,
         padding: spacing.small,
         fontSize: font.size.regular,
-        multilineLineHeight: font.size.regular + LINE_HEIGHT_MODIFIER,
         fontFamilyWeight: font.familyWeight.regular400,
         textColor: color.textPrimary,
         disabledTextColor: color.textDisabled,
@@ -99,15 +96,6 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing
             heading: font.size.large,
             title: font.size.xLarge,
             display: font.size.xxLarge,
-        },
-        lineHeight: {
-            caption: font.size.small + 4,
-            body: font.size.regular + LINE_HEIGHT_MODIFIER,
-            bodyEmphasized: font.size.regular + LINE_HEIGHT_MODIFIER,
-            label: font.size.emphasised + LINE_HEIGHT_MODIFIER,
-            heading: font.size.large + LINE_HEIGHT_MODIFIER,
-            title: font.size.xxLarge + LINE_HEIGHT_MODIFIER,
-            display: font.size.xxLarge + LINE_HEIGHT_MODIFIER,
         },
     },
     highlightedText: {

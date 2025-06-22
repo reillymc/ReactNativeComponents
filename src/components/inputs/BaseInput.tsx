@@ -15,7 +15,6 @@ export interface BaseInputStyles {
     borderRadius: number;
     padding: number;
     fontSize: number;
-    multilineLineHeight: number;
     fontFamilyWeight: string;
     textColor: string;
     placeholderTextColor: string;
@@ -167,7 +166,6 @@ const createStyles = (
             backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
             padding: baseInput.padding,
             fontSize: baseInput.fontSize,
-            lineHeight: multiline ? baseInput.multilineLineHeight : undefined,
             fontFamily: baseInput.fontFamilyWeight,
             color: baseInput.textColor,
         },
