@@ -55,7 +55,7 @@
     },
     "overrides": [
         {
-            "include": ["example/app/**"],
+            "include": ["app/**"],
             "linter": {
                 "rules": {
                     "style": {

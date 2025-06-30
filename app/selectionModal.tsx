@@ -29,7 +29,7 @@ export const useSelectionModal = <T,>({
 }: UseSelectionModalParams<T>) => {
     const router = useRouter();
 
-    const { key: keyParam, selection: selectionParam } = useGlobalSearchParams();
+    const { key: _, selection: selectionParam } = useGlobalSearchParams();
 
     // TODO: investigate issues with params not updating when expected
     const isActive = true; //useMemo(() => key === keyParam, [key, keyParam]);
@@ -202,29 +202,29 @@ const SelectionModal: FC = () => {
 
 export default SelectionModal;
 
-const createStyles = ({ styles: { baseInput }, theme: { padding, color } }: ThemedStyles) => {
+const createStyles = ({ styles: { baseInput }, theme: { spacing, color } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         headerAction: {
-            marginHorizontal: padding.navigationActionHorizontal,
+            marginHorizontal: spacing.navigationActionHorizontal,
         },
         list: {
-            paddingBottom: padding.pageBottom,
+            paddingBottom: spacing.pageBottom,
         },
         tag: {
             marginVertical: 2,
         },
         item: {
-            paddingHorizontal: padding.small,
+            paddingHorizontal: spacing.small,
         },
         selectionDisplay: {
             flexDirection: "row",
-            marginTop: padding.tiny,
-            marginBottom: padding.regular,
+            marginTop: spacing.tiny,
+            marginBottom: spacing.medium,
             overflow: "hidden",
         },
         previewTagContainer: {
             paddingLeft: baseInput.padding,
-            paddingVertical: padding.tiny,
+            paddingVertical: spacing.tiny,
             height: 48,
         },
         previewPlaceholder: {
@@ -232,8 +232,8 @@ const createStyles = ({ styles: { baseInput }, theme: { padding, color } }: Them
             paddingLeft: baseInput.padding,
         },
         clearButton: {
-            paddingHorizontal: padding.regular,
-            marginVertical: padding.tiny + 2,
+            paddingHorizontal: spacing.medium,
+            marginVertical: spacing.tiny + 2,
             borderRightColor: color.border,
             borderRightWidth: 1,
             justifyContent: "center",

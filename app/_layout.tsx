@@ -1,12 +1,5 @@
-import {
-    DeepPartial,
-    MergeTheme,
-    Styles,
-    Theme,
-    ThemeProvider,
-    createDefaultStyles,
-    scaleFont,
-} from "@reillymc/react-native-components";
+import type { DeepPartial } from "@reillymc/es-utils";
+import { MergeTheme, Styles, Theme, ThemeProvider, createDefaultStyles } from "@reillymc/react-native-components";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router/stack";
 import * as SplashScreen from "expo-splash-screen";
@@ -14,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useColorScheme, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { scaleFont } from "../src/helpers";
 import { ComponentScreens } from "./index";
 
 export {

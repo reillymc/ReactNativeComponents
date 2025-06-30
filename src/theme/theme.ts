@@ -1,4 +1,4 @@
-import { DeepPartial } from "../helpers";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 export type Theme = typeof DefaultTheme;
 

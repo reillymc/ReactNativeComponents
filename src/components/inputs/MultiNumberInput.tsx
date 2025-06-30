@@ -1,5 +1,5 @@
-import React from "react";
-import { TextInput as RNTextInput, StyleSheet, View } from "react-native";
+import React, { type FC, type Ref } from "react";
+import { TextInput as DefaultTextInput, StyleSheet, View } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { IconButton, IconButtonProps } from "../buttons";
@@ -36,181 +36,178 @@ export interface MultiNumberInputProps
 
     placeholder2?: string;
 
+    ref?: Ref<DefaultTextInput | null>;
+
     onChange?: (e: MultiNumberInputValue) => void;
 }
 
-export const MultiNumberInput = React.forwardRef<RNTextInput, MultiNumberInputProps>(
-    (
-        {
-            keyboardType = "number-pad",
-            enabledRepresentations = ["number", "fraction", "range"],
-            disabled,
-            clearButtonMode,
-            placeholder,
-            placeholder2,
-            width,
-            maxLength,
-            value = { representation: "number", value: "" },
-            onChange,
-            onSubmitEditing,
-            ...baseProps
-        },
-        ref,
-    ) => {
-        const styles = useThemedStyles(createStyles, { value, disabled, enabledRepresentations });
+export const MultiNumberInput: FC<MultiNumberInputProps> = ({
+    keyboardType = "number-pad",
+    enabledRepresentations = ["number", "fraction", "range"],
+    disabled,
+    clearButtonMode,
+    placeholder,
+    placeholder2,
+    width,
+    maxLength,
+    value = { representation: "number", value: "" },
+    onChange,
+    onSubmitEditing,
+    ref,
 
-        const icon: IconButtonProps["iconName"] = {
-            number: "infinity" as const,
-            fraction: "number" as const,
-            range: "arrow-both" as const,
-        }[value.representation];
+    ...baseProps
+}) => {
+    const styles = useThemedStyles(createStyles, { value, disabled, enabledRepresentations });
 
-        const handleChangeMode = React.useCallback(() => {
-            const currentIndex = enabledRepresentations.indexOf(value.representation);
-            const nextIndex = currentIndex + 1 >= enabledRepresentations.length ? 0 : currentIndex + 1;
+    const icon: IconButtonProps["iconName"] = {
+        number: "infinity" as const,
+        fraction: "number" as const,
+        range: "arrow-both" as const,
+    }[value.representation];
 
-            const nextMode = enabledRepresentations[nextIndex];
-            if (!nextMode) {
+    const handleChangeMode = React.useCallback(() => {
+        const currentIndex = enabledRepresentations.indexOf(value.representation);
+        const nextIndex = currentIndex + 1 >= enabledRepresentations.length ? 0 : currentIndex + 1;
+
+        const nextMode = enabledRepresentations[nextIndex];
+        if (!nextMode) {
+            return;
+        }
+        if (nextMode === "number") {
+            if (value.representation === "number") {
                 return;
             }
-            if (nextMode === "number") {
-                if (value.representation === "number") {
+
+            onChange?.({ representation: nextMode, value: value.value?.[0] });
+            return;
+        }
+
+        if (nextMode === "fraction") {
+            switch (value.representation) {
+                case "number":
+                    onChange?.({ representation: nextMode, value: [value.value ?? "", "", ""] });
                     return;
-                }
-
-                onChange?.({ representation: nextMode, value: value.value?.[0] });
-                return;
+                case "fraction":
+                    return;
+                case "range":
+                    onChange?.({ representation: nextMode, value: [value.value?.[0] ?? "", "", ""] });
+                    return;
             }
+        }
 
-            if (nextMode === "fraction") {
-                switch (value.representation) {
-                    case "number":
-                        onChange?.({ representation: nextMode, value: [value.value ?? "", "", ""] });
-                        return;
-                    case "fraction":
-                        return;
-                    case "range":
-                        onChange?.({ representation: nextMode, value: [value.value?.[0] ?? "", "", ""] });
-                        return;
-                }
+        if (nextMode === "range") {
+            switch (value.representation) {
+                case "number":
+                    onChange?.({ representation: nextMode, value: [value.value ?? "", ""] });
+                    return;
+                case "fraction":
+                    onChange?.({ representation: nextMode, value: [value.value?.[0] ?? "", ""] });
+                    return;
+                case "range":
+                    return;
             }
+        }
+    }, [enabledRepresentations, onChange, value.representation, value.value]);
 
-            if (nextMode === "range") {
-                switch (value.representation) {
-                    case "number":
-                        onChange?.({ representation: nextMode, value: [value.value ?? "", ""] });
-                        return;
-                    case "fraction":
-                        onChange?.({ representation: nextMode, value: [value.value?.[0] ?? "", ""] });
-                        return;
-                    case "range":
-                        return;
-                }
+    const handlePrimaryInputChangeText = React.useCallback(
+        (text: string) => {
+            switch (value.representation) {
+                case "number":
+                    onChange?.({ representation: value.representation, value: text });
+                    break;
+                case "fraction":
+                    onChange?.({
+                        representation: value.representation,
+                        value: [text, value.value?.[1] ?? "", value.value?.[2] ?? ""],
+                    });
+                    break;
+                case "range":
+                    onChange?.({ representation: value.representation, value: [text, value.value?.[1] ?? ""] });
+                    break;
             }
-        }, [enabledRepresentations, onChange, value.representation, value.value]);
+        },
+        [onChange, value.representation, value.value],
+    );
 
-        const handlePrimaryInputChangeText = React.useCallback(
-            (text: string) => {
-                switch (value.representation) {
-                    case "number":
-                        onChange?.({ representation: value.representation, value: text });
-                        break;
-                    case "fraction":
-                        onChange?.({
-                            representation: value.representation,
-                            value: [text, value.value?.[1] ?? "", value.value?.[2] ?? ""],
-                        });
-                        break;
-                    case "range":
-                        onChange?.({ representation: value.representation, value: [text, value.value?.[1] ?? ""] });
-                        break;
-                }
-            },
-            [onChange, value.representation, value.value],
-        );
-
-        return (
-            <BaseInput
-                {...baseProps}
-                width={width}
-                disabled={disabled}
-                inputElement={
-                    <View style={styles.container}>
-                        <IconButton
-                            variant="secondary"
-                            disabled={disabled}
-                            iconName={icon}
-                            rounded={false}
-                            style={styles.iconContainer}
-                            color={styles.icon.color}
-                            onPress={handleChangeMode}
-                        />
+    return (
+        <BaseInput
+            {...baseProps}
+            width={width}
+            disabled={disabled}
+            inputElement={
+                <View style={styles.container}>
+                    <IconButton
+                        variant="secondary"
+                        disabled={disabled}
+                        iconName={icon}
+                        rounded={false}
+                        style={styles.iconContainer}
+                        color={styles.icon.color}
+                        onPress={handleChangeMode}
+                    />
+                    <NumberInput
+                        ref={ref}
+                        disabled={disabled}
+                        placeholder={value.representation !== "range" ? placeholder : placeholder2}
+                        maxLength={maxLength}
+                        clearButtonMode={clearButtonMode}
+                        value={value.representation === "number" ? value.value : value.value?.[0]}
+                        keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
+                        style={styles.primaryInput}
+                        onChangeText={handlePrimaryInputChangeText}
+                        onSubmitEditing={value.representation === "number" ? onSubmitEditing : undefined}
+                    />
+                    {value.representation === "fraction" && (
                         <NumberInput
-                            ref={ref}
                             disabled={disabled}
-                            placeholder={value.representation !== "range" ? placeholder : placeholder2}
+                            placeholder={placeholder2}
+                            value={value.value?.[1]}
                             maxLength={maxLength}
                             clearButtonMode={clearButtonMode}
-                            value={value.representation === "number" ? value.value : value.value?.[0]}
-                            keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
-                            style={styles.primaryInput}
-                            onChangeText={handlePrimaryInputChangeText}
-                            onSubmitEditing={value.representation === "number" ? onSubmitEditing : undefined}
+                            keyboardType="number-pad"
+                            style={styles.input}
+                            onChangeText={text =>
+                                onChange?.({
+                                    representation: value.representation,
+                                    value: [value.value?.[0] ?? "", text, value.value?.[2] ?? ""],
+                                })
+                            }
+                            onSubmitEditing={onSubmitEditing}
                         />
-                        {value.representation === "fraction" && (
+                    )}
+                    {value.representation !== "number" && (
+                        <>
+                            <Text variant="title">{value.representation === "fraction" ? "/" : "\u2212"}</Text>
                             <NumberInput
                                 disabled={disabled}
                                 placeholder={placeholder2}
-                                value={value.value?.[1]}
+                                value={value.representation === "fraction" ? value.value?.[2] : value.value?.[1]}
                                 maxLength={maxLength}
                                 clearButtonMode={clearButtonMode}
-                                keyboardType="number-pad"
+                                keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
                                 style={styles.input}
-                                onChangeText={text =>
-                                    onChange?.({
-                                        representation: value.representation,
-                                        value: [value.value?.[0] ?? "", text, value.value?.[2] ?? ""],
-                                    })
-                                }
-                                onSubmitEditing={onSubmitEditing}
-                            />
-                        )}
-                        {value.representation !== "number" && (
-                            <>
-                                <Text variant="title">{value.representation === "fraction" ? "/" : "\u2212"}</Text>
-                                <NumberInput
-                                    disabled={disabled}
-                                    placeholder={placeholder2}
-                                    value={value.representation === "fraction" ? value.value?.[2] : value.value?.[1]}
-                                    maxLength={maxLength}
-                                    clearButtonMode={clearButtonMode}
-                                    keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
-                                    style={styles.input}
-                                    onChangeText={text => {
-                                        if (value.representation === "fraction") {
-                                            onChange?.({
-                                                representation: value.representation,
-                                                value: [value.value?.[0] ?? "", value.value?.[1] ?? "", text],
-                                            });
-                                            return;
-                                        }
+                                onChangeText={text => {
+                                    if (value.representation === "fraction") {
                                         onChange?.({
                                             representation: value.representation,
-                                            value: [value.value?.[0] ?? "", text],
+                                            value: [value.value?.[0] ?? "", value.value?.[1] ?? "", text],
                                         });
-                                    }}
-                                    onSubmitEditing={onSubmitEditing}
-                                />
-                            </>
-                        )}
-                    </View>
-                }
-            />
-        );
-    },
-);
-
-(MultiNumberInput as React.FunctionComponent).displayName = "MultiNumberInput";
+                                        return;
+                                    }
+                                    onChange?.({
+                                        representation: value.representation,
+                                        value: [value.value?.[0] ?? "", text],
+                                    });
+                                }}
+                                onSubmitEditing={onSubmitEditing}
+                            />
+                        </>
+                    )}
+                </View>
+            }
+        />
+    );
+};
 
 const createStyles = (
     { styles: { baseInput }, theme: { color } }: ThemedStyles,

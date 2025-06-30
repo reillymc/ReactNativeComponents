@@ -9,7 +9,7 @@ import type { ValueItem } from "../valueItem";
 import { DropdownItem } from "./DropdownItem";
 
 export interface DropdownPanelProps<T = string> {
-    parentRef: React.RefObject<TextInput>;
+    parentRef: React.RefObject<TextInput | null>;
     items: Array<ValueItem<T>>;
     searchValue: string;
     maxSuggestionCount?: number;

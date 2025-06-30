@@ -6,7 +6,7 @@ import { ActionSize, ActionVariant } from "../buttons";
 import { Icon } from "../Icon";
 import { Text } from "../Text";
 
-import type { DeepPartial } from "../../helpers";
+import type { DeepPartial } from "@reillymc/es-utils";
 import { useThemedStylesWithOverride } from "../../hooks";
 import { BaseInputProps } from "./BaseInput";
 

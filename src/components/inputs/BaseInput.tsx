@@ -1,4 +1,4 @@
-import React from "react";
+import React, { type FC, type Ref } from "react";
 import { DimensionValue, StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from "react-native";
 
 import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
@@ -56,89 +56,85 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
     modalElement?: React.ReactNode;
 
     containerStyle?: StyleProp<ViewStyle>;
+
+    ref?: Ref<TextInput | null>;
 }
 
-export const BaseInput = React.forwardRef<TextInput, BaseInputProps>(
-    (
-        {
-            label,
-            width,
-            disabled,
-            helpText,
-            mandatory,
-            inputElement,
-            panelAboveElement,
-            panelBelowElement,
-            modalElement,
-            style,
-            containerStyle,
-            multiline,
-            scrollEnabled,
-            hasError,
-            preventAutoTrim,
-            onChangeText,
-            ...props
-        },
-        ref,
-    ) => {
-        const styles = useThemedStyles(createStyles, { width, disabled, multiline });
-        const {
-            styles: { baseInput, text },
-        } = useTheme();
+export const BaseInput: FC<BaseInputProps> = ({
+    label,
+    width,
+    disabled,
+    helpText,
+    mandatory,
+    inputElement,
+    panelAboveElement,
+    panelBelowElement,
+    modalElement,
+    style,
+    containerStyle,
+    multiline,
+    scrollEnabled,
+    hasError,
+    preventAutoTrim,
+    onChangeText,
+    ref,
+    ...props
+}) => {
+    const styles = useThemedStyles(createStyles, { width, disabled, multiline });
+    const {
+        styles: { baseInput, text },
+    } = useTheme();
 
-        return (
-            <>
-                <View style={[styles.container, containerStyle]}>
-                    {label && (
-                        <View style={styles.labelContainer}>
-                            {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
-                        </View>
+    return (
+        <>
+            <View style={[styles.container, containerStyle]}>
+                {label && (
+                    <View style={styles.labelContainer}>
+                        {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
+                    </View>
+                )}
+                {panelAboveElement && <View>{panelAboveElement}</View>}
+
+                <View>
+                    {inputElement ? (
+                        inputElement
+                    ) : (
+                        <TextInput
+                            ref={ref}
+                            editable={!disabled}
+                            placeholderTextColor={baseInput.placeholderTextColor}
+                            style={[styles.input, style]}
+                            multiline={multiline}
+                            scrollEnabled={scrollEnabled ?? false}
+                            onChangeText={onChangeText}
+                            {...props}
+                        />
                     )}
-                    {panelAboveElement && <View>{panelAboveElement}</View>}
-
-                    <View>
-                        {inputElement ? (
-                            inputElement
-                        ) : (
-                            <TextInput
-                                ref={ref}
-                                editable={!disabled}
-                                placeholderTextColor={baseInput.placeholderTextColor}
-                                style={[styles.input, style]}
-                                multiline={multiline}
-                                scrollEnabled={scrollEnabled ?? false}
-                                onChangeText={onChangeText}
-                                {...props}
+                    {mandatory && (
+                        <Text variant="title" style={styles.mandatoryIndicator}>
+                            {"\u2022"}
+                        </Text>
+                    )}
+                    {panelBelowElement && <View>{panelBelowElement}</View>}
+                </View>
+                {(helpText || hasError) && (
+                    <View style={styles.helpText}>
+                        {hasError && (
+                            <Icon
+                                size={text.fontFamilySize.caption}
+                                iconName="exclamationcircle"
+                                style={styles.errorIndicator}
                             />
                         )}
-                        {mandatory && (
-                            <Text variant="title" style={styles.mandatoryIndicator}>
-                                {"\u2022"}
-                            </Text>
-                        )}
-                        {panelBelowElement && <View>{panelBelowElement}</View>}
+                        {helpText &&
+                            (typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText)}
                     </View>
-                    {(helpText || hasError) && (
-                        <View style={styles.helpText}>
-                            {hasError && (
-                                <Icon
-                                    size={text.fontFamilySize.caption}
-                                    iconName="exclamationcircle"
-                                    style={styles.errorIndicator}
-                                />
-                            )}
-                            {helpText &&
-                                (typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText)}
-                        </View>
-                    )}
-                </View>
-                {modalElement}
-            </>
-        );
-    },
-);
-
-(BaseInput as React.FunctionComponent).displayName = "BaseInput";
+                )}
+            </View>
+            {modalElement}
+        </>
+    );
+};
 
 const createStyles = (
     { styles: { baseInput }, theme: { spacing } }: ThemedStyles,

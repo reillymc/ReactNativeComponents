@@ -58,12 +58,12 @@ const ComponentListScreen: React.FC = () => {
     );
 };
 
-const createStyles = ({ theme: { padding, color } }: ThemedStyles) =>
+const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
     StyleSheet.create({
         page: {
             backgroundColor: color.background,
-            paddingHorizontal: padding.pageHorizontal,
-            paddingTop: padding.pageTop,
+            paddingHorizontal: spacing.pageHorizontal,
+            paddingTop: spacing.pageTop,
             paddingBottom: 64,
         },
     });

@@ -1,5 +1,5 @@
-import React from "react";
-import { TextInput as RNTextInput, StyleSheet, View } from "react-native";
+import React, { type FC, type Ref } from "react";
+import { TextInput as DefaultTextInput, StyleSheet, View } from "react-native";
 
 import { ThemedStyles, useThemedStyles } from "../../hooks";
 import { FeatureButton } from "../buttons";
@@ -13,54 +13,58 @@ export interface CounterInputStyles {
 
 export interface CounterInputProps extends NumberInputProps {
     disableKeyboardInput?: boolean;
+    ref?: Ref<DefaultTextInput | null>;
 }
 
-export const CounterInput = React.forwardRef<RNTextInput, CounterInputProps>(
-    ({ onChangeText, label, disableKeyboardInput, disabled, ...props }, ref) => {
-        const styles = useThemedStyles(createStyles, { disabled, disableKeyboardInput });
+export const CounterInput: FC<CounterInputProps> = ({
+    onChangeText,
+    label,
+    disableKeyboardInput,
+    disabled,
+    ref,
+    ...props
+}) => {
+    const styles = useThemedStyles(createStyles, { disabled, disableKeyboardInput });
 
-        const value = parseInt(props.value ?? "0", 10);
+    const value = parseInt(props.value ?? "0", 10);
 
-        return (
-            <View style={props.containerStyle}>
-                {label && (
-                    <View style={styles.label}>
-                        {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
-                    </View>
-                )}
-                <View style={styles.container}>
-                    <FeatureButton
-                        iconName="minus"
-                        size="small"
-                        variant="flat"
-                        disabled={disabled}
-                        rounded={false}
-                        onPress={() => onChangeText?.(Math.max(value - 1, props.min ?? 0).toString())}
-                        style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-                    />
-                    <NumberInput
-                        {...props}
-                        ref={ref}
-                        style={styles.input}
-                        disabled={disabled || disableKeyboardInput}
-                        containerStyle={styles.inputContainer}
-                    />
-                    <FeatureButton
-                        iconName="plus"
-                        size="small"
-                        variant="flat"
-                        disabled={disabled}
-                        rounded={false}
-                        onPress={() => onChangeText?.(Math.min(value + 1, props.max ?? Number.MAX_VALUE).toString())}
-                        style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                    />
+    return (
+        <View style={props.containerStyle}>
+            {label && (
+                <View style={styles.label}>
+                    {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
                 </View>
+            )}
+            <View style={styles.container}>
+                <FeatureButton
+                    iconName="minus"
+                    size="small"
+                    variant="flat"
+                    disabled={disabled}
+                    rounded={false}
+                    onPress={() => onChangeText?.(Math.max(value - 1, props.min ?? 0).toString())}
+                    style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                />
+                <NumberInput
+                    {...props}
+                    ref={ref}
+                    style={styles.input}
+                    disabled={disabled || disableKeyboardInput}
+                    containerStyle={styles.inputContainer}
+                />
+                <FeatureButton
+                    iconName="plus"
+                    size="small"
+                    variant="flat"
+                    disabled={disabled}
+                    rounded={false}
+                    onPress={() => onChangeText?.(Math.min(value + 1, props.max ?? Number.MAX_VALUE).toString())}
+                    style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+                />
             </View>
-        );
-    },
-);
-
-(CounterInput as React.FunctionComponent).displayName = "CounterInput";
+        </View>
+    );
+};
 
 const createStyles = (
     { styles: { counterInput, baseInput } }: ThemedStyles,

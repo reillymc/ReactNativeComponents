@@ -1,20 +1,13 @@
-import React from "react";
+import React, { type Ref } from "react";
 import { TextInput as DefaultTextInput, NativeSyntheticEvent, TextInputFocusEventData, ViewStyle } from "react-native";
 
-import { IsValidString } from "../../../helpers";
 import { BaseInput, BaseInputProps } from "../BaseInput";
 import { TextInputProps } from "../TextInput";
 import { ValueItem } from "../valueItem";
 
+import { ValidateString } from "@reillymc/es-utils";
 import { useForwardedRef } from "../../../hooks";
 import { DropdownPanel, DropdownPanelProps } from "./DropdownPanel";
-
-// Override forwardRef to allow generic typing.
-declare module "react" {
-    function forwardRef<T, P = Record<string, unknown>>(
-        render: (props: P, ref: React.Ref<T>) => React.ReactElement | null,
-    ): (props: P & React.RefAttributes<T>) => React.ReactElement | null;
-}
 
 export interface DropdownInputStyles {
     panelGap: number;
@@ -50,101 +43,97 @@ export type DropdownInputProps<T = string> = Pick<
          * or clears out all text
          */
         onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
+
+        ref?: Ref<DefaultTextInput | null>;
     };
 
-export const DropdownInput = React.forwardRef(
-    <T,>(
-        {
-            items = [],
-            selectedItem,
-            minimumSearchLength = 1,
-            maxSuggestionCount = 5,
-            panelBehaviour,
-            onSelect,
-            onChangeText,
-            onBlur,
-            value,
-            ...props
-        }: DropdownInputProps<T>,
-        ref: React.Ref<DefaultTextInput>,
-    ) => {
-        const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? value ?? "");
-        const [hasFocus, setHasFocus] = React.useState(false);
+export const DropdownInput = <T,>({
+    items = [],
+    selectedItem,
+    minimumSearchLength = 1,
+    maxSuggestionCount = 5,
+    panelBehaviour,
+    onSelect,
+    onChangeText,
+    onBlur,
+    value,
+    ref,
+    ...props
+}: DropdownInputProps<T>) => {
+    const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? value ?? "");
+    const [hasFocus, setHasFocus] = React.useState(false);
 
-        const inputRef = useForwardedRef(ref);
+    const inputRef = useForwardedRef(ref);
 
-        React.useEffect(() => {
-            setSearchValue(selectedItem?.label ?? value ?? "");
-        }, [selectedItem, value]);
+    React.useEffect(() => {
+        setSearchValue(selectedItem?.label ?? value ?? "");
+    }, [selectedItem, value]);
 
-        const handleFocus = () => {
-            setHasFocus(true);
-        };
+    const handleFocus = () => {
+        setHasFocus(true);
+    };
 
-        const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-            onChangeText?.(e.nativeEvent.text.trim());
+    const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+        onChangeText?.(e.nativeEvent.text.trim());
 
-            const existingItem = items.find(item => item.label.toLowerCase() === searchValue.toLowerCase());
-            if (existingItem) {
-                onSelect?.(existingItem, true);
+        const existingItem = items.find(item => item.label.toLowerCase() === searchValue.toLowerCase());
+        if (existingItem) {
+            onSelect?.(existingItem, true);
+        }
+        setHasFocus(false);
+        onBlur?.(e);
+    };
+
+    const handleChangeText = (text: string) => {
+        setSearchValue(text);
+        onChangeText?.(text);
+
+        if (!ValidateString(text)) {
+            onSelect?.(undefined, true);
+        }
+    };
+
+    const showDropdownPanel =
+        hasFocus &&
+        searchValue.length >= minimumSearchLength &&
+        selectedItem?.label.toLowerCase() !== searchValue.toLowerCase();
+
+    return (
+        <BaseInput
+            {...props}
+            ref={inputRef}
+            value={searchValue}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+            onChangeText={handleChangeText}
+            autoCorrect={false}
+            preventAutoTrim
+            panelAboveElement={
+                panelBehaviour === "inlineAbove" ? (
+                    <DropdownPanel
+                        parentRef={inputRef}
+                        items={items}
+                        maxSuggestionCount={maxSuggestionCount}
+                        onSelect={onSelect}
+                        searchValue={searchValue}
+                        visible={showDropdownPanel}
+                        panelBehaviour={panelBehaviour}
+                    />
+                ) : undefined
             }
-            setHasFocus(false);
-            onBlur?.(e);
-        };
-
-        const handleChangeText = (text: string) => {
-            setSearchValue(text);
-            onChangeText?.(text);
-
-            if (!IsValidString(text)) {
-                onSelect?.(undefined, true);
+            panelBelowElement={
+                panelBehaviour !== "inlineAbove" ? (
+                    <DropdownPanel
+                        parentRef={inputRef}
+                        items={items}
+                        maxSuggestionCount={maxSuggestionCount}
+                        onSelect={onSelect}
+                        searchValue={searchValue}
+                        visible={showDropdownPanel}
+                        panelBehaviour={panelBehaviour}
+                    />
+                ) : undefined
             }
-        };
-
-        const showDropdownPanel =
-            hasFocus &&
-            searchValue.length >= minimumSearchLength &&
-            selectedItem?.label.toLowerCase() !== searchValue.toLowerCase();
-
-        return (
-            <BaseInput
-                {...props}
-                ref={inputRef}
-                value={searchValue}
-                onFocus={handleFocus}
-                onBlur={handleBlur}
-                onChangeText={handleChangeText}
-                autoCorrect={false}
-                preventAutoTrim
-                panelAboveElement={
-                    panelBehaviour === "inlineAbove" ? (
-                        <DropdownPanel
-                            parentRef={inputRef}
-                            items={items}
-                            maxSuggestionCount={maxSuggestionCount}
-                            onSelect={onSelect}
-                            searchValue={searchValue}
-                            visible={showDropdownPanel}
-                            panelBehaviour={panelBehaviour}
-                        />
-                    ) : undefined
-                }
-                panelBelowElement={
-                    panelBehaviour !== "inlineAbove" ? (
-                        <DropdownPanel
-                            parentRef={inputRef}
-                            items={items}
-                            maxSuggestionCount={maxSuggestionCount}
-                            onSelect={onSelect}
-                            searchValue={searchValue}
-                            visible={showDropdownPanel}
-                            panelBehaviour={panelBehaviour}
-                        />
-                    ) : undefined
-                }
-            />
-        );
-    },
-);
-
-(DropdownInput as React.FunctionComponent).displayName = "DropdownInput";
+        />
+    );
+};

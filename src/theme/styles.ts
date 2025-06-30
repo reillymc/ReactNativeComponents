@@ -1,5 +1,6 @@
 import merge from "lodash.merge";
 
+import { DeepPartial } from "@reillymc/es-utils";
 import type {
     ActionSize,
     ActionStyles,
@@ -17,7 +18,6 @@ import type {
     ToastStyles,
     ToggleInputStyles,
 } from "../components";
-import { DeepPartial } from "../helpers";
 import { Theme } from "./theme";
 
 export type Styles = {

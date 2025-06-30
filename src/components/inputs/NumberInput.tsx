@@ -1,5 +1,5 @@
-import React from "react";
-import { NativeSyntheticEvent, TextInput as RNTextInput, TextInputChangeEventData } from "react-native";
+import React, { type FC, type Ref } from "react";
+import { TextInput as DefaultTextInput, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
 
 import { BaseInput, BaseInputProps } from "./BaseInput";
 
@@ -21,31 +21,29 @@ export interface NumberInputProps extends BaseInputProps {
      * Passes through raw event. No number validation performed.
      */
     onChange?: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+
+    ref?: Ref<DefaultTextInput | null>;
 }
 
-export const NumberInput = React.forwardRef<RNTextInput, NumberInputProps>(
-    ({ onChangeText, keyboardType = "number-pad", ...props }, ref) => {
-        const handleChangeText = React.useCallback(
-            (text: string) => {
-                if (onChangeText) {
-                    const regExp = keyboardType === "decimal-pad" ? /^([0-9]*\.*[0-9]*)/g : /^([0-9]*)/g;
-                    const validatedString = text.match(regExp)?.[0];
-                    const num = parseFloat(validatedString ?? "");
+export const NumberInput: FC<NumberInputProps> = ({ onChangeText, keyboardType = "number-pad", ref, ...props }) => {
+    const handleChangeText = React.useCallback(
+        (text: string) => {
+            if (onChangeText) {
+                const regExp = keyboardType === "decimal-pad" ? /^([0-9]*\.*[0-9]*)/g : /^([0-9]*)/g;
+                const validatedString = text.match(regExp)?.[0];
+                const num = parseFloat(validatedString ?? "");
 
-                    if (Number.isNaN(num) || validatedString !== num.toString()) {
-                        onChangeText?.(validatedString ?? "");
+                if (Number.isNaN(num) || validatedString !== num.toString()) {
+                    onChangeText?.(validatedString ?? "");
 
-                        return;
-                    }
-
-                    onChangeText?.(num.toString());
+                    return;
                 }
-            },
-            [onChangeText, keyboardType],
-        );
 
-        return <BaseInput {...props} ref={ref} keyboardType={keyboardType} onChangeText={handleChangeText} />;
-    },
-);
+                onChangeText?.(num.toString());
+            }
+        },
+        [onChangeText, keyboardType],
+    );
 
-(NumberInput as React.FunctionComponent).displayName = "NumberInput";
+    return <BaseInput {...props} ref={ref} keyboardType={keyboardType} onChangeText={handleChangeText} />;
+};

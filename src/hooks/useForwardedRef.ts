@@ -1,6 +1,6 @@
 import React from "react";
 
-export const useForwardedRef = <T>(ref: React.ForwardedRef<T>) => {
+export const useForwardedRef = <T>(ref: React.ForwardedRef<T> | undefined) => {
     const localRef = React.useRef<T>(null);
 
     React.useEffect(() => {
