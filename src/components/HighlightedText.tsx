@@ -1,10 +1,14 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import { EscapeForRegexProcessing } from "../helpers";
 import { ThemedStyles, useThemedStyles } from "../hooks";
 
 import { Text, TextProps } from "./Text";
+
+/**
+ * Escapes any characters that would interfere with RegEx processing.
+ */
+export const EscapeForRegexProcessing = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export interface HighlightedTextStyles {
     /**

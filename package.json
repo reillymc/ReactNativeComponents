@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "description": "A collection of React Native components and resources",
     "module": "lib/module/index",
     "types": "lib/typescript/src/index.d.ts",
@@ -43,7 +43,10 @@
         "ios",
         "android"
     ],
-    "repository": "https://github.com/reillymc/ReactNativeComponents",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/reillymc/ReactNativeComponents.git"
+    },
     "author": "reillymc",
     "license": "ISC",
     "bugs": {

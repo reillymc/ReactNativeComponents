@@ -10,7 +10,6 @@ export * from "./Icon";
 export * from "./KeyboardAccessory";
 export * from "./ListItem";
 export { Panel, PanelProps } from "./Panel";
-export { StatusBarBlur, StatusBarBlurProps } from "./StatusBarBlur";
 export * from "./swipeView";
 export * from "./Tag";
 export { Text, TextProps, TextStyles, TextVariant } from "./Text";

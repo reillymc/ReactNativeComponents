@@ -7,7 +7,6 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { useColorScheme, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { scaleFont } from "../src/helpers";
 import { ComponentScreens } from "./index";
 
 export {
@@ -53,12 +52,12 @@ const Layout: React.FC = () => {
                 bold800: "Comfortaa-Bold",
             },
             size: {
-                tiny: scaleFont(12, 0.9, fontScale),
-                small: scaleFont(14, 0.88, fontScale),
-                regular: scaleFont(16, 0.86, fontScale),
-                large: scaleFont(20, 0.84, fontScale),
-                xLarge: scaleFont(24, 0.82, fontScale),
-                xxLarge: scaleFont(32, 0.8, fontScale),
+                tiny: 12 * fontScale,
+                small: 14 * fontScale,
+                regular: 16 * fontScale,
+                large: 18 * fontScale,
+                xLarge: 24 * fontScale,
+                xxLarge: 32 * fontScale,
             },
         },
     };
