@@ -1,11 +1,10 @@
 import React from "react";
-import { Button, ButtonProps } from "@reillymc/react-native-components";
+import { Button, type ButtonProps } from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 export const defaultProps: ButtonProps = {
     label: "Secondary Button",
-    contentAlign: "center",
     variant: "secondary",
     size: "regular",
     onPress: () => null,
@@ -16,16 +15,6 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
         type: "string",
         label: "Label",
     },
-    contentAlign: {
-        type: "enum",
-        label: "Content align",
-        default: "Center",
-        values: [
-            { label: "Left", value: "left" },
-            { label: "Center", value: "center" },
-            { label: "Right", value: "right" },
-        ],
-    },
     variant: {
         type: "enum",
         label: "Style variant",
@@ -33,7 +22,7 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
-            { label: "Flat", value: "flat" },
+            { label: "Destructive", value: "destructive" },
         ],
     },
     disabled: {
@@ -45,7 +34,6 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
         label: "Size",
         default: "Regular",
         values: [
-            { label: "Small", value: "small" },
             { label: "Regular", value: "regular" },
             { label: "Large", value: "large" },
         ],
@@ -67,7 +55,9 @@ const ButtonPage: React.FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

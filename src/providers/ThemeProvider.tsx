@@ -1,7 +1,13 @@
 import React from "react";
-
 import type { DeepPartial } from "@reillymc/es-utils";
-import { createDefaultStyles, DefaultTheme, MergeTheme, Styles, Theme } from "../theme";
+
+import {
+    createDefaultStyles,
+    DefaultTheme,
+    MergeTheme,
+    type Styles,
+    type Theme,
+} from "../theme";
 
 export interface ThemeContextDefinition {
     theme: Theme;

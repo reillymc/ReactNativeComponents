@@ -1,14 +1,25 @@
-import React from "react";
-import { StyleSheet, Pressable, StyleProp, ColorValue, TextStyle, OpaqueColorValue } from "react-native";
+import type React from "react";
+import {
+    type ColorValue,
+    type OpaqueColorValue,
+    Pressable,
+    type StyleProp,
+    StyleSheet,
+    type TextStyle,
+    type ViewStyle,
+} from "react-native";
 import { Octicons } from "@expo/vector-icons";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { Theme } from "../../theme";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import type { Theme } from "../../theme";
+import type { ActionProps } from "./Action";
+import type { ActionSize, ActionVariant } from "./types";
 
-import { ActionSize, ActionVariant } from "./types";
-import { ActionProps } from "./Action";
-
-export const getBackgroundColor = ({ color }: Theme, pressed: boolean, disabled: boolean | undefined): ColorValue => {
+export const getBackgroundColor = (
+    { color }: Theme,
+    pressed: boolean,
+    disabled: boolean | undefined,
+): ColorValue => {
     if (disabled) {
         return color.inputBackgroundDisabled;
     }
@@ -20,7 +31,11 @@ export const getBackgroundColor = ({ color }: Theme, pressed: boolean, disabled:
     return color.inputBackground;
 };
 
-export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: boolean): ColorValue => {
+export const getLabelColor = (
+    { color }: Theme,
+    type: ActionVariant,
+    pressed: boolean,
+): ColorValue => {
     switch (type) {
         case "primary":
             return pressed ? color.primaryDark : color.primary;
@@ -38,10 +53,12 @@ export type IconButtonStyles = {
     fontSize: { [key in ActionSize]: number };
 };
 
-export interface IconButtonProps extends Omit<ActionProps, "label" | "size"> {
+export interface IconButtonProps
+    extends Omit<ActionProps, "label" | "size" | "style"> {
     iconName: keyof typeof Octicons.glyphMap;
     iconStyle?: StyleProp<TextStyle>;
     rounded?: boolean;
+    style?: StyleProp<ViewStyle>;
     color?: string | OpaqueColorValue | undefined;
 
     onPress?: () => void;
@@ -65,7 +82,13 @@ export const IconButton: React.FC<IconButtonProps> = ({
             disabled={disabled}
             style={({ pressed }) => [
                 styles.container,
-                { backgroundColor: getBackgroundColor(theme, pressed, disabled) },
+                {
+                    backgroundColor: getBackgroundColor(
+                        theme,
+                        pressed,
+                        disabled,
+                    ),
+                },
                 style,
             ]}
             onPress={onPress}
@@ -84,7 +107,10 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
 IconButton.displayName = "IconButton";
 
-const createStyles = ({ theme: { color, border } }: ThemedStyles, { rounded }: Partial<IconButtonProps>) => {
+const createStyles = (
+    { theme: { color, border } }: ThemedStyles,
+    { rounded }: Partial<IconButtonProps>,
+) => {
     const size = 28;
 
     const styles = StyleSheet.create({

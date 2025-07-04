@@ -29,13 +29,12 @@ export const DefaultTheme = {
         primaryDark: "#ff8585",
         primaryLight: "#ffbdbd",
         secondary: "#12263A",
-        secondaryHighlight: "#22476D",
+        secondaryHighlight: "#718191",
         secondaryDisabled: "#B5EAD7",
         tertiary: "#06bcc1",
 
         destructive: "#ff382e",
-        destructiveHighlight: "#ff5c54",
-        destructiveDisabled: "#ff9e96",
+        destructiveHighlight: "#ff9e96",
 
         light: "#F4EDEA",
 
@@ -55,8 +54,9 @@ export const DefaultTheme = {
         textInverted: "#F4EDEA",
         textDisabled: "#B5EAD7",
 
-        textOnPrimary: "#12263A",
+        textOnPrimary: "#F4EDEA",
         textOnSecondary: "#F4EDEA",
+        textOnDestructive: "#F4EDEA",
 
         background: "#F4EDEA",
         backgroundHighlight: "#f7f3f2",
@@ -110,7 +110,10 @@ export const DefaultTheme = {
     },
 };
 
-export const MergeTheme = (first: ThemeOverrides, second: ThemeOverrides | undefined): Theme => ({
+export const MergeTheme = (
+    first: ThemeOverrides,
+    second: ThemeOverrides | undefined,
+): Theme => ({
     ...DefaultTheme,
     ...first,
     ...second,

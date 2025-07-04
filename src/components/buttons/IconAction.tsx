@@ -1,12 +1,19 @@
+import type React from "react";
+import {
+    type ColorValue,
+    Pressable,
+    type StyleProp,
+    StyleSheet,
+    type TextStyle,
+    View,
+    type ViewStyle,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import React from "react";
-import { ColorValue, Pressable, StyleProp, StyleSheet, TextStyle, View, ViewStyle } from "react-native";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { Theme } from "../../theme";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import type { Theme } from "../../theme";
 import { Text } from "../Text";
-
-import { ActionSize, ActionVariant } from "./types";
+import type { ActionSize, ActionVariant } from "./types";
 
 const getIconColor = (
     { color }: Theme,
@@ -29,7 +36,7 @@ const getIconColor = (
         }
         case "destructive": {
             if (disabled) {
-                return color.destructiveDisabled;
+                return color.destructiveHighlight;
             }
             return pressed ? color.destructiveHighlight : color.destructive;
         }
@@ -73,7 +80,12 @@ export const IconAction: React.FC<IconActionProps> = ({
     const { theme } = useTheme();
 
     return (
-        <Pressable hitSlop={20} disabled={disabled} style={containerStyle} onPress={onPress}>
+        <Pressable
+            hitSlop={20}
+            disabled={disabled}
+            style={containerStyle}
+            onPress={onPress}
+        >
             {({ pressed }) => (
                 <View style={styles.container}>
                     <AntDesign

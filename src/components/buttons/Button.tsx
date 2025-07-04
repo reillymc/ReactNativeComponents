@@ -1,129 +1,87 @@
-import React from "react";
-import { ColorValue, DimensionValue, Pressable, StyleSheet, Text } from "react-native";
+import type { FC } from "react";
+import { type ColorValue, type DimensionValue, StyleSheet } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { Theme } from "../../theme";
-import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import {
+    Action,
+    type ActionProps,
+    type ActionState,
+    type ActionStyles,
+    type ActionVariant,
+} from "./Action";
 
-import { ActionProps } from "./Action";
-import { ActionSize, ActionVariant } from "./types";
-
-export const getBackgroundColor = (
-    { color }: Theme,
-    variant: ActionVariant,
-    pressed: boolean,
-    disabled: boolean | undefined,
-): ColorValue => {
-    switch (variant) {
-        case "primary": {
-            if (disabled) {
-                return color.primaryLight;
-            }
-            return pressed ? color.primaryDark : color.primary;
-        }
-        case "secondary": {
-            if (disabled) {
-                return color.secondaryDisabled;
-            }
-            return pressed ? color.secondaryHighlight : color.secondary;
-        }
-        case "destructive": {
-            if (disabled) {
-                return color.destructiveDisabled;
-            }
-            return pressed ? color.destructiveHighlight : color.destructive;
-        }
-        case "flat":
-            return "transparent";
-    }
-};
-
-export const getLabelColor = ({ color }: Theme, type: ActionVariant, pressed: boolean): ColorValue => {
-    switch (type) {
-        case "primary":
-            return color.textOnPrimary;
-        case "secondary":
-            return color.textOnSecondary;
-        case "flat":
-            return pressed ? color.textHighlight : color.textPrimary;
-    }
-
-    return color.textInverted;
-};
+export type ButtonSize = "regular" | "large";
 
 type ButtonStyles = {
-    height: { [key in ActionSize]: DimensionValue };
-    width: { [key in ActionSize]: DimensionValue };
+    height: { [Size in ButtonSize]: DimensionValue };
+    width: { [Size in ButtonSize]: DimensionValue };
+    padding: number;
     borderRadius: number;
-
-    /**
-     * Font family due to weight limitations.
-     */
-    fontFamilyWeight: string;
+    color: {
+        [Variant in ActionVariant]: { [State in ActionState]: ColorValue };
+    };
+    label: ActionStyles["label"];
 };
 
 interface ButtonProps extends ActionProps {
-    contentAlign?: "center" | "left" | "right";
+    style?: DeepPartial<ButtonStyles>;
+    size?: "large" | "regular";
 }
 
-const Button: React.FC<ButtonProps> = ({
+const Button: FC<ButtonProps> = ({
     label,
     variant = "primary",
     size = "large",
-    contentAlign = "center",
-    disabled,
+    disabled: disabledProp,
     style,
     onPress,
 }) => {
-    const hitBuffer = size === "small" ? 50 : 20;
+    const disabled = disabledProp || !onPress;
 
-    const styles = useThemedStyles(createStyles, { size, contentAlign, variant });
-    const { theme } = useTheme();
+    const [styles, { button }] = useThemedStylesWithOverride(
+        createStyles,
+        { button: style },
+        { size, variant, disabled },
+    );
 
     return (
-        <Pressable
-            hitSlop={hitBuffer}
-            disabled={disabled}
-            style={({ pressed }) => [
-                styles.button,
-                {
-                    backgroundColor: getBackgroundColor(theme, variant, pressed, disabled),
-                    color: getLabelColor(theme, variant, pressed),
-                },
-                style,
-            ]}
+        <Action
+            style={{ label: button.label }}
             onPress={onPress}
-        >
-            {({ pressed }) => (
-                <Text numberOfLines={1} style={[styles.label, { color: getLabelColor(theme, variant, pressed) }]}>
-                    {label}
-                </Text>
-            )}
-        </Pressable>
+            disabled={disabled}
+            label={label}
+            variant={variant}
+            containerStyle={({ pressed }) => [
+                styles.button,
+                pressed && { backgroundColor: button.color[variant].pressed },
+            ]}
+        />
     );
 };
 
 Button.displayName = "Button";
 
-export { Button, ButtonProps, ButtonStyles };
+export { Button, type ButtonProps, type ButtonStyles };
 
 const createStyles = (
-    { styles: { button, common, baseInput } }: ThemedStyles,
-    { size = "large", contentAlign, variant }: Partial<ButtonProps>,
+    { styles: { button } }: ThemedStyles,
+    {
+        size = "large",
+        variant,
+        disabled,
+    }: Required<Pick<ButtonProps, "size" | "variant" | "disabled">>,
 ) => {
     const styles = StyleSheet.create({
         button: {
             justifyContent: "center",
+            alignItems: "center",
             borderRadius: button.borderRadius,
             minHeight: button.height[size],
             minWidth: button.width[size],
-            width: button.width[size],
-            height: button.height[size],
-        },
-        label: {
-            fontFamily: button.fontFamilyWeight,
-            fontSize: common.action.fontSize[size],
-            textAlign: contentAlign,
-            paddingHorizontal: variant !== "flat" ? baseInput.padding : 0,
+            backgroundColor:
+                button.color[variant][disabled ? "disabled" : "default"],
+            padding: button.padding,
         },
     });
     return styles;

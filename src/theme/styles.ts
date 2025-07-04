@@ -1,6 +1,6 @@
+import type { DeepPartial } from "@reillymc/es-utils";
 import merge from "lodash.merge";
 
-import { DeepPartial } from "@reillymc/es-utils";
 import type {
     ActionSize,
     ActionStyles,
@@ -18,7 +18,7 @@ import type {
     ToastStyles,
     ToggleInputStyles,
 } from "../components";
-import { Theme } from "./theme";
+import type { Theme } from "./theme";
 
 export type Styles = {
     baseInput: BaseInputStyles;
@@ -49,7 +49,12 @@ export type StyleOverrides = DeepPartial<Styles>;
 
 export type CreateStyles = (theme: Theme) => Styles;
 
-export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing }) => ({
+export const createDefaultStyles: CreateStyles = ({
+    border,
+    color,
+    font,
+    spacing,
+}) => ({
     baseInput: {
         height: 48,
         width: {
@@ -103,13 +108,27 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing
     },
     textInput: {},
     action: {
-        color: {
-            // Currently overridden by pressed methods
-            primary: color.primary,
-            secondary: color.secondary,
-            flat: color.textPrimary,
+        label: {
+            fontFamilyWeight: font.familyWeight.regular400,
+            fontSize: font.size.regular,
+            color: {
+                primary: {
+                    default: color.primary,
+                    pressed: color.primaryLight,
+                    disabled: color.primaryLight,
+                },
+                secondary: {
+                    default: color.secondary,
+                    pressed: color.secondaryHighlight,
+                    disabled: color.secondaryHighlight,
+                },
+                destructive: {
+                    default: color.destructive,
+                    pressed: color.destructiveHighlight,
+                    disabled: color.destructiveHighlight,
+                },
+            },
         },
-        fontFamilyWeight: font.familyWeight.regular400,
     },
     iconAction: {
         size: {
@@ -122,15 +141,51 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing
         height: {
             large: 48,
             regular: 40,
-            small: 30,
         },
         width: {
-            small: 120,
             regular: 160,
             large: "100%",
         },
         borderRadius: border.radius.regular,
-        fontFamilyWeight: font.familyWeight.regular400,
+        padding: spacing.medium,
+        color: {
+            primary: {
+                default: color.primary,
+                pressed: color.primaryLight,
+                disabled: color.primaryLight,
+            },
+            secondary: {
+                default: color.secondary,
+                pressed: color.secondaryHighlight,
+                disabled: color.secondaryHighlight,
+            },
+            destructive: {
+                default: color.destructive,
+                pressed: color.destructiveHighlight,
+                disabled: color.destructiveHighlight,
+            },
+        },
+        label: {
+            fontFamilyWeight: font.familyWeight.regular400,
+            fontSize: font.size.regular,
+            color: {
+                primary: {
+                    default: color.textOnPrimary,
+                    pressed: color.textOnPrimary,
+                    disabled: color.textOnPrimary,
+                },
+                secondary: {
+                    default: color.textOnSecondary,
+                    pressed: color.textOnSecondary,
+                    disabled: color.textOnSecondary,
+                },
+                destructive: {
+                    default: color.textOnDestructive,
+                    pressed: color.textOnDestructive,
+                    disabled: color.textOnDestructive,
+                },
+            },
+        },
     },
     iconButton: {
         size: {
@@ -205,5 +260,7 @@ export const createDefaultStyles: CreateStyles = ({ border, color, font, spacing
     },
 });
 
-export const MergeStyles = (styles: Styles, overrides: StyleOverrides | undefined = {}): Styles =>
-    merge({}, styles, overrides);
+export const MergeStyles = (
+    styles: Styles,
+    overrides: StyleOverrides | undefined = {},
+): Styles => merge({}, styles, overrides);

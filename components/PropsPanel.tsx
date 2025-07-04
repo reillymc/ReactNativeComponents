@@ -9,7 +9,7 @@ import {
 } from "@reillymc/react-native-components";
 import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { useSelectionModal } from "../app/selectionModal";
+import { useSelectionModal } from "../app/SelectionModal";
 
 type PropDefinitionBase = {
     label?: string;
