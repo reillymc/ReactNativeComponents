@@ -1,9 +1,13 @@
 import React, { type FC, type Ref } from "react";
-import { TextInput as DefaultTextInput, NativeSyntheticEvent, TextInputChangeEventData } from "react-native";
+import type {
+    TextInput as DefaultTextInput,
+    NativeSyntheticEvent,
+    TextInputChangeEventData,
+} from "react-native";
 
-import { BaseInput, BaseInputProps } from "./BaseInput";
+import { BaseInput, type BaseInputProps } from "./BaseInput";
 
-export interface NumberInputStyles {}
+export type NumberInputStyles = {};
 
 export interface NumberInputProps extends BaseInputProps {
     keyboardType?: "decimal-pad" | "number-pad";
@@ -25,13 +29,21 @@ export interface NumberInputProps extends BaseInputProps {
     ref?: Ref<DefaultTextInput | null>;
 }
 
-export const NumberInput: FC<NumberInputProps> = ({ onChangeText, keyboardType = "number-pad", ref, ...props }) => {
+export const NumberInput: FC<NumberInputProps> = ({
+    onChangeText,
+    keyboardType = "number-pad",
+    ref,
+    ...props
+}) => {
     const handleChangeText = React.useCallback(
         (text: string) => {
             if (onChangeText) {
-                const regExp = keyboardType === "decimal-pad" ? /^([0-9]*\.*[0-9]*)/g : /^([0-9]*)/g;
+                const regExp =
+                    keyboardType === "decimal-pad"
+                        ? /^([0-9]*\.*[0-9]*)/g
+                        : /^([0-9]*)/g;
                 const validatedString = text.match(regExp)?.[0];
-                const num = parseFloat(validatedString ?? "");
+                const num = Number.parseFloat(validatedString ?? "");
 
                 if (Number.isNaN(num) || validatedString !== num.toString()) {
                     onChangeText?.(validatedString ?? "");
@@ -45,5 +57,12 @@ export const NumberInput: FC<NumberInputProps> = ({ onChangeText, keyboardType =
         [onChangeText, keyboardType],
     );
 
-    return <BaseInput {...props} ref={ref} keyboardType={keyboardType} onChangeText={handleChangeText} />;
+    return (
+        <BaseInput
+            {...props}
+            ref={ref}
+            keyboardType={keyboardType}
+            onChangeText={handleChangeText}
+        />
+    );
 };

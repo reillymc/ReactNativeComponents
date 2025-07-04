@@ -1,7 +1,7 @@
 import React from "react";
-import { Tag, TagProps } from "@reillymc/react-native-components";
+import { Tag, type TagProps } from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import { glyphMapValueItemsNullable } from "../helpers";
 
 const defaultProps: TagProps = {
@@ -43,7 +43,9 @@ const TagPage: React.FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

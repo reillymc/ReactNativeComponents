@@ -1,14 +1,25 @@
 import React from "react";
-import { Avatar, AvatarProps, IconAction } from "@reillymc/react-native-components";
+import { AntDesign } from "@expo/vector-icons";
+import {
+    Avatar,
+    type AvatarProps,
+    IconAction,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: AvatarProps = {
     firstName: "John",
     lastName: "Smith",
     imageUri: undefined,
     size: "regular",
-    action: <IconAction iconName="closecircle" onPress={() => null} size={"regular"} />,
+    action: (
+        <IconAction
+            iconName="closecircle"
+            onPress={() => null}
+            iconSet={AntDesign}
+        />
+    ),
 };
 
 const propDefinitions: PropDefinitions<AvatarProps> = {
@@ -25,8 +36,14 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
         label: "Image URL",
         values: [
             { id: "None", label: "None", value: undefined },
-            { label: "David", value: "https://randomuser.me/api/portraits/men/19.jpg" },
-            { label: "Mark", value: "https://randomuser.me/api/portraits/men/20.jpg" },
+            {
+                label: "David",
+                value: "https://randomuser.me/api/portraits/men/19.jpg",
+            },
+            {
+                label: "Mark",
+                value: "https://randomuser.me/api/portraits/men/20.jpg",
+            },
         ],
     },
     size: {
@@ -45,7 +62,17 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
         values: [
             { id: "None", label: "None", value: undefined },
             { id: "Close", label: "Close", value: defaultProps.action },
-            { id: "Edit", label: "Edit", value: <IconAction iconName="edit" onPress={() => null} size={"regular"} /> },
+            {
+                id: "Edit",
+                label: "Edit",
+                value: (
+                    <IconAction
+                        iconName="edit"
+                        onPress={() => null}
+                        iconSet={AntDesign}
+                    />
+                ),
+            },
         ],
     },
 };
@@ -61,7 +88,9 @@ const AvatarPage: React.FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

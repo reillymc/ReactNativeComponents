@@ -1,18 +1,22 @@
 import React from "react";
-import { IconAction, IconActionProps } from "@reillymc/react-native-components";
+import { Octicons } from "@expo/vector-icons";
+import {
+    IconAction,
+    type IconActionProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { glyphMapValueItemsOcticons } from "../helpers";
 
-const defaultProps: IconActionProps = {
+const defaultProps: IconActionProps<any, any> = {
     label: "Secondary IconAction",
-    iconName: "downcircle",
+    iconName: "arrow-both",
     variant: "secondary",
-    size: "regular",
+    iconSet: Octicons,
     onPress: () => null,
 };
 
-const propDefinitions: PropDefinitions<IconActionProps> = {
+const propDefinitions: PropDefinitions<IconActionProps<any, any>> = {
     label: {
         type: "string",
         label: "Label",
@@ -20,7 +24,7 @@ const propDefinitions: PropDefinitions<IconActionProps> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
-        values: glyphMapValueItems,
+        values: glyphMapValueItemsOcticons,
     },
     variant: {
         type: "enum",
@@ -29,20 +33,30 @@ const propDefinitions: PropDefinitions<IconActionProps> = {
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
-            { label: "Flat", value: "flat" },
+        ],
+    },
+    iconPosition: {
+        type: "enum",
+        label: "Icon position",
+        default: "left",
+        values: [
+            { label: "Left", value: "left" },
+            { label: "Right", value: "right" },
         ],
     },
     disabled: {
         type: "boolean",
         label: "Disabled",
     },
-    size: {
+    iconSet: {
         type: "enum",
-        label: "Size",
+        label: "Icon Set",
         values: [
-            { label: "Small", value: "small" },
-            { label: "Regular", value: "regular" },
-            { label: "Large", value: "large" },
+            {
+                id: "octicons",
+                label: "Octicons",
+                value: Octicons,
+            },
         ],
     },
     onPress: {
@@ -52,7 +66,8 @@ const propDefinitions: PropDefinitions<IconActionProps> = {
 };
 
 const IconActionPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<IconActionProps>(defaultProps);
+    const [props, setProps] =
+        React.useState<IconActionProps<any, any>>(defaultProps);
 
     return (
         <ComponentPage
@@ -62,7 +77,9 @@ const IconActionPage: React.FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

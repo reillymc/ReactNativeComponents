@@ -1,12 +1,13 @@
-import React, { type FC, type Ref } from "react";
+import type { FC, Ref } from "react";
 import {
     type TextInput as DefaultTextInput,
     StyleSheet,
     View,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { FeatureButton } from "../buttons";
+import { IconButton } from "../buttons";
 import { Text } from "../Text";
 import { NumberInput, type NumberInputProps } from "./NumberInput";
 
@@ -32,7 +33,7 @@ export const CounterInput: FC<CounterInputProps> = ({
         disableKeyboardInput,
     });
 
-    const value = Number.parseInt(props.value ?? "0", 10);
+    const value = Number.parseInt(props.value ?? "0", 10) || 0;
 
     return (
         <View style={props.containerStyle}>
@@ -46,35 +47,50 @@ export const CounterInput: FC<CounterInputProps> = ({
                 </View>
             )}
             <View style={styles.container}>
-                <FeatureButton
+                <IconButton
+                    iconSet={AntDesign} // TODO: decouple
                     iconName="minus"
-                    size="small"
-                    variant="flat"
+                    variant="secondary"
                     disabled={disabled}
-                    rounded={false}
                     onPress={() =>
                         onChangeText?.(
                             Math.max(value - 1, props.min ?? 0).toString(),
                         )
                     }
                     style={{
-                        borderTopRightRadius: 0,
-                        borderBottomRightRadius: 0,
+                        container: {
+                            borderRadius: 0,
+                            width: { regular: styles.segment.width },
+                        },
                     }}
                 />
                 <NumberInput
                     {...props}
                     ref={ref}
+                    onChangeText={(newValue) => {
+                        if (!newValue) {
+                            onChangeText?.("");
+                            return;
+                        }
+                        onChangeText?.(
+                            Math.min(
+                                Math.max(
+                                    Number.parseInt(newValue ?? "0", 10),
+                                    props.min ?? 0,
+                                ),
+                                props.max ?? Number.MAX_VALUE,
+                            ).toString(),
+                        );
+                    }}
                     style={styles.input}
                     disabled={disabled || disableKeyboardInput}
-                    containerStyle={styles.inputContainer}
+                    containerStyle={styles.segment}
                 />
-                <FeatureButton
+                <IconButton
+                    iconSet={AntDesign}
                     iconName="plus"
-                    size="small"
-                    variant="flat"
+                    variant="secondary"
                     disabled={disabled}
-                    rounded={false}
                     onPress={() =>
                         onChangeText?.(
                             Math.min(
@@ -84,8 +100,10 @@ export const CounterInput: FC<CounterInputProps> = ({
                         )
                     }
                     style={{
-                        borderTopLeftRadius: 0,
-                        borderBottomLeftRadius: 0,
+                        container: {
+                            borderRadius: 0,
+                            width: { regular: styles.segment.width },
+                        },
                     }}
                 />
             </View>
@@ -105,8 +123,9 @@ const createStyles = (
                 ? baseInput.backgroundColorDisabled
                 : baseInput.backgroundColor,
             borderRadius: baseInput.borderRadius,
+            overflow: "hidden",
         },
-        inputContainer: {
+        segment: {
             width: counterInput.width,
         },
         label: {

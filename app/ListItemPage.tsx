@@ -1,30 +1,50 @@
 import React from "react";
+import { AntDesign } from "@expo/vector-icons";
 import {
+    AlertIndicator,
     IconAction,
     ListItem,
-    ListItemProps,
-    Text,
+    ListItemAlert,
+    ListItemAvatar,
+    type ListItemProps,
     ListItemRow,
     SwipeAction,
-    AlertIndicator,
-    ListItemAvatar,
-    ListItemAlert,
+    Text,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: ListItemProps = {
     heading: "Heading text",
     avatar: (
         <ListItemAvatar>
-            <IconAction onPress={() => null} iconName="API" />
+            <IconAction
+                onPress={() => null}
+                iconSet={AntDesign}
+                iconName="API"
+            />
         </ListItemAvatar>
     ),
     alert: undefined,
     contentRows: [
-        <ListItemRow key={1} contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]} />,
+        <ListItemRow
+            key={1}
+            contentItems={[
+                <Text key={1}>Description</Text>,
+                <Text key={2}>Description 2</Text>,
+            ]}
+        />,
     ],
-    swipeActions: [<SwipeAction key="1" iconName="delete" variant="destructive" label="" onPress={() => null} />],
+    swipeActions: [
+        <SwipeAction
+            iconSet={AntDesign}
+            key="1"
+            iconName="delete"
+            variant="destructive"
+            label=""
+            onPress={() => null}
+        />,
+    ],
     onPress: () => null,
 };
 
@@ -55,11 +75,17 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 value: [
                     <ListItemRow
                         key={1}
-                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                        contentItems={[
+                            <Text key={1}>Description</Text>,
+                            <Text key={2}>Description 2</Text>,
+                        ]}
                     />,
                     <ListItemRow
                         key={2}
-                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                        contentItems={[
+                            <Text key={1}>Description</Text>,
+                            <Text key={2}>Description 2</Text>,
+                        ]}
                     />,
                 ],
             },
@@ -69,12 +95,21 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 value: [
                     <ListItemRow
                         key={1}
-                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                        contentItems={[
+                            <Text key={1}>Description</Text>,
+                            <Text key={2}>Description 2</Text>,
+                        ]}
                     />,
-                    <ListItemRow key={2} contentItems={[<Text key={1}>Description</Text>]} />,
+                    <ListItemRow
+                        key={2}
+                        contentItems={[<Text key={1}>Description</Text>]}
+                    />,
                     <ListItemRow
                         key={3}
-                        contentItems={[<Text key={1}>Description</Text>, <Text key={2}>Description 2</Text>]}
+                        contentItems={[
+                            <Text key={1}>Description</Text>,
+                            <Text key={2}>Description 2</Text>,
+                        ]}
                     />,
                 ],
             },
@@ -91,8 +126,22 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 id: "DeleteAndEdit",
                 label: "Delete and Edit",
                 value: [
-                    <SwipeAction key="1" iconName="delete" variant="destructive" label="" onPress={() => null} />,
-                    <SwipeAction key="2" iconName="edit" variant="secondary" label="" onPress={() => null} />,
+                    <SwipeAction
+                        iconSet={AntDesign}
+                        key="1"
+                        iconName="delete"
+                        variant="destructive"
+                        label=""
+                        onPress={() => null}
+                    />,
+                    <SwipeAction
+                        iconSet={AntDesign}
+                        key="2"
+                        iconName="edit"
+                        variant="secondary"
+                        label=""
+                        onPress={() => null}
+                    />,
                 ],
             },
         ],
@@ -108,7 +157,11 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 label: "Alert",
                 value: (
                     <ListItemAlert>
-                        <AlertIndicator style={{ marginRight: 20 }} variant="primary" label="3" />
+                        <AlertIndicator
+                            style={{ marginRight: 20 }}
+                            variant="primary"
+                            label="3"
+                        />
                     </ListItemAlert>
                 ),
             },
@@ -141,7 +194,7 @@ const ListItemPage: React.FunctionComponent = () => {
                     propValues={props}
                     propDefinitions={propDefinitions}
                     onChange={(propId, value) => {
-                        setProps(prev => ({ ...prev, [propId]: value }));
+                        setProps((prev) => ({ ...prev, [propId]: value }));
                     }}
                 />
             }

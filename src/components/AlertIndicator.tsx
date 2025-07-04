@@ -1,20 +1,23 @@
-import React from "react";
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import type React from "react";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
-import { ThemedStyles, useThemedStyles } from "../hooks";
-
-import { ActionVariant } from "./buttons";
+import { type ThemedStyles, useThemedStyles } from "../hooks";
+import type { ActionVariant } from "./buttons/Action";
 import { Text } from "./Text";
 
-export interface AlertIndicatorStyles {}
+export type AlertIndicatorStyles = {};
 
 export interface AlertIndicatorProps {
     label?: string;
-    variant?: Exclude<ActionVariant, "flat">;
+    variant?: ActionVariant;
     style?: StyleProp<ViewStyle>;
 }
 
-export const AlertIndicator: React.FC<AlertIndicatorProps> = ({ label = "", variant = "primary", style }) => {
+export const AlertIndicator: React.FC<AlertIndicatorProps> = ({
+    label = "",
+    variant = "primary",
+    style,
+}) => {
     const styles = useThemedStyles(createStyles, { variant });
 
     return (
@@ -28,7 +31,10 @@ export const AlertIndicator: React.FC<AlertIndicatorProps> = ({ label = "", vari
 
 AlertIndicator.displayName = "AlertIndicator";
 
-const createStyles = ({ theme: { color } }: ThemedStyles, { variant = "primary" }: Partial<AlertIndicatorProps>) => {
+const createStyles = (
+    { theme: { color } }: ThemedStyles,
+    { variant = "primary" }: Partial<AlertIndicatorProps>,
+) => {
     const styles = StyleSheet.create({
         container: {
             display: "flex",

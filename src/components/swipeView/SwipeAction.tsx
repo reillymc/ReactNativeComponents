@@ -1,13 +1,16 @@
-import React from "react";
 import { StyleSheet } from "react-native";
 
-import { FeatureButton, FeatureButtonProps } from "../buttons";
+import { IconAction, type IconActionProps } from "../buttons";
 
-export interface SwipeActionProps extends Pick<FeatureButtonProps, "iconName" | "label" | "onPress" | "variant"> {}
+export interface SwipeActionProps<G extends string, Fn extends string>
+    extends Pick<
+        IconActionProps<G, Fn>,
+        "label" | "iconSet" | "iconName" | "onPress" | "variant"
+    > {}
 
-export const SwipeAction: React.FunctionComponent<SwipeActionProps> = actionProps => (
-    <FeatureButton {...actionProps} rounded={false} style={styles.actionButton} />
-);
+export const SwipeAction = <G extends string, Fn extends string>(
+    actionProps: SwipeActionProps<G, Fn>,
+) => <IconAction {...actionProps} containerStyle={styles.actionButton} />;
 const styles = StyleSheet.create({
     actionButton: {
         height: "100%",

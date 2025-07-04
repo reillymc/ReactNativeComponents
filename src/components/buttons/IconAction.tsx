@@ -1,136 +1,86 @@
-import type React from "react";
-import {
-    type ColorValue,
-    Pressable,
-    type StyleProp,
-    StyleSheet,
-    type TextStyle,
-    View,
-    type ViewStyle,
-} from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { StyleSheet, View } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import type { Theme } from "../../theme";
-import { Text } from "../Text";
-import type { ActionSize, ActionVariant } from "./types";
-
-const getIconColor = (
-    { color }: Theme,
-    variant: ActionVariant,
-    pressed: boolean,
-    disabled: boolean | undefined,
-): ColorValue => {
-    switch (variant) {
-        case "primary": {
-            if (disabled) {
-                return color.primaryLight;
-            }
-            return pressed ? color.primaryDark : color.primary;
-        }
-        case "secondary": {
-            if (disabled) {
-                return color.secondaryDisabled;
-            }
-            return pressed ? color.secondaryHighlight : color.secondary;
-        }
-        case "destructive": {
-            if (disabled) {
-                return color.destructiveHighlight;
-            }
-            return pressed ? color.destructiveHighlight : color.destructive;
-        }
-        case "flat": {
-            if (disabled) {
-                return color.textDisabled;
-            }
-            return pressed ? color.textHighlight : color.textPrimary;
-        }
-    }
-};
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import type { ActionProps } from "./Action";
+import { ActionBase } from "./ActionBase";
+import { InteractiveIcon, type InteractiveIconProps } from "./InteractiveIcon";
+import { InteractiveText } from "./InteractiveText";
 
 export type IconActionStyles = {
-    size: { [key in ActionSize]: number };
+    gap: number;
 };
 
-export interface IconActionProps {
-    iconName: keyof typeof AntDesign.glyphMap;
+export interface IconActionProps<G extends string, Fn extends string>
+    extends Pick<
+            ActionProps,
+            "onPress" | "disabled" | "containerStyle" | "variant"
+        >,
+        Pick<InteractiveIconProps<G, Fn>, "iconSet" | "iconName"> {
     label?: string;
-    variant?: ActionVariant;
-    size?: ActionSize;
-    labelPosition?: "left" | "right";
-    disabled?: boolean;
-    containerStyle?: StyleProp<ViewStyle>;
-    iconStyle?: StyleProp<TextStyle>;
-    onPress?: () => void;
+    iconPosition?: "left" | "right";
+    style?: DeepPartial<IconActionStyles>;
 }
 
-export const IconAction: React.FC<IconActionProps> = ({
+export const IconAction = <G extends string, Fn extends string>({
     iconName,
     label,
     variant = "secondary",
-    size = "regular",
-    labelPosition = "right",
-    disabled,
+    iconPosition = "left",
+    disabled: disabledProp,
     containerStyle,
-    iconStyle,
+    style,
+    iconSet,
     onPress,
-}) => {
-    const styles = useThemedStyles(createStyles, { size, labelPosition });
-    const { theme } = useTheme();
+}: IconActionProps<G, Fn>) => {
+    const disabled = disabledProp || !onPress;
+
+    const [styles] = useThemedStylesWithOverride(
+        createStyles,
+        { iconAction: style },
+        { iconPosition },
+    );
 
     return (
-        <Pressable
-            hitSlop={20}
+        <ActionBase
             disabled={disabled}
-            style={containerStyle}
+            containerStyle={containerStyle}
             onPress={onPress}
         >
-            {({ pressed }) => (
+            {(pressableState) => (
                 <View style={styles.container}>
-                    <AntDesign
-                        name={iconName}
-                        type="font-awesome"
-                        size={styles.icon.height}
-                        color={getIconColor(theme, variant, pressed, disabled)}
-                        style={[styles.icon, iconStyle]}
-                        android_ripple={{
-                            color: theme.color.border,
-                            borderless: true,
-                            radius: styles.icon.height - theme.spacing.tiny,
-                        }}
+                    <InteractiveIcon
+                        iconSet={iconSet}
+                        iconName={iconName}
+                        disabled={disabled}
+                        variant={variant}
+                        {...pressableState}
                     />
-                    {label && (
-                        <Text numberOfLines={1} style={styles.text}>
-                            {label}
-                        </Text>
+                    {!!label && (
+                        <InteractiveText
+                            label={label}
+                            disabled={disabled}
+                            variant={variant}
+                            {...pressableState}
+                        />
                     )}
                 </View>
             )}
-        </Pressable>
+        </ActionBase>
     );
 };
 
-IconAction.displayName = "IconAction";
-
 const createStyles = (
     { styles: { iconAction } }: ThemedStyles,
-    { size = "regular", labelPosition = "right" }: Partial<IconActionProps>,
-) => {
-    const styles = StyleSheet.create({
+    {
+        iconPosition = "right",
+    }: Required<Pick<IconActionProps<"", "">, "iconPosition">>,
+) =>
+    StyleSheet.create({
         container: {
             display: "flex",
-            flexDirection: labelPosition === "left" ? "row-reverse" : "row",
+            flexDirection: iconPosition === "left" ? "row" : "row-reverse",
             alignItems: "center",
-        },
-        icon: {
-            height: iconAction.size[size],
-            width: iconAction.size[size],
-        },
-        text: {
-            marginLeft: labelPosition === "left" ? 0 : 6,
-            marginRight: labelPosition === "left" ? 6 : 0,
+            gap: iconAction.gap,
         },
     });
-    return styles;
-};

@@ -1,7 +1,11 @@
 import React from "react";
-import { Button, Panel, PanelProps } from "@reillymc/react-native-components";
+import {
+    Button,
+    Panel,
+    type PanelProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const defaultProps: PanelProps = {
     collapsed: false,
@@ -20,7 +24,11 @@ const propDefinitions: PropDefinitions<PanelProps> = {
         default: "dark",
         values: [
             { label: "None", value: undefined, id: "none" },
-            { label: "Button", value: <Button label="Panel header" />, id: "button" },
+            {
+                label: "Button",
+                value: <Button label="Panel header" />,
+                id: "button",
+            },
         ],
     },
     children: {
@@ -29,7 +37,11 @@ const propDefinitions: PropDefinitions<PanelProps> = {
         default: "dark",
         values: [
             { label: "None", value: undefined, id: "none" },
-            { label: "Button", value: <Button label="Panel children" />, id: "button" },
+            {
+                label: "Button",
+                value: <Button label="Panel children" />,
+                id: "button",
+            },
         ],
     },
 };
@@ -40,12 +52,19 @@ const PanelPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Panel"
-            component={<Panel {...props} style={{ backgroundColor: "white", marginHorizontal: 16 }} />}
+            component={
+                <Panel
+                    {...props}
+                    style={{ backgroundColor: "white", marginHorizontal: 16 }}
+                />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

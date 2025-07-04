@@ -1,7 +1,11 @@
 import React from "react";
-import { Text, NumberInput, NumberInputProps } from "@reillymc/react-native-components";
+import {
+    NumberInput,
+    type NumberInputProps,
+    Text,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
     placeholder: {
@@ -63,17 +67,27 @@ const defaultProps: NumberInputProps = {
 
 const NumberInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<string | undefined>(undefined);
+    const [inputValue, setInputValue] = React.useState<string | undefined>(
+        undefined,
+    );
 
     return (
         <ComponentPage
             componentName="Number Input"
-            component={<NumberInput {...props} value={inputValue} onChangeText={text => setInputValue(text)} />}
+            component={
+                <NumberInput
+                    {...props}
+                    value={inputValue}
+                    onChangeText={setInputValue}
+                />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

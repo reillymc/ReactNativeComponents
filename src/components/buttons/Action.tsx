@@ -1,38 +1,22 @@
 import type { FC } from "react";
-import {
-    type ColorValue,
-    Pressable,
-    type PressableProps,
-    StyleSheet,
-} from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import { Text } from "../Text";
+import { useStylesWithOverride } from "../../hooks/useThemedStyles";
+import { ActionBase, type ActionBaseProps } from "./ActionBase";
+import { InteractiveText, type InteractiveTextStyles } from "./InteractiveText";
 
 export type ActionState = "default" | "disabled" | "pressed";
 export type ActionVariant = "primary" | "secondary" | "destructive";
 
 export type ActionStyles = {
-    label: {
-        /**
-         * Font family due to weight limitations.
-         */
-        fontFamilyWeight: string;
-        fontSize: number;
-        color: {
-            [Variant in ActionVariant]: { [State in ActionState]: ColorValue };
-        };
-    };
+    label: InteractiveTextStyles;
 };
 
-export interface ActionProps {
+export interface ActionProps
+    extends Pick<ActionBaseProps, "containerStyle" | "disabled" | "onPress"> {
     label: string;
     variant?: ActionVariant;
     style?: DeepPartial<ActionStyles>;
-    containerStyle?: PressableProps["style"];
-    disabled?: boolean;
-    onPress?: () => void;
 }
 
 export const Action: FC<ActionProps> = ({
@@ -44,48 +28,25 @@ export const Action: FC<ActionProps> = ({
     onPress,
 }) => {
     const disabled = disabledProp || !onPress;
-    const [styles, { action }] = useThemedStylesWithOverride(
-        createStyles,
-        { action: style },
-        { variant, disabled },
-    );
+    const { action } = useStylesWithOverride({ action: style });
 
     return (
-        <Pressable
-            hitSlop={20}
+        <ActionBase
             disabled={disabled}
             onPress={onPress}
-            style={containerStyle}
+            containerStyle={containerStyle}
         >
-            {({ pressed }) => (
-                <Text
-                    numberOfLines={1}
-                    style={[
-                        styles.label,
-                        pressed && {
-                            color: action.label.color[variant].pressed,
-                        },
-                    ]}
-                >
-                    {label}
-                </Text>
+            {(pressableState) => (
+                <InteractiveText
+                    {...pressableState}
+                    label={label}
+                    disabled={disabled}
+                    variant={variant}
+                    style={action.label}
+                />
             )}
-        </Pressable>
+        </ActionBase>
     );
 };
 
 Action.displayName = "Action";
-
-const createStyles = (
-    { styles: { action } }: ThemedStyles,
-    { variant, disabled }: Required<Pick<ActionProps, "variant" | "disabled">>,
-) =>
-    StyleSheet.create({
-        label: {
-            fontFamily: action.label.fontFamilyWeight,
-            fontSize: action.label.fontSize,
-            color: action.label.color[variant][
-                disabled ? "disabled" : "default"
-            ],
-        },
-    });

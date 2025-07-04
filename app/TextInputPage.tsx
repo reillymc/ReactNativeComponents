@@ -1,7 +1,11 @@
 import React from "react";
-import { Text, TextInput, TextInputProps } from "@reillymc/react-native-components";
+import {
+    Text,
+    TextInput,
+    type TextInputProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<TextInputProps> = {
     placeholder: {
@@ -78,7 +82,9 @@ const TextInputPage: React.FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

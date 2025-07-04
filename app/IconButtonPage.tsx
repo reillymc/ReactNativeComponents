@@ -1,16 +1,21 @@
 import React from "react";
-import { IconButton, IconButtonProps } from "@reillymc/react-native-components";
+import { Octicons } from "@expo/vector-icons";
+import {
+    IconButton,
+    type IconButtonProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import { glyphMapValueItemsOcticons } from "../helpers";
 
-const defaultProps: IconButtonProps = {
+const defaultProps: IconButtonProps<any, any> = {
+    iconSet: Octicons,
     iconName: "arrow-both",
     variant: "primary",
     onPress: () => null,
 };
 
-const propDefinitions: PropDefinitions<IconButtonProps> = {
+const propDefinitions: PropDefinitions<IconButtonProps<any, any>> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
@@ -24,12 +29,30 @@ const propDefinitions: PropDefinitions<IconButtonProps> = {
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
-            { label: "Flat", value: "flat" },
         ],
     },
     disabled: {
         type: "boolean",
         label: "Disabled",
+    },
+    iconSet: {
+        type: "enum",
+        label: "Icon Set",
+        values: [
+            {
+                id: "octicons",
+                label: "Octicons",
+                value: Octicons,
+            },
+        ],
+    },
+    size: {
+        type: "enum",
+        label: "Size",
+        values: [
+            { label: "Regular", value: "regular" },
+            { label: "Large", value: "large" },
+        ],
     },
     onPress: {
         type: "function",
@@ -38,7 +61,8 @@ const propDefinitions: PropDefinitions<IconButtonProps> = {
 };
 
 const IconButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<IconButtonProps>(defaultProps);
+    const [props, setProps] =
+        React.useState<IconButtonProps<any, any>>(defaultProps);
 
     return (
         <ComponentPage
@@ -48,7 +72,9 @@ const IconButtonPage: React.FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

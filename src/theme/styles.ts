@@ -2,7 +2,6 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import merge from "lodash.merge";
 
 import type {
-    ActionSize,
     ActionStyles,
     AvatarStyles,
     BaseInputStyles,
@@ -10,7 +9,6 @@ import type {
     CounterInputStyles,
     DropdownInputStyles,
     HighlightedTextStyles,
-    IconActionStyles,
     IconButtonStyles,
     ListItemStyles,
     TextInputStyles,
@@ -18,6 +16,10 @@ import type {
     ToastStyles,
     ToggleInputStyles,
 } from "../components";
+import type { ButtonBaseStyles } from "../components/buttons/ButtonBase";
+import type { IconActionStyles } from "../components/buttons/IconAction";
+import type { InteractiveIconStyles } from "../components/buttons/InteractiveIcon";
+import type { InteractiveTextStyles } from "../components/buttons/InteractiveText";
 import type { Theme } from "./theme";
 
 export type Styles = {
@@ -25,7 +27,7 @@ export type Styles = {
     common: {
         action: {
             fontSize: {
-                [key in ActionSize]: number;
+                [key in "small" | "regular" | "large"]: number;
             };
         };
     };
@@ -39,9 +41,12 @@ export type Styles = {
     avatar: AvatarStyles;
 
     action: ActionStyles;
+    interactiveText: InteractiveTextStyles;
+    interactiveIcon: InteractiveIconStyles;
     iconAction: IconActionStyles;
-    button: ButtonStyles;
     iconButton: IconButtonStyles;
+    button: ButtonStyles;
+    buttonBase: ButtonBaseStyles;
     toast: ToastStyles;
 };
 
@@ -54,90 +59,51 @@ export const createDefaultStyles: CreateStyles = ({
     color,
     font,
     spacing,
-}) => ({
-    baseInput: {
-        height: 48,
-        width: {
-            full: "100%",
-            large: "70%",
-            small: "45%",
-        },
-        borderRadius: border.radius.regular,
-        padding: spacing.small,
-        fontSize: font.size.regular,
+}) => {
+    const interactiveText: InteractiveTextStyles = {
         fontFamilyWeight: font.familyWeight.regular400,
-        textColor: color.textPrimary,
-        disabledTextColor: color.textDisabled,
-        placeholderTextColor: color.textSecondary,
-        backgroundColor: color.inputBackground,
-        backgroundColorDisabled: color.inputBackgroundDisabled,
-        labelMargin: 6,
-        mandatoryColor: color.primaryDark,
-        errorColor: color.destructive,
-    },
-    common: {
-        action: {
-            fontSize: {
-                ...font.size,
+        fontSize: font.size.regular,
+        color: {
+            primary: {
+                default: color.primary,
+                pressed: color.primaryLight,
+                disabled: color.primaryLight,
+            },
+            secondary: {
+                default: color.secondary,
+                pressed: color.secondaryHighlight,
+                disabled: color.secondaryHighlight,
+            },
+            destructive: {
+                default: color.destructive,
+                pressed: color.destructiveHighlight,
+                disabled: color.destructiveHighlight,
             },
         },
-    },
-    text: {
-        textColor: color.textPrimary,
-        fontFamilyWeight: {
-            caption: font.familyWeight.light200,
-            body: font.familyWeight.regular400,
-            bodyEmphasized: font.familyWeight.bold600,
-            label: font.familyWeight.bold600,
-            heading: font.familyWeight.bold600,
-            title: font.familyWeight.bold800,
-            display: font.familyWeight.bold800,
-        },
-        fontFamilySize: {
-            caption: font.size.small,
-            body: font.size.regular,
-            bodyEmphasized: font.size.regular,
-            label: font.size.emphasised,
-            heading: font.size.large,
-            title: font.size.xLarge,
-            display: font.size.xxLarge,
-        },
-    },
-    highlightedText: {
-        highlightedFontFamilyWeight: font.familyWeight.bold600,
-    },
-    textInput: {},
-    action: {
-        label: {
-            fontFamilyWeight: font.familyWeight.regular400,
-            fontSize: font.size.regular,
-            color: {
-                primary: {
-                    default: color.primary,
-                    pressed: color.primaryLight,
-                    disabled: color.primaryLight,
-                },
-                secondary: {
-                    default: color.secondary,
-                    pressed: color.secondaryHighlight,
-                    disabled: color.secondaryHighlight,
-                },
-                destructive: {
-                    default: color.destructive,
-                    pressed: color.destructiveHighlight,
-                    disabled: color.destructiveHighlight,
-                },
+    };
+
+    const interactiveIcon: InteractiveIconStyles = {
+        size: 20,
+        color: {
+            primary: {
+                default: color.primary,
+                pressed: color.primaryLight,
+                disabled: color.primaryLight,
+            },
+            secondary: {
+                default: color.secondary,
+                pressed: color.secondaryHighlight,
+                disabled: color.secondaryHighlight,
+            },
+            destructive: {
+                default: color.destructive,
+                pressed: color.destructiveHighlight,
+                disabled: color.destructiveHighlight,
             },
         },
-    },
-    iconAction: {
-        size: {
-            small: 20,
-            regular: 24,
-            large: 32,
-        },
-    },
-    button: {
+    };
+
+    const buttonBase: ButtonBaseStyles = {
         height: {
             large: 48,
             regular: 40,
@@ -165,100 +131,176 @@ export const createDefaultStyles: CreateStyles = ({
                 disabled: color.destructiveHighlight,
             },
         },
-        label: {
-            fontFamilyWeight: font.familyWeight.regular400,
+    };
+
+    const styles: Styles = {
+        baseInput: {
+            height: 48,
+            width: {
+                full: "100%",
+                large: "70%",
+                small: "45%",
+            },
+            borderRadius: border.radius.regular,
+            padding: spacing.small,
             fontSize: font.size.regular,
-            color: {
-                primary: {
-                    default: color.textOnPrimary,
-                    pressed: color.textOnPrimary,
-                    disabled: color.textOnPrimary,
-                },
-                secondary: {
-                    default: color.textOnSecondary,
-                    pressed: color.textOnSecondary,
-                    disabled: color.textOnSecondary,
-                },
-                destructive: {
-                    default: color.textOnDestructive,
-                    pressed: color.textOnDestructive,
-                    disabled: color.textOnDestructive,
+            fontFamilyWeight: font.familyWeight.regular400,
+            textColor: color.textPrimary,
+            disabledTextColor: color.textDisabled,
+            placeholderTextColor: color.textSecondary,
+            backgroundColor: color.inputBackground,
+            backgroundColorDisabled: color.inputBackgroundDisabled,
+            labelMargin: 6,
+            mandatoryColor: color.primaryDark,
+            errorColor: color.destructive,
+        },
+        common: {
+            action: {
+                fontSize: {
+                    ...font.size,
                 },
             },
         },
-    },
-    iconButton: {
-        size: {
-            large: 80,
-            regular: 60,
-            small: 48,
-        },
-        fontSize: {
-            ...font.size,
-        },
-    },
-    dropdownInput: {
-        panelGap: 4,
-    },
-    toggleInput: {
-        indicator: {
-            size: {
-                small: 16,
-                regular: 20,
-                large: 28,
+        text: {
+            textColor: color.textPrimary,
+            fontFamilyWeight: {
+                caption: font.familyWeight.light200,
+                body: font.familyWeight.regular400,
+                bodyEmphasized: font.familyWeight.bold600,
+                label: font.familyWeight.bold600,
+                heading: font.familyWeight.bold600,
+                title: font.familyWeight.bold800,
+                display: font.familyWeight.bold800,
             },
-            color: color.border,
-            selectedColor: {
-                flat: color.textPrimary,
-                primary: color.primary,
-                secondary: color.secondary,
-                destructive: color.destructive,
+            fontFamilySize: {
+                caption: font.size.small,
+                body: font.size.regular,
+                bodyEmphasized: font.size.regular,
+                label: font.size.emphasised,
+                heading: font.size.large,
+                title: font.size.xLarge,
+                display: font.size.xxLarge,
             },
-            disabledColor: color.textDisabled,
         },
-        label: {
+        highlightedText: {
+            highlightedFontFamilyWeight: font.familyWeight.bold600,
+        },
+        interactiveText,
+        textInput: {},
+        interactiveIcon,
+        action: {
+            label: interactiveText,
+        },
+        iconAction: {
             gap: spacing.small,
         },
-    },
-    counterInput: {
-        width: 48,
-    },
-    title: {
-        fontFamilyWeight: font.familyWeight.bold600,
-    },
-    heading: {
-        fontFamilyWeight: font.familyWeight.bold600,
-    },
-    navigationHeader: {
-        fontFamilyWeight: font.familyWeight.regular400,
-        fontSize: font.size.large,
-        paddingTop: 8,
-        paddingBottom: 16,
-        paddingLeft: spacing.pageHorizontal,
-        paddingRight: spacing.pageHorizontal,
-    },
-    listItem: {
-        spacingMargin: 12,
-        internalSpacing: 16,
-        borderRadius: border.radius.loose,
-        contentItemSpacing: 8,
-        contentItemTopMargin: 4,
-    },
-    avatar: {
-        size: {
-            large: 100,
-            regular: 40,
-            small: 28,
+        buttonBase,
+        button: {
+            container: buttonBase,
+            label: {
+                fontFamilyWeight: font.familyWeight.regular400,
+                fontSize: font.size.regular,
+                color: {
+                    primary: {
+                        default: color.textOnPrimary,
+                        pressed: color.textOnPrimary,
+                        disabled: color.textOnPrimary,
+                    },
+                    secondary: {
+                        default: color.textOnSecondary,
+                        pressed: color.textOnSecondary,
+                        disabled: color.textOnSecondary,
+                    },
+                    destructive: {
+                        default: color.textOnDestructive,
+                        pressed: color.textOnDestructive,
+                        disabled: color.textOnDestructive,
+                    },
+                },
+            },
         },
-        initialsFontFamilyWeight: font.familyWeight.bold600,
-        initialsFontSize: font.size.xxLarge,
-        labelFontSize: font.size.tiny,
-    },
-    toast: {
-        horizontalInset: spacing.pageHorizontal + spacing.medium,
-        bottomInset: 100,
-    },
-});
+        iconButton: {
+            container: {
+                borderRadius: "50%",
+                height: {
+                    large: interactiveIcon.size + spacing.medium,
+                    regular: interactiveIcon.size + spacing.small,
+                },
+                padding: 0,
+                width: {
+                    large: interactiveIcon.size + spacing.medium,
+                    regular: interactiveIcon.size + spacing.small,
+                },
+                color: {
+                    primary: {
+                        default: color.background,
+                        pressed: color.background,
+                        disabled: color.background,
+                    },
+                    secondary: {
+                        default: color.background,
+                        pressed: color.background,
+                        disabled: color.background,
+                    },
+                    destructive: {
+                        default: color.background,
+                        pressed: color.background,
+                        disabled: color.background,
+                    },
+                },
+            },
+            icon: interactiveIcon,
+        },
+        dropdownInput: {
+            panelGap: 4,
+        },
+        toggleInput: {
+            indicator: {
+                size: {
+                    small: 16,
+                    regular: 20,
+                    large: 28,
+                },
+                color: color.border,
+                selectedColor: {
+                    flat: color.textPrimary,
+                    primary: color.primary,
+                    secondary: color.secondary,
+                    destructive: color.destructive,
+                },
+            },
+            label: {
+                gap: spacing.small,
+            },
+        },
+        counterInput: {
+            width: 56,
+        },
+        listItem: {
+            spacingMargin: 12,
+            internalSpacing: 16,
+            borderRadius: border.radius.loose,
+            contentItemSpacing: 8,
+            contentItemTopMargin: 4,
+        },
+        avatar: {
+            size: {
+                large: 100,
+                regular: 40,
+                small: 28,
+            },
+            initialsFontFamilyWeight: font.familyWeight.bold600,
+            initialsFontSize: font.size.xxLarge,
+            labelFontSize: font.size.tiny,
+        },
+        toast: {
+            horizontalInset: spacing.pageHorizontal + spacing.medium,
+            bottomInset: 100,
+        },
+    };
+
+    return styles;
+};
 
 export const MergeStyles = (
     styles: Styles,

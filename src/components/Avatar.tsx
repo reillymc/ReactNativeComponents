@@ -1,22 +1,41 @@
-import React from "react";
-import { Text, StyleSheet, View, StyleProp, ViewStyle, Image } from "react-native";
+import type React from "react";
+import {
+    Image,
+    type StyleProp,
+    StyleSheet,
+    Text,
+    View,
+    type ViewStyle,
+} from "react-native";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../hooks";
-import { Theme } from "../theme";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../hooks";
+import type { Theme } from "../theme";
 
-import { ActionSize } from "./buttons";
-
-const getBackgroundColor = (theme: Theme, firstName: string | undefined, lastName: string | undefined) => {
-    const colors = [theme.color.red, theme.color.orange, theme.color.green, theme.color.blue, theme.color.purple];
+const getBackgroundColor = (
+    theme: Theme,
+    firstName: string | undefined,
+    lastName: string | undefined,
+) => {
+    const colors = [
+        theme.color.red,
+        theme.color.orange,
+        theme.color.green,
+        theme.color.blue,
+        theme.color.purple,
+    ];
     const hash =
-        (firstName || lastName || "").split("").reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+        (firstName || lastName || "")
+            .split("")
+            .reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
 
     return colors[hash] ?? theme.color.red;
 };
 
+type AvatarSize = "small" | "regular" | "large";
+
 export type AvatarStyles = {
     initialsFontFamilyWeight: string;
-    size: { [key in ActionSize]: number };
+    size: { [key in AvatarSize]: number };
     initialsFontSize: number;
     labelFontSize: number;
 };
@@ -31,21 +50,41 @@ export interface AvatarProps {
 
     imageUri?: string;
 
-    size?: ActionSize;
+    size?: AvatarSize;
 
     action?: React.ReactNode;
 
     style?: StyleProp<ViewStyle>;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ firstName = "", lastName = "", imageUri, size, action, style }) => {
+export const Avatar: React.FC<AvatarProps> = ({
+    firstName = "",
+    lastName = "",
+    imageUri,
+    size,
+    action,
+    style,
+}) => {
     const styles = useThemedStyles(createStyles, { size });
     const { theme } = useTheme();
 
-    const initials = `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
+    const initials =
+        `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
     return (
-        <View style={[styles.container, { backgroundColor: getBackgroundColor(theme, firstName, lastName) }, style]}>
+        <View
+            style={[
+                styles.container,
+                {
+                    backgroundColor: getBackgroundColor(
+                        theme,
+                        firstName,
+                        lastName,
+                    ),
+                },
+                style,
+            ]}
+        >
             {imageUri ? (
                 <Image source={{ uri: imageUri }} style={styles.image} />
             ) : (
@@ -58,7 +97,9 @@ export const Avatar: React.FC<AvatarProps> = ({ firstName = "", lastName = "", i
                     )}
                 </>
             )}
-            {action && size === "large" && <View style={styles.action}>{action}</View>}
+            {action && size === "large" && (
+                <View style={styles.action}>{action}</View>
+            )}
         </View>
     );
 };
@@ -85,7 +126,10 @@ const createStyles = (
         },
         initials: {
             fontFamily: avatar.initialsFontFamilyWeight,
-            fontSize: size === "large" ? avatar.initialsFontSize : font.size.emphasised,
+            fontSize:
+                size === "large"
+                    ? avatar.initialsFontSize
+                    : font.size.emphasised,
         },
         label: {
             fontSize: avatar.labelFontSize,

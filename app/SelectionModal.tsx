@@ -1,3 +1,6 @@
+import { type FC, useCallback, useEffect, useMemo } from "react";
+import { FlatList, StyleSheet, View } from "react-native";
+import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import {
     Action,
     DropdownItem,
@@ -5,14 +8,14 @@ import {
     Tag,
     Text,
     type ThemedStyles,
-    type ValueItem,
     useThemedStyles,
+    type ValueItem,
 } from "@reillymc/react-native-components";
-import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
-import { type FC, useCallback, useEffect, useMemo } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
 
-type UseSelectionModalParams<T> = Pick<SelectionInputProps<T>, "selectionMode" | "items"> & {
+type UseSelectionModalParams<T> = Pick<
+    SelectionInputProps<T>,
+    "selectionMode" | "items"
+> & {
     key: string;
     label: string;
     placeholder?: string;
@@ -35,7 +38,12 @@ export const useSelectionModal = <T,>({
     const isActive = true; //useMemo(() => key === keyParam, [key, keyParam]);
 
     const selectedItemsFromParams = useMemo(() => {
-        if (!(isActive && selectionParam) || selectionParam === "undefined" || Array.isArray(selectionParam)) return;
+        if (
+            !(isActive && selectionParam) ||
+            selectionParam === "undefined" ||
+            Array.isArray(selectionParam)
+        )
+            return;
 
         return JSON.parse(selectionParam) as Array<ValueItem<T>>;
     }, [isActive, selectionParam]);
@@ -47,7 +55,10 @@ export const useSelectionModal = <T,>({
 
     const stringItems = useMemo(() => JSON.stringify(items), [items]);
     const stringSelectedWithInitial = useMemo(
-        () => (selectedWithInitial ? JSON.stringify(selectedWithInitial) : undefined),
+        () =>
+            selectedWithInitial
+                ? JSON.stringify(selectedWithInitial)
+                : undefined,
         [selectedWithInitial],
     );
 
@@ -62,11 +73,20 @@ export const useSelectionModal = <T,>({
             items: stringItems,
             selection: stringSelectedWithInitial,
         });
-    }, [isActive, stringItems, stringSelectedWithInitial, key, label, placeholder, router, selectionMode]);
+    }, [
+        isActive,
+        stringItems,
+        stringSelectedWithInitial,
+        key,
+        label,
+        placeholder,
+        router,
+        selectionMode,
+    ]);
 
     const openSelectionModal = useCallback(() => {
         router.push({
-            pathname: "/selectionModal",
+            pathname: "/SelectionModal",
             params: {
                 key,
                 selectionMode: selectionMode,
@@ -76,7 +96,15 @@ export const useSelectionModal = <T,>({
                 selection: stringSelectedWithInitial,
             },
         });
-    }, [stringItems, key, label, placeholder, stringSelectedWithInitial, router, selectionMode]);
+    }, [
+        stringItems,
+        key,
+        label,
+        placeholder,
+        stringSelectedWithInitial,
+        router,
+        selectionMode,
+    ]);
 
     return {
         selectedItems: selectedWithInitial,
@@ -97,15 +125,23 @@ const SelectionModal: FC = () => {
     } = useGlobalSearchParams();
 
     const items = useMemo(() => {
-        if (!rawItems || rawItems === "undefined" || Array.isArray(rawItems)) return;
+        if (!rawItems || rawItems === "undefined" || Array.isArray(rawItems))
+            return;
 
         return JSON.parse(rawItems);
     }, [rawItems]) as Array<ValueItem & { id?: string }>;
 
     const selectedItems = useMemo(() => {
-        if (!rawSelection || rawSelection === "undefined" || Array.isArray(rawSelection)) return [];
+        if (
+            !rawSelection ||
+            rawSelection === "undefined" ||
+            Array.isArray(rawSelection)
+        )
+            return [];
 
-        return JSON.parse(rawSelection) as Array<ValueItem | ValueItem<unknown>>;
+        return JSON.parse(rawSelection) as Array<
+            ValueItem | ValueItem<unknown>
+        >;
     }, [rawSelection]);
 
     const selectionMode = useMemo(() => {
@@ -138,7 +174,11 @@ const SelectionModal: FC = () => {
                     title: label as string,
                     headerLargeTitle: false,
                     headerRight: () => (
-                        <Action label="Done" style={styles.headerAction} onPress={() => router.back()} />
+                        <Action
+                            label="Done"
+                            containerStyle={styles.headerAction}
+                            onPress={() => router.back()}
+                        />
                     ),
                 }}
             />
@@ -164,11 +204,20 @@ const SelectionModal: FC = () => {
                             <FlatList
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
-                                keyExtractor={item => ("id" in item ? item.id : item.value.toString())}
+                                keyExtractor={(item) =>
+                                    "id" in item
+                                        ? item.id
+                                        : item.value.toString()
+                                }
                                 data={selectedItems}
-                                contentContainerStyle={styles.previewTagContainer}
+                                contentContainerStyle={
+                                    styles.previewTagContainer
+                                }
                                 ListEmptyComponent={
-                                    <Text variant="caption" style={styles.previewPlaceholder}>
+                                    <Text
+                                        variant="caption"
+                                        style={styles.previewPlaceholder}
+                                    >
                                         {placeholder}
                                     </Text>
                                 }
@@ -190,7 +239,12 @@ const SelectionModal: FC = () => {
                         <DropdownItem
                             key={"id" in item ? item.id : item.value}
                             item={item}
-                            searchValue={selectedItems.find(selectedItem => selectedItem.value === item.value)?.label}
+                            searchValue={
+                                selectedItems.find(
+                                    (selectedItem) =>
+                                        selectedItem.value === item.value,
+                                )?.label
+                            }
                             onPress={() => handleItemPress(item)}
                         />
                     </View>
@@ -202,7 +256,10 @@ const SelectionModal: FC = () => {
 
 export default SelectionModal;
 
-const createStyles = ({ styles: { baseInput }, theme: { spacing, color } }: ThemedStyles) => {
+const createStyles = ({
+    styles: { baseInput },
+    theme: { spacing, color },
+}: ThemedStyles) => {
     const styles = StyleSheet.create({
         headerAction: {
             marginHorizontal: spacing.navigationActionHorizontal,

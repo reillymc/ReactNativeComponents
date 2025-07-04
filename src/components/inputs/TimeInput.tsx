@@ -1,20 +1,32 @@
 import React, { type FC } from "react";
-import { Pressable, TextInput as RNTextInput, StyleSheet, View } from "react-native";
+import {
+    Pressable,
+    type TextInput as RnTextInput,
+    StyleSheet,
+    View,
+} from "react-native";
+import { Octicons } from "@expo/vector-icons";
 
-import { ThemedStyles, useForwardedRef, useThemedStyles } from "../../hooks";
+import {
+    type ThemedStyles,
+    useForwardedRef,
+    useThemedStyles,
+} from "../../hooks";
 import { IconButton } from "../buttons";
 import { Text } from "../Text";
-
-import { BaseInput, BaseInputProps } from "./BaseInput";
+import { BaseInput, type BaseInputProps } from "./BaseInput";
 import { NumberInput } from "./NumberInput";
-import { InputWidth } from "./types";
+import type { InputWidth } from "./types";
 
 export type TimeInputValue = { hours: string; minutes: string };
 
-export interface TimeInputStyles {}
+export type TimeInputStyles = {};
 
 export interface TimeInputProps
-    extends Pick<BaseInputProps, "ref" | "label" | "disabled" | "onSubmitEditing" | "clearButtonMode"> {
+    extends Pick<
+        BaseInputProps,
+        "ref" | "label" | "disabled" | "onSubmitEditing" | "clearButtonMode"
+    > {
     value?: TimeInputValue;
 
     width?: Exclude<InputWidth, "large" | "full">;
@@ -39,7 +51,7 @@ export const TimeInput: FC<TimeInputProps> = ({
     ...baseProps
 }) => {
     const hoursRef = useForwardedRef(ref);
-    const minutesRef = React.useRef<RNTextInput>(null);
+    const minutesRef = React.useRef<RnTextInput>(null);
     const styles = useThemedStyles(createStyles, { value, disabled });
 
     const [isFocused, setIsFocused] = React.useState(false);
@@ -53,10 +65,9 @@ export const TimeInput: FC<TimeInputProps> = ({
                 <View style={styles.container}>
                     <IconButton
                         variant="secondary"
-                        disabled
                         iconName="clock"
-                        style={styles.iconContainer}
-                        iconStyle={styles.icon}
+                        containerStyle={styles.iconContainer}
+                        iconSet={Octicons}
                     />
                     <NumberInput
                         ref={hoursRef}
@@ -69,7 +80,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                         returnKeyLabel="next"
                         returnKeyType="next"
                         style={styles.input}
-                        onChangeText={text =>
+                        onChangeText={(text) =>
                             onChange?.({
                                 ...value,
                                 hours: text,
@@ -78,7 +89,10 @@ export const TimeInput: FC<TimeInputProps> = ({
                         onFocus={() => setIsFocused(true)}
                         onBlur={() => setIsFocused(false)}
                     />
-                    <Pressable onPress={() => hoursRef.current?.focus()} style={styles.timeLabel}>
+                    <Pressable
+                        onPress={() => hoursRef.current?.focus()}
+                        style={styles.timeLabel}
+                    >
                         <Text variant="body">h</Text>
                     </Pressable>
                     <NumberInput
@@ -90,14 +104,21 @@ export const TimeInput: FC<TimeInputProps> = ({
                         clearButtonMode={clearButtonMode}
                         keyboardType="number-pad"
                         style={styles.input}
-                        onChangeText={text => {
-                            const addToHours = text ? Math.floor(parseInt(text, 10) / 60) : undefined;
-                            const remainingMinutes = text ? parseInt(text, 10) % 60 : text;
+                        onChangeText={(text) => {
+                            const addToHours = text
+                                ? Math.floor(Number.parseInt(text, 10) / 60)
+                                : undefined;
+                            const remainingMinutes = text
+                                ? Number.parseInt(text, 10) % 60
+                                : text;
                             onChange?.({
                                 ...value,
                                 hours: value.hours
-                                    ? (parseInt(value.hours, 10) + (addToHours ?? 0)).toString()
-                                    : addToHours?.toString() ?? "",
+                                    ? (
+                                          Number.parseInt(value.hours, 10) +
+                                          (addToHours ?? 0)
+                                      ).toString()
+                                    : (addToHours?.toString() ?? ""),
                                 minutes: remainingMinutes.toString(),
                             });
                         }}
@@ -106,12 +127,21 @@ export const TimeInput: FC<TimeInputProps> = ({
                         onSubmitEditing={onSubmitEditing}
                     />
 
-                    <Pressable style={styles.timeLabel} onPress={() => minutesRef.current?.focus()}>
+                    <Pressable
+                        style={styles.timeLabel}
+                        onPress={() => minutesRef.current?.focus()}
+                    >
                         <Text variant="body">m</Text>
                     </Pressable>
                     <BaseInput
-                        clearButtonMode={disabled || !isFocused ? "never" : "always"}
-                        value={value.hours !== "" || value.minutes !== "" ? " " : ""}
+                        clearButtonMode={
+                            disabled || !isFocused ? "never" : "always"
+                        }
+                        value={
+                            value.hours !== "" || value.minutes !== ""
+                                ? " "
+                                : ""
+                        }
                         selectionColor="transparent"
                         focusable={false}
                         autoComplete="off"
@@ -138,7 +168,9 @@ const createStyles = (
         container: {
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : baseInput.backgroundColor,
             borderRadius: baseInput.borderRadius,
             paddingLeft: baseInput.padding,
         },
@@ -156,7 +188,9 @@ const createStyles = (
             justifyContent: "center",
         },
         iconContainer: {
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : undefined,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : undefined,
         },
         icon: {
             color: color.textPrimary,

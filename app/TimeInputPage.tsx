@@ -1,7 +1,12 @@
 import React from "react";
-import { Text, TimeInput, TimeInputProps, TimeInputValue } from "@reillymc/react-native-components";
+import {
+    Text,
+    TimeInput,
+    type TimeInputProps,
+    type TimeInputValue,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
     hoursPlaceholder: {
@@ -55,13 +60,21 @@ const TimeInputPage: React.FunctionComponent = () => {
 
     return (
         <ComponentPage
-            componentName="Number Input"
-            component={<TimeInput {...props} value={inputValue} onChange={setInputValue} />}
+            componentName="Time Input"
+            component={
+                <TimeInput
+                    {...props}
+                    value={inputValue}
+                    onChange={setInputValue}
+                />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

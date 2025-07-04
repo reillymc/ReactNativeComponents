@@ -1,7 +1,10 @@
-import { ToggleInput, ToggleInputProps } from "@reillymc/react-native-components";
 import React from "react";
+import {
+    ToggleInput,
+    type ToggleInputProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<ToggleInputProps> = {
     label: {
@@ -19,7 +22,6 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
-            { label: "Flat", value: "flat" },
         ],
     },
     iconVariant: {
@@ -66,12 +68,16 @@ const ToggleInputPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Toggle Input"
-            component={<ToggleInput {...props} onChange={setToggled} value={toggled} />}
+            component={
+                <ToggleInput {...props} onChange={setToggled} value={toggled} />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

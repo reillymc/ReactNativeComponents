@@ -1,32 +1,41 @@
-import React from "react";
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle, type ColorValue } from "react-native";
+import type React from "react";
+import {
+    type ColorValue,
+    Pressable,
+    type StyleProp,
+    StyleSheet,
+    View,
+    type ViewStyle,
+} from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { ThemedStyles } from "../../hooks";
-import { ActionSize, ActionVariant } from "../buttons";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import type { ActionVariant } from "../buttons/Action";
 import { Icon } from "../Icon";
 import { Text } from "../Text";
+import type { BaseInputProps } from "./BaseInput";
 
-import type { DeepPartial } from "@reillymc/es-utils";
-import { useThemedStylesWithOverride } from "../../hooks";
-import { BaseInputProps } from "./BaseInput";
+type ToggleSize = "small" | "regular" | "large";
+type ToggleVariant = ActionVariant | "flat";
 
 export type ToggleInputStyles = {
     indicator: {
-        size: { [key in ActionSize]: number };
+        size: { [key in ToggleSize]: number };
         color: ColorValue;
-        selectedColor: { [key in ActionVariant]: ColorValue };
+        selectedColor: { [key in ToggleVariant]: ColorValue };
     };
     label: {
         gap: number;
     };
 };
 
-export interface ToggleInputProps extends Pick<BaseInputProps, "disabled" | "helpText"> {
+export interface ToggleInputProps
+    extends Pick<BaseInputProps, "disabled" | "helpText"> {
     label?: string;
     value?: boolean;
     iconVariant?: "check" | "dot";
-    variant?: ActionVariant;
-    size?: ActionSize;
+    variant?: ToggleVariant;
+    size?: ToggleSize;
     containerStyle?: StyleProp<ViewStyle>;
     styles?: DeepPartial<ToggleInputStyles>;
     onChange: (value: boolean) => void | null | React.SetStateAction<boolean>;
@@ -62,7 +71,7 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                     {iconVariant === "check" ? (
                         <Icon
                             set="octicons"
-                            iconName={!!value ? "check-circle-fill" : "circle"}
+                            iconName={value ? "check-circle-fill" : "circle"}
                             size={toggleInput.indicator.size[size]}
                             style={styles.icon}
                         />
@@ -93,7 +102,11 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
             </View>
             {helpText && (
                 <View style={styles.helpText}>
-                    {typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText}
+                    {typeof helpText === "string" ? (
+                        <Text variant="caption">{helpText}</Text>
+                    ) : (
+                        helpText
+                    )}
                 </View>
             )}
         </Pressable>
@@ -104,7 +117,12 @@ ToggleInput.displayName = "ToggleInput";
 
 const createStyles = (
     { theme: { color }, styles: { toggleInput, baseInput } }: ThemedStyles,
-    { variant = "primary", size = "regular", value, disabled }: Partial<ToggleInputProps>,
+    {
+        variant = "primary",
+        size = "regular",
+        value,
+        disabled,
+    }: Partial<ToggleInputProps>,
 ) => {
     let iconColor = toggleInput.indicator.color;
     if (value) iconColor = toggleInput.indicator.selectedColor[variant];
@@ -134,7 +152,8 @@ const createStyles = (
             color: disabled ? color.textDisabled : color.textPrimary,
         },
         helpText: {
-            marginLeft: toggleInput.indicator.size[size] + toggleInput.label.gap,
+            marginLeft:
+                toggleInput.indicator.size[size] + toggleInput.label.gap,
             marginTop: baseInput.labelMargin,
         },
     });

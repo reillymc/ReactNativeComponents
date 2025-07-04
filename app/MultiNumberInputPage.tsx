@@ -1,12 +1,12 @@
 import React from "react";
 import {
-    Text,
     MultiNumberInput,
-    MultiNumberInputProps,
-    MultiNumberInputValue,
+    type MultiNumberInputProps,
+    type MultiNumberInputValue,
+    Text,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<MultiNumberInputProps> = {
     placeholder: {
@@ -25,9 +25,21 @@ const propDefinitions: PropDefinitions<MultiNumberInputProps> = {
             { id: "number", label: "Number", value: ["number"] },
             { id: "fraction", label: "Fraction", value: ["fraction"] },
             { id: "range", label: "Range", value: ["range"] },
-            { id: "number-fraction", label: "Number and Fraction", value: ["number", "fraction"] },
-            { id: "number-range", label: "Number and Range", value: ["number", "range"] },
-            { id: "fraction-range", label: "Fraction and Range", value: ["fraction", "range"] },
+            {
+                id: "number-fraction",
+                label: "Number and Fraction",
+                value: ["number", "fraction"],
+            },
+            {
+                id: "number-range",
+                label: "Number and Range",
+                value: ["number", "range"],
+            },
+            {
+                id: "fraction-range",
+                label: "Fraction and Range",
+                value: ["fraction", "range"],
+            },
             { id: "all", label: "All", value: ["number", "fraction", "range"] },
         ],
     },
@@ -78,7 +90,8 @@ const defaultProps: MultiNumberInputProps = {
 };
 
 const MultiNumberInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<MultiNumberInputProps>(defaultProps);
+    const [props, setProps] =
+        React.useState<MultiNumberInputProps>(defaultProps);
     const [inputValue, setInputValue] = React.useState<MultiNumberInputValue>();
 
     console.debug(inputValue);
@@ -86,12 +99,20 @@ const MultiNumberInputPage: React.FunctionComponent = () => {
     return (
         <ComponentPage
             componentName="Number Input"
-            component={<MultiNumberInput {...props} value={inputValue} onChange={setInputValue} />}
+            component={
+                <MultiNumberInput
+                    {...props}
+                    value={inputValue}
+                    onChange={setInputValue}
+                />
+            }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

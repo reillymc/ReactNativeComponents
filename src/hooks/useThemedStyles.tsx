@@ -47,3 +47,14 @@ export const useThemedStylesWithOverride = <
 
     return themedStyles;
 };
+
+export const useStylesWithOverride = (componentStyles: StyleOverrides) => {
+    const { styles: originalStyles } = useTheme();
+
+    const themedStyles = useMemo(
+        () => MergeStyles(originalStyles, componentStyles),
+        [componentStyles, originalStyles],
+    );
+
+    return themedStyles;
+};

@@ -1,20 +1,27 @@
 import React, { type FC, type Ref } from "react";
-import { TextInput as DefaultTextInput, StyleSheet, View } from "react-native";
+import {
+    type TextInput as DefaultTextInput,
+    StyleSheet,
+    View,
+} from "react-native";
+import { Octicons } from "@expo/vector-icons";
 
-import { ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton, IconButtonProps } from "../buttons";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { IconButton } from "../buttons";
 import { Text } from "../Text";
-
-import { BaseInput, BaseInputProps } from "./BaseInput";
+import { BaseInput, type BaseInputProps } from "./BaseInput";
 import { NumberInput } from "./NumberInput";
 
 export type NumberValue = { representation: "number"; value: string };
 export type RangeValue = { representation: "range"; value: [string, string] };
-export type FractionValue = { representation: "fraction"; value: [string, string, string] };
+export type FractionValue = {
+    representation: "fraction";
+    value: [string, string, string];
+};
 
 export type MultiNumberInputValue = NumberValue | FractionValue | RangeValue;
 
-export interface MultiNumberInputStyles {}
+export type MultiNumberInputStyles = {};
 
 export interface MultiNumberInputProps
     extends Pick<
@@ -57,17 +64,27 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
 
     ...baseProps
 }) => {
-    const styles = useThemedStyles(createStyles, { value, disabled, enabledRepresentations });
+    const styles = useThemedStyles(createStyles, {
+        value,
+        disabled,
+        enabledRepresentations,
+    });
 
-    const icon: IconButtonProps["iconName"] = {
+    const icon: keyof typeof Octicons.glyphMap = {
+        // TODO: decouple
         number: "infinity" as const,
         fraction: "number" as const,
         range: "arrow-both" as const,
     }[value.representation];
 
     const handleChangeMode = React.useCallback(() => {
-        const currentIndex = enabledRepresentations.indexOf(value.representation);
-        const nextIndex = currentIndex + 1 >= enabledRepresentations.length ? 0 : currentIndex + 1;
+        const currentIndex = enabledRepresentations.indexOf(
+            value.representation,
+        );
+        const nextIndex =
+            currentIndex + 1 >= enabledRepresentations.length
+                ? 0
+                : currentIndex + 1;
 
         const nextMode = enabledRepresentations[nextIndex];
         if (!nextMode) {
@@ -85,12 +102,18 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
         if (nextMode === "fraction") {
             switch (value.representation) {
                 case "number":
-                    onChange?.({ representation: nextMode, value: [value.value ?? "", "", ""] });
+                    onChange?.({
+                        representation: nextMode,
+                        value: [value.value ?? "", "", ""],
+                    });
                     return;
                 case "fraction":
                     return;
                 case "range":
-                    onChange?.({ representation: nextMode, value: [value.value?.[0] ?? "", "", ""] });
+                    onChange?.({
+                        representation: nextMode,
+                        value: [value.value?.[0] ?? "", "", ""],
+                    });
                     return;
             }
         }
@@ -98,10 +121,16 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
         if (nextMode === "range") {
             switch (value.representation) {
                 case "number":
-                    onChange?.({ representation: nextMode, value: [value.value ?? "", ""] });
+                    onChange?.({
+                        representation: nextMode,
+                        value: [value.value ?? "", ""],
+                    });
                     return;
                 case "fraction":
-                    onChange?.({ representation: nextMode, value: [value.value?.[0] ?? "", ""] });
+                    onChange?.({
+                        representation: nextMode,
+                        value: [value.value?.[0] ?? "", ""],
+                    });
                     return;
                 case "range":
                     return;
@@ -113,16 +142,26 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
         (text: string) => {
             switch (value.representation) {
                 case "number":
-                    onChange?.({ representation: value.representation, value: text });
+                    onChange?.({
+                        representation: value.representation,
+                        value: text,
+                    });
                     break;
                 case "fraction":
                     onChange?.({
                         representation: value.representation,
-                        value: [text, value.value?.[1] ?? "", value.value?.[2] ?? ""],
+                        value: [
+                            text,
+                            value.value?.[1] ?? "",
+                            value.value?.[2] ?? "",
+                        ],
                     });
                     break;
                 case "range":
-                    onChange?.({ representation: value.representation, value: [text, value.value?.[1] ?? ""] });
+                    onChange?.({
+                        representation: value.representation,
+                        value: [text, value.value?.[1] ?? ""],
+                    });
                     break;
             }
         },
@@ -140,22 +179,37 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
                         variant="secondary"
                         disabled={disabled}
                         iconName={icon}
-                        rounded={false}
-                        style={styles.iconContainer}
-                        color={styles.icon.color}
+                        iconSet={Octicons}
+                        containerStyle={styles.iconContainer}
                         onPress={handleChangeMode}
                     />
                     <NumberInput
                         ref={ref}
                         disabled={disabled}
-                        placeholder={value.representation !== "range" ? placeholder : placeholder2}
+                        placeholder={
+                            value.representation !== "range"
+                                ? placeholder
+                                : placeholder2
+                        }
                         maxLength={maxLength}
                         clearButtonMode={clearButtonMode}
-                        value={value.representation === "number" ? value.value : value.value?.[0]}
-                        keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
+                        value={
+                            value.representation === "number"
+                                ? value.value
+                                : value.value?.[0]
+                        }
+                        keyboardType={
+                            value.representation === "fraction"
+                                ? "number-pad"
+                                : keyboardType
+                        }
                         style={styles.primaryInput}
                         onChangeText={handlePrimaryInputChangeText}
-                        onSubmitEditing={value.representation === "number" ? onSubmitEditing : undefined}
+                        onSubmitEditing={
+                            value.representation === "number"
+                                ? onSubmitEditing
+                                : undefined
+                        }
                     />
                     {value.representation === "fraction" && (
                         <NumberInput
@@ -166,10 +220,14 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
                             clearButtonMode={clearButtonMode}
                             keyboardType="number-pad"
                             style={styles.input}
-                            onChangeText={text =>
+                            onChangeText={(text) =>
                                 onChange?.({
                                     representation: value.representation,
-                                    value: [value.value?.[0] ?? "", text, value.value?.[2] ?? ""],
+                                    value: [
+                                        value.value?.[0] ?? "",
+                                        text,
+                                        value.value?.[2] ?? "",
+                                    ],
                                 })
                             }
                             onSubmitEditing={onSubmitEditing}
@@ -177,20 +235,37 @@ export const MultiNumberInput: FC<MultiNumberInputProps> = ({
                     )}
                     {value.representation !== "number" && (
                         <>
-                            <Text variant="title">{value.representation === "fraction" ? "/" : "\u2212"}</Text>
+                            <Text variant="title">
+                                {value.representation === "fraction"
+                                    ? "/"
+                                    : "\u2212"}
+                            </Text>
                             <NumberInput
                                 disabled={disabled}
                                 placeholder={placeholder2}
-                                value={value.representation === "fraction" ? value.value?.[2] : value.value?.[1]}
+                                value={
+                                    value.representation === "fraction"
+                                        ? value.value?.[2]
+                                        : value.value?.[1]
+                                }
                                 maxLength={maxLength}
                                 clearButtonMode={clearButtonMode}
-                                keyboardType={value.representation === "fraction" ? "number-pad" : keyboardType}
+                                keyboardType={
+                                    value.representation === "fraction"
+                                        ? "number-pad"
+                                        : keyboardType
+                                }
                                 style={styles.input}
-                                onChangeText={text => {
+                                onChangeText={(text) => {
                                     if (value.representation === "fraction") {
                                         onChange?.({
-                                            representation: value.representation,
-                                            value: [value.value?.[0] ?? "", value.value?.[1] ?? "", text],
+                                            representation:
+                                                value.representation,
+                                            value: [
+                                                value.value?.[0] ?? "",
+                                                value.value?.[1] ?? "",
+                                                text,
+                                            ],
                                         });
                                         return;
                                     }
@@ -217,7 +292,9 @@ const createStyles = (
         container: {
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : baseInput.backgroundColor,
             borderRadius: baseInput.borderRadius,
             paddingHorizontal: baseInput.padding,
         },
@@ -228,10 +305,15 @@ const createStyles = (
             textAlign: value?.representation === "number" ? "left" : "center",
         },
         iconContainer: {
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : undefined,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : undefined,
         },
         icon: {
-            color: enabledRepresentations?.length === 1 ? color.textPrimary : undefined,
+            color:
+                enabledRepresentations?.length === 1
+                    ? color.textPrimary
+                    : undefined,
         },
     });
     return styles;
