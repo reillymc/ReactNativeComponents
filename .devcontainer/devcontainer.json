@@ -9,22 +9,10 @@
         "vscode": {
             // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
+                "biomejs.biome",
                 "expo.vscode-expo-tools",
-                "dbaeumer.vscode-eslint",
-                "editorconfig.editorconfig",
-                "esbenp.prettier-vscode",
                 "msjsdiag.vscode-react-native"
-            ],
-            "settings": {
-                "eslint.alwaysShowStatus": true
-            }
-        }
-    },
-    "features": {
-        "docker-from-docker": {
-            "version": "latest",
-            "moby": false,
-            "dockerDashComposeVersion": "v2"
+            ]
         }
     },
     "remoteUser": "node",

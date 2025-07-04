@@ -3,6 +3,7 @@
     "version": "0.6.1",
     "description": "A collection of React Native components and resources",
     "module": "lib/module/index",
+    "main": "expo-router/entry",
     "types": "lib/typescript/src/index.d.ts",
     "react-native": "src/index",
     "source": "src/index",
@@ -58,7 +59,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.24.0",
-        "@biomejs/biome": "^1.8.3",
+        "@biomejs/biome": "2.0.6",
         "@expo/vector-icons": "^14.1.0",
         "@react-native-community/eslint-config": "^3.2.0",
         "@react-native/metro-config": "^0.76.2",
