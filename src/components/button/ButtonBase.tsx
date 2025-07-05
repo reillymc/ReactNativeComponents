@@ -3,10 +3,10 @@ import { type ColorValue, type DimensionValue, StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import type { ActionState, ActionVariant } from "./Action";
-import { ActionBase, type ActionBaseProps } from "./ActionBase";
+import { ActionBase, type ActionBaseProps } from "../action";
 
-export type ButtonSize = "regular" | "large";
+export type ButtonState = "default" | "disabled" | "pressed";
+export type ButtonSize = "medium" | "large";
 export type ButtonVariant = "primary" | "secondary" | "destructive";
 
 export type ButtonBaseStyles = {
@@ -15,7 +15,7 @@ export type ButtonBaseStyles = {
     padding: number;
     borderRadius: number | `${number}%`;
     color: {
-        [Variant in ActionVariant]: { [State in ActionState]: ColorValue };
+        [Variant in ButtonVariant]: { [State in ButtonState]: ColorValue };
     };
 };
 
@@ -32,7 +32,7 @@ export interface ButtonBaseProps
 export const ButtonBase: FC<ButtonBaseProps> = ({
     variant = "secondary",
     containerStyle,
-    size = "regular",
+    size = "medium",
     disabled: disabledProp,
     style,
     children,

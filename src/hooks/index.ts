@@ -4,6 +4,7 @@ export { usePersistentKeyboardHeight } from "./usePersistentKeyboardHeight";
 export { useTheme } from "./useTheme";
 export {
     ThemedStyles,
+    useStylesWithOverride,
     useThemedStyles,
     useThemedStylesWithOverride,
 } from "./useThemedStyles";

@@ -6,7 +6,7 @@ import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 export const defaultProps: ButtonProps = {
     label: "Secondary Button",
     variant: "secondary",
-    size: "regular",
+    size: "medium",
     onPress: () => null,
 };
 
@@ -34,7 +34,7 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
         label: "Size",
         default: "Regular",
         values: [
-            { label: "Regular", value: "regular" },
+            { label: "Medium", value: "medium" },
             { label: "Large", value: "large" },
         ],
     },

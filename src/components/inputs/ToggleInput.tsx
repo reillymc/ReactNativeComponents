@@ -1,28 +1,28 @@
 import type React from "react";
 import {
     type ColorValue,
-    Pressable,
     type StyleProp,
     StyleSheet,
     View,
     type ViewStyle,
 } from "react-native";
+import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import type { ActionVariant } from "../buttons/Action";
-import { Icon } from "../Icon";
-import { Text } from "../Text";
+import { ActionBase } from "../action";
+import { InteractiveIcon } from "../icon";
+import { InteractiveText, Text } from "../text";
 import type { BaseInputProps } from "./BaseInput";
 
-type ToggleSize = "small" | "regular" | "large";
-type ToggleVariant = ActionVariant | "flat";
+type ToggleSize = "small" | "medium";
+type ToggleVariant = "primary" | "secondary";
 
 export type ToggleInputStyles = {
     indicator: {
-        size: { [key in ToggleSize]: number };
+        size: { [Size in ToggleSize]: number };
         color: ColorValue;
-        selectedColor: { [key in ToggleVariant]: ColorValue };
+        selectedColor: { [Variant in ToggleVariant]: ColorValue };
     };
     label: {
         gap: number;
@@ -47,87 +47,97 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
     value = false,
     iconVariant = "dot",
     variant = "primary",
-    size = "regular",
+    size = "medium",
     containerStyle,
-    disabled,
+    disabled: disabledProp,
     styles: styleOverrides,
     onChange,
 }) => {
-    const [styles, { toggleInput }] = useThemedStylesWithOverride(
+    const disabled = disabledProp || !onChange;
+
+    const [styles] = useThemedStylesWithOverride(
         createStyles,
         { toggleInput: styleOverrides },
-        { variant, size, value, disabled },
+        { size },
     );
 
     return (
-        <Pressable
+        <ActionBase
             disabled={disabled}
-            hitSlop={16}
-            style={[styles.container, containerStyle]}
+            containerStyle={[styles.container, containerStyle]}
             onPress={() => onChange(!value)}
         >
-            <View style={styles.labelIconContainer}>
-                <View style={styles.iconContainer}>
-                    {iconVariant === "check" ? (
-                        <Icon
-                            set="octicons"
-                            iconName={value ? "check-circle-fill" : "circle"}
-                            size={toggleInput.indicator.size[size]}
-                            style={styles.icon}
-                        />
-                    ) : (
-                        <>
-                            <Icon
-                                set="octicons"
-                                iconName="circle"
-                                size={toggleInput.indicator.size[size]}
-                                style={styles.icon}
-                            />
-                            {!!value && (
-                                <Icon
-                                    set="octicons"
-                                    iconName="dot-fill"
-                                    size={toggleInput.indicator.size[size]}
-                                    style={[styles.icon, styles.innerIcon]}
+            {(pressableState) => (
+                <>
+                    <View style={styles.labelIconContainer}>
+                        <View style={styles.iconContainer}>
+                            {iconVariant === "check" ? (
+                                <InteractiveIcon
+                                    iconSet={Octicons}
+                                    iconName={
+                                        value ? "check-circle-fill" : "circle"
+                                    }
+                                    size={size}
+                                    variant={variant}
+                                    disabled={disabled}
+                                    {...pressableState}
                                 />
+                            ) : (
+                                <>
+                                    <InteractiveIcon
+                                        iconSet={Octicons}
+                                        iconName="circle"
+                                        size={size}
+                                        variant={variant}
+                                        disabled={disabled}
+                                        {...pressableState}
+                                    />
+                                    {!!value && (
+                                        <View style={styles.icon}>
+                                            <InteractiveIcon
+                                                iconSet={Octicons}
+                                                iconName="dot-fill"
+                                                size={size}
+                                                variant={variant}
+                                                disabled={disabled}
+                                                {...pressableState}
+                                            />
+                                        </View>
+                                    )}
+                                </>
                             )}
-                        </>
+                        </View>
+                        {label && (
+                            <InteractiveText
+                                textVariant="label"
+                                disabled={disabled}
+                                {...pressableState}
+                            >
+                                {label}
+                            </InteractiveText>
+                        )}
+                    </View>
+                    {helpText && (
+                        <View style={styles.helpText}>
+                            {typeof helpText === "string" ? (
+                                <Text variant="caption">{helpText}</Text>
+                            ) : (
+                                helpText
+                            )}
+                        </View>
                     )}
-                </View>
-                {label && (
-                    <Text variant="label" style={styles.label}>
-                        {label}
-                    </Text>
-                )}
-            </View>
-            {helpText && (
-                <View style={styles.helpText}>
-                    {typeof helpText === "string" ? (
-                        <Text variant="caption">{helpText}</Text>
-                    ) : (
-                        helpText
-                    )}
-                </View>
+                </>
             )}
-        </Pressable>
+        </ActionBase>
     );
 };
 
 ToggleInput.displayName = "ToggleInput";
 
 const createStyles = (
-    { theme: { color }, styles: { toggleInput, baseInput } }: ThemedStyles,
-    {
-        variant = "primary",
-        size = "regular",
-        value,
-        disabled,
-    }: Partial<ToggleInputProps>,
+    { styles: { toggleInput, baseInput } }: ThemedStyles,
+    { size = "medium" }: Partial<ToggleInputProps>,
 ) => {
-    let iconColor = toggleInput.indicator.color;
-    if (value) iconColor = toggleInput.indicator.selectedColor[variant];
-    if (disabled) iconColor = color.textDisabled;
-
     const styles = StyleSheet.create({
         container: {
             justifyContent: "center",
@@ -135,21 +145,15 @@ const createStyles = (
         labelIconContainer: {
             flexDirection: "row",
             alignItems: "center",
+            gap: toggleInput.label.gap,
         },
         iconContainer: {
             width: toggleInput.indicator.size[size],
             height: toggleInput.indicator.size[size],
         },
         icon: {
-            color: iconColor,
             position: "absolute",
-        },
-        innerIcon: {
             alignSelf: "center",
-        },
-        label: {
-            marginLeft: toggleInput.label.gap,
-            color: disabled ? color.textDisabled : color.textPrimary,
         },
         helpText: {
             marginLeft:

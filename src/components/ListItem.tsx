@@ -1,11 +1,16 @@
-import React from "react";
-import { Pressable, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-
-import { ThemedStyles, useThemedStyles } from "../hooks";
-
+import type { FC, ReactNode } from "react";
+import {
+    Pressable,
+    type StyleProp,
+    StyleSheet,
+    View,
+    type ViewStyle,
+} from "react-native";
 import { Undefined } from "@reillymc/es-utils";
-import { SwipeView, SwipeViewProps } from "./swipeView";
-import { Text } from "./Text";
+
+import { type ThemedStyles, useThemedStyles } from "../hooks";
+import { SwipeView, type SwipeViewProps } from "./swipeView";
+import { Text } from "./text";
 
 type ListItemVariant = "default" | "compact";
 
@@ -19,9 +24,9 @@ export interface ListItemStyles {
 
 export interface ListItemProps {
     heading?: string;
-    header?: React.ReactNode;
-    avatar?: React.ReactNode;
-    alert?: React.ReactNode;
+    header?: ReactNode;
+    avatar?: ReactNode;
+    alert?: ReactNode;
     variant?: ListItemVariant;
 
     /**
@@ -29,9 +34,9 @@ export interface ListItemProps {
      * - `<ListItemRow/>`
      * - `<ListItemRow/>[]`
      */
-    contentRows?: Array<React.ReactNode>;
+    contentRows?: Array<ReactNode>;
 
-    footer?: React.ReactNode;
+    footer?: ReactNode;
 
     swipeActions?: SwipeViewProps["rightActions"];
     style?: StyleProp<ViewStyle>;
@@ -39,7 +44,7 @@ export interface ListItemProps {
     onPress?: () => void;
 }
 
-export const ListItem: React.FC<ListItemProps> = ({
+export const ListItem: FC<ListItemProps> = ({
     avatar,
     alert,
     heading,
@@ -62,7 +67,9 @@ export const ListItem: React.FC<ListItemProps> = ({
         <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
             {header}
             <View style={styles.innerContainer}>
-                {!!avatar && <View style={styles.avatarContainer}>{avatar}</View>}
+                {!!avatar && (
+                    <View style={styles.avatarContainer}>{avatar}</View>
+                )}
                 <View style={[styles.contentContainer, contentContainerStyle]}>
                     {!!heading && (
                         <Text variant="heading" numberOfLines={2}>
@@ -79,20 +86,31 @@ export const ListItem: React.FC<ListItemProps> = ({
 
     return (
         <View style={styles.container}>
-            {filteredActions?.length ? <SwipeView rightActions={swipeActions}>{innerContent}</SwipeView> : innerContent}
+            {filteredActions?.length ? (
+                <SwipeView rightActions={swipeActions}>
+                    {innerContent}
+                </SwipeView>
+            ) : (
+                innerContent
+            )}
         </View>
     );
 };
 
 ListItem.displayName = "ListItem";
 
-const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar, variant }: Partial<ListItemProps>) => {
+const createStyles = (
+    { styles: { listItem }, theme }: ThemedStyles,
+    { avatar, variant }: Partial<ListItemProps>,
+) => {
     const styles = StyleSheet.create({
         container: {
-            marginBottom: variant === "compact" ? undefined : listItem.spacingMargin,
+            marginBottom:
+                variant === "compact" ? undefined : listItem.spacingMargin,
             flex: 1,
             backgroundColor: theme.color.foreground,
-            borderRadius: variant === "compact" ? undefined : listItem.borderRadius,
+            borderRadius:
+                variant === "compact" ? undefined : listItem.borderRadius,
             overflow: "hidden",
         },
         pressableContainer: {
@@ -142,10 +160,10 @@ const createStyles = ({ styles: { listItem }, theme }: ThemedStyles, { avatar, v
 };
 
 export interface ListItemRowProps {
-    contentItems?: Array<React.ReactNode> | React.ReactNode;
+    contentItems?: Array<ReactNode> | ReactNode;
 }
 
-export const ListItemRow: React.FC<ListItemRowProps> = ({ contentItems }) => {
+export const ListItemRow: FC<ListItemRowProps> = ({ contentItems }) => {
     const styles = useThemedStyles(createStyles, {});
 
     const items = Array.isArray(contentItems) ? contentItems : [contentItems];
@@ -154,7 +172,9 @@ export const ListItemRow: React.FC<ListItemRowProps> = ({ contentItems }) => {
             {items.map((item, index) => (
                 <View key={index} style={styles.contentItem}>
                     {item}
-                    {index < items.length - 1 && <Text style={styles.spacer}>·</Text>}
+                    {index < items.length - 1 && (
+                        <Text style={styles.spacer}>·</Text>
+                    )}
                 </View>
             ))}
         </View>
@@ -162,30 +182,30 @@ export const ListItemRow: React.FC<ListItemRowProps> = ({ contentItems }) => {
 };
 
 export interface ListItemAvatarProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
-export const ListItemAvatar: React.FC<ListItemAvatarProps> = ({ children }) => {
+export const ListItemAvatar: FC<ListItemAvatarProps> = ({ children }) => {
     const styles = useThemedStyles(createStyles, {});
 
     return <View style={styles.avatar}>{children}</View>;
 };
 
 export interface ListItemAlertProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
-export const ListItemAlert: React.FC<ListItemAlertProps> = ({ children }) => {
+export const ListItemAlert: FC<ListItemAlertProps> = ({ children }) => {
     const styles = useThemedStyles(createStyles, {});
 
     return <View style={styles.alert}>{children}</View>;
 };
 
 export interface ListItemFooterProps {
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
-export const ListItemFooter: React.FC<ListItemFooterProps> = ({ children }) => {
+export const ListItemFooter: FC<ListItemFooterProps> = ({ children }) => {
     const styles = useThemedStyles(createStyles, {});
 
     return <View style={styles.footer}>{children}</View>;

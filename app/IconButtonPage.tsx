@@ -50,7 +50,7 @@ const propDefinitions: PropDefinitions<IconButtonProps<any, any>> = {
         type: "enum",
         label: "Size",
         values: [
-            { label: "Regular", value: "regular" },
+            { label: "Medium", value: "medium" },
             { label: "Large", value: "large" },
         ],
     },

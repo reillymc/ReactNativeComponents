@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { IconAction, type IconActionProps } from "../buttons";
+import { IconAction, type IconActionProps } from "../action";
 
 export interface SwipeActionProps<G extends string, Fn extends string>
     extends Pick<

@@ -5,21 +5,22 @@ import type {
     ActionStyles,
     AvatarStyles,
     BaseInputStyles,
+    ButtonBaseStyles,
     ButtonStyles,
     CounterInputStyles,
     DropdownInputStyles,
     HighlightedTextStyles,
+    IconActionStyles,
     IconButtonStyles,
+    IconStyles,
+    InteractiveIconStyles,
+    InteractiveTextStyles,
     ListItemStyles,
     TextInputStyles,
     TextStyles,
     ToastStyles,
     ToggleInputStyles,
 } from "../components";
-import type { ButtonBaseStyles } from "../components/buttons/ButtonBase";
-import type { IconActionStyles } from "../components/buttons/IconAction";
-import type { InteractiveIconStyles } from "../components/buttons/InteractiveIcon";
-import type { InteractiveTextStyles } from "../components/buttons/InteractiveText";
 import type { Theme } from "./theme";
 
 export type Styles = {
@@ -41,6 +42,7 @@ export type Styles = {
     avatar: AvatarStyles;
 
     action: ActionStyles;
+    icon: IconStyles;
     interactiveText: InteractiveTextStyles;
     interactiveIcon: InteractiveIconStyles;
     iconAction: IconActionStyles;
@@ -61,8 +63,6 @@ export const createDefaultStyles: CreateStyles = ({
     spacing,
 }) => {
     const interactiveText: InteractiveTextStyles = {
-        fontFamilyWeight: font.familyWeight.regular400,
-        fontSize: font.size.regular,
         color: {
             primary: {
                 default: color.primary,
@@ -82,8 +82,17 @@ export const createDefaultStyles: CreateStyles = ({
         },
     };
 
+    const icon: IconStyles = {
+        color: color.textPrimary,
+        size: {
+            small: 16,
+            medium: 20,
+            large: 24,
+        },
+    };
+
     const interactiveIcon: InteractiveIconStyles = {
-        size: 20,
+        size: icon.size,
         color: {
             primary: {
                 default: color.primary,
@@ -106,10 +115,10 @@ export const createDefaultStyles: CreateStyles = ({
     const buttonBase: ButtonBaseStyles = {
         height: {
             large: 48,
-            regular: 40,
+            medium: 40,
         },
         width: {
-            regular: 160,
+            medium: 160,
             large: "100%",
         },
         borderRadius: border.radius.regular,
@@ -188,6 +197,7 @@ export const createDefaultStyles: CreateStyles = ({
         interactiveText,
         textInput: {},
         interactiveIcon,
+        icon,
         action: {
             label: interactiveText,
         },
@@ -198,8 +208,6 @@ export const createDefaultStyles: CreateStyles = ({
         button: {
             container: buttonBase,
             label: {
-                fontFamilyWeight: font.familyWeight.regular400,
-                fontSize: font.size.regular,
                 color: {
                     primary: {
                         default: color.textOnPrimary,
@@ -223,13 +231,13 @@ export const createDefaultStyles: CreateStyles = ({
             container: {
                 borderRadius: "50%",
                 height: {
-                    large: interactiveIcon.size + spacing.medium,
-                    regular: interactiveIcon.size + spacing.small,
+                    large: icon.size.large + spacing.medium,
+                    medium: icon.size.medium + spacing.small,
                 },
                 padding: 0,
                 width: {
-                    large: interactiveIcon.size + spacing.medium,
-                    regular: interactiveIcon.size + spacing.small,
+                    large: icon.size.large + spacing.medium,
+                    medium: icon.size.medium + spacing.small,
                 },
                 color: {
                     primary: {
@@ -256,17 +264,11 @@ export const createDefaultStyles: CreateStyles = ({
         },
         toggleInput: {
             indicator: {
-                size: {
-                    small: 16,
-                    regular: 20,
-                    large: 28,
-                },
+                size: icon.size,
                 color: color.border,
                 selectedColor: {
-                    flat: color.textPrimary,
                     primary: color.primary,
                     secondary: color.secondary,
-                    destructive: color.destructive,
                 },
             },
             label: {

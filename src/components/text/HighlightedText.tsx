@@ -1,14 +1,14 @@
-import React from "react";
+import type React from "react";
 import { StyleSheet } from "react-native";
 
-import { ThemedStyles, useThemedStyles } from "../hooks";
-
-import { Text, TextProps } from "./Text";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { Text, type TextProps } from "./Text";
 
 /**
  * Escapes any characters that would interfere with RegEx processing.
  */
-export const EscapeForRegexProcessing = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+export const EscapeForRegexProcessing = (string: string) =>
+    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export interface HighlightedTextStyles {
     /**
@@ -16,7 +16,8 @@ export interface HighlightedTextStyles {
      */
     highlightedFontFamilyWeight: string;
 }
-export interface HighlightedTextProps extends Pick<TextProps, "variant" | "style"> {
+export interface HighlightedTextProps
+    extends Pick<TextProps, "variant" | "style"> {
     text?: string;
     highlight?: string;
 }
@@ -38,7 +39,12 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
                 <Text
                     {...props}
                     key={`${part}${idx}`}
-                    style={[part.toLowerCase() === highlightedText ? styles.highlighted : styles.default, style]}
+                    style={[
+                        part.toLowerCase() === highlightedText
+                            ? styles.highlighted
+                            : styles.default,
+                        style,
+                    ]}
                 >
                     {part}
                 </Text>
@@ -49,7 +55,10 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
 
 HighlightedText.displayName = "HighlightedText";
 
-const createStyles = ({ theme: { font }, styles: { highlightedText } }: ThemedStyles) => {
+const createStyles = ({
+    theme: { font },
+    styles: { highlightedText },
+}: ThemedStyles) => {
     const styles = StyleSheet.create({
         default: {
             fontFamily: font.familyWeight.regular400,

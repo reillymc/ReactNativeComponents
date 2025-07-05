@@ -1,12 +1,13 @@
-import { AntDesign } from "@expo/vector-icons";
 import { Pressable, StyleSheet, View } from "react-native";
-import { useThemedStyles, type ThemedStyles } from "../../../hooks";
+import { AntDesign } from "@expo/vector-icons";
+
+import { type ThemedStyles, useThemedStyles } from "../../../hooks";
 import { Tag } from "../../Tag";
-import { Text } from "../../Text";
+import { Text } from "../../text";
 import { BaseInput, type BaseInputProps } from "../BaseInput";
 import type { ValueItem } from "../valueItem";
 
-export interface SelectionInputStyles {}
+export type SelectionInputStyles = {};
 
 interface SingleSelection<T> {
     selectionMode: "single";
@@ -18,10 +19,16 @@ interface MultiSelection<T> {
     selection?: Array<ValueItem<T>>;
 }
 
-export type SelectionProps<T = string> = Pick<BaseInputProps, "label" | "placeholder"> &
+export type SelectionProps<T = string> = Pick<
+    BaseInputProps,
+    "label" | "placeholder"
+> &
     (SingleSelection<T> | MultiSelection<T>) & { items?: Array<ValueItem<T>> };
 
-export type SelectionInputProps<T = string> = Omit<BaseInputProps, "selection" | "onChange" | "style"> &
+export type SelectionInputProps<T = string> = Omit<
+    BaseInputProps,
+    "selection" | "onChange" | "style"
+> &
     SelectionProps<T> & {
         hideLabel?: boolean;
         onRemoveItem?: (item: ValueItem<T> | undefined) => void;
@@ -51,27 +58,48 @@ export const SelectionInput = <T,>({
                 <Pressable
                     hitSlop={20}
                     disabled={disabled}
-                    style={({ pressed }) => [styles.button, pressed ? styles.buttonPressed : undefined]}
+                    style={({ pressed }) => [
+                        styles.button,
+                        pressed ? styles.buttonPressed : undefined,
+                    ]}
                     onPress={onAdd}
                 >
                     {() => (
                         <View style={styles.container}>
                             {selectionMode === "single" ? (
-                                <Text style={disabled ? styles.labelDisabled : undefined}>
+                                <Text
+                                    style={
+                                        disabled
+                                            ? styles.labelDisabled
+                                            : undefined
+                                    }
+                                >
                                     {selection?.label ?? placeholder}
                                 </Text>
                             ) : (
                                 <View style={styles.tagContainer}>
                                     {selection?.length ? (
-                                        selection?.map(item => (
+                                        selection?.map((item) => (
                                             <Tag
-                                                key={"id" in item ? item.id : item.value}
+                                                key={
+                                                    "id" in item
+                                                        ? item.id
+                                                        : item.value
+                                                }
                                                 label={item.label}
                                                 style={styles.tag}
                                             />
                                         ))
                                     ) : (
-                                        <Text style={disabled ? styles.labelDisabled : undefined}>{placeholder}</Text>
+                                        <Text
+                                            style={
+                                                disabled
+                                                    ? styles.labelDisabled
+                                                    : undefined
+                                            }
+                                        >
+                                            {placeholder}
+                                        </Text>
                                     )}
                                 </View>
                             )}
@@ -102,14 +130,18 @@ const createStyles = (
             justifyContent: "center",
             borderRadius: baseInput.borderRadius,
             minHeight: baseInput.height,
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : baseInput.backgroundColor,
             color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
             paddingHorizontal: baseInput.padding,
             paddingVertical: selectionMode === "single" ? baseInput.padding : 0,
             fontSize: baseInput.fontSize,
         },
         buttonPressed: {
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : color.backgroundHighlight,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : color.backgroundHighlight,
             color: disabled ? baseInput.disabledTextColor : color.textHighlight,
         },
         labelDisabled: {

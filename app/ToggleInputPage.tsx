@@ -39,8 +39,7 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
         default: "Regular",
         values: [
             { label: "Small", value: "small" },
-            { label: "Regular", value: "regular" },
-            { label: "Large", value: "large" },
+            { label: "Medium", value: "medium" },
         ],
     },
     helpText: {

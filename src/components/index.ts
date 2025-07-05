@@ -1,16 +1,41 @@
-export * from "./buttons";
-export * from "./inputs";
+export {
+    Action,
+    ActionProps,
+    ActionStyles,
+    IconAction,
+    IconActionProps,
+    IconActionStyles,
+} from "./action";
+export {
+    Button,
+    ButtonBaseStyles,
+    ButtonProps,
+    ButtonStyles,
+    IconButton,
+    IconButtonProps,
+    IconButtonStyles,
+} from "./button";
+export { Icon, IconProps, IconStyles, InteractiveIconStyles } from "./icon";
+export {
+    HighlightedText,
+    HighlightedTextProps,
+    HighlightedTextStyles,
+    InteractiveTextStyles,
+    Text,
+    TextProps,
+    TextStyles,
+} from "./text";
+
+//
 
 export * from "./AlertIndicator";
 export * from "./Avatar";
 export * from "./CollapsibleContainer";
 export { Form, FormProps } from "./Form";
-export { HighlightedText, HighlightedTextProps, HighlightedTextStyles } from "./HighlightedText";
-export * from "./Icon";
+export * from "./inputs";
 export * from "./KeyboardAccessory";
 export * from "./ListItem";
 export { Panel, PanelProps } from "./Panel";
 export * from "./swipeView";
 export * from "./Tag";
-export { Text, TextProps, TextStyles, TextVariant } from "./Text";
 export { Toast, ToastProps, ToastStyles } from "./Toast";

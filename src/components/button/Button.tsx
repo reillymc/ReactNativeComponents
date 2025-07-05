@@ -1,17 +1,13 @@
 import type { FC } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks/useThemedStyles";
+import { useStylesWithOverride } from "../../hooks";
+import { InteractiveText, type InteractiveTextStyles } from "../text";
 import {
     ButtonBase,
     type ButtonBaseProps,
     type ButtonBaseStyles,
 } from "./ButtonBase";
-import {
-    InteractiveText,
-    type InteractiveTextProps,
-    type InteractiveTextStyles,
-} from "./InteractiveText";
 
 export type ButtonStyles = {
     container: ButtonBaseStyles;
@@ -20,10 +16,10 @@ export type ButtonStyles = {
 
 export interface ButtonProps
     extends Pick<
-            ButtonBaseProps,
-            "onPress" | "disabled" | "size" | "variant" | "containerStyle"
-        >,
-        Pick<InteractiveTextProps, "label"> {
+        ButtonBaseProps,
+        "onPress" | "disabled" | "size" | "variant" | "containerStyle"
+    > {
+    label: string;
     style?: DeepPartial<ButtonStyles>;
 }
 
@@ -54,11 +50,12 @@ export const Button: FC<ButtonProps> = ({
             {(pressableState) => (
                 <InteractiveText
                     {...pressableState}
-                    label={label}
                     disabled={disabled}
                     variant={variant}
                     style={button.label}
-                />
+                >
+                    {label}
+                </InteractiveText>
             )}
         </ButtonBase>
     );

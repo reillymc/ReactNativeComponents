@@ -1,11 +1,19 @@
-import React, { type FC, type Ref } from "react";
-import { DimensionValue, StyleProp, StyleSheet, TextInput, TextInputProps, View, ViewStyle } from "react-native";
+import type { FC, ReactNode, Ref } from "react";
+import {
+    type DimensionValue,
+    type StyleProp,
+    StyleSheet,
+    TextInput,
+    type TextInputProps,
+    View,
+    type ViewStyle,
+} from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { Icon } from "../Icon";
-import { Text } from "../Text";
-
-import { InputWidth } from "./types";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { Icon } from "../icon";
+import { Text } from "../text";
+import type { InputWidth } from "./types";
 
 export interface BaseInputStyles {
     height: number;
@@ -33,7 +41,7 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
      * - `<Text />`
      * - string
      */
-    label?: React.ReactNode;
+    label?: ReactNode;
 
     width?: InputWidth;
     disabled?: boolean;
@@ -50,10 +58,10 @@ export interface BaseInputProps extends Omit<TextInputProps, "editable"> {
     /**
      * Input element component.
      */
-    inputElement?: React.ReactNode;
-    panelAboveElement?: React.ReactNode;
-    panelBelowElement?: React.ReactNode;
-    modalElement?: React.ReactNode;
+    inputElement?: ReactNode;
+    panelAboveElement?: ReactNode;
+    panelBelowElement?: ReactNode;
+    modalElement?: ReactNode;
 
     containerStyle?: StyleProp<ViewStyle>;
 
@@ -80,9 +88,13 @@ export const BaseInput: FC<BaseInputProps> = ({
     ref,
     ...props
 }) => {
-    const styles = useThemedStyles(createStyles, { width, disabled, multiline });
+    const styles = useThemedStyles(createStyles, {
+        width,
+        disabled,
+        multiline,
+    });
     const {
-        styles: { baseInput, text },
+        styles: { baseInput },
     } = useTheme();
 
     return (
@@ -90,7 +102,11 @@ export const BaseInput: FC<BaseInputProps> = ({
             <View style={[styles.container, containerStyle]}>
                 {label && (
                     <View style={styles.labelContainer}>
-                        {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
+                        {typeof label === "string" ? (
+                            <Text variant="label">{label}</Text>
+                        ) : (
+                            label
+                        )}
                     </View>
                 )}
                 {panelAboveElement && <View>{panelAboveElement}</View>}
@@ -102,7 +118,9 @@ export const BaseInput: FC<BaseInputProps> = ({
                         <TextInput
                             ref={ref}
                             editable={!disabled}
-                            placeholderTextColor={baseInput.placeholderTextColor}
+                            placeholderTextColor={
+                                baseInput.placeholderTextColor
+                            }
                             style={[styles.input, style]}
                             multiline={multiline}
                             scrollEnabled={scrollEnabled ?? false}
@@ -121,13 +139,18 @@ export const BaseInput: FC<BaseInputProps> = ({
                     <View style={styles.helpText}>
                         {hasError && (
                             <Icon
-                                size={text.fontFamilySize.caption}
+                                iconSet={AntDesign}
+                                size="small"
                                 iconName="exclamationcircle"
                                 style={styles.errorIndicator}
                             />
                         )}
                         {helpText &&
-                            (typeof helpText === "string" ? <Text variant="caption">{helpText}</Text> : helpText)}
+                            (typeof helpText === "string" ? (
+                                <Text variant="caption">{helpText}</Text>
+                            ) : (
+                                helpText
+                            ))}
                     </View>
                 )}
             </View>
@@ -159,7 +182,9 @@ const createStyles = (
         input: {
             height: multiline ? "auto" : baseInput.height,
             borderRadius: baseInput.borderRadius,
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : baseInput.backgroundColor,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : baseInput.backgroundColor,
             padding: baseInput.padding,
             fontSize: baseInput.fontSize,
             fontFamily: baseInput.fontFamilyWeight,

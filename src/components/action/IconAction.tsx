@@ -2,10 +2,10 @@ import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { InteractiveIcon, type InteractiveIconProps } from "../icon";
+import { InteractiveText } from "../text";
 import type { ActionProps } from "./Action";
 import { ActionBase } from "./ActionBase";
-import { InteractiveIcon, type InteractiveIconProps } from "./InteractiveIcon";
-import { InteractiveText } from "./InteractiveText";
 
 export type IconActionStyles = {
     gap: number;
@@ -58,17 +58,20 @@ export const IconAction = <G extends string, Fn extends string>({
                     />
                     {!!label && (
                         <InteractiveText
-                            label={label}
                             disabled={disabled}
                             variant={variant}
                             {...pressableState}
-                        />
+                        >
+                            {label}
+                        </InteractiveText>
                     )}
                 </View>
             )}
         </ActionBase>
     );
 };
+
+IconAction.displayName = "IconAction";
 
 const createStyles = (
     { styles: { iconAction } }: ThemedStyles,

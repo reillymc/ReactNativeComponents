@@ -5,7 +5,7 @@ import {
     StyleSheet,
 } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type TextVariant =
     | "display"

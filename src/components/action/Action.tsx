@@ -1,9 +1,9 @@
 import type { FC } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks/useThemedStyles";
+import { useStylesWithOverride } from "../../hooks";
+import { InteractiveText, type InteractiveTextStyles } from "../text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
-import { InteractiveText, type InteractiveTextStyles } from "./InteractiveText";
 
 export type ActionState = "default" | "disabled" | "pressed";
 export type ActionVariant = "primary" | "secondary" | "destructive";
@@ -39,11 +39,12 @@ export const Action: FC<ActionProps> = ({
             {(pressableState) => (
                 <InteractiveText
                     {...pressableState}
-                    label={label}
                     disabled={disabled}
                     variant={variant}
                     style={action.label}
-                />
+                >
+                    {label}
+                </InteractiveText>
             )}
         </ActionBase>
     );

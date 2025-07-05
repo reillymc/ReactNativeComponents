@@ -1,16 +1,16 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks/useThemedStyles";
+import { useStylesWithOverride } from "../../hooks";
+import {
+    InteractiveIcon,
+    type InteractiveIconProps,
+    type InteractiveIconStyles,
+} from "../icon";
 import {
     ButtonBase,
     type ButtonBaseProps,
     type ButtonBaseStyles,
 } from "./ButtonBase";
-import {
-    InteractiveIcon,
-    type InteractiveIconProps,
-    type InteractiveIconStyles,
-} from "./InteractiveIcon";
 
 export type IconButtonVariant = "primary" | "secondary";
 

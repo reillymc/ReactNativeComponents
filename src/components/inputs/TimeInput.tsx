@@ -12,8 +12,8 @@ import {
     useForwardedRef,
     useThemedStyles,
 } from "../../hooks";
-import { IconButton } from "../buttons";
-import { Text } from "../Text";
+import { IconButton } from "../button";
+import { Text } from "../text";
 import { BaseInput, type BaseInputProps } from "./BaseInput";
 import { NumberInput } from "./NumberInput";
 import type { InputWidth } from "./types";

@@ -2,14 +2,15 @@ import type React from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../hooks";
-import type { ActionVariant } from "./buttons/Action";
-import { Text } from "./Text";
+import { Text } from "./text";
+
+export type AlertVariant = "primary" | "secondary" | "destructive";
 
 export type AlertIndicatorStyles = {};
 
 export interface AlertIndicatorProps {
     label?: string;
-    variant?: ActionVariant;
+    variant?: AlertVariant;
     style?: StyleProp<ViewStyle>;
 }
 

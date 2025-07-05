@@ -7,8 +7,8 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton } from "../buttons";
-import { Text } from "../Text";
+import { IconButton } from "../button";
+import { Text } from "../text";
 import { NumberInput, type NumberInputProps } from "./NumberInput";
 
 export interface CounterInputStyles {
@@ -60,7 +60,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     style={{
                         container: {
                             borderRadius: 0,
-                            width: { regular: styles.segment.width },
+                            width: { medium: styles.segment.width },
                         },
                     }}
                 />
@@ -102,7 +102,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     style={{
                         container: {
                             borderRadius: 0,
-                            width: { regular: styles.segment.width },
+                            width: { medium: styles.segment.width },
                         },
                     }}
                 />

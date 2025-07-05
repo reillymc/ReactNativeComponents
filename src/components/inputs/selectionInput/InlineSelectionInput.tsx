@@ -1,12 +1,16 @@
-import React from "react";
-import { Pressable, ScrollView, StyleSheet, type StyleProp, type ViewStyle } from "react-native";
+import {
+    Pressable,
+    ScrollView,
+    type StyleProp,
+    StyleSheet,
+    type ViewStyle,
+} from "react-native";
 
-import { ThemedStyles, useThemedStyles } from "../../../hooks";
-import { Tag, TagProps } from "../../Tag";
-import { Text } from "../../Text";
+import { type ThemedStyles, useThemedStyles } from "../../../hooks";
+import { Tag, type TagProps } from "../../Tag";
+import { Text } from "../../text";
 import { BaseInput } from "../BaseInput";
-
-import { SelectionInputProps } from "./SelectionInput";
+import type { SelectionInputProps } from "./SelectionInput";
 
 export type InlineSelectionInputProps<T = string> = SelectionInputProps<T> &
     Pick<TagProps, "variant"> & {
@@ -26,9 +30,19 @@ export const InlineSelectionInput = <T,>({
     onRemoveItem,
     ...props
 }: InlineSelectionInputProps<T>) => {
-    const styles = useThemedStyles(createStyles, { disabled, selectionMode, variant });
+    const styles = useThemedStyles(createStyles, {
+        disabled,
+        selectionMode,
+        variant,
+    });
 
-    const addButton = <Tag iconName="plus" variant={variant} onPress={disabled ? undefined : onAdd} />;
+    const addButton = (
+        <Tag
+            iconName="plus"
+            variant={variant}
+            onPress={disabled ? undefined : onAdd}
+        />
+    );
 
     return (
         <BaseInput
@@ -36,18 +50,30 @@ export const InlineSelectionInput = <T,>({
             {...props}
             inputElement={
                 <ScrollView
-                    contentContainerStyle={[styles.container, scrollContainerStyles]}
+                    contentContainerStyle={[
+                        styles.container,
+                        scrollContainerStyles,
+                    ]}
                     horizontal
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={selectionMode === "multi"}
                 >
                     {label && (
-                        <Pressable style={styles.labelContainer} onPress={disabled ? undefined : onAdd}>
-                            {typeof label === "string" ? <Text variant="label">{label}</Text> : label}
+                        <Pressable
+                            style={styles.labelContainer}
+                            onPress={disabled ? undefined : onAdd}
+                        >
+                            {typeof label === "string" ? (
+                                <Text variant="label">{label}</Text>
+                            ) : (
+                                label
+                            )}
                         </Pressable>
                     )}
                     {selectionMode === "single" ? (
-                        <Text style={disabled ? styles.labelDisabled : undefined}>
+                        <Text
+                            style={disabled ? styles.labelDisabled : undefined}
+                        >
                             {selection ? (
                                 <Tag
                                     key={`${selection?.value}`}
@@ -55,7 +81,11 @@ export const InlineSelectionInput = <T,>({
                                     iconName="closecircle"
                                     style={styles.tag}
                                     variant={variant}
-                                    onPress={disabled ? undefined : () => onRemoveItem?.(selection)}
+                                    onPress={
+                                        disabled
+                                            ? undefined
+                                            : () => onRemoveItem?.(selection)
+                                    }
                                 />
                             ) : (
                                 addButton
@@ -63,14 +93,18 @@ export const InlineSelectionInput = <T,>({
                         </Text>
                     ) : (
                         <>
-                            {selection?.map(item => (
+                            {selection?.map((item) => (
                                 <Tag
                                     key={`${item.value}`}
                                     label={item.label}
                                     iconName="closecircle"
                                     style={styles.tag}
                                     variant={variant}
-                                    onPress={disabled ? undefined : () => onRemoveItem?.(item)}
+                                    onPress={
+                                        disabled
+                                            ? undefined
+                                            : () => onRemoveItem?.(item)
+                                    }
                                 />
                             ))}
                             {addButton}
@@ -88,7 +122,8 @@ const createStyles = (
     { styles: { baseInput } }: ThemedStyles,
     { disabled, selectionMode, variant }: Partial<InlineSelectionInputProps>,
 ) => {
-    const backgroundColor = variant === "dark" ? baseInput.backgroundColor : undefined;
+    const backgroundColor =
+        variant === "dark" ? baseInput.backgroundColor : undefined;
     const styles = StyleSheet.create({
         container: {
             display: "flex",
@@ -97,7 +132,9 @@ const createStyles = (
             justifyContent: "center",
             borderRadius: baseInput.borderRadius,
             minHeight: baseInput.height,
-            backgroundColor: disabled ? baseInput.backgroundColorDisabled : backgroundColor,
+            backgroundColor: disabled
+                ? baseInput.backgroundColorDisabled
+                : backgroundColor,
             color: disabled ? baseInput.disabledTextColor : baseInput.textColor,
             paddingVertical: selectionMode === "single" ? baseInput.padding : 0,
             fontSize: baseInput.fontSize,

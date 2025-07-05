@@ -1,9 +1,8 @@
-import React from "react";
 import { Pressable, StyleSheet } from "react-native";
 
-import { ThemedStyles, useTheme, useThemedStyles } from "../../../hooks";
-import { HighlightedText } from "../../HighlightedText";
-import { ValueItem } from "../valueItem";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../../hooks";
+import { HighlightedText } from "../../text";
+import type { ValueItem } from "../valueItem";
 
 interface DropdownItemProps<T = string> {
     item: ValueItem<T>;
@@ -12,7 +11,12 @@ interface DropdownItemProps<T = string> {
     onPress: () => void;
 }
 
-export const DropdownItem = <T,>({ item, searchValue, hideItemDescriptions, onPress }: DropdownItemProps<T>) => {
+export const DropdownItem = <T,>({
+    item,
+    searchValue,
+    hideItemDescriptions,
+    onPress,
+}: DropdownItemProps<T>) => {
     const {
         theme: { color },
     } = useTheme();
@@ -26,13 +30,19 @@ export const DropdownItem = <T,>({ item, searchValue, hideItemDescriptions, onPr
             style={({ pressed }) => [
                 styles.dropdownItem,
                 {
-                    backgroundColor: pressed ? color.pressOverlay : "transparent",
+                    backgroundColor: pressed
+                        ? color.pressOverlay
+                        : "transparent",
                 },
             ]}
         >
             <HighlightedText text={item.label} highlight={searchValue} />
             {!hideItemDescriptions && item.description && (
-                <HighlightedText variant="caption" text={item.description} highlight={searchValue} />
+                <HighlightedText
+                    variant="caption"
+                    text={item.description}
+                    highlight={searchValue}
+                />
             )}
         </Pressable>
     );
@@ -40,7 +50,10 @@ export const DropdownItem = <T,>({ item, searchValue, hideItemDescriptions, onPr
 
 DropdownItem.displayName = "DropdownItem";
 
-const createStyles = ({ styles: { baseInput } }: ThemedStyles, _: Partial<DropdownItemProps>) => {
+const createStyles = (
+    { styles: { baseInput } }: ThemedStyles,
+    _: Partial<DropdownItemProps>,
+) => {
     const styles = StyleSheet.create({
         dropdownItem: {
             padding: baseInput.padding,

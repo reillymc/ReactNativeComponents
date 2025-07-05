@@ -7,8 +7,8 @@ import {
 import { Octicons } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton } from "../buttons";
-import { Text } from "../Text";
+import { IconButton } from "../button";
+import { Text } from "../text";
 import { BaseInput, type BaseInputProps } from "./BaseInput";
 import { NumberInput } from "./NumberInput";
 

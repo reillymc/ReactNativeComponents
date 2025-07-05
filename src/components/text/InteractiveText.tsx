@@ -7,17 +7,12 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import { Text } from "../Text";
+import { Text, type TextProps } from "./Text";
 
 export type InteractiveTextState = "default" | "disabled" | "pressed";
 export type InteractiveTextVariant = "primary" | "secondary" | "destructive";
 
 export type InteractiveTextStyles = {
-    /**
-     * Font family due to weight limitations.
-     */
-    fontFamilyWeight: string;
-    fontSize: number;
     color: {
         [Variant in InteractiveTextVariant]: {
             [State in InteractiveTextState]: ColorValue;
@@ -26,8 +21,9 @@ export type InteractiveTextStyles = {
 };
 
 export interface InteractiveTextProps extends PressableStateCallbackType {
-    label: string;
+    children: string;
     style?: DeepPartial<InteractiveTextStyles>;
+    textVariant?: TextProps["variant"];
     variant?: InteractiveTextVariant;
     disabled?: boolean;
 }
@@ -35,7 +31,8 @@ export interface InteractiveTextProps extends PressableStateCallbackType {
 export const InteractiveText: FC<InteractiveTextProps> = ({
     pressed,
     style,
-    label,
+    textVariant,
+    children,
     variant = "secondary",
     disabled = false,
 }) => {
@@ -48,6 +45,7 @@ export const InteractiveText: FC<InteractiveTextProps> = ({
     return (
         <Text
             numberOfLines={1}
+            variant={textVariant}
             style={[
                 styles.label,
                 pressed && {
@@ -55,7 +53,7 @@ export const InteractiveText: FC<InteractiveTextProps> = ({
                 },
             ]}
         >
-            {label}
+            {children}
         </Text>
     );
 };
@@ -69,8 +67,6 @@ const createStyles = (
 ) =>
     StyleSheet.create({
         label: {
-            fontFamily: interactiveText.fontFamilyWeight,
-            fontSize: interactiveText.fontSize,
             color: interactiveText.color[variant][
                 disabled ? "disabled" : "default"
             ],
