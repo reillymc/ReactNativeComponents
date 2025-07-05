@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Text,
     TimeInput,
     type TimeInputProps,
     type TimeInputValue,
@@ -21,27 +20,9 @@ const propDefinitions: PropDefinitions<TimeInputProps> = {
         type: "boolean",
         label: "Disabled",
     },
-    width: {
-        type: "enum",
-        values: [
-            { label: "Small", value: "small" },
-            { id: "undefined", label: "undefined", value: undefined },
-        ],
-        default: "small",
-    },
     label: {
-        type: "enum",
+        type: "string",
         label: "Label",
-        default: "None",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: "Example label" },
-            {
-                id: "TextComponent",
-                label: "Text Component",
-                value: <Text variant="label">Example component label</Text>,
-            },
-        ],
     },
 };
 
@@ -49,7 +30,6 @@ const defaultProps: TimeInputProps = {
     hoursPlaceholder: "0",
     minutesPlaceholder: "0",
     disabled: false,
-    width: "small",
 };
 
 const TimeInputPage: React.FunctionComponent = () => {

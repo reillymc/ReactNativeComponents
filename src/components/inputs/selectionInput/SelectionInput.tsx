@@ -4,7 +4,8 @@ import { AntDesign } from "@expo/vector-icons";
 import { type ThemedStyles, useThemedStyles } from "../../../hooks";
 import { Tag } from "../../Tag";
 import { Text } from "../../text";
-import { BaseInput, type BaseInputProps } from "../BaseInput";
+import type { InputBaseProps } from "../InputBase";
+import { InputScaffold } from "../InputScaffold";
 import type { ValueItem } from "../valueItem";
 
 export type SelectionInputStyles = {};
@@ -20,14 +21,14 @@ interface MultiSelection<T> {
 }
 
 export type SelectionProps<T = string> = Pick<
-    BaseInputProps,
+    InputBaseProps,
     "label" | "placeholder"
 > &
     (SingleSelection<T> | MultiSelection<T>) & { items?: Array<ValueItem<T>> };
 
 export type SelectionInputProps<T = string> = Omit<
-    BaseInputProps,
-    "selection" | "onChange" | "style"
+    InputBaseProps,
+    "selection" | "onChange" | "style" | "containerStyle"
 > &
     SelectionProps<T> & {
         hideLabel?: boolean;
@@ -37,7 +38,6 @@ export type SelectionInputProps<T = string> = Omit<
 
 export const SelectionInput = <T,>({
     label,
-    width,
     disabled,
     items,
     placeholder,
@@ -50,65 +50,58 @@ export const SelectionInput = <T,>({
     const styles = useThemedStyles(createStyles, { disabled, selectionMode });
 
     return (
-        <BaseInput
-            label={!hideLabel && label}
-            width={width}
-            {...props}
-            inputElement={
-                <Pressable
-                    hitSlop={20}
-                    disabled={disabled}
-                    style={({ pressed }) => [
-                        styles.button,
-                        pressed ? styles.buttonPressed : undefined,
-                    ]}
-                    onPress={onAdd}
-                >
-                    {() => (
-                        <View style={styles.container}>
-                            {selectionMode === "single" ? (
-                                <Text
-                                    style={
-                                        disabled
-                                            ? styles.labelDisabled
-                                            : undefined
-                                    }
-                                >
-                                    {selection?.label ?? placeholder}
-                                </Text>
-                            ) : (
-                                <View style={styles.tagContainer}>
-                                    {selection?.length ? (
-                                        selection?.map((item) => (
-                                            <Tag
-                                                key={
-                                                    "id" in item
-                                                        ? item.id
-                                                        : item.value
-                                                }
-                                                label={item.label}
-                                                style={styles.tag}
-                                            />
-                                        ))
-                                    ) : (
-                                        <Text
-                                            style={
-                                                disabled
-                                                    ? styles.labelDisabled
-                                                    : undefined
+        <InputScaffold label={!hideLabel && label} {...props}>
+            <Pressable
+                hitSlop={20}
+                disabled={disabled}
+                style={({ pressed }) => [
+                    styles.button,
+                    pressed ? styles.buttonPressed : undefined,
+                ]}
+                onPress={onAdd}
+            >
+                {() => (
+                    <View style={styles.container}>
+                        {selectionMode === "single" ? (
+                            <Text
+                                style={
+                                    disabled ? styles.labelDisabled : undefined
+                                }
+                            >
+                                {selection?.label ?? placeholder}
+                            </Text>
+                        ) : (
+                            <View style={styles.tagContainer}>
+                                {selection?.length ? (
+                                    selection?.map((item) => (
+                                        <Tag
+                                            key={
+                                                "id" in item
+                                                    ? item.id
+                                                    : item.value
                                             }
-                                        >
-                                            {placeholder}
-                                        </Text>
-                                    )}
-                                </View>
-                            )}
-                            <AntDesign name="down" style={styles.icon} />
-                        </View>
-                    )}
-                </Pressable>
-            }
-        />
+                                            label={item.label}
+                                            style={styles.tag}
+                                        />
+                                    ))
+                                ) : (
+                                    <Text
+                                        style={
+                                            disabled
+                                                ? styles.labelDisabled
+                                                : undefined
+                                        }
+                                    >
+                                        {placeholder}
+                                    </Text>
+                                )}
+                            </View>
+                        )}
+                        <AntDesign name="down" style={styles.icon} />
+                    </View>
+                )}
+            </Pressable>
+        </InputScaffold>
     );
 };
 

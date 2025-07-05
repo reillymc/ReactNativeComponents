@@ -12,16 +12,6 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
         type: "string",
         label: "Placeholder text",
     },
-    width: {
-        type: "enum",
-        label: "Width",
-        default: "Large",
-        values: [
-            { label: "Small", value: "small" },
-            { label: "Large", value: "large" },
-            { label: "Full", value: "full" },
-        ],
-    },
     disabled: {
         type: "boolean",
         label: "Disabled",
@@ -61,7 +51,6 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
 
 const defaultProps: CounterInputProps = {
     placeholder: "0",
-    width: "large",
     disabled: false,
 };
 

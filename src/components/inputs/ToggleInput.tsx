@@ -13,7 +13,7 @@ import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { ActionBase } from "../action";
 import { InteractiveIcon } from "../icon";
 import { InteractiveText, Text } from "../text";
-import type { BaseInputProps } from "./BaseInput";
+import type { InputScaffoldProps } from "./InputScaffold";
 
 type ToggleSize = "small" | "medium";
 type ToggleVariant = "primary" | "secondary";
@@ -29,9 +29,9 @@ export type ToggleInputStyles = {
     };
 };
 
-export interface ToggleInputProps
-    extends Pick<BaseInputProps, "disabled" | "helpText"> {
+export interface ToggleInputProps extends Pick<InputScaffoldProps, "helpText"> {
     label?: string;
+    disabled?: boolean;
     value?: boolean;
     iconVariant?: "check" | "dot";
     variant?: ToggleVariant;

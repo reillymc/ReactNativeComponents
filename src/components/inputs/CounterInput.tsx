@@ -1,31 +1,33 @@
-import type { FC, Ref } from "react";
-import {
-    type TextInput as DefaultTextInput,
-    StyleSheet,
-    View,
-} from "react-native";
+import type { FC } from "react";
+import { StyleSheet, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { IconButton } from "../button";
-import { Text } from "../text";
-import { NumberInput, type NumberInputProps } from "./NumberInput";
+import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export interface CounterInputStyles {
-    width: number;
+    buttonWidth: number;
 }
 
-export interface CounterInputProps extends NumberInputProps {
+export interface CounterInputProps
+    extends NumberInputBaseProps,
+        Pick<
+            InputScaffoldProps,
+            "label" | "helpText" | "mandatory" | "hasError"
+        > {
     disableKeyboardInput?: boolean;
-    ref?: Ref<DefaultTextInput | null>;
 }
 
 export const CounterInput: FC<CounterInputProps> = ({
     onChangeText,
     label,
+    helpText,
+    mandatory,
+    hasError,
     disableKeyboardInput,
     disabled,
-    ref,
     ...props
 }) => {
     const styles = useThemedStyles(createStyles, {
@@ -36,16 +38,12 @@ export const CounterInput: FC<CounterInputProps> = ({
     const value = Number.parseInt(props.value ?? "0", 10) || 0;
 
     return (
-        <View style={props.containerStyle}>
-            {label && (
-                <View style={styles.label}>
-                    {typeof label === "string" ? (
-                        <Text variant="label">{label}</Text>
-                    ) : (
-                        label
-                    )}
-                </View>
-            )}
+        <InputScaffold
+            label={label}
+            helpText={helpText}
+            mandatory={mandatory}
+            hasError={hasError}
+        >
             <View style={styles.container}>
                 <IconButton
                     iconSet={AntDesign} // TODO: decouple
@@ -64,9 +62,8 @@ export const CounterInput: FC<CounterInputProps> = ({
                         },
                     }}
                 />
-                <NumberInput
+                <NumberInputBase
                     {...props}
-                    ref={ref}
                     onChangeText={(newValue) => {
                         if (!newValue) {
                             onChangeText?.("");
@@ -82,9 +79,8 @@ export const CounterInput: FC<CounterInputProps> = ({
                             ).toString(),
                         );
                     }}
-                    style={styles.input}
                     disabled={disabled || disableKeyboardInput}
-                    containerStyle={styles.segment}
+                    containerStyle={[styles.segment, styles.input]}
                 />
                 <IconButton
                     iconSet={AntDesign}
@@ -107,7 +103,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     }}
                 />
             </View>
-        </View>
+        </InputScaffold>
     );
 };
 
@@ -118,7 +114,6 @@ const createStyles = (
     const styles = StyleSheet.create({
         container: {
             flexDirection: "row",
-            alignSelf: "flex-start",
             backgroundColor: disabled
                 ? baseInput.backgroundColorDisabled
                 : baseInput.backgroundColor,
@@ -126,7 +121,7 @@ const createStyles = (
             overflow: "hidden",
         },
         segment: {
-            width: counterInput.width,
+            width: counterInput.buttonWidth,
         },
         label: {
             marginBottom: baseInput.labelMargin,
@@ -134,6 +129,7 @@ const createStyles = (
         input: {
             borderRadius: 0,
             textAlign: "center",
+            flexGrow: 1,
             backgroundColor: disableKeyboardInput
                 ? baseInput.backgroundColor
                 : undefined,

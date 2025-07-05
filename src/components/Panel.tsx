@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleProp, StyleSheet, ViewStyle } from "react-native";
+import type React from "react";
+import { type StyleProp, StyleSheet, type ViewStyle } from "react-native";
 import Animated, { Easing, Layout } from "react-native-reanimated";
 
 export interface PanelProps {
@@ -9,14 +9,26 @@ export interface PanelProps {
     children?: React.ReactNode;
 }
 
-export const Panel: React.FunctionComponent<PanelProps> = ({ collapsed, style, header, children }) => {
+export const Panel: React.FunctionComponent<PanelProps> = ({
+    collapsed,
+    style,
+    header,
+    children,
+}) => {
     const styles = createStyles({ collapsed });
 
     return (
-        <Animated.View layout={Layout.easing(Easing.inOut(Easing.cubic)).mass(0.3).springify()} style={style}>
+        <Animated.View
+            layout={Layout.easing(Easing.inOut(Easing.cubic))
+                .mass(0.3)
+                .springify()}
+            style={style}
+        >
             {header}
             <Animated.View
-                layout={Layout.easing(Easing.inOut(Easing.cubic)).mass(0.3).springify()}
+                layout={Layout.easing(Easing.inOut(Easing.cubic))
+                    .mass(0.3)
+                    .springify()}
                 style={styles.collapsible}
             >
                 {children}

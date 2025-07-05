@@ -1,24 +1,41 @@
 import React, { type Ref } from "react";
-import { TextInput as DefaultTextInput, NativeSyntheticEvent, TextInputFocusEventData, ViewStyle } from "react-native";
-
-import { BaseInput, BaseInputProps } from "../BaseInput";
-import { TextInputProps } from "../TextInput";
-import { ValueItem } from "../valueItem";
-
+import type {
+    TextInput as DefaultTextInput,
+    NativeSyntheticEvent,
+    TextInputFocusEventData,
+    ViewStyle,
+} from "react-native";
 import { ValidateString } from "@reillymc/es-utils";
+
 import { useForwardedRef } from "../../../hooks";
-import { DropdownPanel, DropdownPanelProps } from "./DropdownPanel";
+import { InputBase, type InputBaseProps } from "../InputBase";
+import { InputScaffold, type InputScaffoldProps } from "../InputScaffold";
+import type { ValueItem } from "../valueItem";
+import { DropdownPanel, type DropdownPanelProps } from "./DropdownPanel";
 
 export interface DropdownInputStyles {
     panelGap: number;
 }
 
 export type DropdownInputProps<T = string> = Pick<
-    TextInputProps,
-    "autoCapitalize" | "autoCorrect" | "returnKeyType" | "returnKeyLabel" | "onBlur" | "placeholder" | "width"
+    InputBaseProps,
+    | "autoCapitalize"
+    | "autoCorrect"
+    | "returnKeyType"
+    | "returnKeyLabel"
+    | "onBlur"
+    | "placeholder"
+    | "onChangeText"
+    | "value"
 > &
-    Pick<DropdownPanelProps, "hideItemDescriptions" | "searchInDescriptions" | "panelBehaviour"> &
-    BaseInputProps & {
+    Pick<
+        DropdownPanelProps,
+        "hideItemDescriptions" | "searchInDescriptions" | "panelBehaviour"
+    > &
+    Pick<
+        InputScaffoldProps,
+        "label" | "helpText" | "mandatory" | "hasError"
+    > & {
         items?: Array<ValueItem<T>>;
         selectedItem?: ValueItem<T>;
 
@@ -58,9 +75,15 @@ export const DropdownInput = <T,>({
     onBlur,
     value,
     ref,
+    label,
+    helpText,
+    hasError,
+    mandatory,
     ...props
 }: DropdownInputProps<T>) => {
-    const [searchValue, setSearchValue] = React.useState(selectedItem?.label ?? value ?? "");
+    const [searchValue, setSearchValue] = React.useState(
+        selectedItem?.label ?? value ?? "",
+    );
     const [hasFocus, setHasFocus] = React.useState(false);
 
     const inputRef = useForwardedRef(ref);
@@ -76,7 +99,9 @@ export const DropdownInput = <T,>({
     const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
         onChangeText?.(e.nativeEvent.text.trim());
 
-        const existingItem = items.find(item => item.label.toLowerCase() === searchValue.toLowerCase());
+        const existingItem = items.find(
+            (item) => item.label.toLowerCase() === searchValue.toLowerCase(),
+        );
         if (existingItem) {
             onSelect?.(existingItem, true);
         }
@@ -99,15 +124,11 @@ export const DropdownInput = <T,>({
         selectedItem?.label.toLowerCase() !== searchValue.toLowerCase();
 
     return (
-        <BaseInput
-            {...props}
-            ref={inputRef}
-            value={searchValue}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-            onChangeText={handleChangeText}
-            autoCorrect={false}
-            preventAutoTrim
+        <InputScaffold
+            label={label}
+            helpText={helpText}
+            mandatory={mandatory}
+            hasError={hasError}
             panelAboveElement={
                 panelBehaviour === "inlineAbove" ? (
                     <DropdownPanel
@@ -134,6 +155,16 @@ export const DropdownInput = <T,>({
                     />
                 ) : undefined
             }
-        />
+        >
+            <InputBase
+                {...props}
+                ref={inputRef}
+                value={searchValue}
+                onFocus={handleFocus}
+                onBlur={handleBlur}
+                onChangeText={handleChangeText}
+                autoCorrect={false}
+            />
+        </InputScaffold>
     );
 };

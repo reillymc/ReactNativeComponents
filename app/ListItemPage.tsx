@@ -41,7 +41,6 @@ const defaultProps: ListItemProps = {
             key="1"
             iconName="delete"
             variant="destructive"
-            label=""
             onPress={() => null}
         />,
         <SwipeAction
@@ -49,7 +48,6 @@ const defaultProps: ListItemProps = {
             key="2"
             iconName="edit"
             variant="secondary"
-            label=""
             onPress={() => null}
         />,
     ],
@@ -139,7 +137,6 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                         key="1"
                         iconName="delete"
                         variant="destructive"
-                        label=""
                         onPress={() => null}
                     />,
                     <SwipeAction
@@ -147,7 +144,6 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                         key="2"
                         iconName="edit"
                         variant="secondary"
-                        label=""
                         onPress={() => null}
                     />,
                 ],

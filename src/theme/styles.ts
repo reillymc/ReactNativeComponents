@@ -4,7 +4,6 @@ import merge from "lodash.merge";
 import type {
     ActionStyles,
     AvatarStyles,
-    BaseInputStyles,
     ButtonBaseStyles,
     ButtonStyles,
     CounterInputStyles,
@@ -13,6 +12,7 @@ import type {
     IconActionStyles,
     IconButtonStyles,
     IconStyles,
+    InputBaseStyles,
     InteractiveIconStyles,
     InteractiveTextStyles,
     ListItemStyles,
@@ -24,7 +24,7 @@ import type {
 import type { Theme } from "./theme";
 
 export type Styles = {
-    baseInput: BaseInputStyles;
+    baseInput: InputBaseStyles;
     common: {
         action: {
             fontSize: {
@@ -145,11 +145,6 @@ export const createDefaultStyles: CreateStyles = ({
     const styles: Styles = {
         baseInput: {
             height: 48,
-            width: {
-                full: "100%",
-                large: "70%",
-                small: "45%",
-            },
             borderRadius: border.radius.regular,
             padding: spacing.small,
             fontSize: font.size.regular,
@@ -276,7 +271,7 @@ export const createDefaultStyles: CreateStyles = ({
             },
         },
         counterInput: {
-            width: 56,
+            buttonWidth: 56,
         },
         listItem: {
             spacingMargin: 12,

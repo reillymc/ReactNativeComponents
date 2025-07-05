@@ -1,16 +1,26 @@
-import React from "react";
-import { Keyboard, Platform, TouchableWithoutFeedback, View, ViewStyle } from "react-native";
+import type { FC, ReactNode } from "react";
+import {
+    Keyboard,
+    Platform,
+    TouchableWithoutFeedback,
+    View,
+    type ViewStyle,
+} from "react-native";
 
 export interface FormProps {
     style?: ViewStyle;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
-export const Form: React.FC<FormProps> = ({ style, children }) =>
+export const Form: FC<FormProps> = ({ style, children }) =>
     Platform.OS === "web" ? (
         <View style={style}>{children}</View>
     ) : (
-        <TouchableWithoutFeedback accessible={false} onPress={() => Keyboard.dismiss()}>
-            <View style={style}>{children}</View>
+        <TouchableWithoutFeedback
+            accessible={false}
+            style={style}
+            onPress={() => Keyboard.dismiss()}
+        >
+            {children}
         </TouchableWithoutFeedback>
     );

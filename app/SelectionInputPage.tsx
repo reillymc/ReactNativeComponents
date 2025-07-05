@@ -1,7 +1,10 @@
-import { SelectionInput, SelectionInputProps } from "@reillymc/react-native-components";
 import React from "react";
+import {
+    SelectionInput,
+    type SelectionInputProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<SelectionInputProps> = {
     label: {
@@ -11,16 +14,6 @@ const propDefinitions: PropDefinitions<SelectionInputProps> = {
     placeholder: {
         label: "Placeholder",
         type: "string",
-    },
-    width: {
-        type: "enum",
-        label: "Width",
-        default: "Large",
-        values: [
-            { label: "Small", value: "small" },
-            { label: "Large", value: "large" },
-            { label: "Full", value: "full" },
-        ],
     },
     disabled: {
         type: "boolean",
@@ -59,7 +52,6 @@ const defaultProps: SelectionInputProps = {
     ],
     placeholder: "Select an item",
     selectionMode: "single",
-    width: "large",
     onRemoveItem: () => null,
 };
 
@@ -74,10 +66,10 @@ const SelectionInputPage: React.FunctionComponent = () => {
                 <SelectionInput
                     {...props}
                     onRemoveItem={(e: any) =>
-                        setProps(prev => ({
+                        setProps((prev) => ({
                             ...prev,
                             selection: (Array.isArray(prev.selection)
-                                ? prev.selection.filter(x => x != e)
+                                ? prev.selection.filter((x) => x !== e)
                                 : undefined) as any,
                         }))
                     }
@@ -89,9 +81,12 @@ const SelectionInputPage: React.FunctionComponent = () => {
                     propDefinitions={propDefinitions}
                     onChange={(propId, value) => {
                         if (propId === "selectionMode") {
-                            setProps(prev => ({ ...prev, selection: undefined }));
+                            setProps((prev) => ({
+                                ...prev,
+                                selection: undefined,
+                            }));
                         }
-                        setProps(prev => ({ ...prev, [propId]: value }));
+                        setProps((prev) => ({ ...prev, [propId]: value }));
                     }}
                 />
             }

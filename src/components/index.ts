@@ -15,6 +15,7 @@ export {
     IconButtonProps,
     IconButtonStyles,
 } from "./button";
+export { Form, FormProps } from "./Form";
 export { Icon, IconProps, IconStyles, InteractiveIconStyles } from "./icon";
 export {
     HighlightedText,
@@ -31,7 +32,6 @@ export {
 export * from "./AlertIndicator";
 export * from "./Avatar";
 export * from "./CollapsibleContainer";
-export { Form, FormProps } from "./Form";
 export * from "./inputs";
 export * from "./KeyboardAccessory";
 export * from "./ListItem";

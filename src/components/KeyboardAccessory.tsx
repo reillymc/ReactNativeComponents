@@ -2,9 +2,9 @@ import React from "react";
 import {
     Keyboard,
     KeyboardAvoidingView,
-    KeyboardEvent,
+    type KeyboardEvent,
     LayoutAnimation,
-    LayoutAnimationType,
+    type LayoutAnimationType,
     Platform,
 } from "react-native";
 
@@ -28,39 +28,64 @@ const accessoryAnimation = (duration: number, easing: LayoutAnimationType) => {
         };
     }
 
-    return LayoutAnimation.create(duration, LayoutAnimation.Types[easing], LayoutAnimation.Properties.opacity);
+    return LayoutAnimation.create(
+        duration,
+        LayoutAnimation.Types[easing],
+        LayoutAnimation.Properties.opacity,
+    );
 };
 
-export const KeyboardAccessory: React.FunctionComponent<KeyboardAccessoryProps> = ({
-    alwaysVisible,
-    renderChildren,
-}) => {
+export const KeyboardAccessory: React.FunctionComponent<
+    KeyboardAccessoryProps
+> = ({ alwaysVisible, renderChildren }) => {
     const [keyboardVisible, setKeyboardVisible] = React.useState(false);
 
-    const handleKeyboardShow = React.useCallback((keyboardEvent: KeyboardEvent) => {
-        if (!keyboardEvent.endCoordinates) {
-            return;
-        }
+    const handleKeyboardShow = React.useCallback(
+        (keyboardEvent: KeyboardEvent) => {
+            if (!keyboardEvent.endCoordinates) {
+                return;
+            }
 
-        const keyboardAnimate = () => {
-            LayoutAnimation.configureNext(accessoryAnimation(keyboardEvent.duration, keyboardEvent.easing));
+            const keyboardAnimate = () => {
+                LayoutAnimation.configureNext(
+                    accessoryAnimation(
+                        keyboardEvent.duration,
+                        keyboardEvent.easing,
+                    ),
+                );
 
-            setKeyboardVisible(true);
-        };
+                setKeyboardVisible(true);
+            };
 
-        keyboardAnimate();
-    }, []);
+            keyboardAnimate();
+        },
+        [],
+    );
 
-    const handleKeyboardHide = React.useCallback((keyboardEvent: KeyboardEvent) => {
-        LayoutAnimation.configureNext(accessoryAnimation(keyboardEvent.duration, keyboardEvent.easing));
+    const handleKeyboardHide = React.useCallback(
+        (keyboardEvent: KeyboardEvent) => {
+            LayoutAnimation.configureNext(
+                accessoryAnimation(
+                    keyboardEvent.duration,
+                    keyboardEvent.easing,
+                ),
+            );
 
-        setKeyboardVisible(false);
-    }, []);
+            setKeyboardVisible(false);
+        },
+        [],
+    );
 
     React.useEffect(() => {
-        const showListener = Keyboard.addListener("keyboardWillShow", handleKeyboardShow);
+        const showListener = Keyboard.addListener(
+            "keyboardWillShow",
+            handleKeyboardShow,
+        );
 
-        const hideListener = Keyboard.addListener("keyboardWillHide", handleKeyboardHide);
+        const hideListener = Keyboard.addListener(
+            "keyboardWillHide",
+            handleKeyboardHide,
+        );
         return () => {
             showListener.remove();
             hideListener.remove();
@@ -69,7 +94,8 @@ export const KeyboardAccessory: React.FunctionComponent<KeyboardAccessoryProps> 
 
     return (
         <KeyboardAvoidingView behavior="padding">
-            {(!alwaysVisible && !keyboardVisible) || renderChildren?.({ keyboardVisible: keyboardVisible })}
+            {!(alwaysVisible || keyboardVisible) ||
+                renderChildren?.({ keyboardVisible })}
         </KeyboardAvoidingView>
     );
 };

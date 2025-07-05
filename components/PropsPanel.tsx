@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import {
-    NumberInput,
+    CounterInput,
     SelectionInput,
     TextInput,
     type Theme,
@@ -125,7 +125,6 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     onChangeText={(value) =>
                                         onChange(propId, value)
                                     }
-                                    width="full"
                                 />
                             </View>
                         );
@@ -135,13 +134,12 @@ export const PropsPanel = <T extends Record<string, any>>({
                                 key={definition.label}
                                 style={styles.propContainer}
                             >
-                                <NumberInput
+                                <CounterInput
                                     label={definition.label ?? propId}
                                     value={currentValue}
                                     onChangeText={(value) =>
                                         onChange(propId, value)
                                     }
-                                    width="full"
                                     autoCapitalize="none"
                                 />
                             </View>

@@ -2,6 +2,7 @@ import React from "react";
 import {
     NumberInput,
     type NumberInputProps,
+    type NumberInputValue,
     Text,
 } from "@reillymc/react-native-components";
 
@@ -12,14 +13,34 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
         type: "string",
         label: "Placeholder text",
     },
-    width: {
+    placeholder2: {
+        type: "string",
+        label: "Placeholder 2 text",
+    },
+    enabledRepresentations: {
         type: "enum",
-        label: "Width",
-        default: "Large",
+        label: "Enabled Modes",
+        default: "All",
         values: [
-            { label: "Small", value: "small" },
-            { label: "Large", value: "large" },
-            { label: "Full", value: "full" },
+            { id: "number", label: "Number", value: ["number"] },
+            { id: "fraction", label: "Fraction", value: ["fraction"] },
+            { id: "range", label: "Range", value: ["range"] },
+            {
+                id: "number-fraction",
+                label: "Number and Fraction",
+                value: ["number", "fraction"],
+            },
+            {
+                id: "number-range",
+                label: "Number and Range",
+                value: ["number", "range"],
+            },
+            {
+                id: "fraction-range",
+                label: "Fraction and Range",
+                value: ["fraction", "range"],
+            },
+            { id: "all", label: "All", value: ["number", "fraction", "range"] },
         ],
     },
     disabled: {
@@ -49,27 +70,19 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
             { label: "Decimal", value: "decimal-pad" },
         ],
     },
-    min: {
-        type: "number",
-        label: "Min Value",
-    },
-    max: {
-        type: "number",
-        label: "Max Value",
-    },
 };
 
 const defaultProps: NumberInputProps = {
     placeholder: "0",
-    width: "large",
+    placeholder2: "0",
     disabled: false,
 };
 
 const NumberInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<string | undefined>(
-        undefined,
-    );
+    const [inputValue, setInputValue] = React.useState<NumberInputValue>();
+
+    console.debug(inputValue);
 
     return (
         <ComponentPage
@@ -78,7 +91,7 @@ const NumberInputPage: React.FunctionComponent = () => {
                 <NumberInput
                     {...props}
                     value={inputValue}
-                    onChangeText={setInputValue}
+                    onChange={setInputValue}
                 />
             }
             propsPanel={

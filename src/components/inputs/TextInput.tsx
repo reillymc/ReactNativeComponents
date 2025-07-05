@@ -1,9 +1,30 @@
-import React, { type FC } from "react";
+import type { FC } from "react";
 
-import { BaseInput, BaseInputProps } from "./BaseInput";
+import { InputBase, type InputBaseProps } from "./InputBase";
+import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 
-export interface TextInputStyles {}
+export type TextInputStyles = {};
 
-export interface TextInputProps extends BaseInputProps {}
+export interface TextInputProps
+    extends InputBaseProps,
+        Pick<
+            InputScaffoldProps,
+            "label" | "helpText" | "mandatory" | "hasError"
+        > {}
 
-export const TextInput: FC<TextInputProps> = ({ ref, ...props }) => <BaseInput ref={ref} {...props} />;
+export const TextInput: FC<TextInputProps> = ({
+    label,
+    helpText,
+    mandatory,
+    hasError,
+    ...props
+}) => (
+    <InputScaffold
+        label={label}
+        helpText={helpText}
+        mandatory={mandatory}
+        hasError={hasError}
+    >
+        <InputBase {...props} />
+    </InputScaffold>
+);

@@ -1,7 +1,10 @@
-import { DropdownInput, DropdownInputProps } from "@reillymc/react-native-components";
 import React from "react";
+import {
+    DropdownInput,
+    type DropdownInputProps,
+} from "@reillymc/react-native-components";
 
-import { ComponentPage, PropDefinitions, PropsPanel } from "../components";
+import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
     onSelect: {
@@ -16,26 +19,19 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
         type: "string",
         label: "Label",
     },
-    width: {
-        type: "enum",
-        label: "Width",
-        default: "Large",
-        values: [
-            { label: "Small", value: "small" },
-            { label: "Large", value: "large" },
-            { label: "Full", value: "full" },
-        ],
-    },
 };
 
 const defaultProps: DropdownInputProps = {
     placeholder: "Dropdown Input",
     items: [
         { value: "1", label: "Item 1" },
-        { value: "2", label: "Item 2", description: "An item with description" },
+        {
+            value: "2",
+            label: "Item 2",
+            description: "An item with description",
+        },
         { value: "3", label: "Item 3" },
     ],
-    width: "large",
     onSelect: () => null,
 };
 
@@ -48,15 +44,18 @@ const DropdownInputPage: React.FunctionComponent = () => {
             component={
                 <DropdownInput
                     {...props}
-                    onSelect={e => setProps(prev => ({ ...prev, selectedItem: e }))}
-                    containerStyle={{ width: "50%", marginLeft: 20 }}
+                    onSelect={(selectedItem) =>
+                        setProps((prev) => ({ ...prev, selectedItem }))
+                    }
                 />
             }
             propsPanel={
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => setProps(prev => ({ ...prev, [propId]: value }))}
+                    onChange={(propId, value) =>
+                        setProps((prev) => ({ ...prev, [propId]: value }))
+                    }
                 />
             }
         />

@@ -67,11 +67,12 @@ const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
         },
         component: {
             backgroundColor: color.foreground,
-            width: "80%",
+            width: "90%",
             minHeight: 80,
             alignItems: "center",
             justifyContent: "center",
             borderRadius: border.radius.loose,
+            padding: 12,
         },
         centred: {
             alignItems: "center",

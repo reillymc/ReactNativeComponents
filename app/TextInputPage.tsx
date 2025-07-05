@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    Text,
     TextInput,
     type TextInputProps,
 } from "@reillymc/react-native-components";
@@ -12,16 +11,6 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
         type: "string",
         label: "Placeholder text",
     },
-    width: {
-        type: "enum",
-        label: "Width",
-        default: "Large",
-        values: [
-            { label: "Small", value: "small" },
-            { label: "Large", value: "large" },
-            { label: "Full", value: "full" },
-        ],
-    },
     mandatory: {
         type: "boolean",
         label: "Mandatory",
@@ -31,18 +20,8 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
         label: "Disabled",
     },
     label: {
-        type: "enum",
+        type: "string",
         label: "Label",
-        default: "None",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: "Example label" },
-            {
-                id: "TextComponent",
-                label: "Text Component",
-                value: <Text variant="label">Example component label</Text>,
-            },
-        ],
     },
     helpText: {
         type: "string",
@@ -67,7 +46,6 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
 
 const defaultProps: TextInputProps = {
     placeholder: "Text Input",
-    width: "large",
     disabled: false,
 };
 

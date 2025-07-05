@@ -21,10 +21,6 @@ export const ComponentScreens = {
     CounterInput: { name: "Counter Input", page: "CounterInputPage" },
     TextInput: { name: "Text Input", page: "TextInputPage" },
     NumberInput: { name: "Number Input", page: "NumberInputPage" },
-    MultiNumberInput: {
-        name: "Multi-Number Input",
-        page: "MultiNumberInputPage",
-    },
     TimeInput: { name: "Time Input", page: "TimeInputPage" },
     ToggleInput: { name: "Toggle Input", page: "ToggleInputPage" },
     ListItem: { name: "List Item", page: "ListItemPage" },
@@ -34,10 +30,6 @@ export const ComponentScreens = {
     CollapsibleContainer: {
         name: "Collapsible Container",
         page: "CollapsibleContainerPage",
-    },
-    InlineSelectionInput: {
-        name: "Inline Selection Input",
-        page: "InlineSelectionInputPage",
     },
 } as const satisfies Record<string, { name: string; page: string }>;
 
