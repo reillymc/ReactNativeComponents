@@ -80,7 +80,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                         );
                     }}
                     disabled={disabled || disableKeyboardInput}
-                    containerStyle={[styles.segment, styles.input]}
+                    style={[styles.segment, styles.input]}
                 />
                 <IconButton
                     iconSet={AntDesign}

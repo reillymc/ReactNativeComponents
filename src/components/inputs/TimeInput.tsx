@@ -79,7 +79,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     keyboardType="number-pad"
                     returnKeyLabel="next"
                     returnKeyType="next"
-                    containerStyle={styles.input}
+                    style={styles.input}
                     onChangeText={(text) =>
                         onChange?.({
                             ...value,
@@ -104,7 +104,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
                     keyboardType="number-pad"
-                    containerStyle={styles.input}
+                    style={styles.input}
                     onChangeText={(text) => {
                         const addToHours = text
                             ? Math.floor(Number.parseInt(text, 10) / 60)
@@ -147,7 +147,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     contextMenuHidden
                     disabled={disabled}
                     showSoftInputOnFocus={false}
-                    containerStyle={styles.clearInput}
+                    style={styles.clearInput}
                     onFocus={() => onChange?.({ hours: "", minutes: "" })}
                 />
             </View>

@@ -197,7 +197,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                             ? "number-pad"
                             : keyboardType
                     }
-                    containerStyle={styles.primaryInput}
+                    style={styles.primaryInput}
                     onChangeText={handlePrimaryInputChangeText}
                     onSubmitEditing={
                         value.representation === "number"
@@ -213,7 +213,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                         maxLength={maxLength}
                         clearButtonMode={clearButtonMode}
                         keyboardType="number-pad"
-                        containerStyle={styles.input}
+                        style={styles.input}
                         onChangeText={(text) =>
                             onChange?.({
                                 representation: value.representation,
@@ -249,7 +249,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                                     ? "number-pad"
                                     : keyboardType
                             }
-                            containerStyle={styles.input}
+                            style={styles.input}
                             onChangeText={(text) => {
                                 if (value.representation === "fraction") {
                                     onChange?.({

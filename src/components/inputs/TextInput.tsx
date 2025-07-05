@@ -9,7 +9,7 @@ export interface TextInputProps
     extends InputBaseProps,
         Pick<
             InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError"
+            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
         > {}
 
 export const TextInput: FC<TextInputProps> = ({
@@ -17,6 +17,7 @@ export const TextInput: FC<TextInputProps> = ({
     helpText,
     mandatory,
     hasError,
+    containerStyle,
     ...props
 }) => (
     <InputScaffold
@@ -24,6 +25,7 @@ export const TextInput: FC<TextInputProps> = ({
         helpText={helpText}
         mandatory={mandatory}
         hasError={hasError}
+        containerStyle={containerStyle}
     >
         <InputBase {...props} />
     </InputScaffold>

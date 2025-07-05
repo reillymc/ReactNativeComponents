@@ -2,7 +2,7 @@ import type { FC, ReactNode } from "react";
 import {
     Keyboard,
     Platform,
-    TouchableWithoutFeedback,
+    Pressable,
     View,
     type ViewStyle,
 } from "react-native";
@@ -16,11 +16,11 @@ export const Form: FC<FormProps> = ({ style, children }) =>
     Platform.OS === "web" ? (
         <View style={style}>{children}</View>
     ) : (
-        <TouchableWithoutFeedback
+        <Pressable
             accessible={false}
             style={style}
             onPress={() => Keyboard.dismiss()}
         >
             {children}
-        </TouchableWithoutFeedback>
+        </Pressable>
     );

@@ -4,7 +4,12 @@ export {
     CounterInputStyles,
 } from "./CounterInput";
 export * from "./dropdownInput";
-export { InputBaseStyles } from "./InputBase";
+export { InputBase, InputBaseProps, InputBaseStyles } from "./InputBase";
+export {
+    InputScaffold,
+    InputScaffoldProps,
+    InputScaffoldStyles,
+} from "./InputScaffold";
 export {
     NumberInput,
     NumberInputProps,

@@ -3,7 +3,6 @@ import type {
     TextInput as DefaultTextInput,
     NativeSyntheticEvent,
     TextInputFocusEventData,
-    ViewStyle,
 } from "react-native";
 import { ValidateString } from "@reillymc/es-utils";
 
@@ -26,6 +25,7 @@ export type DropdownInputProps<T = string> = Pick<
     | "onBlur"
     | "placeholder"
     | "onChangeText"
+    | "clearButtonMode"
     | "value"
 > &
     Pick<
@@ -34,7 +34,7 @@ export type DropdownInputProps<T = string> = Pick<
     > &
     Pick<
         InputScaffoldProps,
-        "label" | "helpText" | "mandatory" | "hasError"
+        "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
     > & {
         items?: Array<ValueItem<T>>;
         selectedItem?: ValueItem<T>;
@@ -50,8 +50,6 @@ export type DropdownInputProps<T = string> = Pick<
          * @default 5
          */
         maxSuggestionCount?: number;
-
-        style?: ViewStyle;
 
         /**
          * Callback on selection of valid dropdown value.
@@ -79,6 +77,7 @@ export const DropdownInput = <T,>({
     helpText,
     hasError,
     mandatory,
+    containerStyle,
     ...props
 }: DropdownInputProps<T>) => {
     const [searchValue, setSearchValue] = React.useState(
@@ -129,6 +128,7 @@ export const DropdownInput = <T,>({
             helpText={helpText}
             mandatory={mandatory}
             hasError={hasError}
+            containerStyle={containerStyle}
             panelAboveElement={
                 panelBehaviour === "inlineAbove" ? (
                     <DropdownPanel

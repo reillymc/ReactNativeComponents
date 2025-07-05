@@ -1,11 +1,5 @@
 import type { FC, ReactNode, Ref } from "react";
-import {
-    type StyleProp,
-    StyleSheet,
-    TextInput,
-    type TextInputProps,
-    type TextStyle,
-} from "react-native";
+import { StyleSheet, TextInput, type TextInputProps } from "react-native";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 
@@ -26,8 +20,7 @@ export interface InputBaseStyles {
     errorColor: string;
 }
 
-export interface InputBaseProps
-    extends Omit<TextInputProps, "editable" | "style"> {
+export interface InputBaseProps extends Omit<TextInputProps, "editable"> {
     /**
      * Supports
      *
@@ -39,22 +32,16 @@ export interface InputBaseProps
     disabled?: boolean;
 
     ref?: Ref<TextInput>;
-
-    /**
-     * Prevents auto trimming of text. (Can interfere with inputs that handle onChangeText)
-     */
-
-    containerStyle?: StyleProp<TextStyle>;
 }
 
 export const InputBase: FC<InputBaseProps> = ({
     label,
     disabled,
-    containerStyle,
     multiline,
     scrollEnabled,
     onChangeText,
     ref,
+    style,
     ...props
 }) => {
     const styles = useThemedStyles(createStyles, {
@@ -70,7 +57,7 @@ export const InputBase: FC<InputBaseProps> = ({
             ref={ref}
             editable={!disabled}
             placeholderTextColor={baseInput.placeholderTextColor}
-            style={[styles.input, containerStyle]}
+            style={[styles.input, style]}
             multiline={multiline}
             scrollEnabled={scrollEnabled ?? false}
             onChangeText={onChangeText}
