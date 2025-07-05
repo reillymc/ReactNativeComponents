@@ -1,19 +1,21 @@
 import { StyleSheet } from "react-native";
 
-import { IconAction, type IconActionProps } from "../action";
+import { IconButton, type IconButtonProps } from "../button";
 
 export interface SwipeActionProps<G extends string, Fn extends string>
     extends Pick<
-        IconActionProps<G, Fn>,
-        "label" | "iconSet" | "iconName" | "onPress" | "variant"
+        IconButtonProps<G, Fn>,
+        "iconSet" | "iconName" | "onPress" | "variant"
     > {}
 
 export const SwipeAction = <G extends string, Fn extends string>(
     actionProps: SwipeActionProps<G, Fn>,
-) => <IconAction {...actionProps} containerStyle={styles.actionButton} />;
+) => <IconButton {...actionProps} containerStyle={styles.actionButton} />;
 const styles = StyleSheet.create({
     actionButton: {
         height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
         borderRadius: 0,
         width: 75,
     },

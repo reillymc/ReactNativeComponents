@@ -1,7 +1,11 @@
-import { ThemedStyles, useTheme, useThemedStyles } from "@reillymc/react-native-components";
-import { Stack } from "expo-router";
-import React from "react";
+import type React from "react";
 import { StyleSheet, View } from "react-native";
+import { Stack } from "expo-router";
+import {
+    type ThemedStyles,
+    useTheme,
+    useThemedStyles,
+} from "@reillymc/react-native-components";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -27,12 +31,23 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
                     title: componentName,
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
-                    headerLargeTitleStyle: { fontFamily: theme.font.familyWeight.bold800 },
-                    headerBackTitleStyle: { fontFamily: theme.font.familyWeight.regular400 },
-                    headerLargeStyle: { backgroundColor: theme.color.background },
+                    headerLargeTitleStyle: {
+                        fontFamily: theme.font.familyWeight.bold800,
+                    },
+                    headerBackTitleStyle: {
+                        fontFamily: theme.font.familyWeight.regular400,
+                    },
+                    headerLargeStyle: {
+                        backgroundColor: theme.color.background,
+                    },
                 }}
             />
-            <View style={[styles.componentContainer, fullscreen ? undefined : styles.centred]}>
+            <View
+                style={[
+                    styles.componentContainer,
+                    fullscreen ? undefined : styles.centred,
+                ]}
+            >
                 <View style={styles.component}>{component}</View>
             </View>
             <View style={styles.propsContainer}>{propsPanel}</View>

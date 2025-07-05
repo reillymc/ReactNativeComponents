@@ -44,6 +44,14 @@ const defaultProps: ListItemProps = {
             label=""
             onPress={() => null}
         />,
+        <SwipeAction
+            iconSet={AntDesign}
+            key="2"
+            iconName="edit"
+            variant="secondary"
+            label=""
+            onPress={() => null}
+        />,
     ],
     onPress: () => null,
 };

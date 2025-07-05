@@ -1,20 +1,27 @@
-import React from "react";
-import { StyleSheet, View, ViewStyle } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
+import { type FunctionComponent, type ReactNode, useMemo, useRef } from "react";
+import { StyleSheet, View, type ViewStyle } from "react-native";
+import Swipeable, {
+    type SwipeableRef,
+} from "react-native-gesture-handler/ReanimatedSwipeable";
 
 export interface SwipeViewProps {
     /**
      * Supports:
      * - `SwipeAction`
      */
-    rightActions?: Array<React.ReactNode>;
+    rightActions?: Array<ReactNode>;
     containerStyle?: ViewStyle;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
-export const SwipeView: React.FunctionComponent<SwipeViewProps> = ({ rightActions = [], containerStyle, children }) => {
-    const swipeableRef = React.useRef<Swipeable>(null);
-    const actions = React.useMemo(() => rightActions.reverse(), [rightActions]);
+export const SwipeView: FunctionComponent<SwipeViewProps> = ({
+    rightActions = [],
+    containerStyle,
+    children,
+}) => {
+    // biome-ignore lint/suspicious/noExplicitAny: ref types behaving weird in react 19. TODO: remove any
+    const swipeableRef = useRef<SwipeableRef>(null) as any;
+    const actions = useMemo(() => rightActions.reverse(), [rightActions]);
 
     const handleActionsPress = () => {
         swipeableRef.current?.close();
@@ -22,7 +29,10 @@ export const SwipeView: React.FunctionComponent<SwipeViewProps> = ({ rightAction
 
     const renderRightActions = () => {
         return (
-            <View style={styles.actionsContainer} onTouchEnd={handleActionsPress}>
+            <View
+                style={styles.actionsContainer}
+                onTouchEnd={handleActionsPress}
+            >
                 {actions}
             </View>
         );

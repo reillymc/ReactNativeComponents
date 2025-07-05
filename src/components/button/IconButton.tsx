@@ -58,6 +58,7 @@ export const IconButton = <G extends string, Fn extends string>({
                     {...pressableState}
                     iconName={iconName}
                     iconSet={iconSet}
+                    size={size}
                     disabled={disabled}
                     variant={variant}
                     style={iconButton.icon}

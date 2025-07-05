@@ -1,14 +1,15 @@
+import React, { useEffect, useMemo } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import {
     NumberInput,
     SelectionInput,
     TextInput,
-    Theme,
+    type Theme,
     ToggleInput,
     useTheme,
-    ValueItem,
+    type ValueItem,
 } from "@reillymc/react-native-components";
-import React, { useEffect, useMemo } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+
 import { useSelectionModal } from "../app/SelectionModal";
 
 type PropDefinitionBase = {
@@ -71,7 +72,9 @@ export const PropsPanel = <T extends Record<string, any>>({
 }: PropsPanelProps<T>) => {
     const { theme } = useTheme();
 
-    const [customLabels, setCustomLabels] = React.useState<{ [P in keyof T]?: string }>({});
+    const [customLabels, setCustomLabels] = React.useState<{
+        [P in keyof T]?: string;
+    }>({});
 
     const styles = createStyles(theme);
 
@@ -87,13 +90,16 @@ export const PropsPanel = <T extends Record<string, any>>({
         initialSelection: initialSelection ? [initialSelection] : [],
     });
 
-    const selectedValue = useMemo(() => selectedItems[0]?.value, [selectedItems]);
+    const selectedValue = useMemo(
+        () => selectedItems[0]?.value,
+        [selectedItems],
+    );
 
     useEffect(() => {
-        if (!selectionId || !selectedValue) return;
+        if (!(selectionId && selectedValue)) return;
         onChange(selectionId, selectedValue);
-        // setSelectionId(undefined);
-    }, [selectionId, selectedValue]);
+        setSelectionId(undefined);
+    }, [onChange, selectionId, selectedValue]);
 
     return (
         <ScrollView
@@ -109,22 +115,32 @@ export const PropsPanel = <T extends Record<string, any>>({
                 switch (definition.type) {
                     case "string":
                         return (
-                            <View key={definition.label} style={styles.propContainer}>
+                            <View
+                                key={definition.label}
+                                style={styles.propContainer}
+                            >
                                 <TextInput
                                     label={definition.label ?? propId}
                                     value={currentValue}
-                                    onChangeText={value => onChange(propId, value)}
+                                    onChangeText={(value) =>
+                                        onChange(propId, value)
+                                    }
                                     width="full"
                                 />
                             </View>
                         );
                     case "number":
                         return (
-                            <View key={definition.label} style={styles.propContainer}>
+                            <View
+                                key={definition.label}
+                                style={styles.propContainer}
+                            >
                                 <NumberInput
                                     label={definition.label ?? propId}
                                     value={currentValue}
-                                    onChangeText={value => onChange(propId, value)}
+                                    onChangeText={(value) =>
+                                        onChange(propId, value)
+                                    }
                                     width="full"
                                     autoCapitalize="none"
                                 />
@@ -132,65 +148,101 @@ export const PropsPanel = <T extends Record<string, any>>({
                         );
                     case "boolean":
                         return (
-                            <View key={definition.label} style={styles.propContainer}>
+                            <View
+                                key={definition.label}
+                                style={styles.propContainer}
+                            >
                                 <ToggleInput
                                     value={currentValue}
                                     label={definition.label ?? propId}
-                                    onChange={value => onChange(propId, value)}
+                                    onChange={(value) =>
+                                        onChange(propId, value)
+                                    }
                                 />
                             </View>
                         );
                     case "array":
                         return (
-                            <View key={definition.label} style={styles.propContainer}>
+                            <View
+                                key={definition.label}
+                                style={styles.propContainer}
+                            >
                                 <SelectionInput
                                     label={definition.label}
-                                    items={definition.values.map(value => ({ value, label: value }))}
+                                    items={definition.values.map((value) => ({
+                                        value,
+                                        label: value,
+                                    }))}
                                     selectionMode="single"
-                                    onRemoveItem={value =>
+                                    onRemoveItem={(value) =>
                                         onChange(
                                             propId,
                                             (Array.isArray(currentValue)
-                                                ? currentValue.filter(x => x != value)
+                                                ? currentValue.filter(
+                                                      (x) => x !== value,
+                                                  )
                                                 : undefined) as any,
                                         )
                                     }
-                                    selection={{ label: currentValue, value: currentValue }}
+                                    selection={{
+                                        label: currentValue,
+                                        value: currentValue,
+                                    }}
                                     onAdd={() => {
                                         setSelectionId(propId);
-                                        setSelectionItems(definition.values.map(value => ({ value, label: value })));
+                                        setSelectionItems(
+                                            definition.values.map((value) => ({
+                                                value,
+                                                label: value,
+                                            })),
+                                        );
                                         openSelectionModal();
 
-                                        setInitialSelection({ label: currentValue, value: currentValue });
+                                        setInitialSelection({
+                                            label: currentValue,
+                                            value: currentValue,
+                                        });
                                     }}
                                 />
                             </View>
                         );
-                    case "enum":
+                    case "enum": {
                         const selectedItem = {
                             label:
                                 customLabels[propId] ??
-                                definition.values.find(({ value }) => value === currentValue)?.label ??
-                                definition.values.find(({ label }) => label === definition.default)?.label ??
+                                definition.values.find(
+                                    ({ value }) => value === currentValue,
+                                )?.label ??
+                                definition.values.find(
+                                    ({ label }) => label === definition.default,
+                                )?.label ??
                                 definition.values[0]?.label ??
                                 "",
                             value: currentValue,
                         };
 
                         return (
-                            <View key={definition.label} style={styles.propContainer}>
+                            <View
+                                key={definition.label}
+                                style={styles.propContainer}
+                            >
                                 <SelectionInput
                                     label={definition.label}
                                     items={definition.values}
                                     selectionMode="single"
-                                    onRemoveItem={value => {
+                                    onRemoveItem={(value) => {
                                         onChange(
                                             propId,
                                             (Array.isArray(currentValue)
-                                                ? currentValue.filter(x => x != value)
+                                                ? currentValue.filter(
+                                                      (x) => x !== value,
+                                                  )
                                                 : undefined) as any,
                                         );
-                                        setCustomLabels(prev => ({ ...prev, [propId]: value?.label }));
+                                        setCustomLabels((prev) => ({
+                                            ...prev,
+                                            [propId]: value?.label,
+                                        }));
                                     }}
                                     selection={selectedItem}
                                     onAdd={() => {
@@ -198,11 +250,15 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         setSelectionId(propId);
                                         setSelectionItems(definition.values);
 
-                                        setInitialSelection({ label: currentValue, value: currentValue });
+                                        setInitialSelection({
+                                            label: currentValue,
+                                            value: currentValue,
+                                        });
                                     }}
                                 />
                             </View>
                         );
+                    }
                     default:
                         return null;
                 }

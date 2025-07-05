@@ -107,16 +107,18 @@ const createStyles = (
         container: {
             marginBottom:
                 variant === "compact" ? undefined : listItem.spacingMargin,
-            flex: 1,
             backgroundColor: theme.color.foreground,
             borderRadius:
                 variant === "compact" ? undefined : listItem.borderRadius,
             overflow: "hidden",
+            width: "100%",
         },
         pressableContainer: {
             display: "flex",
             flexDirection: "column",
             backgroundColor: theme.color.foreground,
+            borderRadius:
+                variant === "compact" ? undefined : listItem.borderRadius,
         },
         innerContainer: {
             flexDirection: "row",
@@ -135,7 +137,6 @@ const createStyles = (
             marginRight: listItem.internalSpacing,
         },
         contentContainer: {
-            flex: 1,
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
