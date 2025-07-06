@@ -5,7 +5,7 @@ import { type ThemedStyles, useThemedStyles } from "../../../hooks";
 import { Tag } from "../../Tag";
 import { Text } from "../../text";
 import type { InputBaseProps } from "../InputBase";
-import { InputScaffold } from "../InputScaffold";
+import { InputScaffold, type InputScaffoldProps } from "../InputScaffold";
 import type { ValueItem } from "../valueItem";
 
 export type SelectionInputStyles = {};
@@ -26,10 +26,11 @@ export type SelectionProps<T = string> = Pick<
 > &
     (SingleSelection<T> | MultiSelection<T>) & { items?: Array<ValueItem<T>> };
 
-export type SelectionInputProps<T = string> = Omit<
-    InputBaseProps,
-    "selection" | "onChange" | "style" | "containerStyle"
-> &
+export type SelectionInputProps<T = string> = Pick<InputBaseProps, "disabled"> &
+    Pick<
+        InputScaffoldProps,
+        "helpText" | "hasError" | "mandatory" | "containerStyle"
+    > &
     SelectionProps<T> & {
         hideLabel?: boolean;
         onRemoveItem?: (item: ValueItem<T> | undefined) => void;
@@ -39,18 +40,26 @@ export type SelectionInputProps<T = string> = Omit<
 export const SelectionInput = <T,>({
     label,
     disabled,
-    items,
     placeholder,
     hideLabel,
     selectionMode,
     selection,
+    containerStyle,
+    helpText,
+    mandatory,
+    hasError,
     onAdd,
-    ...props
 }: SelectionInputProps<T>) => {
     const styles = useThemedStyles(createStyles, { disabled, selectionMode });
 
     return (
-        <InputScaffold label={!hideLabel && label} {...props}>
+        <InputScaffold
+            label={!hideLabel && label}
+            helpText={helpText}
+            mandatory={mandatory}
+            hasError={hasError}
+            containerStyle={containerStyle}
+        >
             <Pressable
                 hitSlop={20}
                 disabled={disabled}

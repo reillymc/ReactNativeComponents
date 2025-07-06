@@ -109,7 +109,7 @@ const createStyles = ({
     StyleSheet.create({
         container: {
             flexDirection: "row",
-            flexGrow: 1,
+            flex: 1,
         },
         labelContainer: {
             marginBottom: baseInput.labelMargin,

@@ -27,6 +27,9 @@ export type DropdownInputProps<T = string> = Pick<
     | "onChangeText"
     | "clearButtonMode"
     | "value"
+    | "maxLength"
+    | "onSubmitEditing"
+    | "autoFocus"
 > &
     Pick<
         DropdownPanelProps,

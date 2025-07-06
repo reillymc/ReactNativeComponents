@@ -19,7 +19,7 @@ export interface IconStyles {
 export interface IconProps<G extends string, Fn extends string> {
     iconSet: IconSet<G, Fn>;
     iconName: keyof GlyphMap<G>;
-    size?: IconSize;
+    size?: IconSize | number;
     style?: DeepPartial<IconStyles>;
 }
 
@@ -32,7 +32,11 @@ export const Icon = <G extends string, Fn extends string>({
     const { icon } = useStylesWithOverride({ icon: style });
 
     return (
-        <IconSet size={icon.size[size]} color={icon.color} name={iconName} />
+        <IconSet
+            size={typeof size === "number" ? size : icon.size[size]}
+            color={icon.color}
+            name={iconName}
+        />
     );
 };
 

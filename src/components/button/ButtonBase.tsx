@@ -6,16 +6,14 @@ import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { ActionBase, type ActionBaseProps } from "../action";
 
 export type ButtonState = "default" | "disabled" | "pressed";
-export type ButtonSize = "medium" | "large";
-export type ButtonVariant = "primary" | "secondary" | "destructive";
 
 export type ButtonBaseStyles = {
-    height: { [Size in ButtonSize]: DimensionValue };
-    width: { [Size in ButtonSize]: DimensionValue };
+    height: DimensionValue;
+    width: DimensionValue;
     padding: number;
     borderRadius: number | `${number}%`;
     color: {
-        [Variant in ButtonVariant]: { [State in ButtonState]: ColorValue };
+        [State in ButtonState]: ColorValue;
     };
 };
 
@@ -24,15 +22,11 @@ export interface ButtonBaseProps
         ActionBaseProps,
         "children" | "disabled" | "onPress" | "containerStyle"
     > {
-    size?: ButtonSize;
-    variant?: ButtonVariant;
     style?: DeepPartial<ButtonBaseStyles>;
 }
 
 export const ButtonBase: FC<ButtonBaseProps> = ({
-    variant = "secondary",
     containerStyle,
-    size = "medium",
     disabled: disabledProp,
     style,
     children,
@@ -43,7 +37,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
     const [styles, { buttonBase }] = useThemedStylesWithOverride(
         createStyles,
         { buttonBase: style },
-        { variant, disabled, size },
+        { disabled },
     );
 
     return (
@@ -53,7 +47,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
             containerStyle={(pressableState) => [
                 styles.button,
                 pressableState.pressed && {
-                    backgroundColor: buttonBase.color[variant].pressed,
+                    backgroundColor: buttonBase.color.pressed,
                 },
                 typeof containerStyle === "function"
                     ? containerStyle(pressableState)
@@ -67,21 +61,17 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
 
 const createStyles = (
     { styles: { buttonBase } }: ThemedStyles,
-    {
-        size = "large",
-        variant,
-        disabled,
-    }: Required<Pick<ButtonBaseProps, "size" | "variant" | "disabled">>,
+    { disabled }: Required<Pick<ButtonBaseProps, "disabled">>,
 ) => {
     const styles = StyleSheet.create({
         button: {
             justifyContent: "center",
             alignItems: "center",
             borderRadius: buttonBase.borderRadius,
-            minHeight: buttonBase.height[size],
-            minWidth: buttonBase.width[size],
+            minHeight: buttonBase.height,
+            minWidth: buttonBase.width,
             backgroundColor:
-                buttonBase.color[variant][disabled ? "disabled" : "default"],
+                buttonBase.color[disabled ? "disabled" : "default"],
             padding: buttonBase.padding,
         },
     });

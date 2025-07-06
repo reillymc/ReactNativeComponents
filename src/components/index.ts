@@ -12,6 +12,7 @@ export {
     ButtonProps,
     ButtonStyles,
     IconButton,
+    IconButtonBaseStyles,
     IconButtonProps,
     IconButtonStyles,
 } from "./button";

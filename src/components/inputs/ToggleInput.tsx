@@ -1,17 +1,11 @@
 import type React from "react";
-import {
-    type ColorValue,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { ActionBase } from "../action";
-import { InteractiveIcon } from "../icon";
+import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
 import { InteractiveText, Text } from "../text";
 import type { InputScaffoldProps } from "./InputScaffold";
 
@@ -21,8 +15,10 @@ type ToggleVariant = "primary" | "secondary";
 export type ToggleInputStyles = {
     indicator: {
         size: { [Size in ToggleSize]: number };
-        color: ColorValue;
-        selectedColor: { [Variant in ToggleVariant]: ColorValue };
+        color: InteractiveIconStyles["color"];
+        selectedColor: {
+            [Variant in ToggleVariant]: InteractiveIconStyles["color"];
+        };
     };
     label: {
         gap: number;
@@ -55,7 +51,7 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
 }) => {
     const disabled = disabledProp || !onChange;
 
-    const [styles] = useThemedStylesWithOverride(
+    const [styles, { toggleInput }] = useThemedStylesWithOverride(
         createStyles,
         { toggleInput: styleOverrides },
         { size },
@@ -78,7 +74,12 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                                         value ? "check-circle-fill" : "circle"
                                     }
                                     size={size}
-                                    variant={variant}
+                                    style={{
+                                        color: value
+                                            ? toggleInput.indicator
+                                                  .selectedColor[variant]
+                                            : toggleInput.indicator.color,
+                                    }}
                                     disabled={disabled}
                                     {...pressableState}
                                 />
@@ -88,7 +89,12 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                                         iconSet={Octicons}
                                         iconName="circle"
                                         size={size}
-                                        variant={variant}
+                                        style={{
+                                            color: value
+                                                ? toggleInput.indicator
+                                                      .selectedColor[variant]
+                                                : toggleInput.indicator.color,
+                                        }}
                                         disabled={disabled}
                                         {...pressableState}
                                     />
@@ -98,7 +104,15 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                                                 iconSet={Octicons}
                                                 iconName="dot-fill"
                                                 size={size}
-                                                variant={variant}
+                                                style={{
+                                                    color: value
+                                                        ? toggleInput.indicator
+                                                              .selectedColor[
+                                                              variant
+                                                          ]
+                                                        : toggleInput.indicator
+                                                              .color,
+                                                }}
                                                 disabled={disabled}
                                                 {...pressableState}
                                             />

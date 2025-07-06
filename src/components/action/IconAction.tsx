@@ -1,14 +1,20 @@
-import { StyleSheet, View } from "react-native";
+import { type ColorValue, StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { InteractiveIcon, type InteractiveIconProps } from "../icon";
 import { InteractiveText } from "../text";
-import type { ActionProps } from "./Action";
+import type { InteractiveTextState } from "../text/InteractiveText";
+import type { ActionProps, ActionVariant } from "./Action";
 import { ActionBase } from "./ActionBase";
 
 export type IconActionStyles = {
     gap: number;
+    color: {
+        [Variant in ActionVariant]: {
+            [State in InteractiveTextState]: ColorValue;
+        };
+    };
 };
 
 export interface IconActionProps<G extends string, Fn extends string>
@@ -35,7 +41,7 @@ export const IconAction = <G extends string, Fn extends string>({
 }: IconActionProps<G, Fn>) => {
     const disabled = disabledProp || !onPress;
 
-    const [styles] = useThemedStylesWithOverride(
+    const [styles, { iconAction }] = useThemedStylesWithOverride(
         createStyles,
         { iconAction: style },
         { iconPosition },
@@ -53,7 +59,7 @@ export const IconAction = <G extends string, Fn extends string>({
                         iconSet={iconSet}
                         iconName={iconName}
                         disabled={disabled}
-                        variant={variant}
+                        style={{ color: iconAction.color[variant] }}
                         {...pressableState}
                     />
                     {!!label && (

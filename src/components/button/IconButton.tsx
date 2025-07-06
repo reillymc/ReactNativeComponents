@@ -1,70 +1,64 @@
+import type { DimensionValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStylesWithOverride } from "../../hooks";
+import type { InteractiveIconProps, InteractiveIconStyles } from "../icon";
 import {
-    InteractiveIcon,
-    type InteractiveIconProps,
-    type InteractiveIconStyles,
-} from "../icon";
-import {
-    ButtonBase,
-    type ButtonBaseProps,
-    type ButtonBaseStyles,
-} from "./ButtonBase";
+    IconButtonBase,
+    type IconButtonBaseProps,
+    type IconButtonBaseStyles,
+} from "./IconButtonBase";
 
-export type IconButtonVariant = "primary" | "secondary";
+export type IconButtonVariant = "primary" | "secondary" | "destructive";
 
 export type IconButtonStyles = {
-    container: ButtonBaseStyles;
-    icon: InteractiveIconStyles;
+    container: {
+        size: DimensionValue;
+        color: {
+            [Variant in IconButtonVariant]: IconButtonBaseStyles["container"]["color"];
+        };
+    };
+    icon: {
+        color: {
+            [Variant in IconButtonVariant]: InteractiveIconStyles["color"];
+        };
+    };
 };
 
 export interface IconButtonProps<G extends string, Fn extends string>
     extends Pick<
-            ButtonBaseProps,
-            "onPress" | "disabled" | "size" | "variant" | "containerStyle"
+            IconButtonBaseProps<G, Fn>,
+            "onPress" | "disabled" | "containerStyle"
         >,
         Pick<InteractiveIconProps<G, Fn>, "iconSet" | "iconName"> {
+    variant?: IconButtonVariant;
+
     style?: DeepPartial<IconButtonStyles>;
     onPress?: () => void;
 }
 
 export const IconButton = <G extends string, Fn extends string>({
-    iconName,
-    iconSet,
     variant = "primary",
-    disabled: disabledProp,
-    size,
     style,
-    containerStyle,
-    onPress,
+    ...props
 }: IconButtonProps<G, Fn>) => {
-    const disabled = disabledProp || !onPress;
-
     const { iconButton } = useStylesWithOverride({
         iconButton: style,
     });
 
     return (
-        <ButtonBase
-            style={iconButton.container}
-            disabled={disabled}
-            size={size}
-            onPress={onPress}
-            containerStyle={containerStyle}
-        >
-            {(pressableState) => (
-                <InteractiveIcon
-                    {...pressableState}
-                    iconName={iconName}
-                    iconSet={iconSet}
-                    size={size}
-                    disabled={disabled}
-                    variant={variant}
-                    style={iconButton.icon}
-                />
-            )}
-        </ButtonBase>
+        <IconButtonBase
+            {...props}
+            style={{
+                container: {
+                    color: iconButton.container.color[variant],
+                    size: iconButton.container.size,
+                },
+                icon: {
+                    color: iconButton.icon.color[variant],
+                },
+            }}
+        />
     );
 };
 

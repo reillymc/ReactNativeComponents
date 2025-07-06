@@ -10,6 +10,7 @@ import type {
     DropdownInputStyles,
     HighlightedTextStyles,
     IconActionStyles,
+    IconButtonBaseStyles,
     IconButtonStyles,
     IconStyles,
     InputBaseStyles,
@@ -24,6 +25,21 @@ import type {
 import type { Theme } from "./theme";
 
 export type Styles = {
+    text: TextStyles;
+    interactiveText: InteractiveTextStyles;
+    highlightedText: HighlightedTextStyles;
+
+    icon: IconStyles;
+    interactiveIcon: InteractiveIconStyles;
+
+    action: ActionStyles;
+    iconAction: IconActionStyles;
+
+    buttonBase: ButtonBaseStyles;
+    button: ButtonStyles;
+    iconButtonBase: IconButtonBaseStyles;
+    iconButton: IconButtonStyles;
+
     baseInput: InputBaseStyles;
     common: {
         action: {
@@ -32,8 +48,6 @@ export type Styles = {
             };
         };
     };
-    text: TextStyles;
-    highlightedText: HighlightedTextStyles;
     textInput: TextInputStyles;
     toggleInput: ToggleInputStyles;
     counterInput: CounterInputStyles;
@@ -41,14 +55,6 @@ export type Styles = {
     listItem: ListItemStyles;
     avatar: AvatarStyles;
 
-    action: ActionStyles;
-    icon: IconStyles;
-    interactiveText: InteractiveTextStyles;
-    interactiveIcon: InteractiveIconStyles;
-    iconAction: IconActionStyles;
-    iconButton: IconButtonStyles;
-    button: ButtonStyles;
-    buttonBase: ButtonBaseStyles;
     toast: ToastStyles;
 };
 
@@ -94,55 +100,111 @@ export const createDefaultStyles: CreateStyles = ({
     const interactiveIcon: InteractiveIconStyles = {
         size: icon.size,
         color: {
-            primary: {
-                default: color.primary,
-                pressed: color.primaryLight,
-                disabled: color.primaryLight,
+            default: color.primary,
+            pressed: color.primaryLight,
+            disabled: color.primaryLight,
+        },
+    };
+
+    const action: ActionStyles = {
+        label: interactiveText,
+    };
+
+    const iconAction: IconActionStyles = {
+        gap: spacing.small,
+        color: interactiveText.color,
+    };
+
+    const buttonBase: ButtonBaseStyles = {
+        height: 40,
+        width: "100%",
+        borderRadius: border.radius.regular,
+        padding: spacing.medium,
+        color: {
+            default: color.primary,
+            pressed: color.primaryLight,
+            disabled: color.primaryLight,
+        },
+    };
+
+    const button: ButtonStyles = {
+        container: {
+            borderRadius: buttonBase.borderRadius,
+            height: {
+                large: 48,
+                medium: 40,
             },
-            secondary: {
-                default: color.secondary,
-                pressed: color.secondaryHighlight,
-                disabled: color.secondaryHighlight,
+            width: {
+                medium: 160,
+                large: "100%",
             },
-            destructive: {
-                default: color.destructive,
-                pressed: color.destructiveHighlight,
-                disabled: color.destructiveHighlight,
+            color: interactiveText.color,
+        },
+        label: {
+            color: {
+                primary: {
+                    default: color.textOnPrimary,
+                    disabled: color.textOnPrimary,
+                    pressed: color.textOnPrimary,
+                },
+                secondary: {
+                    default: color.textOnSecondary,
+                    disabled: color.textOnSecondary,
+                    pressed: color.textOnSecondary,
+                },
+                destructive: {
+                    default: color.textOnDestructive,
+                    disabled: color.textOnDestructive,
+                    pressed: color.textOnDestructive,
+                },
             },
         },
     };
 
-    const buttonBase: ButtonBaseStyles = {
-        height: {
-            large: 48,
-            medium: 40,
+    const iconButtonBase: IconButtonBaseStyles = {
+        container: {
+            padding: 4,
+            size: 48,
+            color: {
+                default: color.inputBackground,
+                disabled: color.inputBackgroundDisabled,
+                pressed: color.inputBackground,
+            },
+            borderRadius: "50%",
         },
-        width: {
-            medium: 160,
-            large: "100%",
+        icon: interactiveIcon,
+    };
+
+    const iconButton: IconButtonStyles = {
+        container: {
+            size: icon.size.medium + spacing.small,
+
+            color: interactiveText.color,
         },
-        borderRadius: border.radius.regular,
-        padding: spacing.medium,
-        color: {
-            primary: {
-                default: color.primary,
-                pressed: color.primaryLight,
-                disabled: color.primaryLight,
-            },
-            secondary: {
-                default: color.secondary,
-                pressed: color.secondaryHighlight,
-                disabled: color.secondaryHighlight,
-            },
-            destructive: {
-                default: color.destructive,
-                pressed: color.destructiveHighlight,
-                disabled: color.destructiveHighlight,
-            },
+        icon: {
+            color: button.label.color,
+        },
+    };
+
+    const counterInput: CounterInputStyles = {
+        button: {
+            width: 56,
+            borderRadius: 0,
         },
     };
 
     const styles: Styles = {
+        interactiveText,
+        interactiveIcon,
+        icon,
+        action,
+        iconAction,
+        buttonBase,
+        button,
+        iconButtonBase,
+        iconButton,
+        counterInput,
+
         baseInput: {
             height: 48,
             borderRadius: border.radius.regular,
@@ -189,89 +251,23 @@ export const createDefaultStyles: CreateStyles = ({
         highlightedText: {
             highlightedFontFamilyWeight: font.familyWeight.bold600,
         },
-        interactiveText,
         textInput: {},
-        interactiveIcon,
-        icon,
-        action: {
-            label: interactiveText,
-        },
-        iconAction: {
-            gap: spacing.small,
-        },
-        buttonBase,
-        button: {
-            container: buttonBase,
-            label: {
-                color: {
-                    primary: {
-                        default: color.textOnPrimary,
-                        pressed: color.textOnPrimary,
-                        disabled: color.textOnPrimary,
-                    },
-                    secondary: {
-                        default: color.textOnSecondary,
-                        pressed: color.textOnSecondary,
-                        disabled: color.textOnSecondary,
-                    },
-                    destructive: {
-                        default: color.textOnDestructive,
-                        pressed: color.textOnDestructive,
-                        disabled: color.textOnDestructive,
-                    },
-                },
-            },
-        },
-        iconButton: {
-            container: {
-                borderRadius: "50%",
-                height: {
-                    large: icon.size.large + spacing.medium,
-                    medium: icon.size.medium + spacing.small,
-                },
-                padding: 0,
-                width: {
-                    large: icon.size.large + spacing.medium,
-                    medium: icon.size.medium + spacing.small,
-                },
-                color: {
-                    primary: {
-                        default: color.background,
-                        pressed: color.background,
-                        disabled: color.background,
-                    },
-                    secondary: {
-                        default: color.background,
-                        pressed: color.background,
-                        disabled: color.background,
-                    },
-                    destructive: {
-                        default: color.background,
-                        pressed: color.background,
-                        disabled: color.background,
-                    },
-                },
-            },
-            icon: interactiveIcon,
-        },
         dropdownInput: {
             panelGap: 4,
         },
         toggleInput: {
             indicator: {
                 size: icon.size,
-                color: color.border,
-                selectedColor: {
-                    primary: color.primary,
-                    secondary: color.secondary,
+                color: {
+                    default: color.border,
+                    disabled: color.border,
+                    pressed: color.border,
                 },
+                selectedColor: interactiveText.color,
             },
             label: {
                 gap: spacing.small,
             },
-        },
-        counterInput: {
-            buttonWidth: 56,
         },
         listItem: {
             spacingMargin: 12,

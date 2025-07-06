@@ -9,16 +9,25 @@ import {
     type ButtonBaseStyles,
 } from "./ButtonBase";
 
+export type ButtonSize = "medium" | "large";
+export type ButtonVariant = "primary" | "secondary" | "destructive";
+
 export type ButtonStyles = {
-    container: ButtonBaseStyles;
+    container: {
+        height: { [Size in ButtonSize]: ButtonBaseStyles["height"] };
+        width: { [Size in ButtonSize]: ButtonBaseStyles["width"] };
+        borderRadius: ButtonBaseStyles["borderRadius"];
+        color: {
+            [Variant in ButtonVariant]: ButtonBaseStyles["color"];
+        };
+    };
     label: InteractiveTextStyles;
 };
 
 export interface ButtonProps
-    extends Pick<
-        ButtonBaseProps,
-        "onPress" | "disabled" | "size" | "variant" | "containerStyle"
-    > {
+    extends Pick<ButtonBaseProps, "onPress" | "disabled" | "containerStyle"> {
+    size?: ButtonSize;
+    variant?: ButtonVariant;
     label: string;
     style?: DeepPartial<ButtonStyles>;
 }
@@ -35,16 +44,19 @@ export const Button: FC<ButtonProps> = ({
     const disabled = disabledProp || !onPress;
 
     const { button } = useStylesWithOverride({
-        iconButton: style,
+        button: style,
     });
 
     return (
         <ButtonBase
-            style={button.container}
+            style={{
+                borderRadius: button.container.borderRadius,
+                color: button.container.color[variant],
+                height: button.container.height[size],
+                width: button.container.width[size],
+            }}
             onPress={onPress}
             disabled={disabled}
-            variant={variant}
-            size={size}
             containerStyle={containerStyle}
         >
             {(pressableState) => (

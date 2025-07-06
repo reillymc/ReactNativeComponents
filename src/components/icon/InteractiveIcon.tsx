@@ -10,9 +10,7 @@ export type InteractiveIconVariant = "primary" | "secondary" | "destructive";
 export type InteractiveIconStyles = {
     size: IconStyles["size"];
     color: {
-        [Variant in InteractiveIconVariant]: {
-            [State in InteractiveIconState]: IconStyles["color"];
-        };
+        [State in InteractiveIconState]: IconStyles["color"];
     };
 };
 
@@ -20,7 +18,6 @@ export interface InteractiveIconProps<G extends string, Fn extends string>
     extends PressableStateCallbackType,
         Pick<IconProps<G, Fn>, "iconSet" | "iconName" | "size"> {
     style?: DeepPartial<InteractiveIconStyles>;
-    variant?: InteractiveIconVariant;
     disabled?: boolean;
 }
 
@@ -30,7 +27,6 @@ export const InteractiveIcon = <G extends string, Fn extends string>({
     pressed,
     style,
     size,
-    variant = "secondary",
     disabled = false,
 }: InteractiveIconProps<G, Fn>) => {
     const { interactiveIcon } = useStylesWithOverride({
@@ -45,10 +41,8 @@ export const InteractiveIcon = <G extends string, Fn extends string>({
             style={{
                 size: interactiveIcon.size,
                 color: pressed
-                    ? interactiveIcon.color[variant].pressed
-                    : interactiveIcon.color[variant][
-                          disabled ? "disabled" : "default"
-                      ],
+                    ? interactiveIcon.color.pressed
+                    : interactiveIcon.color[disabled ? "disabled" : "default"],
             }}
         />
     );

@@ -1,23 +1,28 @@
 import type { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { type DimensionValue, StyleSheet, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton } from "../button";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { IconButtonBase, type IconButtonBaseStyles } from "../button";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export interface CounterInputStyles {
-    buttonWidth: number;
+    button: {
+        width: DimensionValue;
+        borderRadius: IconButtonBaseStyles["container"]["borderRadius"];
+    };
 }
 
 export interface CounterInputProps
-    extends NumberInputBaseProps,
+    extends Omit<NumberInputBaseProps, "style">,
         Pick<
             InputScaffoldProps,
             "label" | "helpText" | "mandatory" | "hasError"
         > {
     disableKeyboardInput?: boolean;
+    style?: DeepPartial<CounterInputStyles>;
 }
 
 export const CounterInput: FC<CounterInputProps> = ({
@@ -28,12 +33,14 @@ export const CounterInput: FC<CounterInputProps> = ({
     hasError,
     disableKeyboardInput,
     disabled,
+    style,
     ...props
 }) => {
-    const styles = useThemedStyles(createStyles, {
-        disabled,
-        disableKeyboardInput,
-    });
+    const [styles, { counterInput }] = useThemedStylesWithOverride(
+        createStyles,
+        { counterInput: style },
+        { disabled, disableKeyboardInput },
+    );
 
     const value = Number.parseInt(props.value ?? "0", 10) || 0;
 
@@ -45,22 +52,16 @@ export const CounterInput: FC<CounterInputProps> = ({
             hasError={hasError}
         >
             <View style={styles.container}>
-                <IconButton
+                <IconButtonBase
                     iconSet={AntDesign} // TODO: decouple
                     iconName="minus"
-                    variant="secondary"
                     disabled={disabled}
                     onPress={() =>
                         onChangeText?.(
                             Math.max(value - 1, props.min ?? 0).toString(),
                         )
                     }
-                    style={{
-                        container: {
-                            borderRadius: 0,
-                            width: { medium: styles.segment.width },
-                        },
-                    }}
+                    style={{ container: counterInput.button }}
                 />
                 <NumberInputBase
                     {...props}
@@ -80,12 +81,11 @@ export const CounterInput: FC<CounterInputProps> = ({
                         );
                     }}
                     disabled={disabled || disableKeyboardInput}
-                    style={[styles.segment, styles.input]}
+                    style={styles.input}
                 />
-                <IconButton
+                <IconButtonBase
                     iconSet={AntDesign}
                     iconName="plus"
-                    variant="secondary"
                     disabled={disabled}
                     onPress={() =>
                         onChangeText?.(
@@ -95,12 +95,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                             ).toString(),
                         )
                     }
-                    style={{
-                        container: {
-                            borderRadius: 0,
-                            width: { medium: styles.segment.width },
-                        },
-                    }}
+                    style={{ container: counterInput.button }}
                 />
             </View>
         </InputScaffold>
@@ -108,7 +103,7 @@ export const CounterInput: FC<CounterInputProps> = ({
 };
 
 const createStyles = (
-    { styles: { counterInput, baseInput } }: ThemedStyles,
+    { styles: { baseInput } }: ThemedStyles,
     { disabled, disableKeyboardInput }: Partial<CounterInputProps>,
 ) => {
     const styles = StyleSheet.create({
@@ -119,12 +114,6 @@ const createStyles = (
                 : baseInput.backgroundColor,
             borderRadius: baseInput.borderRadius,
             overflow: "hidden",
-        },
-        segment: {
-            width: counterInput.buttonWidth,
-        },
-        label: {
-            marginBottom: baseInput.labelMargin,
         },
         input: {
             borderRadius: 0,

@@ -46,14 +46,6 @@ const propDefinitions: PropDefinitions<IconButtonProps<any, any>> = {
             },
         ],
     },
-    size: {
-        type: "enum",
-        label: "Size",
-        values: [
-            { label: "Medium", value: "medium" },
-            { label: "Large", value: "large" },
-        ],
-    },
     onPress: {
         type: "function",
         label: "Press action",
