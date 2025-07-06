@@ -6,7 +6,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
-import { InteractiveText, Text } from "../text";
+import { Text } from "../text";
 import type { InputScaffoldProps } from "./InputScaffold";
 
 type ToggleSize = "small" | "medium";
@@ -122,13 +122,9 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
                             )}
                         </View>
                         {label && (
-                            <InteractiveText
-                                textVariant="label"
-                                disabled={disabled}
-                                {...pressableState}
-                            >
+                            <Text variant="label" disabled={disabled}>
                                 {label}
-                            </InteractiveText>
+                            </Text>
                         )}
                     </View>
                     {helpText && (

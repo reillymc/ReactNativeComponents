@@ -30,6 +30,10 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
             },
         ],
     },
+    helpText: {
+        type: "string",
+        label: "Help text",
+    },
     keyboardType: {
         type: "enum",
         label: "Keyboard Type",

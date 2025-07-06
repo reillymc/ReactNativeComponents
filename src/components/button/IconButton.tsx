@@ -15,7 +15,7 @@ export type IconButtonStyles = {
     container: {
         size: DimensionValue;
         color: {
-            [Variant in IconButtonVariant]: IconButtonBaseStyles["container"]["color"];
+            [Variant in IconButtonVariant]: IconButtonBaseStyles["container"]["backgroundColor"];
         };
     };
     icon: {
@@ -38,7 +38,7 @@ export interface IconButtonProps<G extends string, Fn extends string>
 }
 
 export const IconButton = <G extends string, Fn extends string>({
-    variant = "primary",
+    variant = "secondary",
     style,
     ...props
 }: IconButtonProps<G, Fn>) => {
@@ -51,7 +51,7 @@ export const IconButton = <G extends string, Fn extends string>({
             {...props}
             style={{
                 container: {
-                    color: iconButton.container.color[variant],
+                    backgroundColor: iconButton.container.color[variant],
                     size: iconButton.container.size,
                 },
                 icon: {

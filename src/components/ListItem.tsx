@@ -107,7 +107,7 @@ const createStyles = (
         container: {
             marginBottom:
                 variant === "compact" ? undefined : listItem.spacingMargin,
-            backgroundColor: theme.color.foreground,
+            backgroundColor: theme.color.background,
             borderRadius:
                 variant === "compact" ? undefined : listItem.borderRadius,
             overflow: "hidden",

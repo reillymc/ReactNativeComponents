@@ -72,12 +72,14 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                     </View>
                 )}
                 {panelAboveElement}
-                {children}
-                {mandatory && (
-                    <Text variant="title" style={styles.mandatoryIndicator}>
-                        {"\u2022"}
-                    </Text>
-                )}
+                <View>
+                    {children}
+                    {mandatory && (
+                        <Text variant="title" style={styles.mandatoryIndicator}>
+                            {"\u2022"}
+                        </Text>
+                    )}
+                </View>
                 {panelBelowElement}
                 {(helpText || hasError) && (
                     <View style={styles.helpText}>
@@ -109,11 +111,12 @@ const createStyles = ({
     StyleSheet.create({
         container: {
             flexDirection: "row",
-            flex: 1,
+            flexGrow: 1,
+            flexBasis: 1,
         },
         labelContainer: {
             marginBottom: baseInput.labelMargin,
-            marginLeft: baseInput.padding, // Try out??
+            marginLeft: baseInput.padding,
         },
         mandatoryIndicator: {
             position: "absolute",
@@ -125,6 +128,8 @@ const createStyles = ({
             flexDirection: "row",
             gap: spacing.tiny,
             marginTop: baseInput.labelMargin,
+            marginLeft: baseInput.padding,
+            alignItems: "center",
         },
         errorIndicator: {
             color: baseInput.errorColor,

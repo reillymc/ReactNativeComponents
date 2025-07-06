@@ -29,6 +29,7 @@ const propDefinitions: PropDefinitions<IconButtonProps<any, any>> = {
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
+            { label: "Destructive", value: "destructive" },
         ],
     },
     disabled: {

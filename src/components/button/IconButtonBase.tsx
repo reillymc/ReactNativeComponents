@@ -18,7 +18,7 @@ export type IconButtonBaseStyles = {
         size: DimensionValue;
         padding: ButtonBaseStyles["padding"];
         borderRadius: ButtonBaseStyles["borderRadius"];
-        color: ButtonBaseStyles["color"];
+        backgroundColor: ButtonBaseStyles["backgroundColor"];
     };
     icon: InteractiveIconStyles;
 };
@@ -51,7 +51,7 @@ export const IconButtonBase = <G extends string, Fn extends string>({
                 width: iconButtonBase.container.size,
                 padding: iconButtonBase.container.padding,
                 borderRadius: iconButtonBase.container.borderRadius,
-                color: iconButtonBase.container.color,
+                backgroundColor: iconButtonBase.container.backgroundColor,
             }}
             disabled={disabled}
             onPress={onPress}

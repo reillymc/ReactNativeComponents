@@ -30,6 +30,7 @@ export type DropdownInputProps<T = string> = Pick<
     | "maxLength"
     | "onSubmitEditing"
     | "autoFocus"
+    | "submitBehavior"
 > &
     Pick<
         DropdownPanelProps,

@@ -12,7 +12,7 @@ export type ButtonBaseStyles = {
     width: DimensionValue;
     padding: number;
     borderRadius: number | `${number}%`;
-    color: {
+    backgroundColor: {
         [State in ButtonState]: ColorValue;
     };
 };
@@ -47,7 +47,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
             containerStyle={(pressableState) => [
                 styles.button,
                 pressableState.pressed && {
-                    backgroundColor: buttonBase.color.pressed,
+                    backgroundColor: buttonBase.backgroundColor.pressed,
                 },
                 typeof containerStyle === "function"
                     ? containerStyle(pressableState)
@@ -71,7 +71,7 @@ const createStyles = (
             minHeight: buttonBase.height,
             minWidth: buttonBase.width,
             backgroundColor:
-                buttonBase.color[disabled ? "disabled" : "default"],
+                buttonBase.backgroundColor[disabled ? "disabled" : "default"],
             padding: buttonBase.padding,
         },
     });

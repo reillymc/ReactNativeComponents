@@ -18,7 +18,7 @@ export type ButtonStyles = {
         width: { [Size in ButtonSize]: ButtonBaseStyles["width"] };
         borderRadius: ButtonBaseStyles["borderRadius"];
         color: {
-            [Variant in ButtonVariant]: ButtonBaseStyles["color"];
+            [Variant in ButtonVariant]: ButtonBaseStyles["backgroundColor"];
         };
     };
     label: InteractiveTextStyles;
@@ -34,7 +34,7 @@ export interface ButtonProps
 
 export const Button: FC<ButtonProps> = ({
     label,
-    variant = "primary",
+    variant = "secondary",
     size = "large",
     disabled: disabledProp,
     style,
@@ -51,7 +51,7 @@ export const Button: FC<ButtonProps> = ({
         <ButtonBase
             style={{
                 borderRadius: button.container.borderRadius,
-                color: button.container.color[variant],
+                backgroundColor: button.container.color[variant],
                 height: button.container.height[size],
                 width: button.container.width[size],
             }}

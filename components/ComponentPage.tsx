@@ -60,12 +60,14 @@ ComponentPage.displayName = "ComponentPage";
 const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         componentContainer: {
-            flex: 1,
+            flexGrow: 1,
+            flexBasis: 1,
             backgroundColor: color.background,
-            paddingTop: 200,
-            paddingBottom: 50,
+            paddingTop: 160,
+            paddingBottom: 60,
         },
         component: {
+            flex: 1,
             backgroundColor: color.foreground,
             width: "90%",
             minHeight: 80,
@@ -79,7 +81,8 @@ const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
         },
         propsContainer: {
             display: "flex",
-            flex: 2,
+            flexGrow: 5,
+            flexBasis: 1,
             backgroundColor: color.background,
         },
     });

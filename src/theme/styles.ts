@@ -120,7 +120,7 @@ export const createDefaultStyles: CreateStyles = ({
         width: "100%",
         borderRadius: border.radius.regular,
         padding: spacing.medium,
-        color: {
+        backgroundColor: {
             default: color.primary,
             pressed: color.primaryLight,
             disabled: color.primaryLight,
@@ -138,24 +138,40 @@ export const createDefaultStyles: CreateStyles = ({
                 medium: 160,
                 large: "100%",
             },
-            color: interactiveText.color,
-        },
-        label: {
             color: {
-                primary: {
+                secondary: {
                     default: color.textOnPrimary,
                     disabled: color.textOnPrimary,
                     pressed: color.textOnPrimary,
                 },
-                secondary: {
-                    default: color.textOnSecondary,
-                    disabled: color.textOnSecondary,
-                    pressed: color.textOnSecondary,
+                primary: {
+                    default: color.primary,
+                    disabled: color.primaryLight,
+                    pressed: color.primaryLight,
                 },
                 destructive: {
                     default: color.textOnDestructive,
                     disabled: color.textOnDestructive,
                     pressed: color.textOnDestructive,
+                },
+            },
+        },
+        label: {
+            color: {
+                secondary: {
+                    default: color.primary,
+                    disabled: color.primaryLight,
+                    pressed: color.primaryLight,
+                },
+                primary: {
+                    default: color.textOnPrimary,
+                    disabled: color.textOnPrimary,
+                    pressed: color.textOnPrimary,
+                },
+                destructive: {
+                    default: color.destructive,
+                    disabled: color.destructiveHighlight,
+                    pressed: color.destructiveHighlight,
                 },
             },
         },
@@ -165,7 +181,7 @@ export const createDefaultStyles: CreateStyles = ({
         container: {
             padding: 4,
             size: 48,
-            color: {
+            backgroundColor: {
                 default: color.inputBackground,
                 disabled: color.inputBackgroundDisabled,
                 pressed: color.inputBackground,
@@ -179,10 +195,33 @@ export const createDefaultStyles: CreateStyles = ({
         container: {
             size: icon.size.medium + spacing.small,
 
-            color: interactiveText.color,
+            color: {
+                primary: {
+                    default: color.background,
+                    disabled: color.backgroundHighlight,
+                    pressed: color.backgroundHighlight,
+                },
+                secondary: {
+                    default: color.background,
+                    disabled: color.backgroundHighlight,
+                    pressed: color.backgroundHighlight,
+                },
+                destructive: {
+                    default: color.destructive,
+                    disabled: color.destructiveHighlight,
+                    pressed: color.destructiveHighlight,
+                },
+            },
         },
         icon: {
-            color: button.label.color,
+            color: {
+                ...interactiveText.color,
+                destructive: {
+                    default: color.textOnDestructive,
+                    pressed: color.textOnDestructive,
+                    disabled: color.textOnDestructive,
+                },
+            },
         },
     };
 
