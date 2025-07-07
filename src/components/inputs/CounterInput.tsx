@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { type DimensionValue, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -10,8 +10,13 @@ import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export interface CounterInputStyles {
     button: {
-        width: DimensionValue;
-        borderRadius: IconButtonBaseStyles["container"]["borderRadius"];
+        container: {
+            size: IconButtonBaseStyles["container"]["size"];
+            borderRadius: IconButtonBaseStyles["container"]["borderRadius"];
+        };
+        icon: {
+            color: IconButtonBaseStyles["icon"]["color"];
+        };
     };
 }
 
@@ -61,7 +66,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                             Math.max(value - 1, props.min ?? 0).toString(),
                         )
                     }
-                    style={{ container: counterInput.button }}
+                    style={counterInput.button}
                 />
                 <NumberInputBase
                     {...props}
@@ -95,7 +100,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                             ).toString(),
                         )
                     }
-                    style={{ container: counterInput.button }}
+                    style={counterInput.button}
                 />
             </View>
         </InputScaffold>

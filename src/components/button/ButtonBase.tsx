@@ -5,16 +5,14 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { ActionBase, type ActionBaseProps } from "../action";
 
-export type ButtonState = "default" | "disabled" | "pressed";
+export type ButtonState = "enabled" | "disabled" | "pressed";
 
 export type ButtonBaseStyles = {
     height: DimensionValue;
     width: DimensionValue;
     padding: number;
     borderRadius: number | `${number}%`;
-    backgroundColor: {
-        [State in ButtonState]: ColorValue;
-    };
+    backgroundColor: Record<ButtonState, ColorValue>;
 };
 
 export interface ButtonBaseProps
@@ -71,7 +69,7 @@ const createStyles = (
             minHeight: buttonBase.height,
             minWidth: buttonBase.width,
             backgroundColor:
-                buttonBase.backgroundColor[disabled ? "disabled" : "default"],
+                buttonBase.backgroundColor[disabled ? "disabled" : "enabled"],
             padding: buttonBase.padding,
         },
     });

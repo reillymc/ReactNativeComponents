@@ -14,8 +14,6 @@ import {
     ThemeProvider,
 } from "@reillymc/react-native-components";
 
-import { ComponentScreens } from "./index";
-
 export {
     // Catch any errors thrown by the Layout component.
     ErrorBoundary,
@@ -105,9 +103,6 @@ const Layout: React.FC = () => {
                             sheetExpandsWhenScrolledToEdge: true,
                         }}
                     />
-                    {Object.values(ComponentScreens).map((screen) => (
-                        <Stack.Screen key={screen.page} name={screen.page} />
-                    ))}
                 </Stack>
             </ThemeProvider>
         </GestureHandlerRootView>

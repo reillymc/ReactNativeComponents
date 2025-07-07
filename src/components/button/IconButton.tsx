@@ -14,14 +14,13 @@ export type IconButtonVariant = "primary" | "secondary" | "destructive";
 export type IconButtonStyles = {
     container: {
         size: DimensionValue;
-        color: {
-            [Variant in IconButtonVariant]: IconButtonBaseStyles["container"]["backgroundColor"];
-        };
+        backgroundColor: Record<
+            IconButtonVariant,
+            IconButtonBaseStyles["container"]["backgroundColor"]
+        >;
     };
     icon: {
-        color: {
-            [Variant in IconButtonVariant]: InteractiveIconStyles["color"];
-        };
+        color: Record<IconButtonVariant, InteractiveIconStyles["color"]>;
     };
 };
 
@@ -51,7 +50,8 @@ export const IconButton = <G extends string, Fn extends string>({
             {...props}
             style={{
                 container: {
-                    backgroundColor: iconButton.container.color[variant],
+                    backgroundColor:
+                        iconButton.container.backgroundColor[variant],
                     size: iconButton.container.size,
                 },
                 icon: {

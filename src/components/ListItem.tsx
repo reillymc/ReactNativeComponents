@@ -66,17 +66,21 @@ export const ListItem: FC<ListItemProps> = ({
     const innerContent = (
         <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
             {header}
-            <View style={styles.innerContainer}>
-                {!!avatar && (
-                    <View style={styles.avatarContainer}>{avatar}</View>
-                )}
-                <View style={[styles.contentContainer, contentContainerStyle]}>
-                    {!!heading && (
-                        <Text variant="heading" numberOfLines={2}>
-                            {heading}
-                        </Text>
+            <View style={styles.bodyContainer}>
+                <View style={styles.innerContainer}>
+                    {!!avatar && (
+                        <View style={styles.avatarContainer}>{avatar}</View>
                     )}
-                    {filteredRows}
+                    <View
+                        style={[styles.contentContainer, contentContainerStyle]}
+                    >
+                        {!!heading && (
+                            <Text variant="heading" numberOfLines={2}>
+                                {heading}
+                            </Text>
+                        )}
+                        {filteredRows}
+                    </View>
                 </View>
                 {!!alert && <View style={styles.avatarContainer}>{alert}</View>}
             </View>
@@ -119,6 +123,10 @@ const createStyles = (
             backgroundColor: theme.color.foreground,
             borderRadius:
                 variant === "compact" ? undefined : listItem.borderRadius,
+        },
+        bodyContainer: {
+            flexDirection: "row",
+            justifyContent: "space-between",
         },
         innerContainer: {
             flexDirection: "row",

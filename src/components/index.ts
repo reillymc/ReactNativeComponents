@@ -17,7 +17,13 @@ export {
     IconButtonStyles,
 } from "./button";
 export { Form, FormProps } from "./Form";
-export { Icon, IconProps, IconStyles, InteractiveIconStyles } from "./icon";
+export {
+    Icon,
+    IconBaseStyles,
+    IconProps,
+    IconStyles,
+    InteractiveIconStyles,
+} from "./icon";
 export {
     HighlightedText,
     HighlightedTextProps,

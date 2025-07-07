@@ -10,6 +10,7 @@ import type {
     DropdownInputStyles,
     HighlightedTextStyles,
     IconActionStyles,
+    IconBaseStyles,
     IconButtonBaseStyles,
     IconButtonStyles,
     IconStyles,
@@ -30,6 +31,7 @@ export type Styles = {
     highlightedText: HighlightedTextStyles;
 
     icon: IconStyles;
+    iconBase: IconBaseStyles;
     interactiveIcon: InteractiveIconStyles;
 
     action: ActionStyles;
@@ -70,49 +72,65 @@ export const createDefaultStyles: CreateStyles = ({
 }) => {
     const interactiveText: InteractiveTextStyles = {
         color: {
-            primary: {
-                default: color.primary,
-                pressed: color.primaryLight,
-                disabled: color.primaryLight,
-            },
-            secondary: {
-                default: color.secondary,
-                pressed: color.secondaryHighlight,
-                disabled: color.secondaryHighlight,
-            },
-            destructive: {
-                default: color.destructive,
-                pressed: color.destructiveHighlight,
-                disabled: color.destructiveHighlight,
-            },
+            enabled: color.primary,
+            pressed: color.primaryLight,
+            disabled: color.primaryLight,
         },
     };
 
-    const icon: IconStyles = {
+    const iconBase: IconBaseStyles = {
         color: color.textPrimary,
+        size: 20,
+    };
+
+    const icon: IconStyles = {
+        color: {
+            primary: color.primary,
+            secondary: color.secondary,
+            text: color.textPrimary,
+        },
         size: {
             small: 16,
-            medium: 20,
+            medium: iconBase.size,
             large: 24,
         },
     };
 
     const interactiveIcon: InteractiveIconStyles = {
-        size: icon.size,
+        size: iconBase.size,
         color: {
-            default: color.primary,
+            enabled: color.primary,
             pressed: color.primaryLight,
             disabled: color.primaryLight,
         },
     };
 
     const action: ActionStyles = {
-        label: interactiveText,
+        label: {
+            color: {
+                primary: {
+                    enabled: color.primary,
+                    pressed: color.primaryLight,
+                    disabled: color.primaryLight,
+                },
+                secondary: {
+                    enabled: color.secondary,
+                    pressed: color.secondaryHighlight,
+                    disabled: color.secondaryHighlight,
+                },
+                destructive: {
+                    enabled: color.destructive,
+                    pressed: color.destructiveHighlight,
+                    disabled: color.destructiveHighlight,
+                },
+            },
+        },
     };
 
     const iconAction: IconActionStyles = {
         gap: spacing.small,
-        color: interactiveText.color,
+        icon: action.label,
+        text: action.label,
     };
 
     const buttonBase: ButtonBaseStyles = {
@@ -121,7 +139,7 @@ export const createDefaultStyles: CreateStyles = ({
         borderRadius: border.radius.regular,
         padding: spacing.medium,
         backgroundColor: {
-            default: color.primary,
+            enabled: color.primary,
             pressed: color.primaryLight,
             disabled: color.primaryLight,
         },
@@ -140,17 +158,17 @@ export const createDefaultStyles: CreateStyles = ({
             },
             color: {
                 secondary: {
-                    default: color.textOnPrimary,
+                    enabled: color.textOnPrimary,
                     disabled: color.textOnPrimary,
                     pressed: color.textOnPrimary,
                 },
                 primary: {
-                    default: color.primary,
+                    enabled: color.primary,
                     disabled: color.primaryLight,
                     pressed: color.primaryLight,
                 },
                 destructive: {
-                    default: color.textOnDestructive,
+                    enabled: color.textOnDestructive,
                     disabled: color.textOnDestructive,
                     pressed: color.textOnDestructive,
                 },
@@ -159,17 +177,17 @@ export const createDefaultStyles: CreateStyles = ({
         label: {
             color: {
                 secondary: {
-                    default: color.primary,
+                    enabled: color.primary,
                     disabled: color.primaryLight,
                     pressed: color.primaryLight,
                 },
                 primary: {
-                    default: color.textOnPrimary,
+                    enabled: color.textOnPrimary,
                     disabled: color.textOnPrimary,
                     pressed: color.textOnPrimary,
                 },
                 destructive: {
-                    default: color.destructive,
+                    enabled: color.destructive,
                     disabled: color.destructiveHighlight,
                     pressed: color.destructiveHighlight,
                 },
@@ -182,7 +200,7 @@ export const createDefaultStyles: CreateStyles = ({
             padding: 4,
             size: 48,
             backgroundColor: {
-                default: color.inputBackground,
+                enabled: color.inputBackground,
                 disabled: color.inputBackgroundDisabled,
                 pressed: color.inputBackground,
             },
@@ -195,19 +213,19 @@ export const createDefaultStyles: CreateStyles = ({
         container: {
             size: icon.size.medium + spacing.small,
 
-            color: {
+            backgroundColor: {
                 primary: {
-                    default: color.background,
+                    enabled: color.background,
                     disabled: color.backgroundHighlight,
                     pressed: color.backgroundHighlight,
                 },
                 secondary: {
-                    default: color.background,
+                    enabled: color.background,
                     disabled: color.backgroundHighlight,
                     pressed: color.backgroundHighlight,
                 },
                 destructive: {
-                    default: color.destructive,
+                    enabled: color.destructive,
                     disabled: color.destructiveHighlight,
                     pressed: color.destructiveHighlight,
                 },
@@ -215,9 +233,9 @@ export const createDefaultStyles: CreateStyles = ({
         },
         icon: {
             color: {
-                ...interactiveText.color,
+                ...action.label.color,
                 destructive: {
-                    default: color.textOnDestructive,
+                    enabled: color.textOnDestructive,
                     pressed: color.textOnDestructive,
                     disabled: color.textOnDestructive,
                 },
@@ -227,15 +245,21 @@ export const createDefaultStyles: CreateStyles = ({
 
     const counterInput: CounterInputStyles = {
         button: {
-            width: 56,
-            borderRadius: 0,
+            container: {
+                size: 48,
+                borderRadius: 0,
+            },
+            icon: {
+                color: action.label.color.secondary,
+            },
         },
     };
 
     const styles: Styles = {
         interactiveText,
-        interactiveIcon,
+        iconBase,
         icon,
+        interactiveIcon,
         action,
         iconAction,
         buttonBase,
@@ -298,11 +322,13 @@ export const createDefaultStyles: CreateStyles = ({
             indicator: {
                 size: icon.size,
                 color: {
-                    default: color.border,
-                    disabled: color.border,
-                    pressed: color.border,
+                    selected: action.label.color,
+                    deselected: {
+                        enabled: color.border,
+                        disabled: color.border,
+                        pressed: color.border,
+                    },
                 },
-                selectedColor: interactiveText.color,
             },
             label: {
                 gap: spacing.small,

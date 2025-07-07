@@ -3,7 +3,7 @@ import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { Icon } from "../icon";
+import { IconBase } from "../icon";
 import { Text } from "../text";
 
 export interface InputScaffoldStyles {
@@ -84,11 +84,10 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                 {(helpText || hasError) && (
                     <View style={styles.helpText}>
                         {hasError && (
-                            <Icon
+                            <IconBase
                                 iconSet={AntDesign}
-                                size="small"
                                 iconName="exclamationcircle"
-                                style={styles.errorIndicator}
+                                style={{ color: "red", size: 16 }} // TODO extract to new styled component - help and/or error text?
                             />
                         )}
                         {helpText &&
@@ -130,8 +129,5 @@ const createStyles = ({
             marginTop: baseInput.labelMargin,
             marginLeft: baseInput.padding,
             alignItems: "center",
-        },
-        errorIndicator: {
-            color: baseInput.errorColor,
         },
     });

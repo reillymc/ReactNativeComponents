@@ -9,14 +9,11 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { Text, type TextProps } from "./Text";
 
-export type InteractiveTextState = "default" | "disabled" | "pressed";
-export type InteractiveTextVariant = "primary" | "secondary" | "destructive";
+export type InteractiveTextState = "enabled" | "disabled" | "pressed";
 
 export type InteractiveTextStyles = {
     color: {
-        [Variant in InteractiveTextVariant]: {
-            [State in InteractiveTextState]: ColorValue;
-        };
+        [State in InteractiveTextState]: ColorValue;
     };
 };
 
@@ -24,7 +21,6 @@ export interface InteractiveTextProps extends PressableStateCallbackType {
     children: string;
     style?: DeepPartial<InteractiveTextStyles>;
     textVariant?: TextProps["variant"];
-    variant?: InteractiveTextVariant;
     disabled?: boolean;
 }
 
@@ -33,13 +29,12 @@ export const InteractiveText: FC<InteractiveTextProps> = ({
     style,
     textVariant,
     children,
-    variant = "secondary",
     disabled = false,
 }) => {
     const [styles, { interactiveText }] = useThemedStylesWithOverride(
         createStyles,
         { interactiveText: style },
-        { variant, disabled },
+        { disabled },
     );
 
     return (
@@ -48,9 +43,7 @@ export const InteractiveText: FC<InteractiveTextProps> = ({
             variant={textVariant}
             style={[
                 styles.label,
-                pressed && {
-                    color: interactiveText.color[variant].pressed,
-                },
+                pressed && { color: interactiveText.color.pressed },
             ]}
         >
             {children}
@@ -60,15 +53,10 @@ export const InteractiveText: FC<InteractiveTextProps> = ({
 
 const createStyles = (
     { styles: { interactiveText } }: ThemedStyles,
-    {
-        variant,
-        disabled,
-    }: Required<Pick<InteractiveTextProps, "variant" | "disabled">>,
+    { disabled }: Required<Pick<InteractiveTextProps, "disabled">>,
 ) =>
     StyleSheet.create({
         label: {
-            color: interactiveText.color[variant][
-                disabled ? "disabled" : "default"
-            ],
+            color: interactiveText.color[disabled ? "disabled" : "enabled"],
         },
     });

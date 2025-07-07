@@ -14,14 +14,14 @@ export type ButtonVariant = "primary" | "secondary" | "destructive";
 
 export type ButtonStyles = {
     container: {
-        height: { [Size in ButtonSize]: ButtonBaseStyles["height"] };
-        width: { [Size in ButtonSize]: ButtonBaseStyles["width"] };
+        height: Record<ButtonSize, ButtonBaseStyles["height"]>;
+        width: Record<ButtonSize, ButtonBaseStyles["width"]>;
         borderRadius: ButtonBaseStyles["borderRadius"];
-        color: {
-            [Variant in ButtonVariant]: ButtonBaseStyles["backgroundColor"];
-        };
+        color: Record<ButtonVariant, ButtonBaseStyles["backgroundColor"]>;
     };
-    label: InteractiveTextStyles;
+    label: {
+        color: Record<ButtonVariant, InteractiveTextStyles["color"]>;
+    };
 };
 
 export interface ButtonProps
@@ -63,8 +63,7 @@ export const Button: FC<ButtonProps> = ({
                 <InteractiveText
                     {...pressableState}
                     disabled={disabled}
-                    variant={variant}
-                    style={button.label}
+                    style={{ color: button.label.color[variant] }}
                 >
                     {label}
                 </InteractiveText>

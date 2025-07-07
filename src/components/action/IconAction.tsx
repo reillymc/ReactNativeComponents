@@ -1,18 +1,26 @@
-import { type ColorValue, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import { InteractiveIcon, type InteractiveIconProps } from "../icon";
-import { InteractiveText } from "../text";
-import type { InteractiveTextState } from "../text/InteractiveText";
+import {
+    InteractiveIcon,
+    type InteractiveIconProps,
+    type InteractiveIconStyles,
+} from "../icon";
+import { InteractiveText, type InteractiveTextStyles } from "../text";
 import type { ActionProps, ActionVariant } from "./Action";
 import { ActionBase } from "./ActionBase";
 
 export type IconActionStyles = {
     gap: number;
-    color: {
-        [Variant in ActionVariant]: {
-            [State in InteractiveTextState]: ColorValue;
+    text: {
+        color: {
+            [Variant in ActionVariant]: InteractiveTextStyles["color"];
+        };
+    };
+    icon: {
+        color: {
+            [Variant in ActionVariant]: InteractiveIconStyles["color"];
         };
     };
 };
@@ -59,13 +67,13 @@ export const IconAction = <G extends string, Fn extends string>({
                         iconSet={iconSet}
                         iconName={iconName}
                         disabled={disabled}
-                        style={{ color: iconAction.color[variant] }}
+                        style={{ color: iconAction.icon.color[variant] }}
                         {...pressableState}
                     />
                     {!!label && (
                         <InteractiveText
                             disabled={disabled}
-                            variant={variant}
+                            style={{ color: iconAction.text.color[variant] }}
                             {...pressableState}
                         >
                             {label}

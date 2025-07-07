@@ -5,11 +5,12 @@ import { useStylesWithOverride } from "../../hooks";
 import { InteractiveText, type InteractiveTextStyles } from "../text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
 
-export type ActionState = "default" | "disabled" | "pressed";
 export type ActionVariant = "primary" | "secondary" | "destructive";
 
 export type ActionStyles = {
-    label: InteractiveTextStyles;
+    label: {
+        color: Record<ActionVariant, InteractiveTextStyles["color"]>;
+    };
 };
 
 export interface ActionProps
@@ -40,8 +41,7 @@ export const Action: FC<ActionProps> = ({
                 <InteractiveText
                     {...pressableState}
                     disabled={disabled}
-                    variant={variant}
-                    style={action.label}
+                    style={{ color: action.label.color[variant] }}
                 >
                     {label}
                 </InteractiveText>

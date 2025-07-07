@@ -1,11 +1,19 @@
-import { BlurView } from "expo-blur";
 import { useLayoutEffect, useMemo, useRef, useState } from "react";
-import { StyleSheet, type TextInput, View, useWindowDimensions } from "react-native";
+import {
+    StyleSheet,
+    type TextInput,
+    useWindowDimensions,
+    View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { BlurView } from "expo-blur";
 
-import { type ThemedStyles, usePersistentKeyboardHeight, useThemedStyles } from "../../../hooks";
+import {
+    type ThemedStyles,
+    usePersistentKeyboardHeight,
+    useThemedStyles,
+} from "../../../hooks";
 import type { ValueItem } from "../valueItem";
-
 import { DropdownItem } from "./DropdownItem";
 
 export interface DropdownPanelProps<T = string> {
@@ -54,7 +62,9 @@ export const DropdownPanel = <T,>({
             .filter(
                 ({ label, description }) =>
                     label.toLowerCase().includes(search) ||
-                    (searchInDescriptions && description && description.toLowerCase().includes(search)),
+                    (searchInDescriptions &&
+                        description &&
+                        description.toLowerCase().includes(search)),
             )
             .slice(0, maxSuggestionCount);
 
@@ -63,21 +73,29 @@ export const DropdownPanel = <T,>({
         }
 
         return filteredItems.reverse();
-    }, [items, layout?.inverted, maxSuggestionCount, searchValue, searchInDescriptions]);
+    }, [
+        items,
+        layout?.inverted,
+        maxSuggestionCount,
+        searchValue,
+        searchInDescriptions,
+    ]);
 
     useLayoutEffect(() => {
         if (keyboardHeight === undefined) return;
 
         parentRef.current?.measureInWindow((_ix, inputY, _iw, inputHeight) => {
-            containerRef.current?.measureInWindow((_px, _py, _pw, panelHeight) => {
-                const size = inputY + inputHeight + panelHeight;
-                const screenMaxHeight = screenHeight - keyboardHeight - top;
+            containerRef.current?.measureInWindow(
+                (_px, _py, _pw, panelHeight) => {
+                    const size = inputY + inputHeight + panelHeight;
+                    const screenMaxHeight = screenHeight - keyboardHeight - top;
 
-                setLayout({
-                    inputHeight: inputHeight,
-                    inverted: size > screenMaxHeight,
-                });
-            });
+                    setLayout({
+                        inputHeight: inputHeight,
+                        inverted: size > screenMaxHeight,
+                    });
+                },
+            );
         });
     }, [keyboardHeight, screenHeight, searchValue, parentRef, top]);
 
@@ -85,8 +103,12 @@ export const DropdownPanel = <T,>({
 
     return (
         <View ref={containerRef} style={styles.dropdownPanel}>
-            <BlurView intensity={75} tint="default" style={styles.itemsContainer}>
-                {displayItems.map(item => (
+            <BlurView
+                intensity={75}
+                tint="default"
+                style={styles.itemsContainer}
+            >
+                {displayItems.map((item) => (
                     <DropdownItem
                         key={"id" in item ? item.id : item.value}
                         item={item}
@@ -105,12 +127,19 @@ const createStyles = (
     {
         layout,
         panelBehaviour,
-    }: { layout: PanelLayout | undefined; panelBehaviour: DropdownPanelProps["panelBehaviour"] },
+    }: {
+        layout: PanelLayout | undefined;
+        panelBehaviour: DropdownPanelProps["panelBehaviour"];
+    },
 ) => {
     const styles = StyleSheet.create({
         dropdownPanel: {
-            position: panelBehaviour === "absoluteAuto" ? "absolute" : "relative",
-            bottom: panelBehaviour === "absoluteAuto" && layout?.inverted ? layout.inputHeight : undefined,
+            position:
+                panelBehaviour === "absoluteAuto" ? "absolute" : "relative",
+            bottom:
+                panelBehaviour === "absoluteAuto" && layout?.inverted
+                    ? layout.inputHeight
+                    : undefined,
             opacity: layout ? 1 : 0,
             zIndex: 10,
             width: "100%",
