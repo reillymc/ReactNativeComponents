@@ -7,6 +7,7 @@ import type {
     ButtonBaseStyles,
     ButtonStyles,
     DropdownInputStyles,
+    FloatingContainerStyles,
     HighlightedTextStyles,
     IconActionBaseStyles,
     IconActionStyles,
@@ -20,7 +21,10 @@ import type {
     InteractiveIconStyles,
     InteractiveTextStyles,
     ListItemStyles,
+    MenuItemStyles,
+    MenuStyles,
     SelectionInputStyles,
+    SwipeActionStyles,
     TextInputStyles,
     TextStyles,
     ToastStyles,
@@ -64,6 +68,10 @@ export type Styles = {
         };
     };
     toast: ToastStyles;
+    menu: MenuStyles;
+    menuItem: MenuItemStyles;
+    swipeAction: SwipeActionStyles;
+    floatingContainer: FloatingContainerStyles;
 };
 
 export type StyleOverrides = DeepPartial<Styles>;
@@ -81,6 +89,18 @@ export const createDefaultStyles: CreateStyles = ({
             enabled: color.primary,
             pressed: color.primaryLight,
             disabled: color.primaryLight,
+        },
+    };
+
+    const highlightedText: HighlightedTextStyles = {
+        highlighted: {
+            body: font.familyWeight.bold800,
+            bodyEmphasized: font.familyWeight.bold800,
+            caption: font.familyWeight.bold800,
+            display: font.familyWeight.bold800,
+            heading: font.familyWeight.bold800,
+            label: font.familyWeight.bold800,
+            title: font.familyWeight.bold800,
         },
     };
 
@@ -304,6 +324,28 @@ export const createDefaultStyles: CreateStyles = ({
         icon: inputAction.icon,
     };
 
+    const swipeAction: SwipeActionStyles = {
+        width: 75,
+    };
+
+    const floatingContainer: FloatingContainerStyles = {
+        parentMargin: spacing.small,
+    };
+
+    const menu: MenuStyles = {
+        backgroundColor: color.inputBackground,
+        borderRadius: inputBase.container.borderRadius,
+        gap: spacing.tiny,
+        padding: spacing.tiny,
+        parentMargin: spacing.medium,
+    };
+
+    const menuItem: MenuItemStyles = {
+        paddingHorizontal: inputBase.container.padding - menu.padding,
+        paddingVertical: spacing.small + spacing.tiny,
+        borderRadius: menu.borderRadius / 2,
+    };
+
     const styles: Styles = {
         interactiveText,
         iconBase,
@@ -321,6 +363,11 @@ export const createDefaultStyles: CreateStyles = ({
         inputScaffold,
         inputAction,
         selectionInput,
+
+        swipeAction,
+        floatingContainer,
+        menu,
+        menuItem,
 
         common: {
             action: {
@@ -350,9 +397,7 @@ export const createDefaultStyles: CreateStyles = ({
                 display: font.size.xxLarge,
             },
         },
-        highlightedText: {
-            highlightedFontFamilyWeight: font.familyWeight.bold600,
-        },
+        highlightedText,
         textInput: {},
         dropdownInput: {
             panelGap: 4,

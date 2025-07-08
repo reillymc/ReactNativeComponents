@@ -19,6 +19,14 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
         type: "boolean",
         label: "Mandatory",
     },
+    disabled: {
+        type: "boolean",
+        label: "Disabled",
+    },
+    helpText: {
+        type: "string",
+        label: "Help text",
+    },
     label: {
         type: "string",
         label: "Label",

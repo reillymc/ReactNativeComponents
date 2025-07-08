@@ -3,13 +3,13 @@ import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import type { ValueItem } from "../../types";
 import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
 import { Tag } from "../Tag";
 import { Text } from "../text";
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
-import type { ValueItem } from "./valueItem";
 
 export type SelectionInputState = "enabled" | "disabled" | "pressed";
 

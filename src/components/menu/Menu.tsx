@@ -1,0 +1,39 @@
+import type { FC, PropsWithChildren } from "react";
+import { type ColorValue, StyleSheet, View } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
+
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+
+export type MenuStyles = {
+    parentMargin: number;
+    backgroundColor: ColorValue;
+    borderRadius: number;
+    padding: number;
+    gap: number;
+};
+
+export type MenuProps = PropsWithChildren<{
+    style?: DeepPartial<MenuStyles>;
+}>;
+
+export const Menu: FC<MenuProps> = ({ style, children }) => {
+    const [styles] = useThemedStylesWithOverride(
+        createStyles,
+        { menu: style },
+        {},
+    );
+
+    return <View style={styles.container}>{children}</View>;
+};
+
+const createStyles = ({ styles: { menu } }: ThemedStyles) => {
+    const styles = StyleSheet.create({
+        container: {
+            backgroundColor: menu.backgroundColor,
+            borderRadius: menu.borderRadius,
+            padding: menu.padding,
+            gap: menu.gap,
+        },
+    });
+    return styles;
+};

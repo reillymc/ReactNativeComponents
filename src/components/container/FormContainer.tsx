@@ -7,12 +7,12 @@ import {
     type ViewStyle,
 } from "react-native";
 
-export interface FormProps {
+export interface FormContainerProps {
     style?: ViewStyle;
     children?: ReactNode;
 }
 
-export const Form: FC<FormProps> = ({ style, children }) =>
+export const FormContainer: FC<FormContainerProps> = ({ style, children }) =>
     Platform.OS === "web" ? (
         <View style={style}>{children}</View>
     ) : (

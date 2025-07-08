@@ -35,13 +35,6 @@ export interface InputScaffoldProps {
     hasError?: boolean;
     mandatory?: boolean;
 
-    /**
-     * Prevents auto trimming of text. (Can interfere with inputs that handle onChangeText)
-     */
-
-    panelAboveElement?: ReactNode;
-    panelBelowElement?: ReactNode;
-
     containerStyle?: StyleProp<ViewStyle>;
 
     children: ReactNode;
@@ -52,8 +45,6 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
     helpText,
     mandatory,
     children,
-    panelAboveElement,
-    panelBelowElement,
     containerStyle,
     hasError,
 }) => {
@@ -71,7 +62,6 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                         )}
                     </View>
                 )}
-                {panelAboveElement}
                 <View>
                     {children}
                     {mandatory && (
@@ -80,7 +70,6 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                         </Text>
                     )}
                 </View>
-                {panelBelowElement}
                 {(helpText || hasError) && (
                     <View style={styles.helpText}>
                         {hasError && (

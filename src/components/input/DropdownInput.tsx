@@ -1,4 +1,4 @@
-import React, { type Ref } from "react";
+import React, { type Ref, useMemo } from "react";
 import type {
     TextInput as DefaultTextInput,
     NativeSyntheticEvent,
@@ -6,11 +6,12 @@ import type {
 } from "react-native";
 import { ValidateString } from "@reillymc/es-utils";
 
-import { useForwardedRef } from "../../../hooks";
-import { InputBase, type InputBaseProps } from "../InputBase";
-import { InputScaffold, type InputScaffoldProps } from "../InputScaffold";
-import type { ValueItem } from "../valueItem";
-import { DropdownPanel, type DropdownPanelProps } from "./DropdownPanel";
+import { useForwardedRef } from "../../hooks";
+import type { ValueItem } from "../../types";
+import { FloatingContainer } from "../container";
+import { Menu, MenuItem } from "../menu";
+import { InputBase, type InputBaseProps } from "./InputBase";
+import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 
 export interface DropdownInputStyles {
     panelGap: number;
@@ -31,11 +32,8 @@ export type DropdownInputProps<T = string> = Pick<
     | "onSubmitEditing"
     | "autoFocus"
     | "submitBehavior"
+    | "disabled"
 > &
-    Pick<
-        DropdownPanelProps,
-        "hideItemDescriptions" | "searchInDescriptions" | "panelBehaviour"
-    > &
     Pick<
         InputScaffoldProps,
         "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
@@ -71,7 +69,6 @@ export const DropdownInput = <T,>({
     selectedItem,
     minimumSearchLength = 1,
     maxSuggestionCount = 5,
-    panelBehaviour,
     onSelect,
     onChangeText,
     onBlur,
@@ -84,6 +81,8 @@ export const DropdownInput = <T,>({
     containerStyle,
     ...props
 }: DropdownInputProps<T>) => {
+    console.log(selectedItem);
+
     const [searchValue, setSearchValue] = React.useState(
         selectedItem?.label ?? value ?? "",
     );
@@ -99,6 +98,12 @@ export const DropdownInput = <T,>({
         setHasFocus(true);
     };
 
+    const handleSelect: DropdownInputProps<T>["onSelect"] = (e) => {
+        onSelect(e);
+        inputRef.current?.blur();
+        setSearchValue(selectedItem?.label ?? value ?? "");
+    };
+
     const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
         onChangeText?.(e.nativeEvent.text.trim());
 
@@ -106,7 +111,7 @@ export const DropdownInput = <T,>({
             (item) => item.label.toLowerCase() === searchValue.toLowerCase(),
         );
         if (existingItem) {
-            onSelect?.(existingItem, true);
+            handleSelect?.(existingItem, true);
         }
         setHasFocus(false);
         onBlur?.(e);
@@ -117,9 +122,23 @@ export const DropdownInput = <T,>({
         onChangeText?.(text);
 
         if (!ValidateString(text)) {
-            onSelect?.(undefined, true);
+            handleSelect?.(undefined, true);
         }
     };
+
+    const filteredItems = useMemo(() => {
+        const search = searchValue.toLowerCase();
+
+        const filteredItems = items
+            .filter(
+                ({ label, description }) =>
+                    label.toLowerCase().includes(search) ||
+                    description?.toLowerCase().includes(search),
+            )
+            .slice(0, maxSuggestionCount);
+
+        return filteredItems.reverse();
+    }, [items, maxSuggestionCount, searchValue]);
 
     const showDropdownPanel =
         hasFocus &&
@@ -133,32 +152,6 @@ export const DropdownInput = <T,>({
             mandatory={mandatory}
             hasError={hasError}
             containerStyle={containerStyle}
-            panelAboveElement={
-                panelBehaviour === "inlineAbove" ? (
-                    <DropdownPanel
-                        parentRef={inputRef}
-                        items={items}
-                        maxSuggestionCount={maxSuggestionCount}
-                        onSelect={onSelect}
-                        searchValue={searchValue}
-                        visible={showDropdownPanel}
-                        panelBehaviour={panelBehaviour}
-                    />
-                ) : undefined
-            }
-            panelBelowElement={
-                panelBehaviour !== "inlineAbove" ? (
-                    <DropdownPanel
-                        parentRef={inputRef}
-                        items={items}
-                        maxSuggestionCount={maxSuggestionCount}
-                        onSelect={onSelect}
-                        searchValue={searchValue}
-                        visible={showDropdownPanel}
-                        panelBehaviour={panelBehaviour}
-                    />
-                ) : undefined
-            }
         >
             <InputBase
                 {...props}
@@ -169,6 +162,25 @@ export const DropdownInput = <T,>({
                 onChangeText={handleChangeText}
                 autoCorrect={false}
             />
+            {showDropdownPanel && (
+                <FloatingContainer parentRef={inputRef}>
+                    {({ inverted }) => (
+                        <Menu>
+                            {(inverted
+                                ? filteredItems.reverse()
+                                : filteredItems
+                            ).map((item) => (
+                                <MenuItem
+                                    key={"id" in item ? item.id : item.value}
+                                    label={item.label}
+                                    searchValue={searchValue}
+                                    onPress={() => handleSelect(item)}
+                                />
+                            ))}
+                        </Menu>
+                    )}
+                </FloatingContainer>
+            )}
         </InputScaffold>
     );
 };

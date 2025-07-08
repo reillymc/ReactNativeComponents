@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import {
     Action,
-    DropdownItem,
+    MenuItem,
     type SelectionInputProps,
     Tag,
     Text,
@@ -236,9 +236,10 @@ const SelectionModal: FC = () => {
                 }
                 renderItem={({ item }) => (
                     <View style={styles.item}>
-                        <DropdownItem
+                        <MenuItem
                             key={"id" in item ? item.id : item.value}
-                            item={item}
+                            label={item.label}
+                            description={item.description}
                             searchValue={
                                 selectedItems.find(
                                     (selectedItem) =>

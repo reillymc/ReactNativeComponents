@@ -2,7 +2,11 @@ export {
     CounterInput,
     CounterInputProps,
 } from "./CounterInput";
-export * from "./dropdownInput";
+export {
+    DropdownInput,
+    DropdownInputProps,
+    DropdownInputStyles,
+} from "./DropdownInput";
 export {
     InputAction,
     InputActionProps,
@@ -35,4 +39,3 @@ export {
     ToggleInputProps,
     ToggleInputStyles,
 } from "./ToggleInput";
-export { ValueItem } from "./valueItem";

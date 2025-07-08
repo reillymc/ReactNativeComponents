@@ -14,6 +14,7 @@ import {
     CollapsibleContainer,
     CounterInput,
     DropdownInput,
+    HighlightedText,
     Icon,
     IconAction,
     IconButton,
@@ -51,6 +52,17 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
                 name: "Text",
                 href: "/TextPage",
                 component: <Text variant="body">Text</Text>,
+            },
+            {
+                name: "Highlighted Text",
+                href: "/HighlightedTextPage",
+                component: (
+                    <HighlightedText
+                        variant="body"
+                        text="Highlighted Text"
+                        highlight="Highlight"
+                    />
+                ),
             },
         ],
     },

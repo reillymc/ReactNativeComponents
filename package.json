@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.6.7-beta.5",
+    "version": "0.6.7-beta.6",
     "description": "A collection of React Native components and resources",
     "module": "lib/module/index",
     "main": "expo-router/entry",
@@ -35,7 +35,7 @@
         "build": "bob build",
         "lint": "tsc --noEmit -p ./tsconfig.build.json && biome check",
         "prepare": "npm run build",
-        "depcruise": "depcruise src --include-only 'src/components' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
+        "depcruise": "depcruise src --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
         "start": "expo start",
         "test": "jest",
         "typecheck": "tsc --noEmit"
@@ -96,7 +96,6 @@
         "typescript": "~5.8.3"
     },
     "peerDependencies": {
-        "expo-blur": "^14.0",
         "react-native-gesture-handler": "^2.24",
         "react-native-reanimated": "^3.17"
     },
