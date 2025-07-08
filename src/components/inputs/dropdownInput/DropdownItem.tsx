@@ -51,14 +51,14 @@ export const DropdownItem = <T,>({
 DropdownItem.displayName = "DropdownItem";
 
 const createStyles = (
-    { styles: { baseInput } }: ThemedStyles,
+    { styles: { inputBase } }: ThemedStyles,
     _: Partial<DropdownItemProps>,
 ) => {
     const styles = StyleSheet.create({
         dropdownItem: {
-            padding: baseInput.padding,
+            padding: inputBase.container.padding,
             paddingVertical: 10,
-            borderRadius: baseInput.borderRadius / 2,
+            borderRadius: inputBase.container.borderRadius / 2,
         },
     });
     return styles;

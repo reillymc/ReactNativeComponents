@@ -1,5 +1,11 @@
 import type { FC, ReactNode } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+    type ColorValue,
+    type StyleProp,
+    StyleSheet,
+    View,
+    type ViewStyle,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
@@ -7,19 +13,13 @@ import { IconBase } from "../icon";
 import { Text } from "../text";
 
 export interface InputScaffoldStyles {
-    height: number;
-    borderRadius: number;
-    padding: number;
-    fontSize: number;
-    fontFamilyWeight: string;
-    textColor: string;
-    placeholderTextColor: string;
-    disabledTextColor: string;
-    backgroundColor: string;
-    backgroundColorDisabled: string;
-    labelMargin: number;
-    mandatoryColor: string;
-    errorColor: string;
+    gap: number;
+    mandatoryIndicator: {
+        color: ColorValue;
+    };
+    helpText: {
+        gap: number;
+    };
 }
 
 export interface InputScaffoldProps {
@@ -61,7 +61,7 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
 
     return (
         <View style={[styles.container, containerStyle]}>
-            <View style={{ flexGrow: 1 }}>
+            <View style={styles.innerContainer}>
                 {label && (
                     <View style={styles.labelContainer}>
                         {typeof label === "string" ? (
@@ -103,31 +103,29 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
     );
 };
 
-const createStyles = ({
-    styles: { baseInput },
-    theme: { spacing },
-}: ThemedStyles) =>
+const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
             flexDirection: "row",
             flexGrow: 1,
             flexBasis: 1,
         },
+        innerContainer: {
+            flexGrow: 1,
+            gap: inputScaffold.gap,
+        },
         labelContainer: {
-            marginBottom: baseInput.labelMargin,
-            marginLeft: baseInput.padding,
+            marginLeft: inputBase.container.padding,
         },
         mandatoryIndicator: {
             position: "absolute",
-            color: baseInput.mandatoryColor,
-            top: 0,
-            left: spacing.small,
+            color: inputScaffold.mandatoryIndicator.color,
+            left: inputBase.container.padding,
         },
         helpText: {
             flexDirection: "row",
-            gap: spacing.tiny,
-            marginTop: baseInput.labelMargin,
-            marginLeft: baseInput.padding,
+            gap: inputScaffold.gap,
+            marginLeft: inputBase.container.padding,
             alignItems: "center",
         },
     });

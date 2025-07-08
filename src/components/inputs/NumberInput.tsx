@@ -7,10 +7,10 @@ import {
 import { Octicons } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton } from "../button";
 import { Text } from "../text";
+import { InputAction } from "./InputAction";
 import type { InputBaseProps } from "./InputBase";
-import { InputScaffold } from "./InputScaffold";
+import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase } from "./NumberInputBase";
 
 export type NumberValue = { representation: "number"; value: string };
@@ -22,18 +22,16 @@ export type FractionValue = {
 
 export type NumberInputValue = NumberValue | FractionValue | RangeValue;
 
-export type NumberInputStyles = {};
-
 export interface NumberInputProps
     extends Pick<
-        InputBaseProps,
-        | "label"
-        | "disabled"
-        | "placeholder"
-        | "maxLength"
-        | "onSubmitEditing"
-        | "clearButtonMode"
-    > {
+            InputBaseProps,
+            | "disabled"
+            | "placeholder"
+            | "maxLength"
+            | "onSubmitEditing"
+            | "clearButtonMode"
+        >,
+        Pick<InputScaffoldProps, "label" | "mandatory"> {
     keyboardType?: "decimal-pad" | "number-pad";
 
     enabledRepresentations?: ("number" | "fraction" | "range")[];
@@ -50,7 +48,7 @@ export interface NumberInputProps
 export const NumberInput: FC<NumberInputProps> = ({
     keyboardType = "number-pad",
     enabledRepresentations = ["number", "fraction", "range"],
-    disabled,
+    disabled = false,
     clearButtonMode,
     placeholder,
     placeholder2,
@@ -59,7 +57,6 @@ export const NumberInput: FC<NumberInputProps> = ({
     onChange,
     onSubmitEditing,
     ref,
-
     ...baseProps
 }) => {
     const styles = useThemedStyles(createStyles, {
@@ -169,13 +166,15 @@ export const NumberInput: FC<NumberInputProps> = ({
     return (
         <InputScaffold {...baseProps}>
             <View style={styles.container}>
-                <IconButton
-                    variant="secondary"
+                <InputAction
                     disabled={disabled}
                     iconName={icon}
                     iconSet={Octicons}
-                    containerStyle={styles.iconContainer}
-                    onPress={handleChangeMode}
+                    onPress={
+                        enabledRepresentations.length > 1
+                            ? handleChangeMode
+                            : undefined
+                    }
                 />
                 <NumberInputBase
                     ref={ref}
@@ -197,7 +196,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                             ? "number-pad"
                             : keyboardType
                     }
-                    style={styles.primaryInput}
+                    inputStyle={styles.input}
                     onChangeText={handlePrimaryInputChangeText}
                     onSubmitEditing={
                         value.representation === "number"
@@ -213,7 +212,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                         maxLength={maxLength}
                         clearButtonMode={clearButtonMode}
                         keyboardType="number-pad"
-                        style={styles.input}
+                        inputStyle={styles.input}
                         onChangeText={(text) =>
                             onChange?.({
                                 representation: value.representation,
@@ -229,11 +228,13 @@ export const NumberInput: FC<NumberInputProps> = ({
                 )}
                 {value.representation !== "number" && (
                     <>
-                        <Text variant="title">
-                            {value.representation === "fraction"
-                                ? "/"
-                                : "\u2212"}
-                        </Text>
+                        <View style={styles.separator}>
+                            <Text variant="title">
+                                {value.representation === "fraction"
+                                    ? "/"
+                                    : "\u2212"}
+                            </Text>
+                        </View>
                         <NumberInputBase
                             disabled={disabled}
                             placeholder={placeholder2}
@@ -249,7 +250,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                                     ? "number-pad"
                                     : keyboardType
                             }
-                            style={styles.input}
+                            inputStyle={styles.input}
                             onChangeText={(text) => {
                                 if (value.representation === "fraction") {
                                     onChange?.({
@@ -277,35 +278,30 @@ export const NumberInput: FC<NumberInputProps> = ({
 };
 
 const createStyles = (
-    { styles: { baseInput }, theme: { color } }: ThemedStyles,
-    { disabled, value, enabledRepresentations }: Partial<NumberInputProps>,
+    { styles: { inputBase } }: ThemedStyles,
+    { value, disabled }: Required<Pick<NumberInputProps, "value" | "disabled">>,
 ) => {
     const styles = StyleSheet.create({
         container: {
             flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: disabled
-                ? baseInput.backgroundColorDisabled
-                : baseInput.backgroundColor,
-            borderRadius: baseInput.borderRadius,
-            paddingHorizontal: baseInput.padding,
+            borderRadius: inputBase.container.borderRadius,
+            overflow: "hidden",
+            backgroundColor:
+                inputBase.container.backgroundColor[
+                    disabled ? "disabled" : "enabled"
+                ],
         },
         primaryInput: {
-            textAlign: value?.representation === "range" ? "center" : "left",
+            textAlign: value.representation === "range" ? "center" : "left",
+            flexGrow: 1,
+            flexBasis: 1,
         },
         input: {
-            textAlign: value?.representation === "number" ? "left" : "center",
+            textAlign: value.representation === "number" ? "left" : "center",
+            flexGrow: 1,
         },
-        iconContainer: {
-            backgroundColor: disabled
-                ? baseInput.backgroundColorDisabled
-                : undefined,
-        },
-        icon: {
-            color:
-                enabledRepresentations?.length === 1
-                    ? color.textPrimary
-                    : undefined,
+        separator: {
+            justifyContent: "center",
         },
     });
     return styles;

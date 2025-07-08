@@ -8,20 +8,18 @@ import {
 import { Octicons } from "@expo/vector-icons";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton } from "../button";
 import { Text } from "../text";
+import { InputAction } from "./InputAction";
 import { InputBase } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type TimeInputValue = { hours: string; minutes: string };
 
-export type TimeInputStyles = {};
-
 export interface TimeInputProps
     extends Pick<
             NumberInputBaseProps,
-            "label" | "disabled" | "onSubmitEditing" | "clearButtonMode"
+            "disabled" | "onSubmitEditing" | "clearButtonMode"
         >,
         Pick<
             InputScaffoldProps,
@@ -44,10 +42,7 @@ export const TimeInput: FC<TimeInputProps> = ({
     value = { hours: "", minutes: "" },
     onChange,
     onSubmitEditing,
-    label,
-    helpText,
-    mandatory,
-    hasError,
+    ...baseProps
 }) => {
     const hoursRef = React.useRef<RnTextInput>(null);
     const minutesRef = React.useRef<RnTextInput>(null);
@@ -56,18 +51,12 @@ export const TimeInput: FC<TimeInputProps> = ({
     const [isFocused, setIsFocused] = React.useState(false);
 
     return (
-        <InputScaffold
-            label={label}
-            helpText={helpText}
-            mandatory={mandatory}
-            hasError={hasError}
-        >
+        <InputScaffold {...baseProps}>
             <View style={styles.container}>
-                <IconButton
-                    variant="secondary"
+                <InputAction
                     iconName="clock"
-                    containerStyle={styles.iconContainer}
                     iconSet={Octicons}
+                    disabled={disabled}
                 />
                 <NumberInputBase
                     ref={hoursRef}
@@ -79,7 +68,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     keyboardType="number-pad"
                     returnKeyLabel="next"
                     returnKeyType="next"
-                    style={styles.input}
+                    inputStyle={styles.input}
                     onChangeText={(text) =>
                         onChange?.({
                             ...value,
@@ -104,7 +93,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
                     keyboardType="number-pad"
-                    style={styles.input}
+                    inputStyle={styles.input}
                     onChangeText={(text) => {
                         const addToHours = text
                             ? Math.floor(Number.parseInt(text, 10) / 60)
@@ -147,7 +136,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     contextMenuHidden
                     disabled={disabled}
                     showSoftInputOnFocus={false}
-                    style={styles.clearInput}
+                    inputStyle={styles.clearInput}
                     onFocus={() => onChange?.({ hours: "", minutes: "" })}
                 />
             </View>
@@ -156,41 +145,30 @@ export const TimeInput: FC<TimeInputProps> = ({
 };
 
 const createStyles = (
-    { styles: { baseInput }, theme: { spacing, color } }: ThemedStyles,
+    { styles: { inputBase } }: ThemedStyles,
     { disabled }: Partial<TimeInputProps>,
-) => {
-    const styles = StyleSheet.create({
+) =>
+    StyleSheet.create({
         container: {
             flexDirection: "row",
-            alignItems: "center",
-            backgroundColor: disabled
-                ? baseInput.backgroundColorDisabled
-                : baseInput.backgroundColor,
-            borderRadius: baseInput.borderRadius,
-            paddingLeft: baseInput.padding,
+            borderRadius: inputBase.container.borderRadius,
+            overflow: "hidden",
+            backgroundColor:
+                inputBase.container.backgroundColor[
+                    disabled ? "disabled" : "enabled"
+                ],
         },
         input: {
             textAlign: "right",
-            paddingRight: spacing.tiny,
-            flex: 1,
+            flexGrow: 1,
+            flexBasis: 1,
         },
         clearInput: {
-            width: 28,
-            marginRight: spacing.small,
+            flexShrink: 1,
+            marginLeft: inputBase.container.padding,
         },
         timeLabel: {
-            paddingRight: baseInput.padding,
-            height: baseInput.height,
+            height: inputBase.container.height,
             justifyContent: "center",
         },
-        iconContainer: {
-            backgroundColor: disabled
-                ? baseInput.backgroundColorDisabled
-                : undefined,
-        },
-        icon: {
-            color: color.textPrimary,
-        },
     });
-    return styles;
-};

@@ -3,6 +3,7 @@ export {
     ActionProps,
     ActionStyles,
     IconAction,
+    IconActionBaseStyles,
     IconActionProps,
     IconActionStyles,
 } from "./action";

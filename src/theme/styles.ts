@@ -6,18 +6,21 @@ import type {
     AvatarStyles,
     ButtonBaseStyles,
     ButtonStyles,
-    CounterInputStyles,
     DropdownInputStyles,
     HighlightedTextStyles,
+    IconActionBaseStyles,
     IconActionStyles,
     IconBaseStyles,
     IconButtonBaseStyles,
     IconButtonStyles,
     IconStyles,
+    InputActionStyles,
     InputBaseStyles,
+    InputScaffoldStyles,
     InteractiveIconStyles,
     InteractiveTextStyles,
     ListItemStyles,
+    SelectionInputStyles,
     TextInputStyles,
     TextStyles,
     ToastStyles,
@@ -36,27 +39,30 @@ export type Styles = {
 
     action: ActionStyles;
     iconAction: IconActionStyles;
+    iconActionBase: IconActionBaseStyles;
 
     buttonBase: ButtonBaseStyles;
     button: ButtonStyles;
     iconButtonBase: IconButtonBaseStyles;
     iconButton: IconButtonStyles;
 
-    baseInput: InputBaseStyles;
-    common: {
-        action: {
-            fontSize: {
-                [key in "small" | "regular" | "large"]: number;
-            };
-        };
-    };
+    inputBase: InputBaseStyles;
+    inputScaffold: InputScaffoldStyles;
+    inputAction: InputActionStyles;
     textInput: TextInputStyles;
     toggleInput: ToggleInputStyles;
-    counterInput: CounterInputStyles;
+    selectionInput: SelectionInputStyles;
+
     dropdownInput: DropdownInputStyles;
     listItem: ListItemStyles;
     avatar: AvatarStyles;
-
+    common: {
+        action: {
+            fontSize: {
+                [Size in "small" | "regular" | "large"]: number;
+            };
+        };
+    };
     toast: ToastStyles;
 };
 
@@ -127,8 +133,13 @@ export const createDefaultStyles: CreateStyles = ({
         },
     };
 
-    const iconAction: IconActionStyles = {
+    const iconActionBase: IconActionBaseStyles = {
         gap: spacing.small,
+        icon: interactiveText,
+        text: interactiveText,
+    };
+
+    const iconAction: IconActionStyles = {
         icon: action.label,
         text: action.label,
     };
@@ -243,16 +254,54 @@ export const createDefaultStyles: CreateStyles = ({
         },
     };
 
-    const counterInput: CounterInputStyles = {
-        button: {
-            container: {
-                size: 48,
-                borderRadius: 0,
-            },
-            icon: {
-                color: action.label.color.secondary,
+    const inputBase: InputBaseStyles = {
+        container: {
+            height: 48,
+            borderRadius: border.radius.regular,
+            padding: spacing.small,
+            backgroundColor: {
+                enabled: color.inputBackground,
+                disabled: color.inputBackgroundDisabled,
             },
         },
+        text: {
+            fontSize: font.size.regular,
+            fontFamilyWeight: font.familyWeight.regular400,
+            color: {
+                enabled: color.textPrimary,
+                disabled: color.textSecondary,
+            },
+            placeholderColor: color.textSecondary,
+        },
+    };
+
+    const inputScaffold: InputScaffoldStyles = {
+        gap: spacing.tiny,
+        mandatoryIndicator: {
+            color: color.primaryDark,
+        },
+        helpText: {
+            gap: spacing.tiny,
+        },
+    };
+
+    const inputAction: InputActionStyles = {
+        icon: {
+            color: action.label.color.secondary,
+        },
+    };
+
+    const selectionInput: SelectionInputStyles = {
+        container: {
+            backgroundColor: {
+                ...inputBase.container.backgroundColor,
+                pressed: color.backgroundHighlight,
+            },
+        },
+        selectionContainer: {
+            gap: spacing.tiny,
+        },
+        icon: inputAction.icon,
     };
 
     const styles: Styles = {
@@ -261,28 +310,18 @@ export const createDefaultStyles: CreateStyles = ({
         icon,
         interactiveIcon,
         action,
+        iconActionBase,
         iconAction,
         buttonBase,
         button,
         iconButtonBase,
         iconButton,
-        counterInput,
 
-        baseInput: {
-            height: 48,
-            borderRadius: border.radius.regular,
-            padding: spacing.small,
-            fontSize: font.size.regular,
-            fontFamilyWeight: font.familyWeight.regular400,
-            textColor: color.textPrimary,
-            disabledTextColor: color.textDisabled,
-            placeholderTextColor: color.textSecondary,
-            backgroundColor: color.inputBackground,
-            backgroundColorDisabled: color.inputBackgroundDisabled,
-            labelMargin: 6,
-            mandatoryColor: color.primaryDark,
-            errorColor: color.destructive,
-        },
+        inputBase,
+        inputScaffold,
+        inputAction,
+        selectionInput,
+
         common: {
             action: {
                 fontSize: {
@@ -291,7 +330,7 @@ export const createDefaultStyles: CreateStyles = ({
             },
         },
         text: {
-            textColor: color.textPrimary,
+            color: color.textPrimary,
             fontFamilyWeight: {
                 caption: font.familyWeight.light200,
                 body: font.familyWeight.regular400,

@@ -128,6 +128,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/SelectionInputPage",
                 component: (
                     <SelectionInput
+                        label="Selection Input"
                         selectionMode="single"
                         placeholder="Selection Input"
                     />

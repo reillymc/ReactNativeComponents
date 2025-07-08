@@ -20,6 +20,10 @@ const propDefinitions: PropDefinitions<TimeInputProps> = {
         type: "boolean",
         label: "Disabled",
     },
+    mandatory: {
+        type: "boolean",
+        label: "Mandatory",
+    },
     label: {
         type: "string",
         label: "Label",

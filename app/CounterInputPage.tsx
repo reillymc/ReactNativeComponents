@@ -16,6 +16,10 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
         type: "boolean",
         label: "Disabled",
     },
+    mandatory: {
+        type: "boolean",
+        label: "Mandatory",
+    },
     label: {
         type: "enum",
         label: "Label",

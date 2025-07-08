@@ -123,7 +123,7 @@ export const DropdownPanel = <T,>({
 };
 
 const createStyles = (
-    { styles: { dropdownInput, baseInput }, theme: { color } }: ThemedStyles,
+    { styles: { dropdownInput, inputBase }, theme: { color } }: ThemedStyles,
     {
         layout,
         panelBehaviour,
@@ -149,7 +149,7 @@ const createStyles = (
             marginTop: layout?.inverted ? undefined : dropdownInput.panelGap,
             marginBottom: layout?.inverted ? dropdownInput.panelGap : undefined,
             borderColor: color.inputBackground,
-            borderRadius: baseInput.borderRadius,
+            borderRadius: inputBase.container.borderRadius,
             borderWidth: 2,
         },
     });

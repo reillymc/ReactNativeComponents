@@ -257,7 +257,7 @@ const SelectionModal: FC = () => {
 export default SelectionModal;
 
 const createStyles = ({
-    styles: { baseInput },
+    styles: { inputBase },
     theme: { spacing, color },
 }: ThemedStyles) => {
     const styles = StyleSheet.create({
@@ -280,13 +280,13 @@ const createStyles = ({
             overflow: "hidden",
         },
         previewTagContainer: {
-            paddingLeft: baseInput.padding,
+            paddingLeft: inputBase.container.padding,
             paddingVertical: spacing.tiny,
             height: 48,
         },
         previewPlaceholder: {
             alignSelf: "center",
-            paddingLeft: baseInput.padding,
+            paddingLeft: inputBase.container.padding,
         },
         clearButton: {
             paddingHorizontal: spacing.medium,

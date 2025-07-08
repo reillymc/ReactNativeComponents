@@ -15,6 +15,10 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
         type: "string",
         label: "Placeholder text",
     },
+    mandatory: {
+        type: "boolean",
+        label: "Mandatory",
+    },
     label: {
         type: "string",
         label: "Label",

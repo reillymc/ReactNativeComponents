@@ -17,7 +17,7 @@ export type TextVariant =
     | "bodyEmphasized";
 
 export interface TextStyles {
-    textColor: string;
+    color: string;
     /**
      * Font family due to weight limitations.
      */
@@ -59,7 +59,7 @@ const createStyles = (
         text: {
             fontFamily: text.fontFamilyWeight[variant],
             fontSize: text.fontFamilySize[variant],
-            color: text.textColor,
+            color: text.color,
         },
     });
     return styles;

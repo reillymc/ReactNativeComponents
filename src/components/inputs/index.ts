@@ -1,9 +1,13 @@
 export {
     CounterInput,
     CounterInputProps,
-    CounterInputStyles,
 } from "./CounterInput";
 export * from "./dropdownInput";
+export {
+    InputAction,
+    InputActionProps,
+    InputActionStyles,
+} from "./InputAction";
 export { InputBase, InputBaseProps, InputBaseStyles } from "./InputBase";
 export {
     InputScaffold,
@@ -13,15 +17,17 @@ export {
 export {
     NumberInput,
     NumberInputProps,
-    NumberInputStyles,
     NumberInputValue,
 } from "./NumberInput";
-export * from "./selectionInput";
+export {
+    SelectionInput,
+    SelectionInputProps,
+    SelectionInputStyles,
+} from "./SelectionInput";
 export { TextInput, TextInputProps, TextInputStyles } from "./TextInput";
 export {
     TimeInput,
     TimeInputProps,
-    TimeInputStyles,
     TimeInputValue,
 } from "./TimeInput";
 export {

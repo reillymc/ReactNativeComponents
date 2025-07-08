@@ -1,24 +1,11 @@
 import type { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import { IconButtonBase, type IconButtonBaseStyles } from "../button";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { InputAction } from "./InputAction";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
-
-export interface CounterInputStyles {
-    button: {
-        container: {
-            size: IconButtonBaseStyles["container"]["size"];
-            borderRadius: IconButtonBaseStyles["container"]["borderRadius"];
-        };
-        icon: {
-            color: IconButtonBaseStyles["icon"]["color"];
-        };
-    };
-}
 
 export interface CounterInputProps
     extends Omit<NumberInputBaseProps, "style">,
@@ -27,7 +14,6 @@ export interface CounterInputProps
             "label" | "helpText" | "mandatory" | "hasError"
         > {
     disableKeyboardInput?: boolean;
-    style?: DeepPartial<CounterInputStyles>;
 }
 
 export const CounterInput: FC<CounterInputProps> = ({
@@ -37,15 +23,10 @@ export const CounterInput: FC<CounterInputProps> = ({
     mandatory,
     hasError,
     disableKeyboardInput,
-    disabled,
-    style,
+    disabled = false,
     ...props
 }) => {
-    const [styles, { counterInput }] = useThemedStylesWithOverride(
-        createStyles,
-        { counterInput: style },
-        { disabled, disableKeyboardInput },
-    );
+    const styles = useThemedStyles(createStyles, { disabled });
 
     const value = Number.parseInt(props.value ?? "0", 10) || 0;
 
@@ -57,7 +38,7 @@ export const CounterInput: FC<CounterInputProps> = ({
             hasError={hasError}
         >
             <View style={styles.container}>
-                <IconButtonBase
+                <InputAction
                     iconSet={AntDesign} // TODO: decouple
                     iconName="minus"
                     disabled={disabled}
@@ -66,7 +47,6 @@ export const CounterInput: FC<CounterInputProps> = ({
                             Math.max(value - 1, props.min ?? 0).toString(),
                         )
                     }
-                    style={counterInput.button}
                 />
                 <NumberInputBase
                     {...props}
@@ -86,9 +66,9 @@ export const CounterInput: FC<CounterInputProps> = ({
                         );
                     }}
                     disabled={disabled || disableKeyboardInput}
-                    style={styles.input}
+                    inputStyle={styles.input}
                 />
-                <IconButtonBase
+                <InputAction
                     iconSet={AntDesign}
                     iconName="plus"
                     disabled={disabled}
@@ -100,7 +80,6 @@ export const CounterInput: FC<CounterInputProps> = ({
                             ).toString(),
                         )
                     }
-                    style={counterInput.button}
                 />
             </View>
         </InputScaffold>
@@ -108,26 +87,21 @@ export const CounterInput: FC<CounterInputProps> = ({
 };
 
 const createStyles = (
-    { styles: { baseInput } }: ThemedStyles,
-    { disabled, disableKeyboardInput }: Partial<CounterInputProps>,
-) => {
-    const styles = StyleSheet.create({
+    { styles: { inputBase } }: ThemedStyles,
+    { disabled }: Required<Pick<CounterInputProps, "disabled">>,
+) =>
+    StyleSheet.create({
         container: {
             flexDirection: "row",
-            backgroundColor: disabled
-                ? baseInput.backgroundColorDisabled
-                : baseInput.backgroundColor,
-            borderRadius: baseInput.borderRadius,
+            borderRadius: inputBase.container.borderRadius,
             overflow: "hidden",
+            backgroundColor:
+                inputBase.container.backgroundColor[
+                    disabled ? "disabled" : "enabled"
+                ],
         },
         input: {
-            borderRadius: 0,
-            textAlign: "center",
             flexGrow: 1,
-            backgroundColor: disableKeyboardInput
-                ? baseInput.backgroundColor
-                : undefined,
+            textAlign: "center",
         },
     });
-    return styles;
-};

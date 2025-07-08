@@ -19,6 +19,10 @@ const propDefinitions: PropDefinitions<SelectionInputProps> = {
         type: "boolean",
         label: "Disabled",
     },
+    mandatory: {
+        type: "boolean",
+        label: "Mandatory",
+    },
     selectionMode: {
         type: "enum",
         label: "Selection mode",
@@ -52,6 +56,7 @@ const defaultProps: SelectionInputProps = {
     ],
     placeholder: "Select an item",
     selectionMode: "single",
+    selection: { label: "Item", value: "item1" },
     onRemoveItem: () => null,
 };
 
@@ -73,6 +78,7 @@ const SelectionInputPage: React.FunctionComponent = () => {
                                 : undefined) as any,
                         }))
                     }
+                    onAdd={() => null}
                 />
             }
             propsPanel={

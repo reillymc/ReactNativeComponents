@@ -1,4 +1,5 @@
 import React from "react";
+import { View } from "react-native";
 import {
     NumberInput,
     type NumberInputProps,
@@ -46,6 +47,10 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
     disabled: {
         type: "boolean",
         label: "Disabled",
+    },
+    mandatory: {
+        type: "boolean",
+        label: "Mandatory",
     },
     label: {
         type: "enum",

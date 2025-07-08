@@ -56,7 +56,6 @@ const createStyles = (
             flexDirection: "row",
             alignItems: "center",
             borderRadius: 24,
-            marginRight: 8,
             paddingVertical: 6,
             paddingHorizontal: 12,
             backgroundColor:

@@ -12,7 +12,11 @@
                             ":BLANK_LINE:",
                             "react*",
                             "expo*",
-                            [":PACKAGE:", ":PACKAGE_WITH_PROTOCOL:", "!@modules/**"],
+                            [
+                                ":PACKAGE:",
+                                ":PACKAGE_WITH_PROTOCOL:",
+                                "!@modules/**"
+                            ],
                             ":BLANK_LINE:",
                             ["@modules/**", "@/modules/**"],
                             ":BLANK_LINE:",
@@ -26,7 +30,13 @@
         }
     },
     "files": {
-        "includes": ["**", "!**/*.d.ts", "!**/.expo", "!**/services/**", "!**/dist/**"]
+        "includes": [
+            "**",
+            "!**/*.d.ts",
+            "!**/.expo",
+            "!**/services/**",
+            "!**/dist/**"
+        ]
     },
     "formatter": {
         "enabled": true,

@@ -1,63 +1,61 @@
-import type { FC, ReactNode, Ref } from "react";
-import { StyleSheet, TextInput, type TextInputProps } from "react-native";
+import type { FC, Ref } from "react";
+import {
+    type ColorValue,
+    StyleSheet,
+    TextInput,
+    type TextInputProps,
+} from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+
+export type InputState = "enabled" | "disabled";
 
 export interface InputBaseStyles {
-    height: number;
-
-    borderRadius: number;
-    padding: number;
-    fontSize: number;
-    fontFamilyWeight: string;
-    textColor: string;
-    placeholderTextColor: string;
-    disabledTextColor: string;
-    backgroundColor: string;
-    backgroundColorDisabled: string;
-    labelMargin: number;
-    mandatoryColor: string;
-    errorColor: string;
+    container: {
+        height: number;
+        padding: number;
+        borderRadius: number;
+        backgroundColor: Record<InputState, ColorValue>;
+    };
+    text: {
+        fontSize: number;
+        fontFamilyWeight: string;
+        color: Record<InputState, ColorValue>;
+        placeholderColor: ColorValue;
+    };
 }
 
-export interface InputBaseProps extends Omit<TextInputProps, "editable"> {
-    /**
-     * Supports
-     *
-     * - `<Text />`
-     * - string
-     */
-    label?: ReactNode;
-
+export interface InputBaseProps
+    extends Omit<TextInputProps, "editable" | "style"> {
     disabled?: boolean;
-
+    style?: DeepPartial<InputBaseStyles>;
+    inputStyle?: TextInputProps["style"];
     ref?: Ref<TextInput>;
 }
 
 export const InputBase: FC<InputBaseProps> = ({
-    label,
-    disabled,
-    multiline,
+    disabled = false,
+    multiline = false,
     scrollEnabled,
     onChangeText,
     ref,
     style,
+    inputStyle,
     ...props
 }) => {
-    const styles = useThemedStyles(createStyles, {
-        disabled,
-        multiline,
-    });
-    const {
-        styles: { baseInput },
-    } = useTheme();
+    const [styles, { inputBase }] = useThemedStylesWithOverride(
+        createStyles,
+        { inputBase: style },
+        { disabled, multiline },
+    );
 
     return (
         <TextInput
             ref={ref}
             editable={!disabled}
-            placeholderTextColor={baseInput.placeholderTextColor}
-            style={[styles.input, style]}
+            placeholderTextColor={inputBase.text.placeholderColor}
+            style={[styles.input, inputStyle]}
             multiline={multiline}
             scrollEnabled={scrollEnabled ?? false}
             onChangeText={onChangeText}
@@ -67,19 +65,24 @@ export const InputBase: FC<InputBaseProps> = ({
 };
 
 const createStyles = (
-    { styles: { baseInput } }: ThemedStyles,
-    { disabled, multiline = false }: InputBaseProps,
+    { styles: { inputBase } }: ThemedStyles,
+    {
+        disabled,
+        multiline,
+    }: Required<Pick<InputBaseProps, "multiline" | "disabled">>,
 ) =>
     StyleSheet.create({
         input: {
-            height: multiline ? "auto" : baseInput.height,
-            borderRadius: baseInput.borderRadius,
-            backgroundColor: disabled
-                ? baseInput.backgroundColorDisabled
-                : baseInput.backgroundColor,
-            padding: baseInput.padding,
-            fontSize: baseInput.fontSize,
-            fontFamily: baseInput.fontFamilyWeight,
-            color: baseInput.textColor,
+            height: multiline ? "auto" : inputBase.container.height,
+            minHeight: multiline ? inputBase.container.height : undefined,
+            borderRadius: inputBase.container.borderRadius,
+            backgroundColor:
+                inputBase.container.backgroundColor[
+                    disabled ? "disabled" : "enabled"
+                ],
+            padding: inputBase.container.padding,
+            fontSize: inputBase.text.fontSize,
+            fontFamily: inputBase.text.fontFamilyWeight,
+            color: inputBase.text.color[disabled ? "disabled" : "enabled"],
         },
     });

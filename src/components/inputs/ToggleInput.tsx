@@ -147,7 +147,7 @@ export const ToggleInput: React.FC<ToggleInputProps> = ({
 ToggleInput.displayName = "ToggleInput";
 
 const createStyles = (
-    { styles: { toggleInput, baseInput } }: ThemedStyles,
+    { styles: { toggleInput, inputScaffold } }: ThemedStyles,
     { size = "medium" }: Partial<ToggleInputProps>,
 ) => {
     const styles = StyleSheet.create({
@@ -170,7 +170,7 @@ const createStyles = (
         helpText: {
             marginLeft:
                 toggleInput.indicator.size[size] + toggleInput.label.gap,
-            marginTop: baseInput.labelMargin,
+            marginTop: inputScaffold.gap,
         },
     });
     return styles;

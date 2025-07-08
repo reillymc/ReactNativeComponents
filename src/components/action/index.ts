@@ -5,3 +5,8 @@ export {
     IconActionProps,
     IconActionStyles,
 } from "./IconAction";
+export {
+    IconActionBase,
+    IconActionBaseProps,
+    IconActionBaseStyles,
+} from "./IconActionBase";
