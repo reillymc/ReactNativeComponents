@@ -2,6 +2,7 @@ export {
     type CreateStyles,
     createDefaultStyles,
     MergeStyles,
+    type StyleOverrides,
     type Styles,
 } from "./styles";
 export {

@@ -184,3 +184,5 @@ export const DropdownInput = <T,>({
         </InputScaffold>
     );
 };
+
+DropdownInput.name = "DropdownInput";

@@ -4,7 +4,7 @@ import Swipeable, {
     type SwipeableRef,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 
-export interface SwipeViewProps {
+export interface SwipeableContainerProps {
     /**
      * Supports:
      * - `SwipeAction`
@@ -14,7 +14,7 @@ export interface SwipeViewProps {
     children?: ReactNode;
 }
 
-export const SwipeView: FunctionComponent<SwipeViewProps> = ({
+export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     rightActions = [],
     containerStyle,
     children,

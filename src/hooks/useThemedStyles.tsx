@@ -2,8 +2,7 @@
 import { useMemo } from "react";
 
 import { ThemeContextDefinition } from "../providers";
-import { MergeStyles } from "../theme";
-import type { StyleOverrides } from "../theme/styles";
+import { MergeStyles, type StyleOverrides } from "../theme";
 import { useTheme } from "./useTheme";
 
 export { ThemeContextDefinition as ThemedStyles };

@@ -9,7 +9,7 @@ import {
 import { Undefined } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../hooks";
-import { SwipeView, type SwipeViewProps } from "./swipeView";
+import { SwipeableContainer, type SwipeableContainerProps } from "./container";
 import { Text } from "./text";
 
 type ListItemVariant = "default" | "compact";
@@ -38,7 +38,7 @@ export interface ListItemProps {
 
     footer?: ReactNode;
 
-    swipeActions?: SwipeViewProps["rightActions"];
+    swipeActions?: SwipeableContainerProps["rightActions"];
     style?: StyleProp<ViewStyle>;
     contentContainerStyle?: StyleProp<ViewStyle>;
     onPress?: () => void;
@@ -91,9 +91,9 @@ export const ListItem: FC<ListItemProps> = ({
     return (
         <View style={styles.container}>
             {filteredActions?.length ? (
-                <SwipeView rightActions={swipeActions}>
+                <SwipeableContainer rightActions={swipeActions}>
                     {innerContent}
-                </SwipeView>
+                </SwipeableContainer>
             ) : (
                 innerContent
             )}

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconButton, type IconButtonProps } from "../button";
+import { type ThemedStyles, useThemedStyles } from "../hooks";
+import { IconButton, type IconButtonProps } from "./button";
 
 export type SwipeActionStyles = {
     width: number;
