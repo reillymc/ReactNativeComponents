@@ -8,7 +8,6 @@ import { glyphMapValueItemsOcticons } from "../helpers";
 
 const defaultProps: IconProps<any, any> = {
     iconName: "arrow-both",
-    variant: "secondary",
     iconSet: Octicons,
 };
 
@@ -18,15 +17,7 @@ const propDefinitions: PropDefinitions<IconProps<any, any>> = {
         label: "Icon Name",
         values: glyphMapValueItemsOcticons,
     },
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Secondary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
-        ],
-    },
+
     iconSet: {
         type: "enum",
         label: "Icon Set",

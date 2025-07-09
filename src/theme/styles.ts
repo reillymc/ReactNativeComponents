@@ -110,11 +110,7 @@ export const createDefaultStyles: CreateStyles = ({
     };
 
     const icon: IconStyles = {
-        color: {
-            primary: color.primary,
-            secondary: color.secondary,
-            text: color.textPrimary,
-        },
+        color: color.textPrimary,
         size: {
             small: 16,
             medium: iconBase.size,

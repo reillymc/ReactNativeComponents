@@ -1,18 +1,26 @@
 export {
     Action,
+    ActionBase,
+    ActionBaseProps,
     ActionProps,
     ActionStyles,
     IconAction,
+    IconActionBase,
+    IconActionBaseProps,
     IconActionBaseStyles,
     IconActionProps,
     IconActionStyles,
 } from "./action";
 export {
     Button,
+    ButtonBase,
+    ButtonBaseProps,
     ButtonBaseStyles,
     ButtonProps,
     ButtonStyles,
     IconButton,
+    IconButtonBase,
+    IconButtonBaseProps,
     IconButtonBaseStyles,
     IconButtonProps,
     IconButtonStyles,
@@ -30,6 +38,8 @@ export {
 } from "./container";
 export {
     Icon,
+    IconBase,
+    IconBaseProps,
     IconBaseStyles,
     IconProps,
     IconStyles,
