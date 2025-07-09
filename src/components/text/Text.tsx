@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FC, ReactNode } from "react";
 import {
     Text as RnText,
     type TextProps as RnTextProps,
@@ -31,10 +31,10 @@ export interface TextStyles {
 
 export interface TextProps extends RnTextProps {
     variant?: TextVariant;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
-export const Text: React.FC<TextProps> = ({
+export const Text: FC<TextProps> = ({
     variant = "body",
     style,
     children,

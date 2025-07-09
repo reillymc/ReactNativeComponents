@@ -1,4 +1,4 @@
-import React, { type Ref, useMemo } from "react";
+import { type Ref, useEffect, useMemo, useState } from "react";
 import type {
     TextInput as DefaultTextInput,
     NativeSyntheticEvent,
@@ -81,14 +81,14 @@ export const DropdownInput = <T,>({
     containerStyle,
     ...props
 }: DropdownInputProps<T>) => {
-    const [searchValue, setSearchValue] = React.useState(
+    const [searchValue, setSearchValue] = useState(
         selectedItem?.label ?? value ?? "",
     );
-    const [hasFocus, setHasFocus] = React.useState(false);
+    const [hasFocus, setHasFocus] = useState(false);
 
     const inputRef = useForwardedRef(ref);
 
-    React.useEffect(() => {
+    useEffect(() => {
         setSearchValue(selectedItem?.label ?? value ?? "");
     }, [selectedItem, value]);
 
@@ -140,8 +140,8 @@ export const DropdownInput = <T,>({
 
     const showDropdownPanel =
         hasFocus &&
-        searchValue.length >= minimumSearchLength &&
-        selectedItem?.label.toLowerCase() !== searchValue.toLowerCase();
+        filteredItems.length &&
+        searchValue.length >= minimumSearchLength;
 
     return (
         <InputScaffold

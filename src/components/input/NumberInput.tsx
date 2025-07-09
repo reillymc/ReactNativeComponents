@@ -1,4 +1,4 @@
-import React, { type FC, type Ref } from "react";
+import React, { type FC, type Ref, useCallback } from "react";
 import {
     type TextInput as DefaultTextInput,
     StyleSheet,
@@ -72,7 +72,7 @@ export const NumberInput: FC<NumberInputProps> = ({
         range: "arrow-both" as const,
     }[value.representation];
 
-    const handleChangeMode = React.useCallback(() => {
+    const handleChangeMode = useCallback(() => {
         const currentIndex = enabledRepresentations.indexOf(
             value.representation,
         );
@@ -133,7 +133,7 @@ export const NumberInput: FC<NumberInputProps> = ({
         }
     }, [enabledRepresentations, onChange, value.representation, value.value]);
 
-    const handlePrimaryInputChangeText = React.useCallback(
+    const handlePrimaryInputChangeText = useCallback(
         (text: string) => {
             switch (value.representation) {
                 case "number":

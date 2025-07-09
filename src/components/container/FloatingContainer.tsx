@@ -1,4 +1,11 @@
-import { type FC, type ReactNode, useCallback, useRef, useState } from "react";
+import {
+    type FC,
+    type ReactNode,
+    type RefObject,
+    useCallback,
+    useRef,
+    useState,
+} from "react";
 import {
     type LayoutChangeEvent,
     type StyleProp,
@@ -21,12 +28,12 @@ export type FloatingContainerStyles = {
 };
 
 type PanelLayout = {
-    inputHeight: number;
+    parentHeight: number;
     inverted: boolean;
 };
 
 export interface FloatingContainerProps {
-    parentRef: React.RefObject<TextInput | null>;
+    parentRef: RefObject<TextInput | null>;
     children?: ReactNode | ((panelLayout: PanelLayout) => ReactNode);
     containerStyle?: StyleProp<ViewStyle>;
 }
@@ -49,25 +56,16 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 
     const onLayout = useCallback(
         (e: LayoutChangeEvent) => {
-            if (keyboardHeight === undefined) {
-                setLayout(undefined);
-                return;
-            }
-
             parentRef.current?.measureInWindow(
-                (_ix, inputY, _iw, inputHeight) => {
-                    e.currentTarget.measureInWindow(
-                        (_px, _py, _pw, panelHeight) => {
-                            const size = inputY + inputHeight + panelHeight;
-                            const screenMaxHeight =
-                                screenHeight - keyboardHeight - top;
+                (_ix, parentY, _iw, parentHeight) => {
+                    const { height: panelHeight } = e.nativeEvent.layout;
+                    const size = parentY + parentHeight + panelHeight;
+                    const screenMaxHeight = screenHeight - keyboardHeight - top;
 
-                            setLayout({
-                                inputHeight,
-                                inverted: size > screenMaxHeight,
-                            });
-                        },
-                    );
+                    setLayout({
+                        parentHeight,
+                        inverted: size > screenMaxHeight,
+                    });
                 },
             );
         },
@@ -80,10 +78,14 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
             style={[styles.container, containerStyle]}
             onLayout={onLayout}
         >
-            {layout &&
-                (typeof children === "function"
-                    ? children(layout ?? {})
-                    : children)}
+            {typeof children === "function"
+                ? children(
+                      layout ?? {
+                          inverted: false,
+                          parentHeight: 0,
+                      },
+                  )
+                : children}
         </View>
     );
 };
@@ -95,12 +97,12 @@ const createStyles = (
     StyleSheet.create({
         container: {
             position: "absolute",
-            bottom: layout?.inverted ? layout.inputHeight : undefined,
+            bottom: layout?.inverted ? layout.parentHeight : undefined,
             opacity: layout ? 1 : 0,
             zIndex: 10,
             width: "100%",
             overflow: "hidden",
-            top: layout?.inverted ? undefined : layout?.inputHeight,
+            top: layout?.inverted ? undefined : layout?.parentHeight,
             marginTop: layout?.inverted
                 ? undefined
                 : floatingContainer.parentMargin,

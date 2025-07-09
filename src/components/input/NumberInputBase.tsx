@@ -1,4 +1,4 @@
-import React, { type FC, type Ref } from "react";
+import React, { type FC, type Ref, useCallback } from "react";
 import type {
     NativeSyntheticEvent,
     TextInput,
@@ -34,7 +34,7 @@ export const NumberInputBase: FC<NumberInputBaseProps> = ({
     keyboardType = "number-pad",
     ...props
 }) => {
-    const handleChangeText = React.useCallback(
+    const handleChangeText = useCallback(
         (text: string) => {
             if (onChangeText) {
                 const regExp =

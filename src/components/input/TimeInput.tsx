@@ -1,4 +1,4 @@
-import React, { type FC } from "react";
+import React, { type FC, useRef, useState } from "react";
 import {
     Pressable,
     type TextInput as RnTextInput,
@@ -44,11 +44,11 @@ export const TimeInput: FC<TimeInputProps> = ({
     onSubmitEditing,
     ...baseProps
 }) => {
-    const hoursRef = React.useRef<RnTextInput>(null);
-    const minutesRef = React.useRef<RnTextInput>(null);
+    const hoursRef = useRef<RnTextInput>(null);
+    const minutesRef = useRef<RnTextInput>(null);
     const styles = useThemedStyles(createStyles, { value, disabled });
 
-    const [isFocused, setIsFocused] = React.useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
     return (
         <InputScaffold {...baseProps}>

@@ -1,4 +1,5 @@
 import type React from "react";
+import type { FC, SetStateAction } from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
@@ -34,10 +35,10 @@ export interface ToggleInputProps extends Pick<InputScaffoldProps, "helpText"> {
     size?: ToggleSize;
     containerStyle?: StyleProp<ViewStyle>;
     styles?: DeepPartial<ToggleInputStyles>;
-    onChange: (value: boolean) => void | null | React.SetStateAction<boolean>;
+    onChange: (value: boolean) => void | null | SetStateAction<boolean>;
 }
 
-export const ToggleInput: React.FC<ToggleInputProps> = ({
+export const ToggleInput: FC<ToggleInputProps> = ({
     label,
     helpText,
     value = false,
