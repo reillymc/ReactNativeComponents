@@ -1,4 +1,19 @@
 {
-    "extends": "./tsconfig",
-    "include": ["src", "package.json", "README.md"]
+    "compilerOptions": {
+        "target": "ES2024",
+        "module": "esnext",
+        "moduleResolution": "bundler",
+        "outDir": "./lib/",
+        "declarationDir": "./lib/types",
+        "strict": true,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "declaration": true,
+        "declarationMap": true,
+        "jsx": "react-native",
+        "customConditions": ["react-native"],
+        "skipLibCheck": true,
+        "lib": ["DOM", "ESNext"]
+    },
+    "files": ["./src/index.ts"]
 }

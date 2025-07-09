@@ -1,9 +1,9 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.6.7",
+    "version": "0.6.8-beta.1",
     "description": "A collection of React Native components and resources",
-    "module": "lib/module/index",
-    "types": "lib/typescript/src/index.d.ts",
+    "module": "lib/index",
+    "types": "lib/types/index.d.ts",
     "react-native": "src/index",
     "source": "src/index",
     "workspaces": [
@@ -13,25 +13,12 @@
     "files": [
         "src",
         "lib",
-        "android",
-        "ios",
-        "cpp",
-        "*.podspec",
-        "!lib/typescript/example",
-        "!ios/build",
-        "!android/build",
-        "!android/gradle",
-        "!android/gradlew",
-        "!android/gradlew.bat",
-        "!android/local.properties",
-        "!**/__tests__",
-        "!**/__fixtures__",
-        "!**/__mocks__",
         "!**/.*"
     ],
     "scripts": {
         "bootstrap": "yarn example && yarn install",
-        "build": "bob build",
+        "clean": "rm -rf ./lib",
+        "build": "npm run clean && tsc -p ./tsconfig.build.json",
         "lint": "tsc --noEmit -p ./tsconfig.build.json && biome check",
         "prepare": "npm run build",
         "depcruise": "depcruise src --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
@@ -42,14 +29,15 @@
     "keywords": [
         "react-native",
         "ios",
-        "android"
+        "android",
+        "web"
     ],
     "repository": {
         "type": "git",
         "url": "git+https://github.com/reillymc/ReactNativeComponents.git"
     },
     "author": "reillymc",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/reillymc/ReactNativeComponents/issues"
     },
@@ -57,22 +45,20 @@
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
     },
+    "dependencies": {
+        "@reillymc/es-utils": "^0.0.4",
+        "lodash.merge": "^4.6.2"
+    },
     "devDependencies": {
         "@babel/core": "^7.24.0",
         "@biomejs/biome": "2.0.6",
         "@expo/vector-icons": "^14.1.0",
-        "@react-native-community/eslint-config": "^3.2.0",
         "@react-native/metro-config": "^0.76.2",
         "@react-navigation/native": "^7.0.14",
         "@types/jest": "^28.1.2",
         "@types/lodash.merge": "^4.6.9",
         "@types/react": "~19.0.10",
         "dependency-cruiser": "^16.10.4",
-        "eslint": "^8.57.0",
-        "eslint-config-expo": "~9.2.0",
-        "eslint-config-prettier": "^8.5.0",
-        "eslint-plugin-import": "^2.27.5",
-        "eslint-plugin-prettier": "^4.0.0",
         "expo": "^53.0.13",
         "expo-constants": "~17.1.6",
         "expo-font": "~13.3.1",
@@ -85,7 +71,6 @@
         "prettier": "^2.8.3",
         "react": "19.0.0",
         "react-native": "0.79.4",
-        "react-native-builder-bob": "^0.20.0",
         "react-native-gesture-handler": "~2.24.0",
         "react-native-reanimated": "~3.17.4",
         "react-native-safe-area-context": "5.4.0",
@@ -104,23 +89,5 @@
             "<rootDir>/example/node_modules",
             "<rootDir>/lib/"
         ]
-    },
-    "react-native-builder-bob": {
-        "source": "src",
-        "output": "lib",
-        "targets": [
-            "commonjs",
-            "module",
-            [
-                "typescript",
-                {
-                    "project": "tsconfig.build.json"
-                }
-            ]
-        ]
-    },
-    "dependencies": {
-        "@reillymc/es-utils": "^0.0.4",
-        "lodash.merge": "^4.6.2"
     }
 }

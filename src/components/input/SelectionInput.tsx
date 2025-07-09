@@ -81,13 +81,13 @@ export const SelectionInput = <T,>({
                 {(pressableState) => (
                     <>
                         <View style={styles.selectionContainer}>
-                            {selectionMode === "single" && selection && (
+                            {selectionMode === "single" && !!selection && (
                                 <Text style={styles.selectionItemLabel}>
                                     {selection.label}
                                 </Text>
                             )}
                             {selectionMode === "multi" &&
-                                selection?.length &&
+                                !!selection?.length &&
                                 selection.map((item) => (
                                     <Tag
                                         key={
