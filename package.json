@@ -1,30 +1,23 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.6.8-beta.1",
+    "version": "0.6.10",
     "description": "A collection of React Native components and resources",
-    "module": "lib/index",
+    "module": "lib/index.js",
+    "react-native": "lib/index.js",
+    "source": "lib/index.js",
     "types": "lib/types/index.d.ts",
-    "react-native": "src/index",
-    "source": "src/index",
-    "workspaces": [
-        "src",
-        "example"
-    ],
     "files": [
-        "src",
-        "lib",
-        "!**/.*"
+        "lib/**/*"
     ],
     "scripts": {
-        "bootstrap": "yarn example && yarn install",
         "clean": "rm -rf ./lib",
         "build": "npm run clean && tsc -p ./tsconfig.build.json",
-        "lint": "tsc --noEmit -p ./tsconfig.build.json && biome check",
+        "lint": "biome check",
         "prepare": "npm run build",
         "depcruise": "depcruise src --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
         "start": "expo start",
         "test": "jest",
-        "typecheck": "tsc --noEmit"
+        "typecheck": "tsc --noEmit -p ./tsconfig.build.json"
     },
     "keywords": [
         "react-native",
