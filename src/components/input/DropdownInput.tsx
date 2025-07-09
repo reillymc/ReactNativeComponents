@@ -81,8 +81,6 @@ export const DropdownInput = <T,>({
     containerStyle,
     ...props
 }: DropdownInputProps<T>) => {
-    console.log(selectedItem);
-
     const [searchValue, setSearchValue] = React.useState(
         selectedItem?.label ?? value ?? "",
     );
@@ -98,9 +96,9 @@ export const DropdownInput = <T,>({
         setHasFocus(true);
     };
 
-    const handleSelect: DropdownInputProps<T>["onSelect"] = (e) => {
-        onSelect(e);
-        inputRef.current?.blur();
+    const handleSelect: DropdownInputProps<T>["onSelect"] = (e, automated) => {
+        onSelect(e, automated);
+        if (!automated) inputRef.current?.blur();
         setSearchValue(selectedItem?.label ?? value ?? "");
     };
 
@@ -173,6 +171,7 @@ export const DropdownInput = <T,>({
                                 <MenuItem
                                     key={"id" in item ? item.id : item.value}
                                     label={item.label}
+                                    description={item.description}
                                     searchValue={searchValue}
                                     onPress={() => handleSelect(item)}
                                 />
@@ -184,5 +183,3 @@ export const DropdownInput = <T,>({
         </InputScaffold>
     );
 };
-
-DropdownInput.name = "DropdownInput";

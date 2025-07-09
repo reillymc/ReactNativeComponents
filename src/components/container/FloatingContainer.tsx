@@ -1,10 +1,12 @@
 import { type FC, type ReactNode, useCallback, useRef, useState } from "react";
 import {
     type LayoutChangeEvent,
+    type StyleProp,
     StyleSheet,
     type TextInput,
     useWindowDimensions,
     View,
+    type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -26,10 +28,12 @@ type PanelLayout = {
 export interface FloatingContainerProps {
     parentRef: React.RefObject<TextInput | null>;
     children?: ReactNode | ((panelLayout: PanelLayout) => ReactNode);
+    containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const FloatingContainer: FC<FloatingContainerProps> = ({
     parentRef,
+    containerStyle,
     children,
 }) => {
     const containerRef = useRef<View>(null);
@@ -70,15 +74,16 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
         [keyboardHeight, parentRef, top, screenHeight],
     );
 
-    if (!layout) return;
-
     return (
         <View
             ref={containerRef}
-            style={styles.dropdownPanel}
+            style={[styles.container, containerStyle]}
             onLayout={onLayout}
         >
-            {typeof children === "function" ? children(layout) : children}
+            {layout &&
+                (typeof children === "function"
+                    ? children(layout ?? {})
+                    : children)}
         </View>
     );
 };
@@ -88,7 +93,7 @@ const createStyles = (
     layout: PanelLayout | undefined,
 ) =>
     StyleSheet.create({
-        dropdownPanel: {
+        container: {
             position: "absolute",
             bottom: layout?.inverted ? layout.inputHeight : undefined,
             opacity: layout ? 1 : 0,

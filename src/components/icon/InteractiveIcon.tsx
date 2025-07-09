@@ -5,7 +5,6 @@ import { useStylesWithOverride } from "../../hooks";
 import { IconBase, type IconBaseProps, type IconBaseStyles } from "./IconBase";
 
 export type InteractiveIconState = "enabled" | "disabled" | "pressed";
-export type InteractiveIconVariant = "primary" | "secondary" | "destructive";
 
 export type InteractiveIconStyles = {
     size: IconBaseStyles["size"];
