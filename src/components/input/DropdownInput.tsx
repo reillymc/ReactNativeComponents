@@ -33,6 +33,7 @@ export type DropdownInputProps<T = string> = Pick<
     | "autoFocus"
     | "submitBehavior"
     | "disabled"
+    | "inputStyle"
 > &
     Pick<
         InputScaffoldProps,
@@ -127,20 +128,18 @@ export const DropdownInput = <T,>({
     const filteredItems = useMemo(() => {
         const search = searchValue.toLowerCase();
 
-        const filteredItems = items
+        return items
             .filter(
                 ({ label, description }) =>
                     label.toLowerCase().includes(search) ||
                     description?.toLowerCase().includes(search),
             )
             .slice(0, maxSuggestionCount);
-
-        return filteredItems.reverse();
     }, [items, maxSuggestionCount, searchValue]);
 
     const showDropdownPanel =
         hasFocus &&
-        filteredItems.length &&
+        !!filteredItems.length &&
         searchValue.length >= minimumSearchLength;
 
     return (
@@ -160,26 +159,21 @@ export const DropdownInput = <T,>({
                 onChangeText={handleChangeText}
                 autoCorrect={false}
             />
-            {showDropdownPanel && (
-                <FloatingContainer parentRef={inputRef}>
-                    {({ inverted }) => (
-                        <Menu>
-                            {(inverted
-                                ? filteredItems.reverse()
-                                : filteredItems
-                            ).map((item) => (
-                                <MenuItem
-                                    key={"id" in item ? item.id : item.value}
-                                    label={item.label}
-                                    description={item.description}
-                                    searchValue={searchValue}
-                                    onPress={() => handleSelect(item)}
-                                />
-                            ))}
-                        </Menu>
-                    )}
-                </FloatingContainer>
-            )}
+            <FloatingContainer parentRef={inputRef} show={showDropdownPanel}>
+                {({ inverted }) => (
+                    <Menu reverse={inverted}>
+                        {filteredItems.map((item) => (
+                            <MenuItem
+                                key={"id" in item ? item.id : item.value}
+                                label={item.label}
+                                description={item.description}
+                                searchValue={searchValue}
+                                onPress={() => handleSelect(item)}
+                            />
+                        ))}
+                    </Menu>
+                )}
+            </FloatingContainer>
         </InputScaffold>
     );
 };

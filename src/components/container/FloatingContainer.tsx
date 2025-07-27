@@ -7,6 +7,7 @@ import {
     useState,
 } from "react";
 import {
+    KeyboardAvoidingView,
     type LayoutChangeEvent,
     type StyleProp,
     StyleSheet,
@@ -15,78 +16,99 @@ import {
     View,
     type ViewStyle,
 } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { FullWindowOverlay } from "react-native-screens";
 
-import {
-    type ThemedStyles,
-    usePersistentKeyboardHeight,
-    useThemedStyles,
-} from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type FloatingContainerStyles = {
     parentMargin: number;
 };
 
 type PanelLayout = {
+    parentY: number;
     parentHeight: number;
     inverted: boolean;
+    visibleAreaHeight: number;
+    parentX?: number;
+    parentWidth?: number;
 };
 
 export interface FloatingContainerProps {
     parentRef: RefObject<TextInput | null>;
-    children?: ReactNode | ((panelLayout: PanelLayout) => ReactNode);
+    show?: boolean;
+    children?:
+        | ReactNode
+        | ((panelLayout: Pick<PanelLayout, "inverted">) => ReactNode);
     containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const FloatingContainer: FC<FloatingContainerProps> = ({
     parentRef,
+    show,
     containerStyle,
     children,
 }) => {
     const containerRef = useRef<View>(null);
-
     const [layout, setLayout] = useState<PanelLayout>();
-
     const styles = useThemedStyles(createStyles, layout);
 
     const { height: screenHeight } = useWindowDimensions();
-    const { top } = useSafeAreaInsets();
 
-    const { keyboardHeight } = usePersistentKeyboardHeight();
+    const [visibleAreaHeight, setVisibleAreaHeight] = useState(screenHeight);
 
-    const onLayout = useCallback(
+    const onVisibleAreaLayout = useCallback((e: LayoutChangeEvent) => {
+        setVisibleAreaHeight(e.nativeEvent.layout.height);
+    }, []);
+
+    const onPanelLayout = useCallback(
         (e: LayoutChangeEvent) => {
             parentRef.current?.measureInWindow(
-                (_ix, parentY, _iw, parentHeight) => {
-                    const { height: panelHeight } = e.nativeEvent.layout;
-                    const size = parentY + parentHeight + panelHeight;
-                    const screenMaxHeight = screenHeight - keyboardHeight - top;
+                (parentX, parentY, parentWidth, parentHeight) => {
+                    const panelHeight = e.nativeEvent.layout.height;
+
+                    // Calculate available space below parent
+                    const parentBottom = parentY + parentHeight;
+                    const availableBelow = visibleAreaHeight - parentBottom;
+
+                    // If not enough space below for the panel, invert (show above)
+                    const inverted = availableBelow < panelHeight;
 
                     setLayout({
+                        parentY,
                         parentHeight,
-                        inverted: size > screenMaxHeight,
+                        inverted,
+                        visibleAreaHeight,
+                        parentX,
+                        parentWidth,
                     });
                 },
             );
         },
-        [keyboardHeight, parentRef, top, screenHeight],
+        [parentRef, visibleAreaHeight],
     );
 
     return (
-        <View
-            ref={containerRef}
-            style={[styles.container, containerStyle]}
-            onLayout={onLayout}
-        >
-            {typeof children === "function"
-                ? children(
-                      layout ?? {
-                          inverted: false,
-                          parentHeight: 0,
-                      },
-                  )
-                : children}
-        </View>
+        <FullWindowOverlay>
+            <KeyboardAvoidingView
+                behavior="height"
+                style={[styles.keyboardView]}
+                pointerEvents="box-none"
+                onLayout={onVisibleAreaLayout}
+            >
+                {show && (
+                    <View
+                        ref={containerRef}
+                        onLayout={onPanelLayout}
+                        pointerEvents="box-none"
+                        style={[styles.container, containerStyle]}
+                    >
+                        {typeof children === "function"
+                            ? children(layout ?? { inverted: false })
+                            : children}
+                    </View>
+                )}
+            </KeyboardAvoidingView>
+        </FullWindowOverlay>
     );
 };
 
@@ -95,19 +117,22 @@ const createStyles = (
     layout: PanelLayout | undefined,
 ) =>
     StyleSheet.create({
-        container: {
-            position: "absolute",
-            bottom: layout?.inverted ? layout.parentHeight : undefined,
-            opacity: layout ? 1 : 0,
-            zIndex: 10,
-            width: "100%",
-            overflow: "hidden",
-            top: layout?.inverted ? undefined : layout?.parentHeight,
-            marginTop: layout?.inverted
-                ? undefined
-                : floatingContainer.parentMargin,
-            marginBottom: layout?.inverted
-                ? floatingContainer.parentMargin
-                : undefined,
-        },
+        keyboardView: StyleSheet.absoluteFillObject,
+        container: layout
+            ? {
+                  position: "absolute",
+                  zIndex: 10,
+                  left: layout.parentX,
+                  width: layout.parentWidth,
+                  overflow: "hidden",
+                  top: layout.inverted
+                      ? undefined
+                      : layout.parentY + layout.parentHeight,
+                  bottom: layout.inverted
+                      ? layout.visibleAreaHeight - layout.parentY
+                      : undefined,
+                  marginTop: floatingContainer.parentMargin,
+                  marginBottom: floatingContainer.parentMargin,
+              }
+            : { opacity: 0 },
     });

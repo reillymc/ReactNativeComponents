@@ -14,16 +14,26 @@ export type MenuStyles = {
 
 export type MenuProps = PropsWithChildren<{
     style?: DeepPartial<MenuStyles>;
+    reverse?: boolean;
 }>;
 
-export const Menu: FC<MenuProps> = ({ style, children }) => {
+export const Menu: FC<MenuProps> = ({ style, reverse, children }) => {
     const [styles] = useThemedStylesWithOverride(
         createStyles,
         { menu: style },
         {},
     );
 
-    return <View style={styles.container}>{children}</View>;
+    return (
+        <View
+            style={[
+                styles.container,
+                { flexDirection: reverse ? "column-reverse" : "column" },
+            ]}
+        >
+            {children}
+        </View>
+    );
 };
 
 const createStyles = ({ styles: { menu } }: ThemedStyles) => {
