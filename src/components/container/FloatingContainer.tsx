@@ -36,6 +36,7 @@ type PanelLayout = {
 export interface FloatingContainerProps {
     parentRef: RefObject<TextInput | null>;
     show?: boolean;
+    position?: "auto" | "above";
     children?:
         | ReactNode
         | ((panelLayout: Pick<PanelLayout, "inverted">) => ReactNode);
@@ -45,6 +46,7 @@ export interface FloatingContainerProps {
 export const FloatingContainer: FC<FloatingContainerProps> = ({
     parentRef,
     show,
+    position = "auto",
     containerStyle,
     children,
 }) => {
@@ -71,7 +73,8 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
                     const availableBelow = visibleAreaHeight - parentBottom;
 
                     // If not enough space below for the panel, invert (show above)
-                    const inverted = availableBelow < panelHeight;
+                    const inverted =
+                        position === "above" || availableBelow < panelHeight;
 
                     setLayout({
                         parentY,
@@ -84,7 +87,7 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
                 },
             );
         },
-        [parentRef, visibleAreaHeight],
+        [parentRef, visibleAreaHeight, position],
     );
 
     return (

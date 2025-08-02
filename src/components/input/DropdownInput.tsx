@@ -4,11 +4,10 @@ import type {
     NativeSyntheticEvent,
     TextInputFocusEventData,
 } from "react-native";
-import { ValidateString } from "@reillymc/es-utils";
 
 import { useForwardedRef } from "../../hooks";
 import type { ValueItem } from "../../types";
-import { FloatingContainer } from "../container";
+import { FloatingContainer, type FloatingContainerProps } from "../container";
 import { Menu, MenuItem } from "../menu";
 import { InputBase, type InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
@@ -20,7 +19,6 @@ export interface DropdownInputStyles {
 export type DropdownInputProps<T = string> = Pick<
     InputBaseProps,
     | "autoCapitalize"
-    | "autoCorrect"
     | "returnKeyType"
     | "returnKeyLabel"
     | "onBlur"
@@ -60,6 +58,8 @@ export type DropdownInputProps<T = string> = Pick<
          */
         maxSuggestionCount?: number;
 
+        panelPosition?: FloatingContainerProps["position"];
+
         /**
          * Callback on selection (or clearing of selection) of valid dropdown value.
          */
@@ -74,6 +74,7 @@ export const DropdownInput = <T,>({
     minimumSearchLength = 1,
     maxSuggestionCount = 5,
     selectBehaviour = "blurAndSelect",
+    panelPosition,
     onSelect,
     onChangeText,
     onBlur,
@@ -107,9 +108,9 @@ export const DropdownInput = <T,>({
     };
 
     const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        const lowerSearchValue = searchValue.toLowerCase();
+        const search = searchValue.toLowerCase();
         const existingItem = items.find(
-            (item) => item.label.toLowerCase() === lowerSearchValue,
+            (item) => item.label.toLowerCase() === search,
         );
         if (existingItem) {
             onSelect(existingItem);
@@ -131,17 +132,22 @@ export const DropdownInput = <T,>({
 
         return items
             .filter((item) => {
+                if (
+                    selectedItem &&
+                    "id" in item &&
+                    "id" in selectedItem &&
+                    item.id === selectedItem.id
+                ) {
+                    return false; // Exclude the currently selected item
+                }
+
+                if (item.label.toLowerCase() === search) {
+                    return false; // Exclude exact match of search value
+                }
+
                 const inSearch =
                     item.label.toLowerCase().includes(search) ||
                     item.description?.toLowerCase().includes(search);
-
-                if (selectedItem && "id" in item && "id" in selectedItem) {
-                    if (item.id === selectedItem.id) {
-                        return false; // Exclude the currently selected item
-                    }
-                } else if (item.value === selectedItem?.value) {
-                    return false; // Exclude the currently selected item
-                }
 
                 return inSearch;
             })
@@ -169,8 +175,13 @@ export const DropdownInput = <T,>({
                 onBlur={handleBlur}
                 onChangeText={handleChangeText}
                 autoCorrect={false}
+                spellCheck={false}
             />
-            <FloatingContainer parentRef={inputRef} show={showDropdownPanel}>
+            <FloatingContainer
+                parentRef={inputRef}
+                show={showDropdownPanel}
+                position={panelPosition}
+            >
                 {({ inverted }) => (
                     <Menu reverse={inverted}>
                         {filteredItems.map((item) => (
