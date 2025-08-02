@@ -27,7 +27,6 @@ export type DropdownInputProps<T = string> = Pick<
     | "placeholder"
     | "onChangeText"
     | "clearButtonMode"
-    | "value"
     | "maxLength"
     | "onSubmitEditing"
     | "autoFocus"
@@ -43,6 +42,13 @@ export type DropdownInputProps<T = string> = Pick<
         selectedItem?: ValueItem<T>;
 
         /**
+         * Defines the behaviour when an item is selected.
+         * - "select": Selects the item and keeps the input focused.
+         * - "blurAndSelect": Selects the item and blurs the input.
+         */
+        selectBehaviour?: "select" | "blurAndSelect";
+
+        /**
          * Minimum number of characters that need to be entered before the dropdown is shown.
          * @default 1
          */
@@ -55,12 +61,9 @@ export type DropdownInputProps<T = string> = Pick<
         maxSuggestionCount?: number;
 
         /**
-         * Callback on selection of valid dropdown value.
-         * The automated flag indicates whether the selection was triggered by the user or by the component.
-         * Selection is triggered by the component when the user enters a value that matches an existing item,
-         * or clears out all text
+         * Callback on selection (or clearing of selection) of valid dropdown value.
          */
-        onSelect: (e: ValueItem<T> | undefined, automated?: boolean) => void;
+        onSelect: (e: ValueItem<T> | undefined) => void;
 
         ref?: Ref<DefaultTextInput | null>;
     };
@@ -70,10 +73,10 @@ export const DropdownInput = <T,>({
     selectedItem,
     minimumSearchLength = 1,
     maxSuggestionCount = 5,
+    selectBehaviour = "blurAndSelect",
     onSelect,
     onChangeText,
     onBlur,
-    value,
     ref,
     label,
     helpText,
@@ -82,35 +85,34 @@ export const DropdownInput = <T,>({
     containerStyle,
     ...props
 }: DropdownInputProps<T>) => {
-    const [searchValue, setSearchValue] = useState(
-        selectedItem?.label ?? value ?? "",
-    );
+    const [searchValue, setSearchValue] = useState(selectedItem?.label ?? "");
     const [hasFocus, setHasFocus] = useState(false);
 
     const inputRef = useForwardedRef(ref);
 
     useEffect(() => {
-        setSearchValue(selectedItem?.label ?? value ?? "");
-    }, [selectedItem, value]);
+        if (!selectedItem) return;
+        setSearchValue(selectedItem?.label ?? "");
+    }, [selectedItem]);
 
     const handleFocus = () => {
         setHasFocus(true);
     };
 
-    const handleSelect: DropdownInputProps<T>["onSelect"] = (e, automated) => {
-        onSelect(e, automated);
-        if (!automated) inputRef.current?.blur();
-        setSearchValue(selectedItem?.label ?? value ?? "");
+    const handleSelect: DropdownInputProps<T>["onSelect"] = (e) => {
+        onSelect(e);
+        if (selectBehaviour === "blurAndSelect") {
+            inputRef.current?.blur();
+        }
     };
 
     const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
-        onChangeText?.(e.nativeEvent.text.trim());
-
+        const lowerSearchValue = searchValue.toLowerCase();
         const existingItem = items.find(
-            (item) => item.label.toLowerCase() === searchValue.toLowerCase(),
+            (item) => item.label.toLowerCase() === lowerSearchValue,
         );
         if (existingItem) {
-            handleSelect?.(existingItem, true);
+            onSelect(existingItem);
         }
         setHasFocus(false);
         onBlur?.(e);
@@ -119,9 +121,8 @@ export const DropdownInput = <T,>({
     const handleChangeText = (text: string) => {
         setSearchValue(text);
         onChangeText?.(text);
-
-        if (!ValidateString(text)) {
-            handleSelect?.(undefined, true);
+        if (selectedItem) {
+            onSelect(undefined);
         }
     };
 
@@ -129,13 +130,23 @@ export const DropdownInput = <T,>({
         const search = searchValue.toLowerCase();
 
         return items
-            .filter(
-                ({ label, description }) =>
-                    label.toLowerCase().includes(search) ||
-                    description?.toLowerCase().includes(search),
-            )
+            .filter((item) => {
+                const inSearch =
+                    item.label.toLowerCase().includes(search) ||
+                    item.description?.toLowerCase().includes(search);
+
+                if (selectedItem && "id" in item && "id" in selectedItem) {
+                    if (item.id === selectedItem.id) {
+                        return false; // Exclude the currently selected item
+                    }
+                } else if (item.value === selectedItem?.value) {
+                    return false; // Exclude the currently selected item
+                }
+
+                return inSearch;
+            })
             .slice(0, maxSuggestionCount);
-    }, [items, maxSuggestionCount, searchValue]);
+    }, [items, maxSuggestionCount, searchValue, selectedItem]);
 
     const showDropdownPanel =
         hasFocus &&
