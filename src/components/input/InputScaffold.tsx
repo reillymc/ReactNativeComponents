@@ -96,6 +96,7 @@ const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
             flexDirection: "row",
+            flexGrow: 1,
             flexBasis: 1,
         },
         innerContainer: {

@@ -138,10 +138,10 @@ const createStyles = (
         },
         avatar: {
             marginLeft: listItem.internalSpacing,
-            marginRight: listItem.internalSpacing / 2,
+            marginRight: listItem.spacingMargin,
         },
         alert: {
-            marginLeft: listItem.internalSpacing / 2,
+            marginLeft: listItem.spacingMargin,
             marginRight: listItem.internalSpacing,
         },
         contentContainer: {
@@ -149,6 +149,7 @@ const createStyles = (
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
+            width: "100%",
             paddingVertical: listItem.internalSpacing,
             paddingLeft: avatar ? 0 : listItem.internalSpacing,
             paddingRight: listItem.internalSpacing,

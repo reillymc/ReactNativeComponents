@@ -161,8 +161,10 @@ export const createDefaultStyles: CreateStyles = ({
     };
 
     const buttonBase: ButtonBaseStyles = {
-        height: 40,
-        width: "100%",
+        height: 42,
+        width: {
+            medium: "50%",
+        },
         borderRadius: border.radius.regular,
         paddingHorizontal: spacing.medium,
         paddingVertical: spacing.small,
@@ -176,14 +178,6 @@ export const createDefaultStyles: CreateStyles = ({
     const button: ButtonStyles = {
         container: {
             borderRadius: buttonBase.borderRadius,
-            height: {
-                large: 42,
-                medium: 42,
-            },
-            width: {
-                medium: "50%",
-                large: "100%",
-            },
             color: {
                 secondary: {
                     enabled: color.textOnPrimary,

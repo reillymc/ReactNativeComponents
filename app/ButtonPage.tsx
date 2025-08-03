@@ -6,7 +6,7 @@ import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 export const defaultProps: ButtonProps = {
     label: "Secondary Button",
     variant: "secondary",
-    size: "medium",
+    width: "auto",
     onPress: () => null,
 };
 
@@ -29,13 +29,12 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
         type: "boolean",
         label: "Disabled",
     },
-    size: {
+    width: {
         type: "enum",
-        label: "Size",
-        default: "Regular",
+        label: "Width",
         values: [
+            { label: "Auto", value: "auto" },
             { label: "Medium", value: "medium" },
-            { label: "Large", value: "large" },
         ],
     },
     onPress: {

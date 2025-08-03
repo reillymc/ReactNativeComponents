@@ -14,8 +14,6 @@ export type ButtonVariant = "primary" | "secondary" | "destructive";
 
 export type ButtonStyles = {
     container: {
-        height: Record<ButtonSize, ButtonBaseStyles["height"]>;
-        width: Record<ButtonSize, ButtonBaseStyles["width"]>;
         borderRadius: ButtonBaseStyles["borderRadius"];
         color: Record<ButtonVariant, ButtonBaseStyles["backgroundColor"]>;
     };
@@ -25,8 +23,10 @@ export type ButtonStyles = {
 };
 
 export interface ButtonProps
-    extends Pick<ButtonBaseProps, "onPress" | "disabled" | "containerStyle"> {
-    size?: ButtonSize;
+    extends Pick<
+        ButtonBaseProps,
+        "onPress" | "disabled" | "width" | "containerStyle"
+    > {
     variant?: ButtonVariant;
     label: string;
     style?: DeepPartial<ButtonStyles>;
@@ -35,11 +35,10 @@ export interface ButtonProps
 export const Button: FC<ButtonProps> = ({
     label,
     variant = "secondary",
-    size = "large",
     disabled: disabledProp,
     style,
-    containerStyle,
     onPress,
+    ...props
 }) => {
     const disabled = disabledProp || !onPress;
 
@@ -49,15 +48,13 @@ export const Button: FC<ButtonProps> = ({
 
     return (
         <ButtonBase
+            {...props}
             style={{
                 borderRadius: button.container.borderRadius,
                 backgroundColor: button.container.color[variant],
-                height: button.container.height[size],
-                width: button.container.width[size],
             }}
             onPress={onPress}
             disabled={disabled}
-            containerStyle={containerStyle}
         >
             {(pressableState) => (
                 <InteractiveText

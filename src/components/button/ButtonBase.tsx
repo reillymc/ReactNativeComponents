@@ -1,5 +1,10 @@
 import type { FC } from "react";
-import { type ColorValue, type DimensionValue, StyleSheet } from "react-native";
+import {
+    type ColorValue,
+    type DimensionValue,
+    StyleSheet,
+    View,
+} from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
@@ -9,7 +14,9 @@ export type ButtonState = "enabled" | "disabled" | "pressed";
 
 export type ButtonBaseStyles = {
     height: DimensionValue;
-    width: DimensionValue;
+    width: {
+        medium: DimensionValue;
+    };
     paddingHorizontal: number;
     paddingVertical: number;
     borderRadius: number | `${number}%`;
@@ -21,12 +28,14 @@ export interface ButtonBaseProps
         ActionBaseProps,
         "children" | "disabled" | "onPress" | "containerStyle"
     > {
+    width?: "auto" | "medium";
     style?: DeepPartial<ButtonBaseStyles>;
 }
 
 export const ButtonBase: FC<ButtonBaseProps> = ({
     containerStyle,
     disabled: disabledProp,
+    width = "auto",
     style,
     children,
     onPress,
@@ -36,7 +45,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
     const [styles, { buttonBase }] = useThemedStylesWithOverride(
         createStyles,
         { buttonBase: style },
-        { disabled },
+        { disabled, width },
     );
 
     return (
@@ -44,7 +53,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
             onPress={onPress}
             disabled={disabled}
             containerStyle={(pressableState) => [
-                styles.button,
+                styles.buttonBase,
                 pressableState.pressed && {
                     backgroundColor: buttonBase.backgroundColor.pressed,
                 },
@@ -53,26 +62,37 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
                     : containerStyle,
             ]}
         >
-            {children}
+            {(pressableState) => (
+                <View style={styles.innerContainer}>
+                    {typeof children === "function"
+                        ? children(pressableState)
+                        : children}
+                </View>
+            )}
         </ActionBase>
     );
 };
 
 const createStyles = (
     { styles: { buttonBase } }: ThemedStyles,
-    { disabled }: Required<Pick<ButtonBaseProps, "disabled">>,
+    { disabled, width }: Required<Pick<ButtonBaseProps, "disabled" | "width">>,
 ) => {
     const styles = StyleSheet.create({
-        button: {
+        buttonBase: {
+            flexDirection: "row",
             justifyContent: "center",
-            alignItems: "center",
             borderRadius: buttonBase.borderRadius,
             minHeight: buttonBase.height,
-            minWidth: buttonBase.width,
+            minWidth: width === "medium" ? buttonBase.width.medium : undefined,
             backgroundColor:
                 buttonBase.backgroundColor[disabled ? "disabled" : "enabled"],
             paddingHorizontal: buttonBase.paddingHorizontal,
             paddingVertical: buttonBase.paddingVertical,
+        },
+        innerContainer: {
+            flex: width === "auto" ? 1 : undefined,
+            justifyContent: "center",
+            alignItems: "center",
         },
     });
     return styles;
