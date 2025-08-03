@@ -40,7 +40,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
 
     return (
         <Swipeable
-            hitSlop={{ left: -80 }}
+            hitSlop={{ left: -20 }}
             ref={swipeableRef}
             renderRightActions={renderRightActions}
             enableTrackpadTwoFingerGesture

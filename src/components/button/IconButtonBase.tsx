@@ -1,22 +1,19 @@
-import type { DimensionValue } from "react-native";
+import { type DimensionValue, StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { ActionBase } from "../action";
 import {
     InteractiveIcon,
     type InteractiveIconProps,
     type InteractiveIconStyles,
 } from "../icon";
-import {
-    ButtonBase,
-    type ButtonBaseProps,
-    type ButtonBaseStyles,
-} from "./ButtonBase";
+import type { ButtonBaseProps, ButtonBaseStyles } from "./ButtonBase";
 
 export type IconButtonBaseStyles = {
     container: {
         size: DimensionValue;
-        padding: ButtonBaseStyles["padding"];
+        padding: number;
         borderRadius: ButtonBaseStyles["borderRadius"];
         backgroundColor: ButtonBaseStyles["backgroundColor"];
     };
@@ -40,22 +37,22 @@ export const IconButtonBase = <G extends string, Fn extends string>({
 }: IconButtonBaseProps<G, Fn>) => {
     const disabled = disabledProp || !onPress;
 
-    const { iconButtonBase } = useStylesWithOverride({
-        iconButtonBase: style,
-    });
+    const [styles, { iconButtonBase }] = useThemedStylesWithOverride(
+        createStyles,
+        { iconButtonBase: style },
+        { disabled },
+    );
 
     return (
-        <ButtonBase
-            style={{
-                height: iconButtonBase.container.size,
-                width: iconButtonBase.container.size,
-                padding: iconButtonBase.container.padding,
-                borderRadius: iconButtonBase.container.borderRadius,
-                backgroundColor: iconButtonBase.container.backgroundColor,
-            }}
+        <ActionBase
             disabled={disabled}
             onPress={onPress}
-            containerStyle={containerStyle}
+            containerStyle={(pressableState) => [
+                styles.iconButtonBase,
+                typeof containerStyle === "function"
+                    ? containerStyle(pressableState)
+                    : containerStyle,
+            ]}
         >
             {(pressableState) => (
                 <InteractiveIcon
@@ -66,8 +63,27 @@ export const IconButtonBase = <G extends string, Fn extends string>({
                     style={iconButtonBase.icon}
                 />
             )}
-        </ButtonBase>
+        </ActionBase>
     );
 };
 
-IconButtonBase.displayName = "IconButtonBase";
+const createStyles = (
+    { styles: { iconButtonBase } }: ThemedStyles,
+    { disabled }: Required<Pick<IconButtonBaseProps<"", "">, "disabled">>,
+) => {
+    const styles = StyleSheet.create({
+        iconButtonBase: {
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: iconButtonBase.container.borderRadius,
+            minHeight: iconButtonBase.container.size,
+            minWidth: iconButtonBase.container.size,
+            backgroundColor:
+                iconButtonBase.container.backgroundColor[
+                    disabled ? "disabled" : "enabled"
+                ],
+            padding: iconButtonBase.container.padding,
+        },
+    });
+    return styles;
+};

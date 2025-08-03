@@ -164,7 +164,8 @@ export const createDefaultStyles: CreateStyles = ({
         height: 40,
         width: "100%",
         borderRadius: border.radius.regular,
-        padding: spacing.medium,
+        paddingHorizontal: spacing.medium,
+        paddingVertical: spacing.small,
         backgroundColor: {
             enabled: color.primary,
             pressed: color.primaryLight,
@@ -176,11 +177,11 @@ export const createDefaultStyles: CreateStyles = ({
         container: {
             borderRadius: buttonBase.borderRadius,
             height: {
-                large: 48,
-                medium: 40,
+                large: 42,
+                medium: 42,
             },
             width: {
-                medium: 160,
+                medium: "50%",
                 large: "100%",
             },
             color: {

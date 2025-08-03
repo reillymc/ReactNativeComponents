@@ -22,10 +22,20 @@ const defaultProps: ListItemProps = {
                 onPress={() => null}
                 iconSet={AntDesign}
                 iconName="API"
+                variant="primary"
             />
         </ListItemAvatar>
     ),
-    alert: undefined,
+    alert: (
+        <ListItemAlert>
+            <IconAction
+                onPress={() => null}
+                iconSet={AntDesign}
+                iconName="API"
+                variant="primary"
+            />
+        </ListItemAlert>
+    ),
     contentRows: [
         <ListItemRow
             key={1}

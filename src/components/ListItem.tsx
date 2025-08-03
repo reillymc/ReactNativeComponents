@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from "react";
+import type { FC, ReactElement, ReactNode } from "react";
 import {
     Pressable,
     type StyleProp,
@@ -130,9 +130,9 @@ const createStyles = (
         },
         innerContainer: {
             flexDirection: "row",
+            flexShrink: 1,
         },
         avatarContainer: {
-            display: "flex",
             alignItems: "center",
             justifyContent: "center",
         },
@@ -145,6 +145,7 @@ const createStyles = (
             marginRight: listItem.internalSpacing,
         },
         contentContainer: {
+            flexShrink: 1,
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
@@ -157,6 +158,7 @@ const createStyles = (
         },
         contentItem: {
             flexDirection: "row",
+            flexShrink: 1,
         },
         footer: {
             display: "flex",
@@ -169,17 +171,18 @@ const createStyles = (
 };
 
 export interface ListItemRowProps {
-    contentItems?: Array<ReactNode> | ReactNode;
+    contentItems?: Array<ReactElement> | ReactElement;
 }
 
 export const ListItemRow: FC<ListItemRowProps> = ({ contentItems }) => {
     const styles = useThemedStyles(createStyles, {});
 
     const items = Array.isArray(contentItems) ? contentItems : [contentItems];
+
     return (
         <View style={styles.contentItem}>
             {items.map((item, index) => (
-                <View key={index} style={styles.contentItem}>
+                <View key={item?.key} style={styles.contentItem}>
                     {item}
                     {index < items.length - 1 && (
                         <Text style={styles.spacer}>·</Text>

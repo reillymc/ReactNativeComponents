@@ -10,7 +10,8 @@ export type ButtonState = "enabled" | "disabled" | "pressed";
 export type ButtonBaseStyles = {
     height: DimensionValue;
     width: DimensionValue;
-    padding: number;
+    paddingHorizontal: number;
+    paddingVertical: number;
     borderRadius: number | `${number}%`;
     backgroundColor: Record<ButtonState, ColorValue>;
 };
@@ -70,7 +71,8 @@ const createStyles = (
             minWidth: buttonBase.width,
             backgroundColor:
                 buttonBase.backgroundColor[disabled ? "disabled" : "enabled"],
-            padding: buttonBase.padding,
+            paddingHorizontal: buttonBase.paddingHorizontal,
+            paddingVertical: buttonBase.paddingVertical,
         },
     });
     return styles;

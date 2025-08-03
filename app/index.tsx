@@ -123,17 +123,19 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Counter Input",
                 href: "/CounterInputPage",
-                component: <CounterInput placeholder="Counter Input" />,
+                component: <CounterInput placeholder="0" />,
             },
             {
                 name: "Number Input",
                 href: "/NumberInputPage",
-                component: <NumberInput placeholder="Number Input" />,
+                component: <NumberInput placeholder="0" />,
             },
             {
                 name: "Time Input",
                 href: "/TimeInputPage",
-                component: <TimeInput />,
+                component: (
+                    <TimeInput hoursPlaceholder="0" minutesPlaceholder="0" />
+                ),
             },
             {
                 name: "Selection Input",
@@ -143,6 +145,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
                         label="Selection Input"
                         selectionMode="single"
                         placeholder="Selection Input"
+                        hideLabel
                     />
                 ),
             },
@@ -253,14 +256,14 @@ const ComponentListScreen: React.FC = () => {
                             onPress={() => router.push(href)}
                             alert={
                                 component && (
-                                    <View style={{ flexDirection: "row" }}>
-                                        <ListItemAlert>
+                                    <ListItemAlert>
+                                        <View style={styles.listItemDisplay}>
                                             {React.cloneElement(component, {
                                                 ...(component.props as any),
                                                 variant,
                                             })}
-                                        </ListItemAlert>
-                                    </View>
+                                        </View>
+                                    </ListItemAlert>
                                 )
                             }
                         />
@@ -292,6 +295,11 @@ const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
             marginTop: spacing.small,
             marginBottom: spacing.small,
             marginLeft: spacing.medium,
+        },
+        listItemDisplay: {
+            width: 150,
+            alignItems: "flex-end",
+            paddingVertical: 8,
         },
     });
 
