@@ -6,7 +6,7 @@ import type {
 } from "react-native";
 
 import { useForwardedRef } from "../../hooks";
-import type { ValueItem } from "../../types";
+import type { ValueItem, ValueItemComplex, ValueItemSimple } from "../../types";
 import { FloatingContainer, type FloatingContainerProps } from "../container";
 import { Menu, MenuItem } from "../menu";
 import { InputBase, type InputBaseProps } from "./InputBase";
@@ -30,14 +30,26 @@ export type DropdownInputProps<T = string> = Pick<
     | "autoFocus"
     | "submitBehavior"
     | "disabled"
-    | "inputStyle"
+    | "variant"
 > &
     Pick<
         InputScaffoldProps,
         "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
     > & {
         items?: Array<ValueItem<T>>;
-        selectedItem?: ValueItem<T>;
+
+        /**
+         * The currently selected item.
+         * If not provided, the input will be in an unselected state.
+         */
+        selectedValue?: T extends string | number
+            ? ValueItemSimple<T>["value"]
+            : ValueItemComplex<T>["id"];
+
+        /**
+         * The current input text, should be set when no item is selected.
+         */
+        textValue?: string;
 
         /**
          * Defines the behaviour when an item is selected.
@@ -70,7 +82,8 @@ export type DropdownInputProps<T = string> = Pick<
 
 export const DropdownInput = <T,>({
     items = [],
-    selectedItem,
+    selectedValue,
+    textValue,
     minimumSearchLength = 1,
     maxSuggestionCount = 5,
     selectBehaviour = "blurAndSelect",
@@ -86,15 +99,34 @@ export const DropdownInput = <T,>({
     containerStyle,
     ...props
 }: DropdownInputProps<T>) => {
-    const [searchValue, setSearchValue] = useState(selectedItem?.label ?? "");
+    const [searchValue, setSearchValue] = useState(textValue ?? "");
     const [hasFocus, setHasFocus] = useState(false);
 
     const inputRef = useForwardedRef(ref);
 
     useEffect(() => {
-        if (!selectedItem) return;
-        setSearchValue(selectedItem?.label ?? "");
-    }, [selectedItem]);
+        if (!selectedValue) {
+            setSearchValue("");
+            return;
+        }
+
+        const existingItem = items.find((item) => {
+            if ("id" in item) {
+                return item.id === selectedValue;
+            }
+            return item.value === selectedValue;
+        }) as ValueItem<T> | undefined;
+
+        if (!existingItem) return;
+
+        setSearchValue(existingItem?.label);
+    }, [selectedValue, items]);
+
+    useEffect(() => {
+        if (!textValue) return;
+
+        setSearchValue(textValue);
+    }, [textValue]);
 
     const handleFocus = () => {
         setHasFocus(true);
@@ -102,6 +134,8 @@ export const DropdownInput = <T,>({
 
     const handleSelect: DropdownInputProps<T>["onSelect"] = (e) => {
         onSelect(e);
+        setSearchValue("");
+
         if (selectBehaviour === "blurAndSelect") {
             inputRef.current?.blur();
         }
@@ -122,7 +156,7 @@ export const DropdownInput = <T,>({
     const handleChangeText = (text: string) => {
         setSearchValue(text);
         onChangeText?.(text);
-        if (selectedItem) {
+        if (selectedValue) {
             onSelect(undefined);
         }
     };
@@ -133,11 +167,14 @@ export const DropdownInput = <T,>({
         return items
             .filter((item) => {
                 if (
-                    selectedItem &&
+                    selectedValue &&
                     "id" in item &&
-                    "id" in selectedItem &&
-                    item.id === selectedItem.id
+                    item.id === selectedValue
                 ) {
+                    return false; // Exclude the currently selected item
+                }
+
+                if (selectedValue && item.value === selectedValue) {
                     return false; // Exclude the currently selected item
                 }
 
@@ -152,7 +189,7 @@ export const DropdownInput = <T,>({
                 return inSearch;
             })
             .slice(0, maxSuggestionCount);
-    }, [items, maxSuggestionCount, searchValue, selectedItem]);
+    }, [items, maxSuggestionCount, searchValue, selectedValue]);
 
     const showDropdownPanel =
         hasFocus &&

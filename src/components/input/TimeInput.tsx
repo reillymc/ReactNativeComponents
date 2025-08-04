@@ -1,4 +1,4 @@
-import React, { type FC, useRef, useState } from "react";
+import { type FC, useRef, useState } from "react";
 import {
     Pressable,
     type TextInput as RnTextInput,
@@ -19,11 +19,11 @@ export type TimeInputValue = { hours: string; minutes: string };
 export interface TimeInputProps
     extends Pick<
             NumberInputBaseProps,
-            "disabled" | "onSubmitEditing" | "clearButtonMode"
+            "disabled" | "onSubmitEditing" | "clearButtonMode" | "variant"
         >,
         Pick<
             InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError"
+            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
         > {
     value?: TimeInputValue;
 
@@ -35,18 +35,20 @@ export interface TimeInputProps
 }
 
 export const TimeInput: FC<TimeInputProps> = ({
-    disabled,
+    disabled: disabledProp,
     clearButtonMode,
     hoursPlaceholder,
     minutesPlaceholder,
+    variant = "regular",
     value = { hours: "", minutes: "" },
     onChange,
     onSubmitEditing,
     ...baseProps
 }) => {
+    const disabled = disabledProp || !onChange;
     const hoursRef = useRef<RnTextInput>(null);
     const minutesRef = useRef<RnTextInput>(null);
-    const styles = useThemedStyles(createStyles, { value, disabled });
+    const styles = useThemedStyles(createStyles, { variant, disabled });
 
     const [isFocused, setIsFocused] = useState(false);
 
@@ -55,6 +57,7 @@ export const TimeInput: FC<TimeInputProps> = ({
             <View style={styles.container}>
                 <InputAction
                     iconName="clock"
+                    variant={variant}
                     iconSet={Octicons}
                     disabled={disabled}
                 />
@@ -65,6 +68,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
                     value={value?.hours}
+                    variant={variant}
                     keyboardType="number-pad"
                     returnKeyLabel="next"
                     returnKeyType="next"
@@ -92,6 +96,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     value={value.minutes}
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
+                    variant={variant}
                     keyboardType="number-pad"
                     inputStyle={styles.input}
                     onChangeText={(text) => {
@@ -132,6 +137,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     selectionColor="transparent"
                     focusable={false}
                     autoComplete="off"
+                    variant={variant}
                     caretHidden
                     contextMenuHidden
                     disabled={disabled}
@@ -146,7 +152,10 @@ export const TimeInput: FC<TimeInputProps> = ({
 
 const createStyles = (
     { styles: { inputBase } }: ThemedStyles,
-    { disabled }: Partial<TimeInputProps>,
+    {
+        disabled,
+        variant,
+    }: Required<Pick<TimeInputProps, "disabled" | "variant">>,
 ) =>
     StyleSheet.create({
         container: {
@@ -168,7 +177,7 @@ const createStyles = (
             marginLeft: inputBase.container.padding,
         },
         timeLabel: {
-            height: inputBase.container.height,
+            height: inputBase.container.height[variant],
             justifyContent: "center",
         },
     });

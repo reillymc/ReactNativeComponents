@@ -1,4 +1,4 @@
-import React, { type FC, type Ref, useCallback } from "react";
+import { type FC, type Ref, useCallback } from "react";
 import {
     type TextInput as DefaultTextInput,
     StyleSheet,
@@ -9,9 +9,8 @@ import { Octicons } from "@expo/vector-icons";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
-import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
-import { NumberInputBase } from "./NumberInputBase";
+import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type NumberValue = { representation: "number"; value: string };
 export type RangeValue = { representation: "range"; value: [string, string] };
@@ -24,14 +23,18 @@ export type NumberInputValue = NumberValue | FractionValue | RangeValue;
 
 export interface NumberInputProps
     extends Pick<
-            InputBaseProps,
+            NumberInputBaseProps,
             | "disabled"
             | "placeholder"
             | "maxLength"
             | "onSubmitEditing"
             | "clearButtonMode"
+            | "variant"
         >,
-        Pick<InputScaffoldProps, "label" | "mandatory"> {
+        Pick<
+            InputScaffoldProps,
+            "label" | "mandatory" | "helpText" | "containerStyle"
+        > {
     keyboardType?: "decimal-pad" | "number-pad";
 
     enabledRepresentations?: ("number" | "fraction" | "range")[];
@@ -54,6 +57,7 @@ export const NumberInput: FC<NumberInputProps> = ({
     placeholder2,
     maxLength,
     value = { representation: "number", value: "" },
+    variant = "regular",
     onChange,
     onSubmitEditing,
     ref,
@@ -168,6 +172,7 @@ export const NumberInput: FC<NumberInputProps> = ({
             <View style={styles.container}>
                 <InputAction
                     disabled={disabled}
+                    variant={variant}
                     iconName={icon}
                     iconSet={Octicons}
                     onPress={
@@ -179,6 +184,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                 <NumberInputBase
                     ref={ref}
                     disabled={disabled}
+                    variant={variant}
                     placeholder={
                         value.representation !== "range"
                             ? placeholder
@@ -207,6 +213,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                 {value.representation === "fraction" && (
                     <NumberInputBase
                         disabled={disabled}
+                        variant={variant}
                         placeholder={placeholder2}
                         value={value.value?.[1]}
                         maxLength={maxLength}
@@ -237,6 +244,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                         </View>
                         <NumberInputBase
                             disabled={disabled}
+                            variant={variant}
                             placeholder={placeholder2}
                             value={
                                 value.representation === "fraction"

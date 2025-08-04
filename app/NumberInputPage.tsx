@@ -3,16 +3,13 @@ import {
     NumberInput,
     type NumberInputProps,
     type NumberInputValue,
-    Text,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { CommonInputProps } from "../helpers";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
-    placeholder: {
-        type: "string",
-        label: "Placeholder text",
-    },
+    ...CommonInputProps,
     placeholder2: {
         type: "string",
         label: "Placeholder 2 text",
@@ -41,28 +38,6 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
                 value: ["fraction", "range"],
             },
             { id: "all", label: "All", value: ["number", "fraction", "range"] },
-        ],
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    mandatory: {
-        type: "boolean",
-        label: "Mandatory",
-    },
-    label: {
-        type: "enum",
-        label: "Label",
-        default: "None",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: "Example label" },
-            {
-                id: "TextComponent",
-                label: "Text Component",
-                value: <Text variant="label">Example component label</Text>,
-            },
         ],
     },
     keyboardType: {

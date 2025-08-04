@@ -5,28 +5,10 @@ import {
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { CommonInputProps } from "../helpers";
 
 const propDefinitions: PropDefinitions<TextInputProps> = {
-    placeholder: {
-        type: "string",
-        label: "Placeholder text",
-    },
-    mandatory: {
-        type: "boolean",
-        label: "Mandatory",
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    label: {
-        type: "string",
-        label: "Label",
-    },
-    helpText: {
-        type: "string",
-        label: "Help text",
-    },
+    ...CommonInputProps,
     clearButtonMode: {
         type: "enum",
         label: "Clear button mode",

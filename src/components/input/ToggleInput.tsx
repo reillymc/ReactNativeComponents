@@ -1,6 +1,5 @@
-import type React from "react";
 import type { FC, SetStateAction } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -8,14 +7,14 @@ import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
 import { Text } from "../text";
+import type { InputBaseProps, InputVariant } from "./InputBase";
 import type { InputScaffoldProps } from "./InputScaffold";
 
-type ToggleSize = "small" | "medium";
 type ToggleVariant = "primary" | "secondary";
 
 export type ToggleInputStyles = {
     indicator: {
-        size: { [Size in ToggleSize]: number };
+        size: { [Size in InputVariant]: number };
         color: {
             deselected: InteractiveIconStyles["color"];
             selected: Record<ToggleVariant, InteractiveIconStyles["color"]>;
@@ -26,14 +25,12 @@ export type ToggleInputStyles = {
     };
 };
 
-export interface ToggleInputProps extends Pick<InputScaffoldProps, "helpText"> {
-    label?: string;
-    disabled?: boolean;
+export interface ToggleInputProps
+    extends Pick<InputScaffoldProps, "helpText" | "label" | "containerStyle">,
+        Pick<InputBaseProps, "variant" | "disabled"> {
     value?: boolean;
     iconVariant?: "check" | "dot";
-    variant?: ToggleVariant;
-    size?: ToggleSize;
-    containerStyle?: StyleProp<ViewStyle>;
+    toggleVariant?: ToggleVariant;
     styles?: DeepPartial<ToggleInputStyles>;
     onChange: (value: boolean) => void | null | SetStateAction<boolean>;
 }
@@ -43,9 +40,9 @@ export const ToggleInput: FC<ToggleInputProps> = ({
     helpText,
     value = false,
     iconVariant = "dot",
-    variant = "primary",
-    size = "medium",
+    toggleVariant = "primary",
     containerStyle,
+    variant = "regular",
     disabled: disabledProp,
     styles: styleOverrides,
     onChange,
@@ -55,7 +52,7 @@ export const ToggleInput: FC<ToggleInputProps> = ({
     const [styles, { toggleInput }] = useThemedStylesWithOverride(
         createStyles,
         { toggleInput: styleOverrides },
-        { size },
+        { variant },
     );
 
     return (
@@ -75,10 +72,12 @@ export const ToggleInput: FC<ToggleInputProps> = ({
                                         value ? "check-circle-fill" : "circle"
                                     }
                                     style={{
-                                        size: toggleInput.indicator.size[size],
+                                        size: toggleInput.indicator.size[
+                                            variant
+                                        ],
                                         color: value
                                             ? toggleInput.indicator.color
-                                                  .selected[variant]
+                                                  .selected[toggleVariant]
                                             : toggleInput.indicator.color
                                                   .deselected,
                                     }}
@@ -92,11 +91,11 @@ export const ToggleInput: FC<ToggleInputProps> = ({
                                         iconName="circle"
                                         style={{
                                             size: toggleInput.indicator.size[
-                                                size
+                                                variant
                                             ],
                                             color: value
                                                 ? toggleInput.indicator.color
-                                                      .selected[variant]
+                                                      .selected[toggleVariant]
                                                 : toggleInput.indicator.color
                                                       .deselected,
                                         }}
@@ -110,10 +109,10 @@ export const ToggleInput: FC<ToggleInputProps> = ({
                                                 iconName="dot-fill"
                                                 style={{
                                                     size: toggleInput.indicator
-                                                        .size[size],
+                                                        .size[variant],
                                                     color: toggleInput.indicator
                                                         .color.selected[
-                                                        variant
+                                                        toggleVariant
                                                     ],
                                                 }}
                                                 disabled={disabled}
@@ -149,7 +148,7 @@ ToggleInput.displayName = "ToggleInput";
 
 const createStyles = (
     { styles: { toggleInput, inputScaffold } }: ThemedStyles,
-    { size = "medium" }: Partial<ToggleInputProps>,
+    { variant }: Required<Pick<ToggleInputProps, "variant">>,
 ) => {
     const styles = StyleSheet.create({
         container: {
@@ -161,8 +160,8 @@ const createStyles = (
             gap: toggleInput.label.gap,
         },
         iconContainer: {
-            width: toggleInput.indicator.size[size],
-            height: toggleInput.indicator.size[size],
+            width: toggleInput.indicator.size[variant],
+            height: toggleInput.indicator.size[variant],
         },
         icon: {
             position: "absolute",
@@ -170,7 +169,7 @@ const createStyles = (
         },
         helpText: {
             marginLeft:
-                toggleInput.indicator.size[size] + toggleInput.label.gap,
+                toggleInput.indicator.size[variant] + toggleInput.label.gap,
             marginTop: inputScaffold.gap,
         },
     });

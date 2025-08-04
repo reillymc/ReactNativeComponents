@@ -8,10 +8,10 @@ import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export interface CounterInputProps
-    extends Omit<NumberInputBaseProps, "style">,
+    extends Omit<NumberInputBaseProps, "style" | "inputStyle">,
         Pick<
             InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError"
+            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
         > {
     disableKeyboardInput?: boolean;
 }
@@ -24,6 +24,8 @@ export const CounterInput: FC<CounterInputProps> = ({
     hasError,
     disableKeyboardInput,
     disabled = false,
+    variant = "regular",
+    containerStyle,
     ...props
 }) => {
     const styles = useThemedStyles(createStyles, { disabled });
@@ -36,11 +38,13 @@ export const CounterInput: FC<CounterInputProps> = ({
             helpText={helpText}
             mandatory={mandatory}
             hasError={hasError}
+            containerStyle={containerStyle}
         >
             <View style={styles.container}>
                 <InputAction
                     iconSet={AntDesign} // TODO: decouple
                     iconName="minus"
+                    variant={variant}
                     disabled={disabled}
                     onPress={() =>
                         onChangeText?.(
@@ -50,6 +54,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                 />
                 <NumberInputBase
                     {...props}
+                    variant={variant}
                     onChangeText={(newValue) => {
                         if (!newValue) {
                             onChangeText?.("");
@@ -72,6 +77,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     iconSet={AntDesign}
                     iconName="plus"
                     disabled={disabled}
+                    variant={variant}
                     onPress={() =>
                         onChangeText?.(
                             Math.min(

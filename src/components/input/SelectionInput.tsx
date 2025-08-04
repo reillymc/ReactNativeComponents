@@ -36,7 +36,10 @@ interface MultiSelection<T> {
 export type SelectionProps<T = string> = Pick<InputBaseProps, "placeholder"> &
     (SingleSelection<T> | MultiSelection<T>) & { items?: Array<ValueItem<T>> };
 
-export type SelectionInputProps<T = string> = Pick<InputBaseProps, "disabled"> &
+export type SelectionInputProps<T = string> = Pick<
+    InputBaseProps,
+    "disabled" | "variant"
+> &
     Pick<
         InputScaffoldProps,
         "helpText" | "hasError" | "mandatory" | "containerStyle" | "label"
@@ -50,19 +53,21 @@ export type SelectionInputProps<T = string> = Pick<InputBaseProps, "disabled"> &
 
 export const SelectionInput = <T,>({
     label,
-    disabled,
+    disabled: disabledProp,
     placeholder,
     hideLabel,
     selectionMode,
     selection,
     style,
+    variant = "regular",
     onAdd,
     ...props
 }: SelectionInputProps<T>) => {
+    const disabled = disabledProp || !onAdd;
     const [styles, { selectionInput }] = useThemedStylesWithOverride(
         createStyles,
         { selectionInput: style },
-        { disabled, selectionMode },
+        { disabled, variant },
     );
 
     const hasSelection =
@@ -123,7 +128,10 @@ SelectionInput.displayName = "SelectionInput";
 
 const createStyles = (
     { styles: { inputBase, selectionInput } }: ThemedStyles,
-    { disabled }: Partial<SelectionInputProps>,
+    {
+        disabled,
+        variant,
+    }: Required<Pick<SelectionInputProps, "disabled" | "variant">>,
 ) =>
     StyleSheet.create({
         container: {
@@ -131,7 +139,7 @@ const createStyles = (
             alignItems: "center",
             justifyContent: "center",
             borderRadius: inputBase.container.borderRadius,
-            minHeight: inputBase.container.height,
+            minHeight: inputBase.container.height[variant],
             backgroundColor:
                 inputBase.container.backgroundColor[
                     disabled ? "disabled" : "enabled"
@@ -155,8 +163,8 @@ const createStyles = (
             color: inputBase.text.placeholderColor,
         },
         iconContainer: {
-            width: inputBase.container.height,
-            height: inputBase.container.height,
+            width: inputBase.container.height[variant],
+            height: inputBase.container.height[variant],
             alignItems: "center",
             justifyContent: "center",
         },

@@ -5,17 +5,11 @@ import {
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { CommonInputProps } from "../helpers";
 
 const propDefinitions: PropDefinitions<ToggleInputProps> = {
-    label: {
-        type: "string",
-        label: "Label",
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    variant: {
+    ...CommonInputProps,
+    toggleVariant: {
         type: "enum",
         label: "Style variant",
         default: "Primary",
@@ -33,19 +27,6 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
             { label: "Dot", value: "dot" },
         ],
     },
-    size: {
-        type: "enum",
-        label: "Size",
-        default: "Regular",
-        values: [
-            { label: "Small", value: "small" },
-            { label: "Medium", value: "medium" },
-        ],
-    },
-    helpText: {
-        type: "string",
-        label: "Help text",
-    },
     onChange: {
         type: "function",
         label: "Change action",
@@ -55,7 +36,7 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
 const defaultProps: ToggleInputProps = {
     disabled: false,
     onChange: () => null,
-    variant: "primary",
+    toggleVariant: "primary",
     label: "Toggle input label",
 };
 

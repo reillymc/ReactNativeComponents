@@ -267,7 +267,10 @@ export const createDefaultStyles: CreateStyles = ({
 
     const inputBase: InputBaseStyles = {
         container: {
-            height: 48,
+            height: {
+                regular: 48,
+                compact: 36,
+            },
             borderRadius: border.radius.regular,
             padding: spacing.small,
             backgroundColor: {
@@ -395,7 +398,10 @@ export const createDefaultStyles: CreateStyles = ({
         },
         toggleInput: {
             indicator: {
-                size: icon.size,
+                size: {
+                    compact: icon.size.small,
+                    regular: icon.size.medium,
+                },
                 color: {
                     selected: action.label.color,
                     deselected: {

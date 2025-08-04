@@ -5,31 +5,13 @@ import {
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { CommonInputProps } from "../helpers";
 
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
+    ...CommonInputProps,
     onSelect: {
         type: "function",
         label: "onSelect",
-    },
-    placeholder: {
-        type: "string",
-        label: "Placeholder text",
-    },
-    mandatory: {
-        type: "boolean",
-        label: "Mandatory",
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    helpText: {
-        type: "string",
-        label: "Help text",
-    },
-    label: {
-        type: "string",
-        label: "Label",
     },
 };
 

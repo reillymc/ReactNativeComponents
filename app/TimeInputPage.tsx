@@ -6,8 +6,17 @@ import {
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    InputBasePropDefinitions,
+    InputScaffoldPropDefinitions,
+} from "../helpers";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
+    label: InputScaffoldPropDefinitions.label,
+    helpText: InputScaffoldPropDefinitions.helpText,
+    variant: InputBasePropDefinitions.variant,
+    mandatory: InputScaffoldPropDefinitions.mandatory,
+    disabled: InputBasePropDefinitions.disabled,
     hoursPlaceholder: {
         type: "string",
         label: "Hours placeholder text",
@@ -15,18 +24,6 @@ const propDefinitions: PropDefinitions<TimeInputProps> = {
     minutesPlaceholder: {
         type: "string",
         label: "Minutes placeholder 2 text",
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    mandatory: {
-        type: "boolean",
-        label: "Mandatory",
-    },
-    label: {
-        type: "string",
-        label: "Label",
     },
 };
 

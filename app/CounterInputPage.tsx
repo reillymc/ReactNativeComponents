@@ -2,51 +2,13 @@ import React from "react";
 import {
     CounterInput,
     type CounterInputProps,
-    Text,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { CommonInputProps } from "../helpers";
 
 const propDefinitions: PropDefinitions<CounterInputProps> = {
-    placeholder: {
-        type: "string",
-        label: "Placeholder text",
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    mandatory: {
-        type: "boolean",
-        label: "Mandatory",
-    },
-    label: {
-        type: "enum",
-        label: "Label",
-        default: "None",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: "Example label" },
-            {
-                id: "TextComponent",
-                label: "Text Component",
-                value: <Text variant="label">Example component label</Text>,
-            },
-        ],
-    },
-    helpText: {
-        type: "string",
-        label: "Help text",
-    },
-    keyboardType: {
-        type: "enum",
-        label: "Keyboard Type",
-        default: "Number Pad",
-        values: [
-            { label: "Number", value: "number-pad" },
-            { label: "Decimal", value: "decimal-pad" },
-        ],
-    },
+    ...CommonInputProps,
     min: {
         type: "number",
         label: "Min Value",

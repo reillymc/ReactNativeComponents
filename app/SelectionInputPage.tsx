@@ -5,24 +5,10 @@ import {
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import { CommonInputProps } from "../helpers";
 
 const propDefinitions: PropDefinitions<SelectionInputProps> = {
-    label: {
-        label: "Label",
-        type: "string",
-    },
-    placeholder: {
-        label: "Placeholder",
-        type: "string",
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    mandatory: {
-        type: "boolean",
-        label: "Mandatory",
-    },
+    ...CommonInputProps,
     selectionMode: {
         type: "enum",
         label: "Selection mode",

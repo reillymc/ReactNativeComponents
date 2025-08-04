@@ -10,10 +10,11 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 
 export type InputState = "enabled" | "disabled";
+export type InputVariant = "regular" | "compact";
 
 export interface InputBaseStyles {
     container: {
-        height: number;
+        height: Record<InputVariant, number>;
         padding: number;
         borderRadius: number;
         backgroundColor: Record<InputState, ColorValue>;
@@ -29,6 +30,7 @@ export interface InputBaseStyles {
 export interface InputBaseProps
     extends Omit<TextInputProps, "editable" | "style"> {
     disabled?: boolean;
+    variant?: InputVariant;
     style?: DeepPartial<InputBaseStyles>;
     inputStyle?: TextInputProps["style"];
     ref?: Ref<TextInput>;
@@ -37,6 +39,7 @@ export interface InputBaseProps
 export const InputBase: FC<InputBaseProps> = ({
     disabled = false,
     multiline = false,
+    variant = "regular",
     scrollEnabled,
     onChangeText,
     ref,
@@ -47,7 +50,7 @@ export const InputBase: FC<InputBaseProps> = ({
     const [styles, { inputBase }] = useThemedStylesWithOverride(
         createStyles,
         { inputBase: style },
-        { disabled, multiline },
+        { disabled, multiline, variant },
     );
 
     return (
@@ -69,12 +72,15 @@ const createStyles = (
     {
         disabled,
         multiline,
-    }: Required<Pick<InputBaseProps, "multiline" | "disabled">>,
+        variant,
+    }: Required<Pick<InputBaseProps, "multiline" | "disabled" | "variant">>,
 ) =>
     StyleSheet.create({
         input: {
-            height: multiline ? "auto" : inputBase.container.height,
-            minHeight: multiline ? inputBase.container.height : undefined,
+            height: multiline ? "auto" : inputBase.container.height[variant],
+            minHeight: multiline
+                ? inputBase.container.height[variant]
+                : undefined,
             borderRadius: inputBase.container.borderRadius,
             backgroundColor:
                 inputBase.container.backgroundColor[
