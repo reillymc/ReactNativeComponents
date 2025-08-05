@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.6.16",
+    "version": "0.7.0-beta.0",
     "description": "A collection of React Native components and resources",
     "module": "lib/index.js",
     "react-native": "lib/index.js",
@@ -40,7 +40,8 @@
     },
     "dependencies": {
         "@reillymc/es-utils": "^0.0.4",
-        "lodash.merge": "^4.6.2"
+        "lodash.merge": "^4.6.2",
+        "react-native-svg": "15.11.2"
     },
     "devDependencies": {
         "@babel/core": "^7.24.0",

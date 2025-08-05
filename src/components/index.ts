@@ -63,6 +63,8 @@ export {
     NumberInput,
     NumberInputProps,
     NumberInputValue,
+    RatingInput,
+    RatingInputProps,
     SelectionInput,
     SelectionInputProps,
     SelectionInputStyles,
@@ -84,6 +86,7 @@ export {
     MenuProps,
     MenuStyles,
 } from "./menu";
+export { getRatingIcons, Rating, RatingProps } from "./Rating";
 export {
     HighlightedText,
     HighlightedTextProps,
