@@ -23,6 +23,7 @@ export {
     NumberInputProps,
     NumberInputValue,
 } from "./NumberInput";
+export { RatingInput, RatingInputProps } from "./RatingInput";
 export {
     SelectionInput,
     SelectionInputProps,

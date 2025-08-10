@@ -23,6 +23,7 @@ import type {
     ListItemStyles,
     MenuItemStyles,
     MenuStyles,
+    RatingStyles,
     SelectionInputStyles,
     SwipeActionStyles,
     TextInputStyles,
@@ -56,6 +57,8 @@ export type Styles = {
     textInput: TextInputStyles;
     toggleInput: ToggleInputStyles;
     selectionInput: SelectionInputStyles;
+
+    rating: RatingStyles;
 
     dropdownInput: DropdownInputStyles;
     listItem: ListItemStyles;
@@ -340,6 +343,18 @@ export const createDefaultStyles: CreateStyles = ({
         borderRadius: menu.borderRadius / 2,
     };
 
+    const rating: RatingStyles = {
+        gap: spacing.tiny,
+        icon: {
+            color: {
+                empty: color.primaryLight,
+                half: color.primary,
+                full: color.primary,
+            },
+            size: icon.size.large,
+        },
+    };
+
     const styles: Styles = {
         interactiveText,
         iconBase,
@@ -362,6 +377,7 @@ export const createDefaultStyles: CreateStyles = ({
         floatingContainer,
         menu,
         menuItem,
+        rating,
 
         common: {
             action: {

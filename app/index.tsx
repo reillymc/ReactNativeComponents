@@ -21,6 +21,8 @@ import {
     ListItem,
     ListItemAlert,
     NumberInput,
+    Rating,
+    RatingInput,
     SelectionInput,
     Tag,
     Text,
@@ -160,6 +162,11 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
                 ),
             },
             {
+                name: "Rating Input",
+                href: "/RatingInputPage",
+                component: <RatingInput />,
+            },
+            {
                 name: "Toggle Input",
                 href: "/ToggleInputPage",
                 component: (
@@ -182,6 +189,11 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Collapsible Container",
                 href: "/CollapsibleContainerPage",
+            },
+            {
+                name: "Rating",
+                href: "/RatingPage",
+                component: <Rating value={3} max={5} />,
             },
         ],
     },

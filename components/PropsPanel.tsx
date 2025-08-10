@@ -136,9 +136,12 @@ export const PropsPanel = <T extends Record<string, any>>({
                             >
                                 <CounterInput
                                     label={definition.label ?? propId}
-                                    value={currentValue}
+                                    value={currentValue.toString()}
                                     onChangeText={(value) =>
-                                        onChange(propId, value)
+                                        onChange(
+                                            propId,
+                                            Number.parseInt(value, 10),
+                                        )
                                     }
                                     autoCapitalize="none"
                                 />

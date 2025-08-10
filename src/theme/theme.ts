@@ -68,7 +68,7 @@ export const DefaultTheme = {
         border: "#E2E8F0",
 
         inputBackground: "#e4d8d4",
-        inputBackgroundDisabled: "#E2E8F0",
+        inputBackgroundDisabled: "#f0e9e2ff",
         inputText: "#12263A",
 
         pressOverlay: "rgba(0, 0, 0, 0.1)",

@@ -104,12 +104,7 @@ export const DropdownInput = <T,>({
 
     const inputRef = useForwardedRef(ref);
 
-    useEffect(() => {
-        if (!selectedValue) {
-            setSearchValue("");
-            return;
-        }
-
+    const existingItemLabel = useMemo(() => {
         const existingItem = items.find((item) => {
             if ("id" in item) {
                 return item.id === selectedValue;
@@ -117,10 +112,17 @@ export const DropdownInput = <T,>({
             return item.value === selectedValue;
         }) as ValueItem<T> | undefined;
 
-        if (!existingItem) return;
+        return existingItem?.label;
+    }, [items, selectedValue]);
 
-        setSearchValue(existingItem?.label);
-    }, [selectedValue, items]);
+    useEffect(() => {
+        if (!existingItemLabel) {
+            setSearchValue("");
+            return;
+        }
+
+        setSearchValue(existingItemLabel);
+    }, [existingItemLabel]);
 
     useEffect(() => {
         if (!textValue) return;
