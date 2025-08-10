@@ -3,7 +3,7 @@ export { useKeyboardHeight } from "./useKeyboardHeight";
 export { usePersistentKeyboardHeight } from "./usePersistentKeyboardHeight";
 export { useTheme } from "./useTheme";
 export {
-    ThemedStyles,
+    type ThemedStyles,
     useStylesWithOverride,
     useThemedStyles,
     useThemedStylesWithOverride,

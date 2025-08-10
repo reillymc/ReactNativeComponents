@@ -1,14 +1,14 @@
 export {
     CollapsibleContainer,
-    CollapsibleContainerProps,
+    type CollapsibleContainerProps,
 } from "./CollapsibleContainer";
 export {
     FloatingContainer,
-    FloatingContainerProps,
-    FloatingContainerStyles,
+    type FloatingContainerProps,
+    type FloatingContainerStyles,
 } from "./FloatingContainer";
-export { FormContainer, FormContainerProps } from "./FormContainer";
+export { FormContainer, type FormContainerProps } from "./FormContainer";
 export {
     SwipeableContainer,
-    SwipeableContainerProps,
+    type SwipeableContainerProps,
 } from "./SwipeableContainer";

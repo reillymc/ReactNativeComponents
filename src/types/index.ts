@@ -1,1 +1,1 @@
-export { ValueItem, ValueItemComplex, ValueItemSimple } from "./valueItem";
+export type { ValueItem, ValueItemComplex, ValueItemSimple } from "./valueItem";

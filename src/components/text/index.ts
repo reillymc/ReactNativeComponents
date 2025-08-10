@@ -1,11 +1,12 @@
-export {
-    HighlightedText,
+export type {
     HighlightedTextProps,
     HighlightedTextStyles,
 } from "./HighlightedText";
-export {
-    InteractiveText,
+export { HighlightedText } from "./HighlightedText";
+export type {
     InteractiveTextProps,
     InteractiveTextStyles,
 } from "./InteractiveText";
-export { Text, TextProps, TextStyles } from "./Text";
+export { InteractiveText } from "./InteractiveText";
+export type { TextProps, TextStyles } from "./Text";
+export { Text } from "./Text";

@@ -1,12 +1,12 @@
-export { Action, ActionProps, ActionStyles } from "./Action";
-export { ActionBase, ActionBaseProps } from "./ActionBase";
+export { Action, type ActionProps, type ActionStyles } from "./Action";
+export { ActionBase, type ActionBaseProps } from "./ActionBase";
 export {
     IconAction,
-    IconActionProps,
-    IconActionStyles,
+    type IconActionProps,
+    type IconActionStyles,
 } from "./IconAction";
 export {
     IconActionBase,
-    IconActionBaseProps,
-    IconActionBaseStyles,
+    type IconActionBaseProps,
+    type IconActionBaseStyles,
 } from "./IconActionBase";

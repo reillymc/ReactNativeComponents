@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.7.0",
+    "version": "0.7.1",
     "description": "A collection of React Native components and resources",
     "module": "lib/index.js",
     "react-native": "lib/index.js",
@@ -71,7 +71,7 @@
         "react-native-screens": "~4.11.1",
         "react-native-web": "^0.20.0",
         "release-it": "^15.0.0",
-        "typescript": "~5.8.3"
+        "typescript": "^5.9.2"
     },
     "peerDependencies": {
         "react-native-gesture-handler": "^2.24",
