@@ -193,7 +193,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Rating",
                 href: "/RatingPage",
-                component: <Rating value={2} max={4} />,
+                component: <Rating value={3} max={5} />,
             },
         ],
     },

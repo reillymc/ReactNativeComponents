@@ -1,9 +1,10 @@
 import type { FC } from "react";
+import type { ColorValue } from "react-native";
 import Svg, { Path, Rect } from "react-native-svg";
 
 type StarIconProps = {
     size: number;
-    color: string;
+    color: ColorValue;
 };
 
 export const StarBorder: FC<StarIconProps> = ({ size, color }) => (

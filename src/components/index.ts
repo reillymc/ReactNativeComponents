@@ -86,7 +86,7 @@ export {
     MenuProps,
     MenuStyles,
 } from "./menu";
-export { getRatingIcons, Rating, RatingProps } from "./Rating";
+export { getRatingIcons, Rating, RatingProps, RatingStyles } from "./Rating";
 export {
     HighlightedText,
     HighlightedTextProps,
