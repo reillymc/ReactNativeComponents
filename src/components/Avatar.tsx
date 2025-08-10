@@ -35,7 +35,7 @@ type AvatarSize = "small" | "regular" | "large";
 
 export type AvatarStyles = {
     initialsFontFamilyWeight: string;
-    size: { [key in AvatarSize]: number };
+    size: { [Key in AvatarSize]: number };
     initialsFontSize: number;
     labelFontSize: number;
 };

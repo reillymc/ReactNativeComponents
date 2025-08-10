@@ -13,7 +13,9 @@
         "jsx": "react-native",
         "customConditions": ["react-native"],
         "skipLibCheck": true,
-        "lib": ["DOM", "ESNext"]
+        "lib": ["DOM", "ESNext"],
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true
     },
     "files": ["./src/index.ts"]
 }

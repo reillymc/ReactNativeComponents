@@ -1,5 +1,5 @@
-import React from "react";
-import { StyleProp, StyleSheet, ViewStyle } from "react-native";
+import type React from "react";
+import { type StyleProp, StyleSheet, type ViewStyle } from "react-native";
 import Animated, {
     FadeInDown,
     FadeInLeft,
@@ -19,12 +19,9 @@ export interface CollapsibleContainerProps {
     children?: React.ReactNode;
 }
 
-export const CollapsibleContainer: React.FunctionComponent<CollapsibleContainerProps> = ({
-    collapsed,
-    direction = "down",
-    style,
-    children,
-}) => {
+export const CollapsibleContainer: React.FunctionComponent<
+    CollapsibleContainerProps
+> = ({ collapsed, direction = "down", style, children }) => {
     const styles = createStyles({ collapsed });
 
     const transitionEntering = {

@@ -1,11 +1,11 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any prop definition is permitted */
 import { useMemo } from "react";
 
-import { ThemeContextDefinition } from "../providers";
+import type { ThemeContextDefinition } from "../providers";
 import { MergeStyles, type StyleOverrides } from "../theme";
 import { useTheme } from "./useTheme";
 
-export { ThemeContextDefinition as ThemedStyles };
+export type { ThemeContextDefinition as ThemedStyles };
 
 export type Generator<
     T extends Record<string, any>,

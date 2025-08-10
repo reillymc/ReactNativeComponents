@@ -1,4 +1,4 @@
-import React, { type FC, type Ref, useCallback } from "react";
+import { type FC, type Ref, useCallback } from "react";
 import type {
     NativeSyntheticEvent,
     TextInput,
@@ -7,7 +7,7 @@ import type {
 
 import { InputBase, type InputBaseProps } from "./InputBase";
 
-export type NumberInputBaseStyles = {};
+export type NumberInputBaseStyles = never;
 
 export interface NumberInputBaseProps extends InputBaseProps {
     keyboardType?: "decimal-pad" | "number-pad";

@@ -1,7 +1,7 @@
-export { Icon, IconProps, IconStyles } from "./Icon";
-export { IconBase, IconBaseProps, IconBaseStyles } from "./IconBase";
+export { Icon, type IconProps, type IconStyles } from "./Icon";
+export { IconBase, type IconBaseProps, type IconBaseStyles } from "./IconBase";
 export {
     InteractiveIcon,
-    InteractiveIconProps,
-    InteractiveIconStyles,
+    type InteractiveIconProps,
+    type InteractiveIconStyles,
 } from "./InteractiveIcon";

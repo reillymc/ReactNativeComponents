@@ -26,7 +26,6 @@ import type {
     RatingStyles,
     SelectionInputStyles,
     SwipeActionStyles,
-    TextInputStyles,
     TextStyles,
     ToastStyles,
     ToggleInputStyles,
@@ -54,7 +53,6 @@ export type Styles = {
     inputBase: InputBaseStyles;
     inputScaffold: InputScaffoldStyles;
     inputAction: InputActionStyles;
-    textInput: TextInputStyles;
     toggleInput: ToggleInputStyles;
     selectionInput: SelectionInputStyles;
 
@@ -408,7 +406,6 @@ export const createDefaultStyles: CreateStyles = ({
             },
         },
         highlightedText,
-        textInput: {},
         dropdownInput: {
             panelGap: 4,
         },

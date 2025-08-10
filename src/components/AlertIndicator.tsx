@@ -6,7 +6,7 @@ import { Text } from "./text";
 
 export type AlertVariant = "primary" | "secondary" | "destructive";
 
-export type AlertIndicatorStyles = {};
+export type AlertIndicatorStyles = never;
 
 export interface AlertIndicatorProps {
     label?: string;

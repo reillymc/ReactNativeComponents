@@ -23,7 +23,9 @@
         "skipLibCheck": true,
         "strict": true,
         "target": "esnext",
-        "noEmit": false
+        "noEmit": false,
+        "erasableSyntaxOnly": true,
+        "verbatimModuleSyntax": true
     },
     "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }
