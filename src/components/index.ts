@@ -98,14 +98,11 @@ export {
     Menu,
     MenuItem,
 } from "./menu";
-export type { RatingProps } from "./Rating";
 export {
     getRatingIcons,
-    getRatingIcons,
     Rating,
-    Rating,
-    RatingProps,
-    RatingStyles,
+    type RatingProps,
+    type RatingStyles,
 } from "./Rating";
 export type {
     HighlightedTextProps,
