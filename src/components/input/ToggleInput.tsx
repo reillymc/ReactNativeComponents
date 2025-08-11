@@ -32,7 +32,7 @@ export interface ToggleInputProps
     iconVariant?: "check" | "dot";
     toggleVariant?: ToggleVariant;
     styles?: DeepPartial<ToggleInputStyles>;
-    onChange: (value: boolean) => undefined | null | SetStateAction<boolean>;
+    onChange: (value: boolean) => void;
 }
 
 export const ToggleInput: FC<ToggleInputProps> = ({

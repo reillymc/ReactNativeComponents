@@ -86,13 +86,15 @@ const createStyles = (
             minWidth: width === "medium" ? buttonBase.width.medium : undefined,
             backgroundColor:
                 buttonBase.backgroundColor[disabled ? "disabled" : "enabled"],
-            paddingHorizontal: buttonBase.paddingHorizontal,
-            paddingVertical: buttonBase.paddingVertical,
+            flexGrow: 1,
+            flexBasis: 1,
         },
         innerContainer: {
             flex: width === "auto" ? 1 : undefined,
             justifyContent: "center",
             alignItems: "center",
+            paddingHorizontal: buttonBase.paddingHorizontal,
+            paddingVertical: buttonBase.paddingVertical,
         },
     });
     return styles;
