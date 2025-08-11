@@ -1,4 +1,9 @@
-export * from "./glyphMapValueItems";
+export {
+    glyphMapValueItems,
+    glyphMapValueItemsNullable,
+    glyphMapValueItemsNullableOcticons,
+    glyphMapValueItemsOcticons,
+} from "./glyphMapValueItems";
 export {
     CommonInputProps,
     InputBasePropDefinitions,

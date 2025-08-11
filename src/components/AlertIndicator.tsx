@@ -1,12 +1,23 @@
 import type React from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+    type ColorValue,
+    type StyleProp,
+    StyleSheet,
+    View,
+    type ViewStyle,
+} from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../hooks";
 import { Text } from "./text";
 
-export type AlertVariant = "primary" | "secondary" | "destructive";
+export type AlertVariant = "primary" | "secondary";
 
-export type AlertIndicatorStyles = never;
+export type AlertIndicatorStyles = {
+    size: number;
+    borderRadius: number;
+    color: Record<AlertVariant, ColorValue>;
+    backgroundColor: Record<AlertVariant, ColorValue>;
+};
 
 export interface AlertIndicatorProps {
     label?: string;
@@ -23,7 +34,11 @@ export const AlertIndicator: React.FC<AlertIndicatorProps> = ({
 
     return (
         <View style={[styles.container, style]}>
-            <Text numberOfLines={1} style={styles.text} variant="caption">
+            <Text
+                numberOfLines={1}
+                style={styles.text}
+                variant="bodyEmphasized"
+            >
                 {label}
             </Text>
         </View>
@@ -33,7 +48,7 @@ export const AlertIndicator: React.FC<AlertIndicatorProps> = ({
 AlertIndicator.displayName = "AlertIndicator";
 
 const createStyles = (
-    { theme: { color } }: ThemedStyles,
+    { styles: { alertIndicator } }: ThemedStyles,
     { variant = "primary" }: Partial<AlertIndicatorProps>,
 ) => {
     const styles = StyleSheet.create({
@@ -41,13 +56,13 @@ const createStyles = (
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height: 28,
-            width: 28,
-            borderRadius: 14,
-            backgroundColor: color[variant],
+            height: alertIndicator.size,
+            width: alertIndicator.size,
+            borderRadius: alertIndicator.borderRadius,
+            backgroundColor: alertIndicator.backgroundColor[variant],
         },
         text: {
-            color: color.textInverted,
+            color: alertIndicator.color[variant],
         },
     });
     return styles;

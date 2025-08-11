@@ -19,6 +19,49 @@ export type FractionValue = {
     value: [string, string, string];
 };
 
+type Representations = "number" | "fraction" | "range";
+
+const getNextMode = (
+    enabledRepresentations: Representations[],
+    current: Representations,
+) => {
+    const currentIndex = enabledRepresentations.indexOf(current);
+    const nextIndex =
+        currentIndex + 1 >= enabledRepresentations.length
+            ? 0
+            : currentIndex + 1;
+    return enabledRepresentations[nextIndex];
+};
+
+const getNextValue = (
+    nextMode: Representations,
+    { value, representation }: NumberInputValue,
+): NumberInputValue | undefined => {
+    if (nextMode === representation) return undefined;
+
+    switch (nextMode) {
+        case "number":
+            return { representation: "number", value: value?.[0] ?? "" };
+        case "fraction":
+            return {
+                representation: "fraction",
+                value: [
+                    value?.[0] ?? (typeof value === "string" ? value : ""),
+                    "",
+                    "",
+                ],
+            };
+        case "range":
+            return {
+                representation: "range",
+                value: [
+                    value?.[0] ?? (typeof value === "string" ? value : ""),
+                    "",
+                ],
+            };
+    }
+};
+
 export type NumberInputValue = NumberValue | FractionValue | RangeValue;
 
 export interface NumberInputProps
@@ -37,7 +80,7 @@ export interface NumberInputProps
         > {
     keyboardType?: "decimal-pad" | "number-pad";
 
-    enabledRepresentations?: ("number" | "fraction" | "range")[];
+    enabledRepresentations?: Representations[];
 
     value?: NumberInputValue;
 
@@ -77,65 +120,17 @@ export const NumberInput: FC<NumberInputProps> = ({
     }[value.representation];
 
     const handleChangeMode = useCallback(() => {
-        const currentIndex = enabledRepresentations.indexOf(
+        const nextMode = getNextMode(
+            enabledRepresentations,
             value.representation,
         );
-        const nextIndex =
-            currentIndex + 1 >= enabledRepresentations.length
-                ? 0
-                : currentIndex + 1;
+        if (!nextMode) return;
 
-        const nextMode = enabledRepresentations[nextIndex];
-        if (!nextMode) {
-            return;
-        }
-        if (nextMode === "number") {
-            if (value.representation === "number") {
-                return;
-            }
+        const nextValue = getNextValue(nextMode, value);
+        if (!nextValue) return;
 
-            onChange?.({ representation: nextMode, value: value.value?.[0] });
-            return;
-        }
-
-        if (nextMode === "fraction") {
-            switch (value.representation) {
-                case "number":
-                    onChange?.({
-                        representation: nextMode,
-                        value: [value.value ?? "", "", ""],
-                    });
-                    return;
-                case "fraction":
-                    return;
-                case "range":
-                    onChange?.({
-                        representation: nextMode,
-                        value: [value.value?.[0] ?? "", "", ""],
-                    });
-                    return;
-            }
-        }
-
-        if (nextMode === "range") {
-            switch (value.representation) {
-                case "number":
-                    onChange?.({
-                        representation: nextMode,
-                        value: [value.value ?? "", ""],
-                    });
-                    return;
-                case "fraction":
-                    onChange?.({
-                        representation: nextMode,
-                        value: [value.value?.[0] ?? "", ""],
-                    });
-                    return;
-                case "range":
-                    return;
-            }
-        }
-    }, [enabledRepresentations, onChange, value.representation, value.value]);
+        onChange?.(nextValue);
+    }, [enabledRepresentations, onChange, value]);
 
     const handlePrimaryInputChangeText = useCallback(
         (text: string) => {

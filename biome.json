@@ -35,7 +35,7 @@
             "!**/*.d.ts",
             "!**/.expo",
             "!**/services/**",
-            "!**/dist/**"
+            "!**/lib/**"
         ]
     },
     "formatter": {
@@ -94,7 +94,7 @@
                 "noEmptyBlockStatements": "warn"
             },
             "nursery": {
-                "noImportCycles": "on"
+                "noImportCycles": "warn"
             }
         }
     },
@@ -107,6 +107,9 @@
                         "noDefaultExport": {
                             "level": "off"
                         }
+                    },
+                    "suspicious": {
+                        "noExplicitAny": "info"
                     }
                 }
             }

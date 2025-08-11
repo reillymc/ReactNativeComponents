@@ -1,4 +1,4 @@
-import type { FC, SetStateAction } from "react";
+import type { FC } from "react";
 import { StyleSheet, View } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";

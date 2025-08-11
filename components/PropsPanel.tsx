@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noExplicitAny: any used for simple prop definition flexibility */
 import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import {
@@ -179,11 +180,11 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     onRemoveItem={(value) =>
                                         onChange(
                                             propId,
-                                            (Array.isArray(currentValue)
+                                            Array.isArray(currentValue)
                                                 ? currentValue.filter(
                                                       (x) => x !== value,
                                                   )
-                                                : undefined) as any,
+                                                : undefined,
                                         )
                                     }
                                     selection={{
@@ -235,11 +236,11 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     onRemoveItem={(value) => {
                                         onChange(
                                             propId,
-                                            (Array.isArray(currentValue)
+                                            Array.isArray(currentValue)
                                                 ? currentValue.filter(
                                                       (x) => x !== value,
                                                   )
-                                                : undefined) as any,
+                                                : undefined,
                                         );
                                         setCustomLabels((prev) => ({
                                             ...prev,

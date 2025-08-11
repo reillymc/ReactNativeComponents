@@ -14,20 +14,20 @@ export interface ToastStyles {
 }
 export interface ToastProps {
     action?: React.ReactNode;
-    style?: StyleProp<ViewStyle>;
+    containerStyle?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
 }
 
 export const Toast: React.FunctionComponent<ToastProps> = ({
     action,
-    style,
+    containerStyle,
     children,
 }) => {
     const styles = useThemedStyles(createStyles, {});
 
     return (
         <Animated.View
-            style={[styles.container, style]}
+            style={[styles.container, containerStyle]}
             entering={SlideInDown.springify().mass(0.5)}
             exiting={SlideOutDown.springify().mass(0.5)}
             layout={Layout.springify().mass(0.5)}

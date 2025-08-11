@@ -1,6 +1,6 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "description": "A collection of React Native components and resources",
     "module": "lib/index.js",
     "react-native": "lib/index.js",
@@ -12,12 +12,13 @@
     "scripts": {
         "clean": "rm -rf ./lib",
         "build": "npm run clean && tsc -p ./tsconfig.build.json",
-        "lint": "biome check",
+        "lint": "biome check --error-on-warnings",
         "prepare": "npm run build",
         "depcruise": "depcruise src --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
         "start": "expo start",
         "test": "jest",
-        "typecheck": "tsc --noEmit -p ./tsconfig.build.json"
+        "typecheck": "tsc --noEmit -p ./tsconfig.build.json",
+        "typecheck:full": "tsc --noEmit -p ./tsconfig.json"
     },
     "keywords": [
         "react-native",
@@ -45,7 +46,7 @@
     },
     "devDependencies": {
         "@babel/core": "^7.24.0",
-        "@biomejs/biome": "2.0.6",
+        "@biomejs/biome": "^2.1.4",
         "@expo/vector-icons": "^14.1.0",
         "@react-native/metro-config": "^0.76.2",
         "@react-navigation/native": "^7.0.14",

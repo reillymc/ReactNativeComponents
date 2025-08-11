@@ -4,6 +4,7 @@ import { useColorScheme, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
+// biome-ignore lint/performance/noNamespaceImport: package import convention
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import type { DeepPartial } from "@reillymc/es-utils";
@@ -19,6 +20,7 @@ export {
     ErrorBoundary,
 } from "expo-router";
 
+// biome-ignore lint/style/useNamingConvention: expo naming convention
 export const unstable_settings = {
     // Ensure that reloading on `/modal` keeps a back button present.
     initialRouteName: "index",

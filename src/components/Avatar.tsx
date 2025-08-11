@@ -1,5 +1,6 @@
 import type React from "react";
 import {
+    type ColorValue,
     Image,
     type StyleProp,
     StyleSheet,
@@ -7,37 +8,38 @@ import {
     View,
     type ViewStyle,
 } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../hooks";
-import type { Theme } from "../theme";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../hooks";
 
 const getBackgroundColor = (
-    theme: Theme,
+    colors: Array<{ background: ColorValue; foreground: ColorValue }>,
     firstName: string | undefined,
     lastName: string | undefined,
-) => {
-    const colors = [
-        theme.color.red,
-        theme.color.orange,
-        theme.color.green,
-        theme.color.blue,
-        theme.color.purple,
-    ];
+): { background: ColorValue; foreground: ColorValue } => {
     const hash =
         (firstName || lastName || "")
             .split("")
             .reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
 
-    return colors[hash] ?? theme.color.red;
+    return (
+        colors[hash] ?? colors[0] ?? { background: "#fff", foreground: "#000" }
+    );
 };
 
 type AvatarSize = "small" | "regular" | "large";
 
 export type AvatarStyles = {
-    initialsFontFamilyWeight: string;
     size: { [Key in AvatarSize]: number };
-    initialsFontSize: number;
-    labelFontSize: number;
+    initials: {
+        fontFamilyWeight: string;
+        fontSize: Record<AvatarSize, number>;
+    };
+    label: {
+        fontFamilyWeight: string;
+        fontSize: number;
+    };
+    colors: Array<{ background: ColorValue; foreground: ColorValue }>;
 };
 
 export interface AvatarProps {
@@ -54,50 +56,44 @@ export interface AvatarProps {
 
     action?: React.ReactNode;
 
-    style?: StyleProp<ViewStyle>;
+    style?: DeepPartial<AvatarStyles>;
+
+    containerStyle?: StyleProp<ViewStyle>;
 }
 
 export const Avatar: React.FC<AvatarProps> = ({
     firstName = "",
     lastName = "",
     imageUri,
-    size,
+    size = "regular",
     action,
     style,
+    containerStyle,
 }) => {
-    const styles = useThemedStyles(createStyles, { size });
-    const { theme } = useTheme();
+    const [styles] = useThemedStylesWithOverride(
+        createStyles,
+        { avatar: style },
+        { size, firstName, lastName },
+    );
 
     const initials =
         `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
     return (
-        <View
-            style={[
-                styles.container,
-                {
-                    backgroundColor: getBackgroundColor(
-                        theme,
-                        firstName,
-                        lastName,
-                    ),
-                },
-                style,
-            ]}
-        >
+        <View style={[styles.container, containerStyle]}>
             {imageUri ? (
                 <Image source={{ uri: imageUri }} style={styles.image} />
             ) : (
                 <>
-                    <Text style={[styles.initials]}>{initials}</Text>
+                    <Text style={styles.initials}>{initials}</Text>
                     {size === "large" && (
-                        <Text numberOfLines={2} style={[styles.label]}>
+                        <Text numberOfLines={3} style={[styles.label]}>
                             {`${firstName} ${lastName}`}
                         </Text>
                     )}
                 </>
             )}
-            {action && size === "large" && (
+            {action && size !== "small" && (
                 <View style={styles.action}>{action}</View>
             )}
         </View>
@@ -107,14 +103,25 @@ export const Avatar: React.FC<AvatarProps> = ({
 Avatar.displayName = "Avatar";
 
 const createStyles = (
-    { styles: { avatar }, theme: { font } }: ThemedStyles,
-    { size = "regular" }: Partial<AvatarProps>,
+    { styles: { avatar }, theme: { spacing } }: ThemedStyles,
+    {
+        size = "regular",
+        firstName,
+        lastName,
+    }: Required<Pick<AvatarProps, "size" | "firstName" | "lastName">>,
 ) => {
+    const { background, foreground } = getBackgroundColor(
+        avatar.colors,
+        firstName,
+        lastName,
+    );
+
     const styles = StyleSheet.create({
         container: {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
+            backgroundColor: background,
             height: avatar.size[size],
             width: avatar.size[size],
             borderRadius: avatar.size[size] / 2,
@@ -125,22 +132,21 @@ const createStyles = (
             borderRadius: avatar.size[size] / 2,
         },
         initials: {
-            fontFamily: avatar.initialsFontFamilyWeight,
-            fontSize:
-                size === "large"
-                    ? avatar.initialsFontSize
-                    : font.size.emphasised,
+            fontFamily: avatar.initials.fontFamilyWeight,
+            fontSize: avatar.initials.fontSize[size],
+            color: foreground,
         },
         label: {
-            fontSize: avatar.labelFontSize,
-            paddingHorizontal: 16,
-            paddingBottom: 12,
+            fontSize: avatar.label.fontSize,
+            fontFamily: avatar.label.fontFamilyWeight,
+            paddingHorizontal: spacing.small,
             textAlign: "center",
+            color: foreground,
         },
         action: {
             position: "absolute",
-            top: 0,
-            right: -12,
+            top: -spacing.tiny,
+            right: -spacing.small,
         },
     });
     return styles;

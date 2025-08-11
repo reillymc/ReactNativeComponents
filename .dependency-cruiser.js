@@ -10,6 +10,9 @@ module.exports = {
             from: {},
             to: {
                 circular: true,
+                viaOnly: {
+                    dependencyTypesNot: ["type-only"],
+                },
             },
         },
         {

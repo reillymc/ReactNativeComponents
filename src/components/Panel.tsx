@@ -37,8 +37,6 @@ export const Panel: React.FunctionComponent<PanelProps> = ({
     );
 };
 
-Panel.displayName = "Panel";
-
 const createStyles = ({ collapsed }: PanelProps) => {
     const styles = StyleSheet.create({
         collapsible: {

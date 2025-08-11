@@ -3,6 +3,7 @@ import merge from "lodash.merge";
 
 import type {
     ActionStyles,
+    AlertIndicatorStyles,
     AvatarStyles,
     ButtonBaseStyles,
     ButtonStyles,
@@ -57,6 +58,7 @@ export type Styles = {
     selectionInput: SelectionInputStyles;
 
     rating: RatingStyles;
+    alertIndicator: AlertIndicatorStyles;
 
     dropdownInput: DropdownInputStyles;
     listItem: ListItemStyles;
@@ -353,6 +355,19 @@ export const createDefaultStyles: CreateStyles = ({
         },
     };
 
+    const alertIndicator: AlertIndicatorStyles = {
+        size: 28,
+        borderRadius: 14,
+        backgroundColor: {
+            primary: color.primary,
+            secondary: color.secondary,
+        },
+        color: {
+            primary: color.textOnPrimary,
+            secondary: color.textOnSecondary,
+        },
+    };
+
     const styles: Styles = {
         interactiveText,
         iconBase,
@@ -376,6 +391,7 @@ export const createDefaultStyles: CreateStyles = ({
         menu,
         menuItem,
         rating,
+        alertIndicator,
 
         common: {
             action: {
@@ -437,13 +453,29 @@ export const createDefaultStyles: CreateStyles = ({
         },
         avatar: {
             size: {
-                large: 100,
+                large: 80,
                 regular: 40,
-                small: 28,
+                small: 32,
             },
-            initialsFontFamilyWeight: font.familyWeight.bold600,
-            initialsFontSize: font.size.xxLarge,
-            labelFontSize: font.size.tiny,
+            initials: {
+                fontFamilyWeight: font.familyWeight.bold600,
+                fontSize: {
+                    large: font.size.xxLarge,
+                    regular: font.size.xLarge,
+                    small: font.size.large,
+                },
+            },
+            label: {
+                fontSize: font.size.tiny,
+                fontFamilyWeight: font.familyWeight.bold600,
+            },
+            colors: [
+                { background: color.red, foreground: color.textPrimary },
+                { background: color.orange, foreground: color.textPrimary },
+                { background: color.green, foreground: color.textPrimary },
+                { background: color.blue, foreground: color.textPrimary },
+                { background: color.purple, foreground: color.textPrimary },
+            ],
         },
         toast: {
             horizontalInset: spacing.pageHorizontal + spacing.medium,

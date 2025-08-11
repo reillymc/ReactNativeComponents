@@ -1,2 +1,6 @@
-export { ComponentPage, ComponentPageProps } from "./ComponentPage";
-export { PropDefinitions, PropsPanel, PropsPanelProps } from "./PropsPanel";
+export { ComponentPage, type ComponentPageProps } from "./ComponentPage";
+export {
+    type PropDefinitions,
+    PropsPanel,
+    type PropsPanelProps,
+} from "./PropsPanel";

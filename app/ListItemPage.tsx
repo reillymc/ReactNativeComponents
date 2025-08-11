@@ -28,12 +28,7 @@ const defaultProps: ListItemProps = {
     ),
     alert: (
         <ListItemAlert>
-            <IconAction
-                onPress={() => null}
-                iconSet={AntDesign}
-                iconName="API"
-                variant="primary"
-            />
+            <AlertIndicator variant="primary" label="8" />
         </ListItemAlert>
     ),
     contentRows: [

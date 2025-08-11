@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
 import { type FC, useCallback, useEffect, useMemo } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
