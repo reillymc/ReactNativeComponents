@@ -119,6 +119,8 @@ export {
     Rating,
     type RatingProps,
     type RatingStyles,
+    ratingToValue,
+    valueToRating,
 } from "./Rating";
 export {
     SwipeAction,

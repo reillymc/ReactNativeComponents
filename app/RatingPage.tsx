@@ -17,6 +17,10 @@ const propDefinitions: PropDefinitions<RatingProps> = {
         type: "number",
         label: "Max Value",
     },
+    scale: {
+        type: "number",
+        label: "Scale",
+    },
 };
 
 const RatingPage: FC = () => {

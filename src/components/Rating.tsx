@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import { type FC, useMemo } from "react";
 import {
     type ColorValue,
     type StyleProp,
@@ -10,6 +10,18 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { StarBorder, StarFull, StarHalf } from "../assets";
 import { type ThemedStyles, useThemedStylesWithOverride } from "../hooks";
+
+export const valueToRating = (
+    rating: number,
+    starCount: number,
+    scale: number,
+): number => (rating / scale) * starCount;
+
+export const ratingToValue = (
+    stars: number,
+    starCount: number,
+    scale: number,
+): number => (stars * scale) / starCount;
 
 export const getRatingIcons = (
     rating: number,
@@ -44,6 +56,11 @@ export interface RatingProps {
      */
     max?: number;
 
+    /**
+     * External rating system scale to base conversion between value and icons
+     */
+    scale?: number;
+
     ratingIconSet?: RatingIconSet;
 
     style?: DeepPartial<RatingStyles>;
@@ -57,6 +74,7 @@ export interface RatingProps {
 export const Rating: FC<RatingProps> = ({
     value = 0,
     max = 5,
+    scale,
     ratingIconSet = DefaultRatingIconSet,
     style,
     containerStyle,
@@ -67,12 +85,14 @@ export const Rating: FC<RatingProps> = ({
         undefined,
     );
 
+    const scaledRating = scale ? valueToRating(value, max, scale) : value;
+
     return (
         <View
             style={[styles.starRating, containerStyle]}
-            accessibilityLabel={`star rating. ${value} stars.`}
+            accessibilityLabel={`star rating. ${scaledRating} of ${max}.`}
         >
-            {getRatingIcons(value, max).map((variant, i) => {
+            {getRatingIcons(scaledRating, max).map((variant, i) => {
                 const RatingIcon = ratingIconSet[variant];
                 const color = rating.icon.color[variant];
 

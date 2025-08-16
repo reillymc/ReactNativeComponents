@@ -13,6 +13,8 @@ import {
     DefaultRatingIconSet,
     getRatingIcons,
     type RatingProps,
+    ratingToValue,
+    valueToRating,
 } from "../Rating";
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
@@ -23,7 +25,7 @@ export interface RatingInputProps
             "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
         >,
         Pick<InputBaseProps, "disabled" | "variant">,
-        Pick<RatingProps, "ratingIconSet" | "max" | "value"> {
+        Pick<RatingProps, "ratingIconSet" | "max" | "value" | "scale"> {
     /**
      * Change listener that gets called when rating changes.
      */
@@ -43,6 +45,7 @@ export const RatingInput: FC<RatingInputProps> = ({
     disabled: disabledProp,
     variant = "regular",
     ratingIconSet = DefaultRatingIconSet,
+    scale,
     onChange,
     ...props
 }) => {
@@ -82,6 +85,11 @@ export const RatingInput: FC<RatingInputProps> = ({
         variant,
     ]);
 
+    const ratingIcons = useMemo(() => {
+        const rating = scale ? valueToRating(value, max, scale) : value;
+        return getRatingIcons(rating, max);
+    }, [value, max, scale]);
+
     const [isInteracting, setInteracting] = useState(false);
 
     const panHandlers = useMemo(() => {
@@ -95,11 +103,10 @@ export const RatingInput: FC<RatingInputProps> = ({
         };
 
         const handleChange = (newRating: number) => {
-            if (disabled) return;
-
-            if (newRating !== value) {
-                onChange?.(newRating);
-            }
+            if (disabled || newRating === value) return;
+            onChange?.(
+                scale ? ratingToValue(newRating, max, scale) : newRating,
+            );
         };
 
         if (disabled) return {};
@@ -135,7 +142,7 @@ export const RatingInput: FC<RatingInputProps> = ({
                 }, animationConfig.delay);
             },
         }).panHandlers;
-    }, [value, max, width, disabled, onChange]);
+    }, [value, max, width, disabled, scale, onChange]);
 
     return (
         <InputScaffold {...props}>
@@ -144,7 +151,7 @@ export const RatingInput: FC<RatingInputProps> = ({
                 {...panHandlers}
                 onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
             >
-                {getRatingIcons(value, max).map((variant, i) => {
+                {ratingIcons.map((variant, i) => {
                     const RatingIcon = ratingIconSet[variant];
                     const color = rating.icon.color[variant];
 

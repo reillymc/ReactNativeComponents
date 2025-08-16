@@ -18,6 +18,10 @@ const propDefinitions: PropDefinitions<RatingInputProps> = {
         type: "number",
         label: "Max Value",
     },
+    scale: {
+        type: "number",
+        label: "Scale",
+    },
 };
 
 const RatingInputPage: React.FunctionComponent = () => {

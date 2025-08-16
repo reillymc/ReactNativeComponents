@@ -1,4 +1,3 @@
-import type { DimensionValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStylesWithOverride } from "../../hooks";
@@ -13,7 +12,7 @@ export type IconButtonVariant = "primary" | "secondary" | "destructive";
 
 export type IconButtonStyles = {
     container: {
-        size: DimensionValue;
+        size: number;
         backgroundColor: Record<
             IconButtonVariant,
             IconButtonBaseStyles["container"]["backgroundColor"]
