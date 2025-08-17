@@ -85,10 +85,8 @@ export const RatingInput: FC<RatingInputProps> = ({
         variant,
     ]);
 
-    const ratingIcons = useMemo(() => {
-        const rating = scale ? valueToRating(value, max, scale) : value;
-        return getRatingIcons(rating, max);
-    }, [value, max, scale]);
+    const scaledRating = scale ? valueToRating(value, max, scale) : value;
+    const ratingIcons = getRatingIcons(scaledRating, max);
 
     const [isInteracting, setInteracting] = useState(false);
 
@@ -160,7 +158,9 @@ export const RatingInput: FC<RatingInputProps> = ({
                             // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
                             key={i}
                             active={
-                                isInteracting && value > i && value - 1 <= i
+                                isInteracting &&
+                                scaledRating > i &&
+                                scaledRating - 1 <= i
                             }
                         >
                             <RatingIcon size={ratingIconSize} color={color} />

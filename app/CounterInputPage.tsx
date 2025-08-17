@@ -17,6 +17,10 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
         type: "number",
         label: "Max Value",
     },
+    disableKeyboardInput: {
+        type: "boolean",
+        label: "Disable Keyboard Input",
+    },
 };
 
 const defaultProps: CounterInputProps = {

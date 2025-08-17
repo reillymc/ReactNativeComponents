@@ -109,5 +109,7 @@ const createStyles = (
         input: {
             flexGrow: 1,
             textAlign: "center",
+            // Override disabled style. TODO: indicate keyboard enabled/disabled visually
+            backgroundColor: inputBase.container.backgroundColor.enabled,
         },
     });
