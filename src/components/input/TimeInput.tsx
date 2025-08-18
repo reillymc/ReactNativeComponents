@@ -70,7 +70,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     value={value?.hours}
                     variant={variant}
                     keyboardType="number-pad"
-                    returnKeyLabel="next"
+                    submitBehavior="submit"
                     returnKeyType="next"
                     inputStyle={styles.input}
                     onChangeText={(text) =>
@@ -81,6 +81,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     }
                     onFocus={() => setIsFocused(true)}
                     onBlur={() => setIsFocused(false)}
+                    onSubmitEditing={() => minutesRef.current?.focus()}
                 />
                 <Pressable
                     onPress={() => hoursRef.current?.focus()}
@@ -98,6 +99,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     clearButtonMode={clearButtonMode}
                     variant={variant}
                     keyboardType="number-pad"
+                    returnKeyType="done"
                     inputStyle={styles.input}
                     onChangeText={(text) => {
                         const addToHours = text
