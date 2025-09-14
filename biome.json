@@ -30,13 +30,7 @@
         }
     },
     "files": {
-        "includes": [
-            "**",
-            "!**/*.d.ts",
-            "!**/.expo",
-            "!**/services/**",
-            "!**/lib/**"
-        ]
+        "includes": ["**", "!**/*.d.ts", "!**/.expo", "!lib"]
     },
     "formatter": {
         "enabled": true,

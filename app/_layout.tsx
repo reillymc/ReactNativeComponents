@@ -1,5 +1,5 @@
 import type React from "react";
-import { useEffect, useMemo } from "react";
+import { StrictMode, useEffect, useMemo } from "react";
 import { useColorScheme, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
@@ -91,23 +91,25 @@ const Layout: React.FC = () => {
     }
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <ThemeProvider theme={theme} styles={styles}>
-                <StatusBar style="auto" />
-                <Stack>
-                    <Stack.Screen name="index" />
-                    <Stack.Screen
-                        name="SelectionModal"
-                        options={{
-                            presentation: "formSheet",
-                            sheetAllowedDetents: [0.5, 1.0],
-                            sheetGrabberVisible: true,
-                            sheetExpandsWhenScrolledToEdge: true,
-                        }}
-                    />
-                </Stack>
-            </ThemeProvider>
-        </GestureHandlerRootView>
+        <StrictMode>
+            <GestureHandlerRootView style={{ flex: 1 }}>
+                <ThemeProvider theme={theme} styles={styles}>
+                    <StatusBar style="auto" />
+                    <Stack>
+                        <Stack.Screen name="index" />
+                        <Stack.Screen
+                            name="SelectionModal"
+                            options={{
+                                presentation: "formSheet",
+                                sheetAllowedDetents: [0.5, 1.0],
+                                sheetGrabberVisible: true,
+                                sheetExpandsWhenScrolledToEdge: true,
+                            }}
+                        />
+                    </Stack>
+                </ThemeProvider>
+            </GestureHandlerRootView>
+        </StrictMode>
     );
 };
 

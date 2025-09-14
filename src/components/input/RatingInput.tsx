@@ -3,7 +3,6 @@ import {
     type ReactElement,
     useEffect,
     useMemo,
-    useRef,
     useState,
 } from "react";
 import { Animated, Easing, PanResponder, StyleSheet, View } from "react-native";
@@ -180,10 +179,12 @@ type AnimatedIconProps = {
 const AnimatedIcon: FC<AnimatedIconProps> = ({ active, children }) => {
     const { scale, easing, duration } = animationConfig;
 
-    const animatedSize = useRef(new Animated.Value(active ? scale : 1));
+    const [animatedSize] = useState(
+        () => new Animated.Value(active ? scale : 1),
+    );
 
     useEffect(() => {
-        const animation = Animated.timing(animatedSize.current, {
+        const animation = Animated.timing(animatedSize, {
             toValue: active ? scale : 1,
             useNativeDriver: true,
             easing,
@@ -192,12 +193,12 @@ const AnimatedIcon: FC<AnimatedIconProps> = ({ active, children }) => {
 
         animation.start();
         return animation.stop;
-    }, [active, scale, easing, duration]);
+    }, [active, animatedSize, scale, easing, duration]);
 
     return (
         <Animated.View
             pointerEvents="none"
-            style={{ transform: [{ scale: animatedSize.current }] }}
+            style={{ transform: [{ scale: animatedSize }] }}
         >
             {children}
         </Animated.View>

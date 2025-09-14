@@ -1,19 +1,7 @@
-import React from "react";
+import React, { type RefObject } from "react";
 
-export const useForwardedRef = <T>(ref: React.ForwardedRef<T> | undefined) => {
+export const useForwardedRef = <T>(ref: RefObject<T> | undefined | null) => {
     const localRef = React.useRef<T>(null);
 
-    React.useEffect(() => {
-        if (!ref) {
-            return;
-        }
-
-        if (typeof ref === "function") {
-            ref(localRef.current);
-        } else {
-            ref.current = localRef.current;
-        }
-    });
-
-    return localRef;
+    return ref ?? localRef;
 };

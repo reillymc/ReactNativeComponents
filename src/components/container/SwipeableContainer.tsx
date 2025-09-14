@@ -1,7 +1,7 @@
 import { type FunctionComponent, type ReactNode, useMemo, useRef } from "react";
 import { StyleSheet, View, type ViewStyle } from "react-native";
 import Swipeable, {
-    type SwipeableRef,
+    type SwipeableMethods,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 
 export interface SwipeableContainerProps {
@@ -19,8 +19,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     containerStyle,
     children,
 }) => {
-    // biome-ignore lint/suspicious/noExplicitAny: ref types behaving weird in react 19. TODO: remove any
-    const swipeableRef = useRef<SwipeableRef>(null) as any;
+    const swipeableRef = useRef<SwipeableMethods>(null);
     const actions = useMemo(() => rightActions.reverse(), [rightActions]);
 
     const handleActionsPress = () => {

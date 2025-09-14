@@ -1,12 +1,12 @@
-import { type Ref, useEffect, useMemo, useState } from "react";
-import type {
-    TextInput as DefaultTextInput,
-    NativeSyntheticEvent,
-    TextInputFocusEventData,
-} from "react-native";
+import { type RefObject, useEffect, useMemo, useState } from "react";
+import type { BlurEvent, TextInput as DefaultTextInput } from "react-native";
 
+import type {
+    ValueItem,
+    ValueItemComplex,
+    ValueItemSimple,
+} from "../../common";
 import { useForwardedRef } from "../../hooks";
-import type { ValueItem, ValueItemComplex, ValueItemSimple } from "../../types";
 import { FloatingContainer, type FloatingContainerProps } from "../container";
 import { Menu, MenuItem } from "../menu";
 import { InputBase, type InputBaseProps } from "./InputBase";
@@ -77,7 +77,7 @@ export type DropdownInputProps<T = string> = Pick<
          */
         onSelect: (e: ValueItem<T> | undefined) => void;
 
-        ref?: Ref<DefaultTextInput | null>;
+        ref?: RefObject<DefaultTextInput | null>;
     };
 
 export const DropdownInput = <T,>({
@@ -143,7 +143,7 @@ export const DropdownInput = <T,>({
         }
     };
 
-    const handleBlur = (e: NativeSyntheticEvent<TextInputFocusEventData>) => {
+    const handleBlur = (e: BlurEvent) => {
         const search = searchValue.toLowerCase();
         const existingItem = items.find(
             (item) => item.label.toLowerCase() === search,

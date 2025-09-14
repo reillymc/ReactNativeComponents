@@ -75,7 +75,7 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                         {hasError && (
                             <IconBase
                                 iconSet={AntDesign}
-                                iconName="exclamationcircle"
+                                iconName="exclamation-circle"
                                 style={{ color: "red", size: 16 }} // TODO extract to new styled component - help and/or error text?
                             />
                         )}

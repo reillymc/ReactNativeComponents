@@ -46,8 +46,6 @@ export const InputAction = <G extends string, Fn extends string>({
     );
 };
 
-InputAction.name = "InputAction";
-
 const createStyles = (
     { styles: { inputBase } }: ThemedStyles,
     {

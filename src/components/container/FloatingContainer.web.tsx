@@ -2,7 +2,6 @@ import {
     type FC,
     type ReactNode,
     type RefObject,
-    useCallback,
     useRef,
     useState,
 } from "react";
@@ -54,23 +53,20 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 
     const { keyboardHeight } = usePersistentKeyboardHeight();
 
-    const onLayout = useCallback(
-        (e: LayoutChangeEvent) => {
-            parentRef.current?.measureInWindow(
-                (_ix, parentY, _iw, parentHeight) => {
-                    const { height: panelHeight } = e.nativeEvent.layout;
-                    const size = parentY + parentHeight + panelHeight;
-                    const screenMaxHeight = screenHeight - keyboardHeight - top;
+    const onLayout = (e: LayoutChangeEvent) => {
+        parentRef.current?.measureInWindow(
+            (_ix, parentY, _iw, parentHeight) => {
+                const { height: panelHeight } = e.nativeEvent.layout;
+                const size = parentY + parentHeight + panelHeight;
+                const screenMaxHeight = screenHeight - keyboardHeight - top;
 
-                    setLayout({
-                        parentHeight,
-                        inverted: size > screenMaxHeight,
-                    });
-                },
-            );
-        },
-        [keyboardHeight, parentRef, top, screenHeight],
-    );
+                setLayout({
+                    parentHeight,
+                    inverted: size > screenMaxHeight,
+                });
+            },
+        );
+    };
 
     return (
         <View

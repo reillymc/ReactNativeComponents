@@ -2,8 +2,8 @@ import { type ColorValue, StyleSheet, View } from "react-native";
 import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
+import type { ValueItem } from "../../common";
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
-import type { ValueItem } from "../../types";
 import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
 import { Tag } from "../Tag";

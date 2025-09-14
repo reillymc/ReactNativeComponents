@@ -62,33 +62,30 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
         setVisibleAreaHeight(e.nativeEvent.layout.height);
     }, []);
 
-    const onPanelLayout = useCallback(
-        (e: LayoutChangeEvent) => {
-            parentRef.current?.measureInWindow(
-                (parentX, parentY, parentWidth, parentHeight) => {
-                    const panelHeight = e.nativeEvent.layout.height;
+    const onPanelLayout = (e: LayoutChangeEvent) => {
+        parentRef.current?.measureInWindow(
+            (parentX, parentY, parentWidth, parentHeight) => {
+                const panelHeight = e.nativeEvent.layout.height;
 
-                    // Calculate available space below parent
-                    const parentBottom = parentY + parentHeight;
-                    const availableBelow = visibleAreaHeight - parentBottom;
+                // Calculate available space below parent
+                const parentBottom = parentY + parentHeight;
+                const availableBelow = visibleAreaHeight - parentBottom;
 
-                    // If not enough space below for the panel, invert (show above)
-                    const inverted =
-                        position === "above" || availableBelow < panelHeight;
+                // If not enough space below for the panel, invert (show above)
+                const inverted =
+                    position === "above" || availableBelow < panelHeight;
 
-                    setLayout({
-                        parentY,
-                        parentHeight,
-                        inverted,
-                        visibleAreaHeight,
-                        parentX,
-                        parentWidth,
-                    });
-                },
-            );
-        },
-        [parentRef, visibleAreaHeight, position],
-    );
+                setLayout({
+                    parentY,
+                    parentHeight,
+                    inverted,
+                    visibleAreaHeight,
+                    parentX,
+                    parentWidth,
+                });
+            },
+        );
+    };
 
     return (
         <FullWindowOverlay>
