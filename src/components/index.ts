@@ -80,6 +80,9 @@ export type {
     TimeInputValue,
     ToggleInputProps,
     ToggleInputStyles,
+    FractionValue,
+    NumberValue,
+    RangeValue,
 } from "./input";
 export {
     CounterInput,

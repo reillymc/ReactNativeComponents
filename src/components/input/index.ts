@@ -20,6 +20,9 @@ export { InputScaffold } from "./InputScaffold";
 export type {
     NumberInputProps,
     NumberInputValue,
+    FractionValue,
+    NumberValue,
+    RangeValue,
 } from "./NumberInput";
 export { NumberInput } from "./NumberInput";
 export type { RatingInputProps } from "./RatingInput";
