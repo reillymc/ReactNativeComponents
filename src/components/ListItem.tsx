@@ -92,7 +92,7 @@ export const ListItem: FC<ListItemProps> = ({
         <View style={styles.container}>
             {filteredActions?.length ? (
                 <SwipeableContainer rightActions={swipeActions}>
-                    {innerContent}
+                    <View>{innerContent}</View>
                 </SwipeableContainer>
             ) : (
                 innerContent
