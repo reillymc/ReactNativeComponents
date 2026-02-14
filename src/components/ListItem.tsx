@@ -23,7 +23,7 @@ export interface ListItemStyles {
 }
 
 export interface ListItemProps {
-    heading?: string;
+    heading?: ReactNode;
     header?: ReactNode;
     avatar?: ReactNode;
     alert?: ReactNode;
@@ -74,10 +74,12 @@ export const ListItem: FC<ListItemProps> = ({
                     <View
                         style={[styles.contentContainer, contentContainerStyle]}
                     >
-                        {!!heading && (
+                        {!!heading && typeof heading === "string" ? (
                             <Text variant="heading" numberOfLines={2}>
                                 {heading}
                             </Text>
+                        ) : (
+                            heading
                         )}
                         {filteredRows}
                     </View>
