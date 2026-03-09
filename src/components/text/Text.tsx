@@ -3,6 +3,7 @@ import {
     Text as RnText,
     type TextProps as RnTextProps,
     StyleSheet,
+    type TextStyle,
 } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
@@ -13,19 +14,16 @@ export type TextVariant =
     | "heading"
     | "label"
     | "body"
-    | "caption"
-    | "bodyEmphasized";
+    | "caption";
 
 export interface TextStyles {
     color: string;
-    /**
-     * Font family due to weight limitations.
-     */
-    fontFamilyWeight: {
-        [Variant in TextVariant]: string;
-    };
-    fontFamilySize: {
-        [Variant in TextVariant]: number;
+    font: {
+        [Variant in TextVariant]: {
+            family: string;
+            weight: TextStyle["fontWeight"];
+            size: number;
+        };
     };
 }
 
@@ -49,18 +47,15 @@ export const Text: FC<TextProps> = ({
     );
 };
 
-Text.displayName = "Text";
-
 const createStyles = (
     { styles: { text } }: ThemedStyles,
     { variant = "body" }: Partial<TextProps>,
-) => {
-    const styles = StyleSheet.create({
+) =>
+    StyleSheet.create({
         text: {
-            fontFamily: text.fontFamilyWeight[variant],
-            fontSize: text.fontFamilySize[variant],
+            fontFamily: text.font[variant].family,
+            fontWeight: text.font[variant].weight,
+            fontSize: text.font[variant].size,
             color: text.color,
         },
     });
-    return styles;
-};

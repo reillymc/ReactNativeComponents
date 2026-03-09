@@ -34,11 +34,7 @@ export const AlertIndicator: React.FC<AlertIndicatorProps> = ({
 
     return (
         <View style={[styles.container, style]}>
-            <Text
-                numberOfLines={1}
-                style={styles.text}
-                variant="bodyEmphasized"
-            >
+            <Text numberOfLines={1} style={styles.text}>
                 {label}
             </Text>
         </View>
@@ -63,6 +59,7 @@ const createStyles = (
         },
         text: {
             color: alertIndicator.color[variant],
+            fontWeight: "600",
         },
     });
     return styles;

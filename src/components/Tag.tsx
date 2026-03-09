@@ -63,8 +63,8 @@ const createStyles = (
             width: "auto",
         },
         icon: {
-            height: text.fontFamilySize.body,
-            width: text.fontFamilySize.body,
+            height: text.font.body.size,
+            width: text.font.body.size,
             marginRight: label === undefined ? 0 : 6,
             marginVertical: 6,
             color: color.textPrimary,

@@ -96,14 +96,13 @@ export const createDefaultStyles: CreateStyles = ({
     };
 
     const highlightedText: HighlightedTextStyles = {
-        highlighted: {
-            body: font.familyWeight.bold800,
-            bodyEmphasized: font.familyWeight.bold800,
-            caption: font.familyWeight.bold800,
-            display: font.familyWeight.bold800,
-            heading: font.familyWeight.bold800,
-            label: font.familyWeight.bold800,
-            title: font.familyWeight.bold800,
+        highlightedWeight: {
+            body: "800",
+            caption: "800",
+            display: "800",
+            heading: "800",
+            label: "800",
+            title: "800",
         },
     };
 
@@ -283,7 +282,7 @@ export const createDefaultStyles: CreateStyles = ({
         },
         text: {
             fontSize: font.size.regular,
-            fontFamilyWeight: font.familyWeight.regular400,
+            fontFamily: font.family.sans,
             color: {
                 enabled: color.textPrimary,
                 disabled: color.textSecondary,
@@ -402,23 +401,37 @@ export const createDefaultStyles: CreateStyles = ({
         },
         text: {
             color: color.textPrimary,
-            fontFamilyWeight: {
-                caption: font.familyWeight.light200,
-                body: font.familyWeight.regular400,
-                bodyEmphasized: font.familyWeight.bold600,
-                label: font.familyWeight.bold600,
-                heading: font.familyWeight.bold600,
-                title: font.familyWeight.bold800,
-                display: font.familyWeight.bold800,
-            },
-            fontFamilySize: {
-                caption: font.size.small,
-                body: font.size.regular,
-                bodyEmphasized: font.size.regular,
-                label: font.size.emphasised,
-                heading: font.size.large,
-                title: font.size.xLarge,
-                display: font.size.xxLarge,
+            font: {
+                caption: {
+                    family: font.family.sans,
+                    weight: "200",
+                    size: font.size.small,
+                },
+                body: {
+                    family: font.family.sans,
+                    weight: "400",
+                    size: font.size.regular,
+                },
+                label: {
+                    family: font.family.sans,
+                    weight: "500",
+                    size: font.size.emphasised,
+                },
+                heading: {
+                    family: font.family.sans,
+                    weight: "600",
+                    size: font.size.large,
+                },
+                title: {
+                    family: font.family.sans,
+                    weight: "800",
+                    size: font.size.xLarge,
+                },
+                display: {
+                    family: font.family.sans,
+                    weight: "800",
+                    size: font.size.xxLarge,
+                },
             },
         },
         highlightedText,
@@ -458,7 +471,7 @@ export const createDefaultStyles: CreateStyles = ({
                 small: 32,
             },
             initials: {
-                fontFamilyWeight: font.familyWeight.bold600,
+                fontWeight: "600",
                 fontSize: {
                     large: font.size.xxLarge,
                     regular: font.size.xLarge,
@@ -467,7 +480,7 @@ export const createDefaultStyles: CreateStyles = ({
             },
             label: {
                 fontSize: font.size.tiny,
-                fontFamilyWeight: font.familyWeight.bold600,
+                fontWeight: "500",
             },
             colors: [
                 { background: color.red, foreground: color.textPrimary },

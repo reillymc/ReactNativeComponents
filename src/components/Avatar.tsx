@@ -5,6 +5,7 @@ import {
     type StyleProp,
     StyleSheet,
     Text,
+    type TextStyle,
     View,
     type ViewStyle,
 } from "react-native";
@@ -32,11 +33,11 @@ type AvatarSize = "small" | "regular" | "large";
 export type AvatarStyles = {
     size: { [Key in AvatarSize]: number };
     initials: {
-        fontFamilyWeight: string;
+        fontWeight: TextStyle["fontWeight"];
         fontSize: Record<AvatarSize, number>;
     };
     label: {
-        fontFamilyWeight: string;
+        fontWeight: TextStyle["fontWeight"];
         fontSize: number;
     };
     colors: Array<{ background: ColorValue; foreground: ColorValue }>;
@@ -132,13 +133,13 @@ const createStyles = (
             borderRadius: avatar.size[size] / 2,
         },
         initials: {
-            fontFamily: avatar.initials.fontFamilyWeight,
+            fontWeight: avatar.initials.fontWeight,
             fontSize: avatar.initials.fontSize[size],
             color: foreground,
         },
         label: {
             fontSize: avatar.label.fontSize,
-            fontFamily: avatar.label.fontFamilyWeight,
+            fontWeight: avatar.label.fontWeight,
             paddingHorizontal: spacing.small,
             textAlign: "center",
             color: foreground,

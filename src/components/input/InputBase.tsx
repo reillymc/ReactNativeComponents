@@ -21,7 +21,7 @@ export interface InputBaseStyles {
     };
     text: {
         fontSize: number;
-        fontFamilyWeight: string;
+        fontFamily: string;
         color: Record<InputState, ColorValue>;
         placeholderColor: ColorValue;
     };
@@ -88,7 +88,7 @@ const createStyles = (
                 ],
             padding: inputBase.container.padding,
             fontSize: inputBase.text.fontSize,
-            fontFamily: inputBase.text.fontFamilyWeight,
+            fontFamily: inputBase.text.fontFamily,
             color: inputBase.text.color[disabled ? "disabled" : "enabled"],
         },
     });

@@ -6,12 +6,9 @@ export type ThemeOverrides = DeepPartial<Theme>;
 
 export const DefaultTheme = {
     font: {
-        familyWeight: {
-            light100: "Helvetica-Light",
-            light200: "Helvetica-Light",
-            regular400: "Helvetica",
-            bold600: "Helvetica-Bold",
-            bold800: "Helvetica-Bold",
+        family: {
+            sans: "Helvetica",
+            mono: "Helvetica",
         },
         size: {
             tiny: 12,
@@ -126,10 +123,10 @@ export const MergeTheme = (
         ...DefaultTheme.font,
         ...first.font,
         ...second?.font,
-        familyWeight: {
-            ...DefaultTheme.font.familyWeight,
-            ...first.font?.familyWeight,
-            ...second?.font?.familyWeight,
+        family: {
+            ...DefaultTheme.font.family,
+            ...first.font?.family,
+            ...second?.font?.family,
         },
         size: {
             ...DefaultTheme.font.size,

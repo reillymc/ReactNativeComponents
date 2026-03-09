@@ -1,9 +1,9 @@
 import type React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useThemedStylesWithOverride } from "../../hooks";
-import { Text, type TextProps, type TextStyles } from "./Text";
+import { Text, type TextProps, type TextVariant } from "./Text";
 
 /**
  * Escapes any characters that would interfere with RegEx processing.
@@ -12,7 +12,7 @@ export const EscapeForRegexProcessing = (string: string) =>
     string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export interface HighlightedTextStyles {
-    highlighted: TextStyles["fontFamilyWeight"];
+    highlightedWeight: Record<TextVariant, TextStyle["fontWeight"]>;
 }
 export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
     text?: string;
@@ -48,7 +48,8 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
                     key={`${part}${idx}`}
                     style={
                         part.toLowerCase() === highlightedString && {
-                            fontFamily: highlightedText.highlighted[variant],
+                            fontWeight:
+                                highlightedText.highlightedWeight[variant],
                         }
                     }
                 >
