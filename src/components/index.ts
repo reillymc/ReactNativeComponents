@@ -87,6 +87,7 @@ export type {
 export {
     CounterInput,
     DropdownInput,
+    DropdownInputBase,
     InputAction,
     InputBase,
     InputScaffold,

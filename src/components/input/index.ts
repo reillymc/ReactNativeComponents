@@ -44,3 +44,7 @@ export type {
     ToggleInputStyles,
 } from "./ToggleInput";
 export { ToggleInput } from "./ToggleInput";
+export {
+    DropdownInputBase,
+    type DropdownInputBaseProps,
+} from "./DropdownInputBase";
