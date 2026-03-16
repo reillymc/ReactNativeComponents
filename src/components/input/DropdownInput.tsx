@@ -25,7 +25,6 @@ export type DropdownInputProps<T = string> = Pick<
     | "variant"
     | "items"
     | "selectedValue"
-    | "textValue"
     | "minimumSearchLength"
     | "maxSuggestionCount"
     | "panelPosition"

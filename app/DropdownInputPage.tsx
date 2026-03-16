@@ -13,6 +13,14 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
         type: "function",
         label: "onSelect",
     },
+    selectBehaviour: {
+        type: "enum",
+        label: "Select Behaviour",
+        values: [
+            { label: "Blur and Select", value: "blurAndSelect" },
+            { label: "Keep Focus", value: "select" },
+        ],
+    },
 };
 
 const defaultProps: DropdownInputProps = {
@@ -32,14 +40,19 @@ const defaultProps: DropdownInputProps = {
 const DropdownInputPage: React.FunctionComponent = () => {
     const [props, setProps] = React.useState(defaultProps);
 
+    console.log(props.selectedValue);
+
     return (
         <ComponentPage
             componentName="Dropdown Input"
             component={
                 <DropdownInput
                     {...props}
-                    onSelect={(selectedItem) =>
-                        setProps((prev) => ({ ...prev, selectedItem }))
+                    onSelect={(selection) =>
+                        setProps((prev) => ({
+                            ...prev,
+                            selectedValue: selection?.value,
+                        }))
                     }
                 />
             }

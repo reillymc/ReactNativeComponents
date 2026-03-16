@@ -39,11 +39,6 @@ export type DropdownInputBaseProps<T = string> = Pick<
         : ValueItemComplex<T>["id"];
 
     /**
-     * The current input text, should be set when no item is selected.
-     */
-    textValue?: string;
-
-    /**
      * Defines the behaviour when an item is selected.
      * - "select": Selects the item and keeps the input focused.
      * - "blurAndSelect": Selects the item and blurs the input.
@@ -75,7 +70,6 @@ export type DropdownInputBaseProps<T = string> = Pick<
 export const DropdownInputBase = <T,>({
     items = [],
     selectedValue,
-    textValue,
     minimumSearchLength = 1,
     maxSuggestionCount = 5,
     selectBehaviour = "blurAndSelect",
@@ -86,8 +80,9 @@ export const DropdownInputBase = <T,>({
     ref,
     ...props
 }: DropdownInputBaseProps<T>) => {
-    const [searchValue, setSearchValue] = useState(textValue ?? "");
+    const [searchValue, setSearchValue] = useState("");
     const [hasFocus, setHasFocus] = useState(false);
+    const [isTyping, setIsTyping] = useState(false);
 
     const inputRef = useForwardedRef(ref);
 
@@ -103,27 +98,35 @@ export const DropdownInputBase = <T,>({
     }, [items, selectedValue]);
 
     useEffect(() => {
-        if (!existingItemLabel) {
-            setSearchValue("");
+        if (isTyping) {
             return;
         }
 
-        setSearchValue(existingItemLabel);
-    }, [existingItemLabel]);
+        if (existingItemLabel) {
+            setSearchValue(existingItemLabel);
+            return;
+        }
 
-    useEffect(() => {
-        if (!textValue) return;
-
-        setSearchValue(textValue);
-    }, [textValue]);
+        if (selectedValue === undefined) {
+            setSearchValue("");
+        }
+    }, [existingItemLabel, selectedValue, isTyping]);
 
     const handleFocus = () => {
         setHasFocus(true);
     };
 
-    const handleSelect: DropdownInputBaseProps<T>["onSelect"] = (e) => {
-        onSelect(e);
-        setSearchValue("");
+    const handleSelect = (item: ValueItem<T>) => {
+        const selectedItemId = "id" in item ? item.id : item.value;
+        const isAlreadySelected =
+            selectedValue !== undefined && selectedValue === selectedItemId;
+
+        if (!isAlreadySelected) {
+            onSelect(item);
+        }
+
+        setSearchValue(item.label);
+        setIsTyping(false);
 
         if (selectBehaviour === "blurAndSelect") {
             inputRef.current?.blur();
@@ -135,20 +138,35 @@ export const DropdownInputBase = <T,>({
         const existingItem = items.find(
             (item) => item.label.toLowerCase() === search,
         );
+
         if (existingItem) {
-            onSelect(existingItem);
+            const existingItemId =
+                "id" in existingItem ? existingItem.id : existingItem.value;
+            const isAlreadySelected =
+                selectedValue !== undefined && selectedValue === existingItemId;
+
+            if (!isAlreadySelected) {
+                onSelect(existingItem);
+            }
         }
+
         setHasFocus(false);
+        setIsTyping(false);
         onBlur?.(e);
     };
 
     const handleChangeText = (text: string) => {
         setSearchValue(text);
         onChangeText?.(text);
-        if (selectedValue) {
+
+        if (selectedValue !== undefined && !isTyping) {
             onSelect(undefined);
         }
+
+        setIsTyping(true);
     };
+
+    const isSelectionActive = selectedValue !== undefined && !isTyping;
 
     const filteredItems = useMemo(() => {
         const search = searchValue.toLowerCase();
@@ -182,6 +200,7 @@ export const DropdownInputBase = <T,>({
 
     const showDropdownPanel =
         hasFocus &&
+        !isSelectionActive &&
         !!filteredItems.length &&
         searchValue.length >= minimumSearchLength;
 
