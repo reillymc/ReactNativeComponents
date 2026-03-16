@@ -16,6 +16,7 @@ export type DropdownInputProps<T = string> = Pick<
     | "onBlur"
     | "placeholder"
     | "onChangeText"
+    | "textValue"
     | "clearButtonMode"
     | "maxLength"
     | "onSubmitEditing"

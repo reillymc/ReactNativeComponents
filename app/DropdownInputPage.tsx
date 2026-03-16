@@ -54,6 +54,9 @@ const DropdownInputPage: React.FunctionComponent = () => {
                             selectedValue: selection?.value,
                         }))
                     }
+                    onChangeText={(textValue) =>
+                        setProps((prev) => ({ ...prev, textValue }))
+                    }
                 />
             }
             propsPanel={

@@ -1,4 +1,4 @@
-import { type RefObject, useEffect, useMemo, useState } from "react";
+import { type RefObject, useMemo, useState } from "react";
 import type { BlurEvent, TextInput as DefaultTextInput } from "react-native";
 
 import type {
@@ -28,6 +28,7 @@ export type DropdownInputBaseProps<T = string> = Pick<
     | "variant"
     | "inputStyle"
 > & {
+    textValue?: string;
     items?: Array<ValueItem<T>>;
 
     /**
@@ -75,14 +76,13 @@ export const DropdownInputBase = <T,>({
     selectBehaviour = "blurAndSelect",
     panelPosition,
     onSelect,
+    textValue,
     onChangeText,
     onBlur,
     ref,
     ...props
 }: DropdownInputBaseProps<T>) => {
-    const [searchValue, setSearchValue] = useState("");
     const [hasFocus, setHasFocus] = useState(false);
-    const [isTyping, setIsTyping] = useState(false);
 
     const inputRef = useForwardedRef(ref);
 
@@ -97,21 +97,6 @@ export const DropdownInputBase = <T,>({
         return existingItem?.label;
     }, [items, selectedValue]);
 
-    useEffect(() => {
-        if (isTyping) {
-            return;
-        }
-
-        if (existingItemLabel) {
-            setSearchValue(existingItemLabel);
-            return;
-        }
-
-        if (selectedValue === undefined) {
-            setSearchValue("");
-        }
-    }, [existingItemLabel, selectedValue, isTyping]);
-
     const handleFocus = () => {
         setHasFocus(true);
     };
@@ -125,16 +110,17 @@ export const DropdownInputBase = <T,>({
             onSelect(item);
         }
 
-        setSearchValue(item.label);
-        setIsTyping(false);
+        onChangeText?.(item.label);
 
         if (selectBehaviour === "blurAndSelect") {
             inputRef.current?.blur();
         }
     };
 
+    const inputText = textValue ?? existingItemLabel ?? "";
+
     const handleBlur = (e: BlurEvent) => {
-        const search = searchValue.toLowerCase();
+        const search = inputText.toLowerCase();
         const existingItem = items.find(
             (item) => item.label.toLowerCase() === search,
         );
@@ -151,25 +137,29 @@ export const DropdownInputBase = <T,>({
         }
 
         setHasFocus(false);
-        setIsTyping(false);
         onBlur?.(e);
     };
 
     const handleChangeText = (text: string) => {
-        setSearchValue(text);
-        onChangeText?.(text);
+        const didMatchSelection =
+            selectedValue !== undefined &&
+            existingItemLabel !== undefined &&
+            text !== existingItemLabel;
 
-        if (selectedValue !== undefined && !isTyping) {
+        if (didMatchSelection) {
             onSelect(undefined);
         }
 
-        setIsTyping(true);
+        onChangeText?.(text);
     };
 
-    const isSelectionActive = selectedValue !== undefined && !isTyping;
+    const isSelectionActive =
+        selectedValue !== undefined &&
+        existingItemLabel !== undefined &&
+        inputText === existingItemLabel;
 
     const filteredItems = useMemo(() => {
-        const search = searchValue.toLowerCase();
+        const search = inputText.toLowerCase();
 
         return items
             .filter((item) => {
@@ -196,20 +186,20 @@ export const DropdownInputBase = <T,>({
                 return inSearch;
             })
             .slice(0, maxSuggestionCount);
-    }, [items, maxSuggestionCount, searchValue, selectedValue]);
+    }, [items, maxSuggestionCount, inputText, selectedValue]);
 
     const showDropdownPanel =
         hasFocus &&
         !isSelectionActive &&
         !!filteredItems.length &&
-        searchValue.length >= minimumSearchLength;
+        inputText.length >= minimumSearchLength;
 
     return (
         <>
             <InputBase
                 {...props}
                 ref={inputRef}
-                value={searchValue}
+                value={inputText}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onChangeText={handleChangeText}
@@ -228,7 +218,7 @@ export const DropdownInputBase = <T,>({
                                 key={"id" in item ? item.id : item.value}
                                 label={item.label}
                                 description={item.description}
-                                searchValue={searchValue}
+                                searchValue={inputText}
                                 onPress={() => handleSelect(item)}
                             />
                         ))}
