@@ -6,10 +6,13 @@ jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-            contents: read
+            contents: write
             packages: write
         steps:
             - uses: actions/checkout@v4
+              with:
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  fetch-depth: 0
             # Setup .npmrc file to publish to GitHub Packages
             - uses: actions/setup-node@v4
               with:
@@ -21,6 +24,17 @@ jobs:
               run: npm install
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Bump patch version and push
+              run: |
+                npm version patch --no-git-tag-version
+                git config user.name "github-actions[bot]"
+                git config user.email "github-actions[bot]@users.noreply.github.com"
+                git add package.json package-lock.json
+                git commit -m "ci: bump patch version [skip ci]"
+                git push
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish package
               run: npm publish --access restricted
