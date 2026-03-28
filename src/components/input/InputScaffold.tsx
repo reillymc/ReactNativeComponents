@@ -52,42 +52,40 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
 
     return (
         <View style={[styles.container, containerStyle]}>
-            <View style={styles.innerContainer}>
-                {label && (
-                    <View style={styles.labelContainer}>
-                        {typeof label === "string" ? (
-                            <Text variant="label">{label}</Text>
-                        ) : (
-                            label
-                        )}
-                    </View>
-                )}
-                <View>
-                    {children}
-                    {mandatory && (
-                        <Text variant="title" style={styles.mandatoryIndicator}>
-                            {"\u2022"}
-                        </Text>
+            {label && (
+                <View style={styles.labelContainer}>
+                    {typeof label === "string" ? (
+                        <Text variant="label">{label}</Text>
+                    ) : (
+                        label
                     )}
                 </View>
-                {(helpText || hasError) && (
-                    <View style={styles.helpText}>
-                        {hasError && (
-                            <IconBase
-                                iconSet={AntDesign}
-                                iconName="exclamation-circle"
-                                style={{ color: "red", size: 16 }} // TODO extract to new styled component - help and/or error text?
-                            />
-                        )}
-                        {helpText &&
-                            (typeof helpText === "string" ? (
-                                <Text variant="caption">{helpText}</Text>
-                            ) : (
-                                helpText
-                            ))}
-                    </View>
+            )}
+            <View>
+                {children}
+                {mandatory && (
+                    <Text variant="title" style={styles.mandatoryIndicator}>
+                        {"\u2022"}
+                    </Text>
                 )}
             </View>
+            {(helpText || hasError) && (
+                <View style={styles.helpText}>
+                    {hasError && (
+                        <IconBase
+                            iconSet={AntDesign}
+                            iconName="exclamation-circle"
+                            style={{ color: "red", size: 16 }} // TODO extract to new styled component - help and/or error text?
+                        />
+                    )}
+                    {helpText &&
+                        (typeof helpText === "string" ? (
+                            <Text variant="caption">{helpText}</Text>
+                        ) : (
+                            helpText
+                        ))}
+                </View>
+            )}
         </View>
     );
 };
@@ -95,12 +93,6 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
 const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
-            flexDirection: "row",
-            flexGrow: 1,
-            flexBasis: 1,
-        },
-        innerContainer: {
-            flexGrow: 1,
             gap: inputScaffold.gap,
         },
         labelContainer: {
