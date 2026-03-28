@@ -93,6 +93,7 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
 const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
+            flex: 1,
             gap: inputScaffold.gap,
         },
         labelContainer: {
