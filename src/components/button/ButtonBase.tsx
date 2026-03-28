@@ -86,8 +86,6 @@ const createStyles = (
             minWidth: width === "medium" ? buttonBase.width.medium : undefined,
             backgroundColor:
                 buttonBase.backgroundColor[disabled ? "disabled" : "enabled"],
-            flexGrow: 1,
-            flexBasis: 1,
         },
         innerContainer: {
             flex: width === "auto" ? 1 : undefined,
