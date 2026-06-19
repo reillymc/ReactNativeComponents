@@ -3,6 +3,7 @@
         "target": "ES2024",
         "module": "esnext",
         "moduleResolution": "bundler",
+        "rootDir": "./src/",
         "outDir": "./lib/",
         "declarationDir": "./lib/types",
         "strict": true,

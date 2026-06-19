@@ -5,6 +5,10 @@ export type {
     DropdownInputStyles,
 } from "./DropdownInput";
 export { DropdownInput } from "./DropdownInput";
+export {
+    DropdownInputBase,
+    type DropdownInputBaseProps,
+} from "./DropdownInputBase";
 export type {
     InputActionProps,
     InputActionStyles,
@@ -18,9 +22,9 @@ export type {
 } from "./InputScaffold";
 export { InputScaffold } from "./InputScaffold";
 export type {
+    FractionValue,
     NumberInputProps,
     NumberInputValue,
-    FractionValue,
     NumberValue,
     RangeValue,
 } from "./NumberInput";
@@ -44,7 +48,3 @@ export type {
     ToggleInputStyles,
 } from "./ToggleInput";
 export { ToggleInput } from "./ToggleInput";
-export {
-    DropdownInputBase,
-    type DropdownInputBaseProps,
-} from "./DropdownInputBase";

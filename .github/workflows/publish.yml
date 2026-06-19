@@ -21,7 +21,7 @@ jobs:
                   # Defaults to the user or organization that owns the workflow file
                   scope: "@reillymc"
             - name: Install dependencies
-              run: npm install
+              run: npm ci
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -111,8 +111,6 @@ const createStyles = (
 ) => {
     const styles = StyleSheet.create({
         container: {
-            marginBottom:
-                variant === "compact" ? undefined : listItem.spacingMargin,
             backgroundColor: theme.color.background,
             borderRadius:
                 variant === "compact" ? undefined : listItem.borderRadius,

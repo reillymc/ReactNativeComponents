@@ -117,7 +117,7 @@ const createStyles = (
     layout: PanelLayout | undefined,
 ) =>
     StyleSheet.create({
-        keyboardView: StyleSheet.absoluteFillObject,
+        keyboardView: StyleSheet.absoluteFill,
         container: layout
             ? {
                   position: "absolute",

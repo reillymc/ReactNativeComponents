@@ -63,6 +63,7 @@ export type {
     CounterInputProps,
     DropdownInputProps,
     DropdownInputStyles,
+    FractionValue,
     InputActionProps,
     InputActionStyles,
     InputBaseProps,
@@ -71,6 +72,8 @@ export type {
     InputScaffoldStyles,
     NumberInputProps,
     NumberInputValue,
+    NumberValue,
+    RangeValue,
     RatingInputProps,
     SelectionInputProps,
     SelectionInputStyles,
@@ -80,9 +83,6 @@ export type {
     TimeInputValue,
     ToggleInputProps,
     ToggleInputStyles,
-    FractionValue,
-    NumberValue,
-    RangeValue,
 } from "./input";
 export {
     CounterInput,
