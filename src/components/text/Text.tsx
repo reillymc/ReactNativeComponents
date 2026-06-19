@@ -5,8 +5,9 @@ import {
     StyleSheet,
     type TextStyle,
 } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 
 export type TextVariant =
     | "display"
@@ -16,19 +17,23 @@ export type TextVariant =
     | "body"
     | "caption";
 
-export interface TextStyles {
-    color: string;
+interface BaseStyles {
+    color: TextStyle["color"];
     font: {
-        [Variant in TextVariant]: {
-            family: string;
-            weight: TextStyle["fontWeight"];
-            size: number;
-        };
+        family: TextStyle["fontFamily"];
+        weight: TextStyle["fontWeight"];
+        size: TextStyle["fontSize"];
     };
 }
 
-export interface TextProps extends RnTextProps {
+export interface TextStyles {
+    color: BaseStyles["color"];
+    font: Record<TextVariant, BaseStyles["font"]>;
+}
+
+export interface TextProps extends Omit<RnTextProps, "style"> {
     variant?: TextVariant;
+    style?: DeepPartial<BaseStyles>;
     children?: ReactNode;
 }
 
@@ -38,10 +43,25 @@ export const Text: FC<TextProps> = ({
     children,
     ...props
 }) => {
-    const styles = useThemedStyles(createStyles, { variant });
+    const [styles] = useThemedStylesWithOverride(
+        createStyles,
+        {
+            text: {
+                color: style?.color,
+                font: {
+                    [variant]: {
+                        family: style?.font?.family,
+                        weight: style?.font?.weight,
+                        size: style?.font?.size,
+                    },
+                },
+            },
+        },
+        { variant },
+    );
 
     return (
-        <RnText {...props} style={[styles.text, style]}>
+        <RnText {...props} style={styles.text}>
             {children}
         </RnText>
     );
