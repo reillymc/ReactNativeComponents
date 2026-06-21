@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../hooks";
+import { type ThemedStyles, useThemedStyles } from "../hooks";
 
 const getBackgroundColor = (
     colors: Array<{ background: ColorValue; foreground: ColorValue }>,
@@ -71,11 +71,10 @@ export const Avatar: React.FC<AvatarProps> = ({
     style,
     containerStyle,
 }) => {
-    const [styles] = useThemedStylesWithOverride(
-        createStyles,
-        { avatar: style },
-        { size, firstName, lastName },
-    );
+    const [styles] = useThemedStyles("avatar", createStyles, {
+        styles: { avatar: style },
+        props: { size, firstName, lastName },
+    });
 
     const initials =
         `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();

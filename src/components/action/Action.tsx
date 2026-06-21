@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks";
+import { useStyles } from "../../hooks";
 import { InteractiveText, type InteractiveTextStyles } from "../text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
 
@@ -29,7 +29,7 @@ export const Action: FC<ActionProps> = ({
     onPress,
 }) => {
     const disabled = disabledProp || !onPress;
-    const { action } = useStylesWithOverride({ action: style });
+    const { action } = useStyles({ action: style });
 
     return (
         <ActionBase

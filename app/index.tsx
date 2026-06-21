@@ -200,7 +200,7 @@ const ComponentListScreen: React.FC = () => {
     const router = useRouter();
     const { theme } = useTheme();
 
-    const styles = useThemedStyles(createStyles, undefined);
+    const styles = useThemedStyles(createStyles);
 
     const [collapsed, setCollapsed] = useState(true);
     const [variant, setVariant] = useState<"primary" | "secondary">();

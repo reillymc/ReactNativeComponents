@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import { StyleSheet, View } from "react-native";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { InputAction } from "./InputAction";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
@@ -30,10 +30,9 @@ export const CounterInput: FC<CounterInputProps> = ({
     containerStyle,
     ...props
 }) => {
-    const styles = useThemedStyles(createStyles, { disabled });
-    const {
-        icons: { counterInput },
-    } = useTheme();
+    const [styles, { icons }] = useThemedStyles("counterInput", createStyles, {
+        props: { disabled },
+    });
 
     const value = Number.parseInt(props.value ?? "0", 10) || 0;
 
@@ -47,7 +46,7 @@ export const CounterInput: FC<CounterInputProps> = ({
         >
             <View style={styles.container}>
                 <InputAction
-                    iconName={counterInput.decrease}
+                    iconName={icons.decrease}
                     variant={variant}
                     disabled={disabled}
                     onPress={() =>
@@ -78,7 +77,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     inputStyle={styles.input}
                 />
                 <InputAction
-                    iconName={counterInput.increase}
+                    iconName={icons.increase}
                     disabled={disabled}
                     variant={variant}
                     onPress={() =>

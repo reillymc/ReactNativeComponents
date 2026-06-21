@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import {
     componentWithIcon,
     InteractiveIcon,
@@ -34,16 +34,19 @@ export const IconActionBase = componentWithIcon<IconActionBaseProps>(
         iconPosition = "left",
         disabled: disabledProp,
         containerStyle,
-        style,
+        style: styleOverrides,
         onPress,
         ...iconProps
     }) => {
         const disabled = disabledProp || !onPress;
 
-        const [styles, { iconActionBase }] = useThemedStylesWithOverride(
+        const [styles, { style }] = useThemedStyles(
+            "iconActionBase",
             createStyles,
-            { iconActionBase: style },
-            { iconPosition },
+            {
+                styles: { iconActionBase: styleOverrides },
+                props: { iconPosition },
+            },
         );
 
         return (
@@ -56,14 +59,14 @@ export const IconActionBase = componentWithIcon<IconActionBaseProps>(
                     <View style={styles.container}>
                         <InteractiveIcon
                             disabled={disabled}
-                            style={iconActionBase.icon}
+                            style={style.icon}
                             {...iconProps}
                             {...pressableState}
                         />
                         {!!label && (
                             <InteractiveText
                                 disabled={disabled}
-                                style={iconActionBase.text}
+                                style={style.text}
                                 {...pressableState}
                             >
                                 {label}

@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks";
+import { useStyles } from "../../hooks";
 import { InteractiveText, type InteractiveTextStyles } from "../text";
 import {
     ButtonBase,
@@ -42,7 +42,7 @@ export const Button: FC<ButtonProps> = ({
 }) => {
     const disabled = disabledProp || !onPress;
 
-    const { button } = useStylesWithOverride({
+    const { button } = useStyles({
         button: style,
     });
 

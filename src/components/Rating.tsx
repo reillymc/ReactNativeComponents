@@ -9,7 +9,7 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { StarBorder, StarFull, StarHalf } from "../assets";
-import { type ThemedStyles, useThemedStylesWithOverride } from "../hooks";
+import { type ThemedStyles, useThemedStyles } from "../hooks";
 
 export const valueToRating = (
     rating: number,
@@ -76,14 +76,12 @@ export const Rating: FC<RatingProps> = ({
     max = 5,
     scale,
     ratingIconSet = DefaultRatingIconSet,
-    style,
+    style: styleOverrides,
     containerStyle,
 }) => {
-    const [styles, { rating }] = useThemedStylesWithOverride(
-        createStyles,
-        { rating: style },
-        undefined,
-    );
+    const [styles, { style }] = useThemedStyles("rating", createStyles, {
+        styles: { rating: styleOverrides },
+    });
 
     const scaledRating = scale ? valueToRating(value, max, scale) : value;
 
@@ -94,13 +92,13 @@ export const Rating: FC<RatingProps> = ({
         >
             {getRatingIcons(scaledRating, max).map((variant, i) => {
                 const RatingIcon = ratingIconSet[variant];
-                const color = rating.icon.color[variant];
+                const color = style.icon.color[variant];
 
                 return (
                     <RatingIcon
                         // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
                         key={i}
-                        size={rating.icon.size}
+                        size={style.icon.size}
                         color={color}
                     />
                 );

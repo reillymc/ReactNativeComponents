@@ -27,7 +27,7 @@ export const MenuItem: FC<MenuItemProps> = ({
         theme: { color },
     } = useTheme();
 
-    const styles = useThemedStyles(createStyles, {});
+    const [styles] = useThemedStyles("menuItem", createStyles);
 
     return (
         <Pressable

@@ -1,9 +1,8 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any prop definition is permitted */
 import { useMemo } from "react";
 
-import type { ThemeContextDefinition } from "../providers";
+import type { ThemeContextDefinition as ThemedStyles } from "../providers";
 import {
-    DefaultIcons,
     type Icons,
     MergeStyles,
     type StyleOverrides,
@@ -11,48 +10,7 @@ import {
 } from "../theme";
 import { useTheme } from "./useTheme";
 
-export type { ThemeContextDefinition as ThemedStyles };
-
-export const useThemedStyles = <
-    T extends Record<string, any>,
-    U extends Record<string, any> | undefined,
->(
-    generator: Generator<T, U>,
-    componentProps: U,
-) => {
-    const theme = useTheme();
-
-    const themedStyles = useMemo(
-        () => generator(theme, componentProps as any),
-        [generator, theme, componentProps],
-    );
-
-    return themedStyles;
-};
-
-export const useThemedStylesWithOverride = <
-    T extends Record<string, any>,
-    U extends Record<string, any> | undefined,
->(
-    generator: Generator<T, U>,
-    componentStyles: StyleOverrides,
-    componentProps: U,
-) => {
-    const { theme, styles: originalStyles } = useTheme();
-
-    const themedStyles = useMemo(() => {
-        const styles = MergeStyles(originalStyles, componentStyles);
-        return [
-            generator(
-                { theme, styles, icons: DefaultIcons },
-                componentProps as any,
-            ),
-            styles,
-        ] as const;
-    }, [generator, theme, componentProps, componentStyles, originalStyles]);
-
-    return themedStyles;
-};
+export type { ThemedStyles };
 
 function hasKey<T extends object, K extends PropertyKey>(
     obj: T,
@@ -61,24 +19,43 @@ function hasKey<T extends object, K extends PropertyKey>(
     return key in obj;
 }
 
-type ComponentKey = keyof Styles | keyof Icons<any>;
+type StyleOnlyKey = keyof Styles;
+type IconOnlyKey = keyof Icons<any>;
+type ComponentKey = StyleOnlyKey | IconOnlyKey;
 
-type StyleResult<C extends ComponentKey> = (C extends keyof Styles
-    ? { style: Styles[C] }
-    : Record<never, never>) &
-    (C extends keyof Icons<any>
-        ? { icons: Icons<any>[C] }
-        : Record<never, never>);
+type ComponentRegistry = {
+    [K in keyof Styles | keyof Icons<any>]: K extends keyof Styles
+        ? K extends keyof Icons<any>
+            ? {
+                  style: Styles[K];
+                  icons: Icons<any>[K];
+              }
+            : {
+                  style: Styles[K];
+              }
+        : K extends keyof Icons<any>
+          ? {
+                icons: Icons<any>[K];
+            }
+          : never;
+};
 
-type UseStylesReturn<C extends ComponentKey, T> = readonly [T, StyleResult<C>];
+type StyleResult<C extends keyof ComponentRegistry> = ComponentRegistry[C];
 
-type GeneratorProps<G> = G extends (...args: infer Args) => any
-    ? Args extends [ThemeContextDefinition, infer U]
-        ? U
-        : never
-    : never;
+type UseStylesReturn<C extends ComponentKey, G = undefined> = [
+    generated: G,
+    component: StyleResult<C>,
+];
+type AnyGenerator = (...args: any[]) => any;
 
-type UseStylesOptions<G> = [GeneratorProps<G>] extends [never]
+type GeneratorResult<G extends AnyGenerator> = ReturnType<G>;
+
+type GeneratorProps<G extends AnyGenerator> =
+    Parameters<G> extends [ThemedStyles, infer U] ? U : never;
+
+type UseStylesOptions<G extends AnyGenerator> = [GeneratorProps<G>] extends [
+    never,
+]
     ? [
           options?: {
               styles?: StyleOverrides;
@@ -91,19 +68,14 @@ type UseStylesOptions<G> = [GeneratorProps<G>] extends [never]
           },
       ];
 
-type Generator<T, U> = U extends undefined
-    ? (theme: ThemeContextDefinition) => T
-    : (theme: ThemeContextDefinition, props: U) => T;
-
-export const useStyles = <
+export const useThemedStyles = <
     C extends ComponentKey,
-    T extends Record<string, any>,
-    G extends Generator<T, any>,
+    G extends (...args: any[]) => any,
 >(
     componentName: C,
     generator: G,
     ...[options = {}]: UseStylesOptions<G>
-): UseStylesReturn<C, T> => {
+): UseStylesReturn<C, GeneratorResult<G>> => {
     const componentProps = "props" in options ? options.props : undefined;
     const componentStyles = "styles" in options ? options.styles : undefined;
     const { theme, styles: originalStyles, icons } = useTheme();
@@ -111,7 +83,10 @@ export const useStyles = <
     const themedStyles = useMemo(() => {
         const styles = MergeStyles(originalStyles, componentStyles);
 
-        const generated = generator({ theme, styles, icons }, componentProps);
+        const generated =
+            "props" in options
+                ? generator({ theme, styles, icons }, componentProps)
+                : generator({ theme, styles, icons });
 
         const componentResult = hasKey(styles, componentName)
             ? hasKey(icons, componentName)
@@ -128,11 +103,15 @@ export const useStyles = <
                 }
               : {};
 
-        return [generated, componentResult] as unknown as UseStylesReturn<C, T>;
+        return [generated, componentResult] as [
+            GeneratorResult<G>,
+            StyleResult<C>,
+        ];
     }, [
         generator,
         theme,
         icons,
+        options,
         componentProps,
         componentStyles,
         componentName,
@@ -142,7 +121,37 @@ export const useStyles = <
     return themedStyles;
 };
 
-export const useStylesWithOverride = (componentStyles: StyleOverrides) => {
+export const useThemedStylesExternal = <G extends (...args: any[]) => any>(
+    generator: G,
+    ...[options = {}]: UseStylesOptions<G>
+): GeneratorResult<G> => {
+    const componentProps = "props" in options ? options.props : undefined;
+    const componentStyles = "styles" in options ? options.styles : undefined;
+    const { theme, styles: originalStyles, icons } = useTheme();
+
+    const themedStyles = useMemo(() => {
+        const styles = MergeStyles(originalStyles, componentStyles);
+
+        const generated =
+            "props" in options
+                ? generator({ theme, styles, icons }, componentProps)
+                : generator({ theme, styles, icons });
+
+        return generated;
+    }, [
+        generator,
+        theme,
+        icons,
+        options,
+        componentProps,
+        componentStyles,
+        originalStyles,
+    ]);
+
+    return themedStyles;
+};
+
+export const useStyles = (componentStyles: StyleOverrides) => {
     const { styles: originalStyles } = useTheme();
 
     const themedStyles = useMemo(

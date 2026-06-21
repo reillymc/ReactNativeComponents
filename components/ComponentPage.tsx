@@ -22,7 +22,7 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
 }) => {
     const { theme } = useTheme();
 
-    const styles = useThemedStyles(createStyles, {});
+    const styles = useThemedStyles(createStyles);
 
     return (
         <>
@@ -59,8 +59,8 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
-    const styles = StyleSheet.create({
+const createStyles = ({ theme: { color, border } }: ThemedStyles) =>
+    StyleSheet.create({
         componentContainer: {
             flexGrow: 1,
             flexBasis: 1,
@@ -73,7 +73,6 @@ const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
             backgroundColor: color.foreground,
             width: "90%",
             minHeight: 80,
-            alignItems: "center",
             justifyContent: "center",
             borderRadius: border.radius.loose,
             padding: 12,
@@ -88,5 +87,3 @@ const createStyles = ({ theme: { color, border } }: ThemedStyles) => {
             backgroundColor: color.background,
         },
     });
-    return styles;
-};

@@ -5,7 +5,7 @@ import {
     View,
 } from "react-native";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
@@ -110,16 +110,11 @@ export const NumberInput: FC<NumberInputProps> = ({
     ref,
     ...baseProps
 }) => {
-    const styles = useThemedStyles(createStyles, {
-        value,
-        disabled,
-        enabledRepresentations,
+    const [styles, { icons }] = useThemedStyles("numberInput", createStyles, {
+        props: { value, disabled },
     });
-    const {
-        icons: { numberInput },
-    } = useTheme();
 
-    const icon = numberInput[value.representation];
+    const icon = icons[value.representation];
 
     const handleChangeMode = useCallback(() => {
         const nextMode = getNextMode(

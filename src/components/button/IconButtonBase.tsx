@@ -1,7 +1,7 @@
 import { type DimensionValue, StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
 import {
     componentWithIcon,
@@ -29,17 +29,20 @@ export interface IconButtonBaseProps
 export const IconButtonBase = componentWithIcon<IconButtonBaseProps>(
     ({
         disabled: disabledProp,
-        style,
+        style: styleOverrides,
         containerStyle,
         onPress,
         ...iconProps
     }) => {
         const disabled = disabledProp || !onPress;
 
-        const [styles, { iconButtonBase }] = useThemedStylesWithOverride(
+        const [styles, { style }] = useThemedStyles(
+            "iconButtonBase",
             createStyles,
-            { iconButtonBase: style },
-            { disabled },
+            {
+                styles: { iconButtonBase: styleOverrides },
+                props: { disabled },
+            },
         );
 
         return (
@@ -50,8 +53,7 @@ export const IconButtonBase = componentWithIcon<IconButtonBaseProps>(
                     pressableState.pressed
                         ? {
                               backgroundColor:
-                                  iconButtonBase.container.backgroundColor
-                                      .pressed,
+                                  style.container.backgroundColor.pressed,
                           }
                         : undefined,
                     styles.iconButtonBase,
@@ -65,7 +67,7 @@ export const IconButtonBase = componentWithIcon<IconButtonBaseProps>(
                         {...pressableState}
                         {...iconProps}
                         disabled={disabled}
-                        style={iconButtonBase.icon}
+                        style={style.icon}
                     />
                 )}
             </ActionBase>

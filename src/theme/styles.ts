@@ -24,9 +24,11 @@ import type {
     ListItemStyles,
     MenuItemStyles,
     MenuStyles,
+    RatingInputStyles,
     RatingStyles,
     SelectionInputStyles,
     SwipeActionStyles,
+    TagStyles,
     TextStyles,
     ToastStyles,
     ToggleInputStyles,
@@ -56,6 +58,7 @@ export type Styles = {
     inputAction: InputActionStyles;
     toggleInput: ToggleInputStyles;
     selectionInput: SelectionInputStyles;
+    ratingInput: RatingInputStyles;
 
     rating: RatingStyles;
     alertIndicator: AlertIndicatorStyles;
@@ -75,6 +78,7 @@ export type Styles = {
     menuItem: MenuItemStyles;
     swipeAction: SwipeActionStyles;
     floatingContainer: FloatingContainerStyles;
+    tag: TagStyles;
 };
 
 export type StyleOverrides = DeepPartial<Styles>;
@@ -367,6 +371,12 @@ export const createDefaultStyles: CreateStyles = ({
         },
     };
 
+    const tag: TagStyles = {
+        borderRadius: border.radius.loose,
+        internalSpacing: spacing.small,
+        padding: spacing.small,
+    };
+
     const styles: Styles = {
         interactiveText,
         iconBase,
@@ -384,6 +394,7 @@ export const createDefaultStyles: CreateStyles = ({
         inputScaffold,
         inputAction,
         selectionInput,
+        ratingInput: null,
 
         swipeAction,
         floatingContainer,
@@ -391,6 +402,7 @@ export const createDefaultStyles: CreateStyles = ({
         menuItem,
         rating,
         alertIndicator,
+        tag,
 
         common: {
             action: {

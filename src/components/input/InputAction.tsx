@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import {
     IconActionBase,
     type IconActionBaseProps,
@@ -22,10 +22,10 @@ export interface InputActionProps
 
 export const InputAction = componentWithIcon<InputActionProps>(
     ({ disabled = false, containerStyle, variant = "regular", ...props }) => {
-        const [styles, { inputAction }] = useThemedStylesWithOverride(
+        const [styles, { style }] = useThemedStyles(
+            "inputAction",
             createStyles,
-            {},
-            { disabled, variant },
+            { props: { disabled, variant } },
         );
 
         return (
@@ -38,7 +38,7 @@ export const InputAction = componentWithIcon<InputActionProps>(
                         ? containerStyle(pressableState)
                         : containerStyle,
                 ]}
-                style={{ icon: inputAction.icon }}
+                style={{ icon: style.icon }}
             />
         );
     },

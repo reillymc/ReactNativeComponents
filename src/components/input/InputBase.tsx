@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type InputState = "enabled" | "disabled";
 export type InputVariant = "regular" | "compact";
@@ -43,21 +43,20 @@ export const InputBase: FC<InputBaseProps> = ({
     scrollEnabled,
     onChangeText,
     ref,
-    style,
+    style: styleOverrides,
     inputStyle,
     ...props
 }) => {
-    const [styles, { inputBase }] = useThemedStylesWithOverride(
-        createStyles,
-        { inputBase: style },
-        { disabled, multiline, variant },
-    );
+    const [styles, { style }] = useThemedStyles("inputBase", createStyles, {
+        styles: { inputBase: styleOverrides },
+        props: { disabled, multiline, variant },
+    });
 
     return (
         <TextInput
             ref={ref}
             editable={!disabled}
-            placeholderTextColor={inputBase.text.placeholderColor}
+            placeholderTextColor={style.text.placeholderColor}
             style={[styles.input, inputStyle]}
             multiline={multiline}
             scrollEnabled={scrollEnabled ?? false}

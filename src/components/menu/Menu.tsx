@@ -2,7 +2,7 @@ import type { FC, PropsWithChildren } from "react";
 import { type ColorValue, StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type MenuStyles = {
     parentMargin: number;
@@ -18,11 +18,9 @@ export type MenuProps = PropsWithChildren<{
 }>;
 
 export const Menu: FC<MenuProps> = ({ style, reverse, children }) => {
-    const [styles] = useThemedStylesWithOverride(
-        createStyles,
-        { menu: style },
-        {},
-    );
+    const [styles] = useThemedStyles("menu", createStyles, {
+        styles: { menu: style },
+    });
 
     return (
         <View

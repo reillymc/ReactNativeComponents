@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     AlertIndicator,
     IconAction,
@@ -185,8 +185,8 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
     },
 };
 
-const ListItemPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ListItemProps>(defaultProps);
+const ListItemPage: FunctionComponent = () => {
+    const [props, setProps] = useState<ListItemProps>(defaultProps);
 
     return (
         <ComponentPage

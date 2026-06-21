@@ -79,6 +79,7 @@ export type {
     NumberValue,
     RangeValue,
     RatingInputProps,
+    RatingInputStyles,
     SelectionInputIcons,
     SelectionInputProps,
     SelectionInputStyles,
@@ -113,7 +114,7 @@ export {
     type ListItemProps,
     ListItemRow,
     type ListItemStyles,
-} from "./ListItem";
+} from "./listItem";
 export type {
     MenuItemProps,
     MenuItemStyles,
@@ -139,7 +140,7 @@ export {
     type SwipeActionStyles,
 } from "./SwipeAction";
 export { Toast, type ToastProps, type ToastStyles } from "./Toast";
-export { Tag, TagIcon, type TagProps } from "./tag";
+export { Tag, TagIcon, type TagProps, type TagStyles } from "./tag";
 export type {
     HighlightedTextProps,
     HighlightedTextStyles,

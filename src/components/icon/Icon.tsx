@@ -1,6 +1,6 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks";
+import { useStyles } from "../../hooks";
 import { componentWithIcon } from "./componentWithIcon";
 import { IconBase, type IconBaseStyles } from "./IconBase";
 
@@ -19,7 +19,7 @@ export type IconProps = {
 
 export const Icon = componentWithIcon<IconProps>(
     ({ size = "medium", style, ...iconProps }) => {
-        const { icon } = useStylesWithOverride({ icon: style });
+        const { icon } = useStyles({ icon: style });
 
         return (
             <IconBase

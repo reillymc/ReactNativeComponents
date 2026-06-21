@@ -38,7 +38,9 @@ export const Text: FC<TextProps> = ({
     children,
     ...props
 }) => {
-    const styles = useThemedStyles(createStyles, { variant });
+    const [styles] = useThemedStyles("text", createStyles, {
+        props: { variant },
+    });
 
     return (
         <RnText {...props} style={[styles.text, style]}>

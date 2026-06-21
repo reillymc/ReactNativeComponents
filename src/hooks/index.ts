@@ -5,7 +5,6 @@ export { useTheme } from "./useTheme";
 export {
     type ThemedStyles,
     useStyles,
-    useStylesWithOverride,
     useThemedStyles,
-    useThemedStylesWithOverride,
+    useThemedStylesExternal,
 } from "./useThemedStyles";

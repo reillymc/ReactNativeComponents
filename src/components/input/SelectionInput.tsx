@@ -2,7 +2,7 @@ import { type ColorValue, StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ValueItem } from "../../common";
-import { type ThemedStyles, useStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
@@ -66,7 +66,7 @@ export const SelectionInput = <T,>({
     ...props
 }: SelectionInputProps<T>) => {
     const disabled = disabledProp || !onAdd;
-    const [styles, { style, icons }] = useStyles(
+    const [styles, { style, icons }] = useThemedStyles(
         "selectionInput",
         createStyles,
         {

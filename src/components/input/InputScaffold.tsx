@@ -50,10 +50,9 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
     containerStyle,
     hasError,
 }) => {
-    const styles = useThemedStyles(createStyles, {});
+    const [styles, { icons }] = useThemedStyles("inputScaffold", createStyles);
     const {
         theme: { color },
-        icons: { inputScaffold },
     } = useTheme();
 
     return (
@@ -79,7 +78,7 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                 <View style={styles.helpText}>
                     {hasError && (
                         <Icon
-                            iconName={inputScaffold.error}
+                            iconName={icons.error}
                             style={{ color: color.error }}
                             size="small"
                         />

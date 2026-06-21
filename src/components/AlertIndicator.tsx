@@ -30,7 +30,9 @@ export const AlertIndicator: React.FC<AlertIndicatorProps> = ({
     variant = "primary",
     style,
 }) => {
-    const styles = useThemedStyles(createStyles, { variant });
+    const [styles] = useThemedStyles("alertIndicator", createStyles, {
+        props: { variant },
+    });
 
     return (
         <View style={[styles.container, style]}>

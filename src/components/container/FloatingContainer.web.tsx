@@ -46,7 +46,9 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 
     const [layout, setLayout] = useState<PanelLayout>();
 
-    const styles = useThemedStyles(createStyles, layout);
+    const [styles] = useThemedStyles("floatingContainer", createStyles, {
+        props: { layout },
+    });
 
     const { height: screenHeight } = useWindowDimensions();
     const { top } = useSafeAreaInsets();
@@ -88,7 +90,7 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 
 const createStyles = (
     { styles: { floatingContainer } }: ThemedStyles,
-    layout: PanelLayout | undefined,
+    { layout }: { layout: PanelLayout | undefined },
 ) =>
     StyleSheet.create({
         container: {

@@ -52,7 +52,9 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 }) => {
     const containerRef = useRef<View>(null);
     const [layout, setLayout] = useState<PanelLayout>();
-    const styles = useThemedStyles(createStyles, layout);
+    const [styles] = useThemedStyles("floatingContainer", createStyles, {
+        props: { layout },
+    });
 
     const { height: screenHeight } = useWindowDimensions();
 
@@ -114,7 +116,7 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 
 const createStyles = (
     { styles: { floatingContainer } }: ThemedStyles,
-    layout: PanelLayout | undefined,
+    { layout }: { layout: PanelLayout | undefined },
 ) =>
     StyleSheet.create({
         keyboardView: StyleSheet.absoluteFill,

@@ -115,7 +115,7 @@ export const useSelectionModal = <T,>({
 };
 
 const SelectionModal: FC = () => {
-    const styles = useThemedStyles(createStyles, {});
+    const styles = useThemedStyles(createStyles);
     const router = useRouter();
 
     const {

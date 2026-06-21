@@ -2,7 +2,7 @@ import type React from "react";
 import { StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useThemedStylesWithOverride } from "../../hooks";
+import { useThemedStyles } from "../../hooks";
 import { Text, type TextProps, type TextVariant } from "./Text";
 
 /**
@@ -25,14 +25,16 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
     text = "",
     highlight = "",
     textStyles,
-    style,
+    style: styleOverrides,
     variant = "body",
     ...props
 }) => {
-    const [styles, { highlightedText }] = useThemedStylesWithOverride(
+    const [styles, { style }] = useThemedStyles(
+        "highlightedText",
         createStyles,
-        { highlightedText: style },
-        {},
+        {
+            styles: { highlightedText: styleOverrides },
+        },
     );
 
     const highlightedString = EscapeForRegexProcessing(highlight.toLowerCase());
@@ -48,8 +50,7 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
                     key={`${part}${idx}`}
                     style={
                         part.toLowerCase() === highlightedString && {
-                            fontWeight:
-                                highlightedText.highlightedWeight[variant],
+                            fontWeight: style.highlightedWeight[variant],
                         }
                     }
                 >

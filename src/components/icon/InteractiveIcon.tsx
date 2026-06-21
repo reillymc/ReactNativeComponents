@@ -1,7 +1,7 @@
 import type { PressableStateCallbackType } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks";
+import { useStyles } from "../../hooks";
 import { componentWithIcon } from "./componentWithIcon";
 import { IconBase, type IconBaseStyles } from "./IconBase";
 
@@ -21,7 +21,7 @@ export interface InteractiveIconProps extends PressableStateCallbackType {
 
 export const InteractiveIcon = componentWithIcon<InteractiveIconProps>(
     ({ pressed, style, disabled = false, ...iconProps }) => {
-        const { interactiveIcon } = useStylesWithOverride({
+        const { interactiveIcon } = useStyles({
             interactiveIcon: style,
         });
 

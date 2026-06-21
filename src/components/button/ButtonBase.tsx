@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase, type ActionBaseProps } from "../action";
 
 export type ButtonState = "enabled" | "disabled" | "pressed";
@@ -36,17 +36,16 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
     containerStyle,
     disabled: disabledProp,
     width = "auto",
-    style,
+    style: styleOverrides,
     children,
     onPress,
 }) => {
     const disabled = disabledProp || !onPress;
 
-    const [styles, { buttonBase }] = useThemedStylesWithOverride(
-        createStyles,
-        { buttonBase: style },
-        { disabled, width },
-    );
+    const [styles, { style }] = useThemedStyles("buttonBase", createStyles, {
+        styles: { buttonBase: styleOverrides },
+        props: { disabled, width },
+    });
 
     return (
         <ActionBase
@@ -55,7 +54,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
             containerStyle={(pressableState) => [
                 styles.buttonBase,
                 pressableState.pressed && {
-                    backgroundColor: buttonBase.backgroundColor.pressed,
+                    backgroundColor: style.backgroundColor.pressed,
                 },
                 typeof containerStyle === "function"
                     ? containerStyle(pressableState)

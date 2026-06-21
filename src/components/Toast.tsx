@@ -23,7 +23,7 @@ export const Toast: React.FunctionComponent<ToastProps> = ({
     containerStyle,
     children,
 }) => {
-    const styles = useThemedStyles(createStyles, {});
+    const [styles] = useThemedStyles("toast", createStyles);
 
     return (
         <Animated.View

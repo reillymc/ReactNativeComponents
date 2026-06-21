@@ -6,7 +6,7 @@ import {
     View,
 } from "react-native";
 
-import { type ThemedStyles, useStyles } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
@@ -50,7 +50,7 @@ export const TimeInput: FC<TimeInputProps> = ({
     const disabled = disabledProp || !onChange;
     const hoursRef = useRef<RnTextInput>(null);
     const minutesRef = useRef<RnTextInput>(null);
-    const [styles, { icons }] = useStyles("timeInput", createStyles, {
+    const [styles, { icons }] = useThemedStyles("timeInput", createStyles, {
         props: { variant, disabled },
     });
 

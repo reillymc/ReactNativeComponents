@@ -18,6 +18,8 @@ import {
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 
+export type RatingInputStyles = null;
+
 export interface RatingInputProps
     extends Pick<
             InputScaffoldProps,
@@ -55,7 +57,9 @@ export const RatingInput: FC<RatingInputProps> = ({
         styles: { inputBase, rating },
     } = useTheme();
 
-    const styles = useThemedStyles(createStyles, { disabled, variant });
+    const [styles] = useThemedStyles("ratingInput", createStyles, {
+        props: { disabled, variant },
+    });
 
     const [width, setWidth] = useState<number>();
 
@@ -193,7 +197,7 @@ const AnimatedIcon: FC<AnimatedIconProps> = ({ active, children }) => {
 
         animation.start();
         return animation.stop;
-    }, [active, animatedSize, scale, easing, duration]);
+    }, [active, animatedSize]);
 
     return (
         <Animated.View

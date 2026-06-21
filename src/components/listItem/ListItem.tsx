@@ -1,4 +1,4 @@
-import type { FC, ReactElement, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import {
     Pressable,
     type StyleProp,
@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { Undefined } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../hooks";
-import { SwipeableContainer, type SwipeableContainerProps } from "./container";
-import { Text } from "./text";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { SwipeableContainer, type SwipeableContainerProps } from "../container";
+import { Text } from "../text";
 
 type ListItemVariant = "default" | "compact";
 
@@ -25,7 +25,13 @@ export interface ListItemStyles {
 export interface ListItemProps {
     heading?: ReactNode;
     header?: ReactNode;
+    /**
+     * [ListItemAvatar](./ListItemAvatar.tsx)
+     */
     avatar?: ReactNode;
+    /**
+     * [ListItemAlert](./ListItemAlert.tsx)
+     */
     alert?: ReactNode;
     variant?: ListItemVariant;
 
@@ -36,6 +42,9 @@ export interface ListItemProps {
      */
     contentRows?: Array<ReactNode>;
 
+    /**
+     * [ListItemFooter](./ListItemFooter.tsx)
+     */
     footer?: ReactNode;
 
     swipeActions?: SwipeableContainerProps["rightActions"];
@@ -50,7 +59,7 @@ export const ListItem: FC<ListItemProps> = ({
     heading,
     footer,
     header,
-    variant,
+    variant = "default",
     contentRows = [],
     swipeActions,
     style,
@@ -61,16 +70,16 @@ export const ListItem: FC<ListItemProps> = ({
 
     const filteredActions = swipeActions?.filter(Undefined);
 
-    const styles = useThemedStyles(createStyles, { avatar, variant });
+    const [styles] = useThemedStyles("listItem", createStyles, {
+        props: { variant },
+    });
 
     const innerContent = (
         <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
             {header}
             <View style={styles.bodyContainer}>
                 <View style={styles.innerContainer}>
-                    {!!avatar && (
-                        <View style={styles.avatarContainer}>{avatar}</View>
-                    )}
+                    {avatar}
                     <View
                         style={[styles.contentContainer, contentContainerStyle]}
                     >
@@ -84,7 +93,7 @@ export const ListItem: FC<ListItemProps> = ({
                         {filteredRows}
                     </View>
                 </View>
-                {!!alert && <View style={styles.avatarContainer}>{alert}</View>}
+                {alert}
             </View>
             {footer}
         </Pressable>
@@ -103,13 +112,11 @@ export const ListItem: FC<ListItemProps> = ({
     );
 };
 
-ListItem.displayName = "ListItem";
-
 const createStyles = (
     { styles: { listItem }, theme }: ThemedStyles,
-    { avatar, variant }: Partial<ListItemProps>,
-) => {
-    const styles = StyleSheet.create({
+    { variant }: Required<Pick<ListItemProps, "variant">>,
+) =>
+    StyleSheet.create({
         container: {
             backgroundColor: theme.color.background,
             borderRadius:
@@ -132,94 +139,12 @@ const createStyles = (
             flexDirection: "row",
             flexShrink: 1,
         },
-        avatarContainer: {
-            alignItems: "center",
-            justifyContent: "center",
-        },
-        avatar: {
-            marginLeft: listItem.internalSpacing,
-            marginRight: listItem.spacingMargin,
-        },
-        alert: {
-            marginLeft: listItem.spacingMargin,
-            marginRight: listItem.internalSpacing,
-        },
         contentContainer: {
             flexShrink: 1,
             flexDirection: "column",
             alignItems: "flex-start",
             justifyContent: "center",
             width: "100%",
-            paddingVertical: listItem.internalSpacing,
-            paddingLeft: avatar ? 0 : listItem.internalSpacing,
-            paddingRight: listItem.internalSpacing,
-        },
-        spacer: {
-            marginHorizontal: listItem.contentItemSpacing,
-        },
-        contentItem: {
-            flexDirection: "row",
-            flexShrink: 1,
-        },
-        footer: {
-            display: "flex",
-            marginBottom: listItem.internalSpacing,
-            marginLeft: listItem.internalSpacing,
-            marginRight: listItem.internalSpacing,
+            padding: listItem.internalSpacing,
         },
     });
-    return styles;
-};
-
-export interface ListItemRowProps {
-    contentItems?: Array<ReactElement> | ReactElement;
-}
-
-export const ListItemRow: FC<ListItemRowProps> = ({ contentItems }) => {
-    const styles = useThemedStyles(createStyles, {});
-
-    const items = Array.isArray(contentItems) ? contentItems : [contentItems];
-
-    return (
-        <View style={styles.contentItem}>
-            {items.map((item, index) => (
-                <View key={item?.key} style={styles.contentItem}>
-                    {item}
-                    {index < items.length - 1 && (
-                        <Text style={styles.spacer}>·</Text>
-                    )}
-                </View>
-            ))}
-        </View>
-    );
-};
-
-export interface ListItemAvatarProps {
-    children?: ReactNode;
-}
-
-export const ListItemAvatar: FC<ListItemAvatarProps> = ({ children }) => {
-    const styles = useThemedStyles(createStyles, {});
-
-    return <View style={styles.avatar}>{children}</View>;
-};
-
-export interface ListItemAlertProps {
-    children?: ReactNode;
-}
-
-export const ListItemAlert: FC<ListItemAlertProps> = ({ children }) => {
-    const styles = useThemedStyles(createStyles, {});
-
-    return <View style={styles.alert}>{children}</View>;
-};
-
-export interface ListItemFooterProps {
-    children?: ReactNode;
-}
-
-export const ListItemFooter: FC<ListItemFooterProps> = ({ children }) => {
-    const styles = useThemedStyles(createStyles, {});
-
-    return <View style={styles.footer}>{children}</View>;
-};

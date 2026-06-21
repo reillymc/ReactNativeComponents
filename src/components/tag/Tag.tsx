@@ -3,12 +3,17 @@ import {
     Pressable,
     type StyleProp,
     StyleSheet,
-    View,
     type ViewStyle,
 } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { Text } from "../text";
+
+export interface TagStyles {
+    internalSpacing: number;
+    borderRadius: number;
+    padding: number;
+}
 
 export interface TagProps {
     label?: string;
@@ -22,7 +27,9 @@ export interface TagProps {
 }
 
 export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
-    const styles = useThemedStyles(createStyles, { variant, label });
+    const [styles] = useThemedStyles("tag", createStyles, {
+        props: { variant, label },
+    });
 
     return (
         <Pressable
@@ -30,31 +37,27 @@ export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
             onPress={onPress}
             style={[styles.container, style]}
         >
-            {icon && <View style={styles.icon}>{icon}</View>}
+            {icon}
             <Text style={styles.text}>{label}</Text>
         </Pressable>
     );
 };
 
 const createStyles = (
-    { theme: { color } }: ThemedStyles,
-    { variant = "dark", label }: Partial<TagProps>,
+    { theme: { color }, styles: { tag } }: ThemedStyles,
+    { variant = "dark" }: Partial<TagProps>,
 ) => {
     const styles = StyleSheet.create({
         container: {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: 24,
-            paddingVertical: 6,
-            paddingHorizontal: 12,
+            borderRadius: tag.borderRadius,
+            padding: tag.padding,
             backgroundColor:
                 variant === "dark" ? color.background : color.foreground,
             width: "auto",
-        },
-        icon: {
-            marginRight: label === undefined ? 0 : 6,
-            marginVertical: 6,
+            gap: tag.internalSpacing,
         },
         text: {
             color: color.textPrimary,

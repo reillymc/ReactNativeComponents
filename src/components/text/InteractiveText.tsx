@@ -6,7 +6,7 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { Text, type TextProps } from "./Text";
 
 export type InteractiveTextState = "enabled" | "disabled" | "pressed";
@@ -26,25 +26,25 @@ export interface InteractiveTextProps extends PressableStateCallbackType {
 
 export const InteractiveText: FC<InteractiveTextProps> = ({
     pressed,
-    style,
+    style: styleOverrides,
     textVariant,
     children,
     disabled = false,
 }) => {
-    const [styles, { interactiveText }] = useThemedStylesWithOverride(
+    const [styles, { style }] = useThemedStyles(
+        "interactiveText",
         createStyles,
-        { interactiveText: style },
-        { disabled },
+        {
+            styles: { interactiveText: styleOverrides },
+            props: { disabled },
+        },
     );
 
     return (
         <Text
             numberOfLines={1}
             variant={textVariant}
-            style={[
-                styles.label,
-                pressed && { color: interactiveText.color.pressed },
-            ]}
+            style={[styles.label, pressed && { color: style.color.pressed }]}
         >
             {children}
         </Text>
