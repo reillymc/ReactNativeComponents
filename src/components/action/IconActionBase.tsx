@@ -3,8 +3,8 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
 import {
+    componentWithIcon,
     InteractiveIcon,
-    type InteractiveIconProps,
     type InteractiveIconStyles,
 } from "../icon";
 import { InteractiveText, type InteractiveTextStyles } from "../text";
@@ -21,69 +21,66 @@ export type IconActionBaseStyles = {
     };
 };
 
-export interface IconActionBaseProps<G extends string, Fn extends string>
-    extends Pick<ActionProps, "onPress" | "disabled" | "containerStyle">,
-        Pick<InteractiveIconProps<G, Fn>, "iconSet" | "iconName"> {
+export interface IconActionBaseProps
+    extends Pick<ActionProps, "onPress" | "disabled" | "containerStyle"> {
     label?: string;
     iconPosition?: "left" | "right";
     style?: DeepPartial<IconActionBaseStyles>;
 }
 
-export const IconActionBase = <G extends string, Fn extends string>({
-    iconName,
-    label,
-    iconPosition = "left",
-    disabled: disabledProp,
-    containerStyle,
-    style,
-    iconSet,
-    onPress,
-}: IconActionBaseProps<G, Fn>) => {
-    const disabled = disabledProp || !onPress;
+export const IconActionBase = componentWithIcon<IconActionBaseProps>(
+    ({
+        label,
+        iconPosition = "left",
+        disabled: disabledProp,
+        containerStyle,
+        style,
+        onPress,
+        ...iconProps
+    }) => {
+        const disabled = disabledProp || !onPress;
 
-    const [styles, { iconActionBase }] = useThemedStylesWithOverride(
-        createStyles,
-        { iconActionBase: style },
-        { iconPosition },
-    );
+        const [styles, { iconActionBase }] = useThemedStylesWithOverride(
+            createStyles,
+            { iconActionBase: style },
+            { iconPosition },
+        );
 
-    return (
-        <ActionBase
-            disabled={disabled}
-            containerStyle={containerStyle}
-            onPress={onPress}
-        >
-            {(pressableState) => (
-                <View style={styles.container}>
-                    <InteractiveIcon
-                        iconSet={iconSet}
-                        iconName={iconName}
-                        disabled={disabled}
-                        style={iconActionBase.icon}
-                        {...pressableState}
-                    />
-                    {!!label && (
-                        <InteractiveText
+        return (
+            <ActionBase
+                disabled={disabled}
+                containerStyle={containerStyle}
+                onPress={onPress}
+            >
+                {(pressableState) => (
+                    <View style={styles.container}>
+                        <InteractiveIcon
                             disabled={disabled}
-                            style={iconActionBase.text}
+                            style={iconActionBase.icon}
+                            {...iconProps}
                             {...pressableState}
-                        >
-                            {label}
-                        </InteractiveText>
-                    )}
-                </View>
-            )}
-        </ActionBase>
-    );
-};
-
-IconActionBase.displayName = "IconActionBase";
+                        />
+                        {!!label && (
+                            <InteractiveText
+                                disabled={disabled}
+                                style={iconActionBase.text}
+                                {...pressableState}
+                            >
+                                {label}
+                            </InteractiveText>
+                        )}
+                    </View>
+                )}
+            </ActionBase>
+        );
+    },
+);
 
 const createStyles = (
     { styles: { iconActionBase } }: ThemedStyles,
     {
         iconPosition = "right",
-    }: Required<Pick<IconActionBaseProps<"", "">, "iconPosition">>,
+    }: Required<Pick<IconActionBaseProps, "iconPosition">>,
 ) =>
     StyleSheet.create({
         container: {

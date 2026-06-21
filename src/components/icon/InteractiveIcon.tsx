@@ -2,7 +2,8 @@ import type { PressableStateCallbackType } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStylesWithOverride } from "../../hooks";
-import { IconBase, type IconBaseProps, type IconBaseStyles } from "./IconBase";
+import { componentWithIcon } from "./componentWithIcon";
+import { IconBase, type IconBaseStyles } from "./IconBase";
 
 export type InteractiveIconState = "enabled" | "disabled" | "pressed";
 
@@ -13,34 +14,29 @@ export type InteractiveIconStyles = {
     };
 };
 
-export interface InteractiveIconProps<G extends string, Fn extends string>
-    extends PressableStateCallbackType,
-        Pick<IconBaseProps<G, Fn>, "iconSet" | "iconName"> {
+export interface InteractiveIconProps extends PressableStateCallbackType {
     style?: DeepPartial<InteractiveIconStyles>;
     disabled?: boolean;
 }
 
-export const InteractiveIcon = <G extends string, Fn extends string>({
-    iconSet,
-    iconName,
-    pressed,
-    style,
-    disabled = false,
-}: InteractiveIconProps<G, Fn>) => {
-    const { interactiveIcon } = useStylesWithOverride({
-        interactiveIcon: style,
-    });
+export const InteractiveIcon = componentWithIcon<InteractiveIconProps>(
+    ({ pressed, style, disabled = false, ...iconProps }) => {
+        const { interactiveIcon } = useStylesWithOverride({
+            interactiveIcon: style,
+        });
 
-    return (
-        <IconBase
-            iconSet={iconSet}
-            iconName={iconName}
-            style={{
-                size: interactiveIcon.size,
-                color: pressed
-                    ? interactiveIcon.color.pressed
-                    : interactiveIcon.color[disabled ? "disabled" : "enabled"],
-            }}
-        />
-    );
-};
+        return (
+            <IconBase
+                {...iconProps}
+                style={{
+                    size: interactiveIcon.size,
+                    color: pressed
+                        ? interactiveIcon.color.pressed
+                        : interactiveIcon.color[
+                              disabled ? "disabled" : "enabled"
+                          ],
+                }}
+            />
+        );
+    },
+);

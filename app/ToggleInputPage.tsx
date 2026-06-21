@@ -1,13 +1,16 @@
 import React from "react";
 import {
+    type IconBaseDefaultProps,
     ToggleInput,
     type ToggleInputProps,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import { CommonInputProps, glyphMapValueItems } from "../helpers";
 
-const propDefinitions: PropDefinitions<ToggleInputProps> = {
+type Props = IconBaseDefaultProps & ToggleInputProps;
+
+const propDefinitions: PropDefinitions<Props> = {
     ...CommonInputProps,
     toggleVariant: {
         type: "enum",
@@ -18,14 +21,10 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
             { label: "Secondary", value: "secondary" },
         ],
     },
-    iconVariant: {
+    iconName: {
         type: "enum",
-        label: "Icon variant",
-        default: "Dot",
-        values: [
-            { label: "Check", value: "check" },
-            { label: "Dot", value: "dot" },
-        ],
+        label: "Icon Name",
+        values: glyphMapValueItems,
     },
     onChange: {
         type: "function",
@@ -33,15 +32,16 @@ const propDefinitions: PropDefinitions<ToggleInputProps> = {
     },
 };
 
-const defaultProps: ToggleInputProps = {
+const defaultProps: Props = {
     disabled: false,
     onChange: () => null,
     toggleVariant: "primary",
     label: "Toggle input label",
+    iconName: "check",
 };
 
 const ToggleInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ToggleInputProps>(defaultProps);
+    const [props, setProps] = React.useState<Props>(defaultProps);
 
     const [toggled, setToggled] = React.useState(false);
 

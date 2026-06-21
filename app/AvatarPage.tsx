@@ -1,5 +1,4 @@
 import React from "react";
-import { AntDesign } from "@expo/vector-icons";
 import {
     Avatar,
     type AvatarProps,
@@ -13,13 +12,7 @@ const defaultProps: AvatarProps = {
     lastName: "Smith",
     imageUri: undefined,
     size: "regular",
-    action: (
-        <IconAction
-            iconName="closecircle"
-            onPress={() => null}
-            iconSet={AntDesign}
-        />
-    ),
+    action: <IconAction iconName="x-circle" onPress={() => null} />,
 };
 
 const propDefinitions: PropDefinitions<AvatarProps> = {
@@ -65,13 +58,7 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
             {
                 id: "Edit",
                 label: "Edit",
-                value: (
-                    <IconAction
-                        iconName="edit"
-                        onPress={() => null}
-                        iconSet={AntDesign}
-                    />
-                ),
+                value: <IconAction iconName="pencil" onPress={() => null} />,
             },
         ],
     },

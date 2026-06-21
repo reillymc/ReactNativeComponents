@@ -1,22 +1,23 @@
 import React from "react";
-import { Octicons } from "@expo/vector-icons";
 import {
     IconAction,
     type IconActionProps,
+    type IconBaseDefaultProps,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItemsOcticons } from "../helpers";
+import { glyphMapValueItems } from "../helpers";
 
-const defaultProps: IconActionProps<any, any> = {
+type Props = IconBaseDefaultProps & IconActionProps;
+
+const defaultProps: Props = {
     label: "Secondary IconAction",
     iconName: "arrow-both",
     variant: "secondary",
-    iconSet: Octicons,
     onPress: () => null,
 };
 
-const propDefinitions: PropDefinitions<IconActionProps<any, any>> = {
+const propDefinitions: PropDefinitions<Props> = {
     label: {
         type: "string",
         label: "Label",
@@ -24,7 +25,7 @@ const propDefinitions: PropDefinitions<IconActionProps<any, any>> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
-        values: glyphMapValueItemsOcticons,
+        values: glyphMapValueItems,
     },
     variant: {
         type: "enum",
@@ -48,17 +49,6 @@ const propDefinitions: PropDefinitions<IconActionProps<any, any>> = {
         type: "boolean",
         label: "Disabled",
     },
-    iconSet: {
-        type: "enum",
-        label: "Icon Set",
-        values: [
-            {
-                id: "octicons",
-                label: "Octicons",
-                value: Octicons,
-            },
-        ],
-    },
     onPress: {
         type: "function",
         label: "Press action",
@@ -66,8 +56,7 @@ const propDefinitions: PropDefinitions<IconActionProps<any, any>> = {
 };
 
 const IconActionPage: React.FunctionComponent = () => {
-    const [props, setProps] =
-        React.useState<IconActionProps<any, any>>(defaultProps);
+    const [props, setProps] = React.useState<Props>(defaultProps);
 
     return (
         <ComponentPage

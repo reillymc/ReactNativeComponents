@@ -160,7 +160,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     onChange={(value) =>
                                         onChange(propId, value)
                                     }
-                                    iconVariant="check"
+                                    iconName="check"
                                 />
                             </View>
                         );

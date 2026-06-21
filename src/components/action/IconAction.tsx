@@ -1,7 +1,7 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStylesWithOverride } from "../../hooks";
-import type { InteractiveIconStyles } from "../icon";
+import { componentWithIcon, type InteractiveIconStyles } from "../icon";
 import type { InteractiveTextStyles } from "../text";
 import { IconActionBase, type IconActionBaseProps } from "./IconActionBase";
 
@@ -20,34 +20,23 @@ export type IconActionStyles = {
     };
 };
 
-export interface IconActionProps<G extends string, Fn extends string>
-    extends Omit<IconActionBaseProps<G, Fn>, "style"> {
+export interface IconActionProps extends Omit<IconActionBaseProps, "style"> {
     variant?: IconActionVariant;
     style?: DeepPartial<IconActionStyles>;
 }
 
-export const IconAction = <G extends string, Fn extends string>({
-    variant = "secondary",
-    disabled: disabledProp,
-    style,
-    onPress,
-    ...props
-}: IconActionProps<G, Fn>) => {
-    const disabled = disabledProp || !onPress;
+export const IconAction = componentWithIcon<IconActionProps>(
+    ({ variant = "secondary", style, ...props }) => {
+        const { iconAction } = useStylesWithOverride({ iconAction: style });
 
-    const { iconAction } = useStylesWithOverride({ iconAction: style });
-
-    return (
-        <IconActionBase
-            {...props}
-            disabled={disabled}
-            onPress={onPress}
-            style={{
-                icon: { color: iconAction.icon.color[variant] },
-                text: { color: iconAction.text.color[variant] },
-            }}
-        />
-    );
-};
-
-IconAction.displayName = "IconAction";
+        return (
+            <IconActionBase
+                {...props}
+                style={{
+                    icon: { color: iconAction.icon.color[variant] },
+                    text: { color: iconAction.text.color[variant] },
+                }}
+            />
+        );
+    },
+);

@@ -1,13 +1,12 @@
 import React from "react";
-import { Tag, type TagProps } from "@reillymc/react-native-components";
+import { Tag, TagIcon, type TagProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItemsNullable } from "../helpers";
 
 const defaultProps: TagProps = {
     label: "Example Tag",
-    iconName: "closecircleo",
     variant: "dark",
+    icon: <TagIcon iconName="x-circle" />,
 };
 
 const propDefinitions: PropDefinitions<TagProps> = {
@@ -15,11 +14,21 @@ const propDefinitions: PropDefinitions<TagProps> = {
         type: "string",
         label: "First Name",
     },
-    iconName: {
+    icon: {
         type: "enum",
-        label: "Icon Name",
-        default: "closecircleo",
-        values: glyphMapValueItemsNullable,
+        label: "Icon",
+        values: [
+            {
+                id: "none",
+                label: "none",
+                value: undefined,
+            },
+            {
+                id: "close",
+                label: "close",
+                value: <TagIcon iconName="x-circle" />,
+            },
+        ],
     },
     variant: {
         type: "enum",

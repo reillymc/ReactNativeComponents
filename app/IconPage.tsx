@@ -1,38 +1,30 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: don't need to worry about type-safe usage here */
-import React from "react";
-import { Octicons } from "@expo/vector-icons";
-import { Icon, type IconProps } from "@reillymc/react-native-components";
+import { type FunctionComponent, useState } from "react";
+import {
+    Icon,
+    type IconBaseDefaultProps,
+    type IconProps,
+} from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItemsOcticons } from "../helpers";
+import { glyphMapValueItems } from "../helpers";
 
-const defaultProps: IconProps<any, any> = {
+type Props = IconBaseDefaultProps & IconProps;
+
+const defaultProps: Props = {
     iconName: "arrow-both",
-    iconSet: Octicons,
 };
 
-const propDefinitions: PropDefinitions<IconProps<any, any>> = {
+const propDefinitions: PropDefinitions<Props> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
-        values: glyphMapValueItemsOcticons,
-    },
-
-    iconSet: {
-        type: "enum",
-        label: "Icon Set",
-        values: [
-            {
-                id: "octicons",
-                label: "Octicons",
-                value: Octicons,
-            },
-        ],
+        values: glyphMapValueItems,
     },
 };
 
-const IconPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<IconProps<any, any>>(defaultProps);
+const IconPage: FunctionComponent = () => {
+    const [props, setProps] = useState<Props>(defaultProps);
 
     return (
         <ComponentPage

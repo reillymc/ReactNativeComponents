@@ -1,29 +1,39 @@
 import type { ColorValue } from "react-native";
-import type {
-    GlyphMap,
-    Icon as IconSet,
-} from "@expo/vector-icons/build/createIconSet";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStylesWithOverride } from "../../hooks";
+import { useStylesWithOverride, useTheme } from "../../hooks";
+import type { IconComponentProps } from "./componentWithIcon";
 
 export interface IconBaseStyles {
     color: ColorValue;
     size: number;
 }
 
-export interface IconBaseProps<G extends string, Fn extends string> {
-    iconSet: IconSet<G, Fn>;
-    iconName: keyof GlyphMap<G>;
+export type IconBaseProps<G extends string> = IconComponentProps<G> & {
     style?: DeepPartial<IconBaseStyles>;
-}
+};
 
-export const IconBase = <G extends string, Fn extends string>({
-    iconSet: IconSet,
-    iconName,
+export const IconBase = <G extends string>({
     style,
-}: IconBaseProps<G, Fn>) => {
+    iconName,
+    iconSet: OverrideIconSet,
+}: IconBaseProps<G>) => {
     const { iconBase } = useStylesWithOverride({ iconBase: style });
+    const {
+        icons: { iconSet },
+    } = useTheme();
+
+    if (OverrideIconSet) {
+        return (
+            <OverrideIconSet
+                size={iconBase.size}
+                color={iconBase.color}
+                name={iconName}
+            />
+        );
+    }
+
+    const IconSet = iconSet;
 
     return (
         <IconSet size={iconBase.size} color={iconBase.color} name={iconName} />

@@ -4,9 +4,9 @@ import {
     StyleSheet,
     View,
 } from "react-native";
-import { Octicons } from "@expo/vector-icons";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
@@ -64,6 +64,10 @@ const getNextValue = (
 
 export type NumberInputValue = NumberValue | FractionValue | RangeValue;
 
+export type NumberInputIcons = ComponentIconAssets<
+    "number" | "range" | "fraction"
+>;
+
 export interface NumberInputProps
     extends Pick<
             NumberInputBaseProps,
@@ -111,13 +115,11 @@ export const NumberInput: FC<NumberInputProps> = ({
         disabled,
         enabledRepresentations,
     });
+    const {
+        icons: { numberInput },
+    } = useTheme();
 
-    const icon: keyof typeof Octicons.glyphMap = {
-        // TODO: decouple
-        number: "infinity" as const,
-        fraction: "number" as const,
-        range: "arrow-both" as const,
-    }[value.representation];
+    const icon = numberInput[value.representation];
 
     const handleChangeMode = useCallback(() => {
         const nextMode = getNextMode(
@@ -169,7 +171,6 @@ export const NumberInput: FC<NumberInputProps> = ({
                     disabled={disabled}
                     variant={variant}
                     iconName={icon}
-                    iconSet={Octicons}
                     onPress={
                         enabledRepresentations.length > 1
                             ? handleChangeMode
@@ -181,9 +182,9 @@ export const NumberInput: FC<NumberInputProps> = ({
                     disabled={disabled}
                     variant={variant}
                     placeholder={
-                        value.representation !== "range"
-                            ? placeholder
-                            : placeholder2
+                        value.representation === "range"
+                            ? placeholder2
+                            : placeholder
                     }
                     maxLength={maxLength}
                     clearButtonMode={clearButtonMode}

@@ -32,10 +32,12 @@ export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.familyWeight.bold800,
+                        fontFamily: theme.font.family.sans,
+                        fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.familyWeight.regular400,
+                        fontFamily: theme.font.family.sans,
+                        fontSize: theme.font.size.regular,
                     },
                     headerLargeStyle: {
                         backgroundColor: theme.color.background,

@@ -1,5 +1,4 @@
 import React from "react";
-import { AntDesign } from "@expo/vector-icons";
 import {
     AlertIndicator,
     IconAction,
@@ -20,8 +19,7 @@ const defaultProps: ListItemProps = {
         <ListItemAvatar>
             <IconAction
                 onPress={() => null}
-                iconSet={AntDesign}
-                iconName="API"
+                iconName="apps"
                 variant="primary"
             />
         </ListItemAvatar>
@@ -42,16 +40,14 @@ const defaultProps: ListItemProps = {
     ],
     swipeActions: [
         <SwipeAction
-            iconSet={AntDesign}
             key="1"
-            iconName="delete"
+            iconName={"trash"}
             variant="destructive"
             onPress={() => null}
         />,
         <SwipeAction
-            iconSet={AntDesign}
             key="2"
-            iconName="edit"
+            iconName="pencil"
             variant="secondary"
             onPress={() => null}
         />,
@@ -138,16 +134,14 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 label: "Delete and Edit",
                 value: [
                     <SwipeAction
-                        iconSet={AntDesign}
                         key="1"
-                        iconName="delete"
+                        iconName="trash"
                         variant="destructive"
                         onPress={() => null}
                     />,
                     <SwipeAction
-                        iconSet={AntDesign}
                         key="2"
-                        iconName="edit"
+                        iconName="pencil"
                         variant="secondary"
                         onPress={() => null}
                     />,

@@ -1,12 +1,12 @@
 import { type ColorValue, StyleSheet, View } from "react-native";
-import { Octicons } from "@expo/vector-icons";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ValueItem } from "../../common";
-import { type ThemedStyles, useThemedStylesWithOverride } from "../../hooks";
+import { type ThemedStyles, useStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
 import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
-import { Tag } from "../Tag";
+import { Tag } from "../tag";
 import { Text } from "../text";
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
@@ -22,6 +22,8 @@ export type SelectionInputStyles = {
     };
     icon: Pick<InteractiveIconStyles, "color">;
 };
+
+export type SelectionInputIcons = ComponentIconAssets<"showOptions">;
 
 interface SingleSelection<T> {
     selectionMode: "single";
@@ -58,16 +60,19 @@ export const SelectionInput = <T,>({
     hideLabel,
     selectionMode,
     selection,
-    style,
+    style: styleOverrides,
     variant = "regular",
     onAdd,
     ...props
 }: SelectionInputProps<T>) => {
     const disabled = disabledProp || !onAdd;
-    const [styles, { selectionInput }] = useThemedStylesWithOverride(
+    const [styles, { style, icons }] = useStyles(
+        "selectionInput",
         createStyles,
-        { selectionInput: style },
-        { disabled, variant },
+        {
+            styles: { selectionInput: styleOverrides },
+            props: { disabled, variant },
+        },
     );
 
     const hasSelection =
@@ -110,10 +115,9 @@ export const SelectionInput = <T,>({
                         </View>
                         <View style={styles.iconContainer}>
                             <InteractiveIcon
-                                iconSet={Octicons}
-                                iconName="chevron-down"
+                                iconName={icons.showOptions}
                                 disabled={disabled}
-                                style={selectionInput.icon}
+                                style={style.icon}
                                 {...pressableState}
                             />
                         </View>

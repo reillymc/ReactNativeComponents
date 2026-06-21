@@ -6,7 +6,6 @@ import {
     View,
 } from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
-import { Octicons } from "@expo/vector-icons";
 import {
     Action,
     Avatar,
@@ -74,7 +73,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Icon",
                 href: "/IconPage",
-                component: <Icon iconSet={Octicons} iconName="star" />,
+                component: <Icon iconName="star" />,
             },
         ],
     },
@@ -89,13 +88,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Icon Action",
                 href: "/IconActionPage",
-                component: (
-                    <IconAction
-                        iconSet={Octicons}
-                        iconName="star"
-                        label="Icon Action"
-                    />
-                ),
+                component: <IconAction iconName="star" label="Icon Action" />,
             },
         ],
     },
@@ -110,7 +103,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Icon Button",
                 href: "/IconButtonPage",
-                component: <IconButton iconSet={Octicons} iconName="star" />,
+                component: <IconButton iconName="star" />,
             },
         ],
     },
@@ -170,7 +163,11 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
                 name: "Toggle Input",
                 href: "/ToggleInputPage",
                 component: (
-                    <ToggleInput onChange={() => null} label="Toggle Input" />
+                    <ToggleInput
+                        onChange={() => null}
+                        iconName="check"
+                        label="Toggle Input"
+                    />
                 ),
             },
         ],
@@ -216,10 +213,12 @@ const ComponentListScreen: React.FC = () => {
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.familyWeight.bold800,
+                        fontFamily: theme.font.family.sans,
+                        fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.familyWeight.regular400,
+                        fontFamily: theme.font.family.sans,
+                        fontSize: theme.font.size.regular,
                     },
                     headerLargeStyle: {
                         backgroundColor: theme.color.background,
@@ -235,7 +234,6 @@ const ComponentListScreen: React.FC = () => {
                     <View style={styles.listHeader}>
                         <IconAction
                             label="Common Props"
-                            iconSet={Octicons}
                             iconName={collapsed ? "chevron-down" : "chevron-up"}
                             iconPosition="right"
                             onPress={() => setCollapsed((prev) => !prev)}

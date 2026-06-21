@@ -5,9 +5,9 @@ import {
     StyleSheet,
     View,
 } from "react-native";
-import { Octicons } from "@expo/vector-icons";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputBase } from "./InputBase";
@@ -15,6 +15,8 @@ import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type TimeInputValue = { hours: string; minutes: string };
+
+export type TimeInputIcons = ComponentIconAssets<"time">;
 
 export interface TimeInputProps
     extends Pick<
@@ -48,7 +50,9 @@ export const TimeInput: FC<TimeInputProps> = ({
     const disabled = disabledProp || !onChange;
     const hoursRef = useRef<RnTextInput>(null);
     const minutesRef = useRef<RnTextInput>(null);
-    const styles = useThemedStyles(createStyles, { variant, disabled });
+    const [styles, { icons }] = useStyles("timeInput", createStyles, {
+        props: { variant, disabled },
+    });
 
     const [isFocused, setIsFocused] = useState(false);
 
@@ -56,9 +60,8 @@ export const TimeInput: FC<TimeInputProps> = ({
         <InputScaffold {...baseProps}>
             <View style={styles.container}>
                 <InputAction
-                    iconName="clock"
+                    iconName={icons.time}
                     variant={variant}
-                    iconSet={Octicons}
                     disabled={disabled}
                 />
                 <NumberInputBase

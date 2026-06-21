@@ -6,10 +6,10 @@ import {
     View,
     type ViewStyle,
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { IconBase } from "../icon";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
+import { Icon } from "../icon";
 import { Text } from "../text";
 
 export interface InputScaffoldStyles {
@@ -21,6 +21,8 @@ export interface InputScaffoldStyles {
         gap: number;
     };
 }
+
+export type InputScaffoldIcons = ComponentIconAssets<"error">;
 
 export interface InputScaffoldProps {
     /**
@@ -49,6 +51,10 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
     hasError,
 }) => {
     const styles = useThemedStyles(createStyles, {});
+    const {
+        theme: { color },
+        icons: { inputScaffold },
+    } = useTheme();
 
     return (
         <View style={[styles.container, containerStyle]}>
@@ -72,10 +78,10 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
             {(helpText || hasError) && (
                 <View style={styles.helpText}>
                     {hasError && (
-                        <IconBase
-                            iconSet={AntDesign}
-                            iconName="exclamation-circle"
-                            style={{ color: "red", size: 16 }} // TODO extract to new styled component - help and/or error text?
+                        <Icon
+                            iconName={inputScaffold.error}
+                            style={{ color: color.error }}
+                            size="small"
                         />
                     )}
                     {helpText &&

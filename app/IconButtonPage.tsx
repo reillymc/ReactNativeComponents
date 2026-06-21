@@ -1,26 +1,27 @@
-import React from "react";
-import { Octicons } from "@expo/vector-icons";
+import { type FunctionComponent, useState } from "react";
 import {
+    type IconBaseDefaultProps,
     IconButton,
     type IconButtonProps,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItemsOcticons } from "../helpers";
+import { glyphMapValueItems } from "../helpers";
 
-const defaultProps: IconButtonProps<any, any> = {
-    iconSet: Octicons,
+type Props = IconBaseDefaultProps & IconButtonProps;
+
+const defaultProps: Props = {
     iconName: "arrow-both",
     variant: "primary",
     onPress: () => null,
 };
 
-const propDefinitions: PropDefinitions<IconButtonProps<any, any>> = {
+const propDefinitions: PropDefinitions<Props> = {
     iconName: {
         type: "enum",
         label: "Icon Name",
         default: defaultProps.iconName,
-        values: glyphMapValueItemsOcticons,
+        values: glyphMapValueItems,
     },
     variant: {
         type: "enum",
@@ -36,26 +37,14 @@ const propDefinitions: PropDefinitions<IconButtonProps<any, any>> = {
         type: "boolean",
         label: "Disabled",
     },
-    iconSet: {
-        type: "enum",
-        label: "Icon Set",
-        values: [
-            {
-                id: "octicons",
-                label: "Octicons",
-                value: Octicons,
-            },
-        ],
-    },
     onPress: {
         type: "function",
         label: "Press action",
     },
 };
 
-const IconButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] =
-        React.useState<IconButtonProps<any, any>>(defaultProps);
+const IconButtonPage: FunctionComponent = () => {
+    const [props, setProps] = useState<Props>(defaultProps);
 
     return (
         <ComponentPage

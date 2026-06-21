@@ -7,6 +7,7 @@ import {
     MenuItem,
     type SelectionInputProps,
     Tag,
+    TagIcon,
     Text,
     type ThemedStyles,
     useThemedStyles,
@@ -227,7 +228,7 @@ const SelectionModal: FC = () => {
                                         label={item.label}
                                         style={styles.tag}
                                         variant="light"
-                                        iconName="closecircle"
+                                        icon={<TagIcon iconName="x-circle" />}
                                         onPress={() => handleItemPress(item)}
                                     />
                                 )}

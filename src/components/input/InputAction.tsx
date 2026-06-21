@@ -6,52 +6,50 @@ import {
     type IconActionBaseProps,
     type IconActionBaseStyles,
 } from "../action";
+import { componentWithIcon } from "../icon";
 import type { InputBaseProps } from "./InputBase";
 
 export interface InputActionStyles {
     icon: Pick<IconActionBaseStyles["icon"], "color">;
 }
 
-export interface InputActionProps<G extends string, Fn extends string>
+export interface InputActionProps
     extends Pick<
-            IconActionBaseProps<G, Fn>,
-            "iconSet" | "iconName" | "onPress" | "disabled" | "containerStyle"
+            IconActionBaseProps,
+            "onPress" | "disabled" | "containerStyle"
         >,
         Pick<InputBaseProps, "variant"> {}
 
-export const InputAction = <G extends string, Fn extends string>({
-    disabled = false,
-    containerStyle,
-    variant = "regular",
-    ...props
-}: InputActionProps<G, Fn>) => {
-    const [styles, { inputAction }] = useThemedStylesWithOverride(
-        createStyles,
-        {},
-        { disabled, variant },
-    );
+export const InputAction = componentWithIcon<InputActionProps>(
+    ({ disabled = false, containerStyle, variant = "regular", ...props }) => {
+        const [styles, { inputAction }] = useThemedStylesWithOverride(
+            createStyles,
+            {},
+            { disabled, variant },
+        );
 
-    return (
-        <IconActionBase
-            {...props}
-            disabled={disabled}
-            containerStyle={(pressableState) => [
-                styles.container,
-                typeof containerStyle === "function"
-                    ? containerStyle(pressableState)
-                    : containerStyle,
-            ]}
-            style={{ icon: inputAction.icon }}
-        />
-    );
-};
+        return (
+            <IconActionBase
+                {...props}
+                disabled={disabled}
+                containerStyle={(pressableState) => [
+                    styles.container,
+                    typeof containerStyle === "function"
+                        ? containerStyle(pressableState)
+                        : containerStyle,
+                ]}
+                style={{ icon: inputAction.icon }}
+            />
+        );
+    },
+);
 
 const createStyles = (
     { styles: { inputBase } }: ThemedStyles,
     {
         disabled,
         variant,
-    }: Required<Pick<InputActionProps<"", "">, "disabled" | "variant">>,
+    }: Required<Pick<InputActionProps, "disabled" | "variant">>,
 ) =>
     StyleSheet.create({
         container: {

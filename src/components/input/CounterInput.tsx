@@ -1,11 +1,13 @@
 import type { FC } from "react";
 import { StyleSheet, View } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
 import { InputAction } from "./InputAction";
 import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
+
+export type CounterInputIcons = ComponentIconAssets<"decrease" | "increase">;
 
 export interface CounterInputProps
     extends Omit<NumberInputBaseProps, "style" | "inputStyle">,
@@ -29,6 +31,9 @@ export const CounterInput: FC<CounterInputProps> = ({
     ...props
 }) => {
     const styles = useThemedStyles(createStyles, { disabled });
+    const {
+        icons: { counterInput },
+    } = useTheme();
 
     const value = Number.parseInt(props.value ?? "0", 10) || 0;
 
@@ -42,8 +47,7 @@ export const CounterInput: FC<CounterInputProps> = ({
         >
             <View style={styles.container}>
                 <InputAction
-                    iconSet={AntDesign} // TODO: decouple
-                    iconName="minus"
+                    iconName={counterInput.decrease}
                     variant={variant}
                     disabled={disabled}
                     onPress={() =>
@@ -74,8 +78,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     inputStyle={styles.input}
                 />
                 <InputAction
-                    iconSet={AntDesign}
-                    iconName="plus"
+                    iconName={counterInput.increase}
                     disabled={disabled}
                     variant={variant}
                     onPress={() =>

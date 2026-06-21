@@ -1,4 +1,11 @@
 export {
+    type ComponentIconAssets,
+    DefaultIcons,
+    type GlyphMap,
+    type IconComponent,
+    type Icons,
+} from "./icons";
+export {
     type CreateStyles,
     createDefaultStyles,
     MergeStyles,

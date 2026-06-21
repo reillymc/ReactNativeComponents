@@ -49,6 +49,7 @@ export {
     SwipeableContainer,
 } from "./container";
 export type {
+    IconBaseDefaultProps,
     IconBaseProps,
     IconBaseStyles,
     IconProps,
@@ -60,6 +61,7 @@ export {
     IconBase,
 } from "./icon";
 export type {
+    CounterInputIcons,
     CounterInputProps,
     DropdownInputProps,
     DropdownInputStyles,
@@ -68,19 +70,24 @@ export type {
     InputActionStyles,
     InputBaseProps,
     InputBaseStyles,
+    InputScaffoldIcons,
     InputScaffoldProps,
     InputScaffoldStyles,
+    NumberInputIcons,
     NumberInputProps,
     NumberInputValue,
     NumberValue,
     RangeValue,
     RatingInputProps,
+    SelectionInputIcons,
     SelectionInputProps,
     SelectionInputStyles,
     TextInputProps,
     TextInputStyles,
+    TimeInputIcons,
     TimeInputProps,
     TimeInputValue,
+    ToggleInputIcons,
     ToggleInputProps,
     ToggleInputStyles,
 } from "./input";
@@ -131,8 +138,8 @@ export {
     type SwipeActionProps,
     type SwipeActionStyles,
 } from "./SwipeAction";
-export { Tag, type TagProps } from "./Tag";
 export { Toast, type ToastProps, type ToastStyles } from "./Toast";
+export { Tag, TagIcon, type TagProps } from "./tag";
 export type {
     HighlightedTextProps,
     HighlightedTextStyles,
