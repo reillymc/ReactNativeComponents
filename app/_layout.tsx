@@ -1,6 +1,6 @@
 import type React from "react";
 import { StrictMode, useEffect, useMemo } from "react";
-import { useColorScheme, useWindowDimensions } from "react-native";
+import { Platform, useColorScheme, useWindowDimensions } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -20,6 +20,8 @@ export {
     ErrorBoundary,
 } from "expo-router";
 
+const Font = "Comfortaa" as const;
+
 // biome-ignore lint/style/useNamingConvention: expo naming convention
 export const unstable_settings = {
     // Ensure that reloading on `/modal` keeps a back button present.
@@ -29,31 +31,21 @@ export const unstable_settings = {
 SplashScreen.preventAutoHideAsync();
 
 const Layout: React.FC = () => {
-    const [fontsLoaded] = useFonts({
-        "Comfortaa-Bold": require("../assets/fonts/Comfortaa-Bold.ttf"),
-        "Comfortaa-Light": require("../assets/fonts/Comfortaa-Light.ttf"),
-        "Comfortaa-Regular": require("../assets/fonts/Comfortaa-Regular.ttf"),
-    });
-
     const colorScheme = useColorScheme();
     const { fontScale } = useWindowDimensions();
 
     useEffect(() => {
-        if (fontsLoaded) {
-            SplashScreen.hideAsync();
-        }
-    }, [fontsLoaded]);
+        SplashScreen.hideAsync();
+    }, []);
 
     const [theme, styles] = useMemo(() => {
         const baseTheme: DeepPartial<Theme> = {
             font: {
-                familyWeight: {
-                    light100: "Comfortaa-Light",
-                    light200: "Comfortaa-Light",
-                    regular400: "Comfortaa-Regular",
-                    bold600: "Comfortaa-Bold",
-                    bold800: "Comfortaa-Bold",
+                family: {
+                    mono: Font,
+                    sans: Font,
                 },
+
                 size: {
                     tiny: 12 * fontScale,
                     small: 14 * fontScale,
@@ -86,8 +78,13 @@ const Layout: React.FC = () => {
         return [theme, createDefaultStyles(theme)];
     }, [colorScheme, fontScale]);
 
-    if (!fontsLoaded) {
-        return null;
+    if (Platform.OS === "web") {
+        // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime
+        const [loaded] = useFonts({
+            comfortaa: require("../assets/fonts/Comfortaa.ttf"),
+        });
+
+        if (!loaded) return null;
     }
 
     return (

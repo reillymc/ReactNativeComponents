@@ -1,7 +1,7 @@
 {
     "expo": {
         "name": "React Native Components",
-        "slug": "react-native-components-example",
+        "slug": "react-native-components",
         "scheme": "rnc",
         "version": "1.0.0",
         "orientation": "portrait",
@@ -9,7 +9,11 @@
         "userInterfaceStyle": "automatic",
         "assetBundlePatterns": ["**/*"],
         "ios": {
-            "supportsTablet": true
+            "supportsTablet": true,
+            "bundleIdentifier": "com.reillymc.reactnativecomponents",
+            "infoPlist": {
+                "ITSAppUsesNonExemptEncryption": false
+            }
         },
         "android": {
             "adaptiveIcon": {
@@ -23,7 +27,12 @@
         },
         "plugins": [
             "expo-router",
-            "expo-font",
+            [
+                "expo-font",
+                {
+                    "fonts": ["./assets/fonts/Comfortaa.ttf"]
+                }
+            ],
             [
                 "expo-splash-screen",
                 {
@@ -41,6 +50,11 @@
         "experiments": {
             "typedRoutes": true,
             "reactCompiler": true
+        },
+        "extra": {
+            "eas": {
+                "projectId": "42b3867b-d7b8-425e-851f-17bcb6629a5e"
+            }
         }
     }
 }
