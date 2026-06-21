@@ -59,6 +59,7 @@ export type {
 export {
     Icon,
     IconBase,
+    withIcon,
 } from "./icon";
 export type {
     CounterInputIcons,
