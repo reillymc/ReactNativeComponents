@@ -1,16 +1,21 @@
 import { type FunctionComponent, useState } from "react";
 import {
-    type IconBaseDefaultProps,
+    Octicons,
+    type OcticonsIconName,
+} from "@react-native-vector-icons/octicons";
+import {
     IconButton,
     type IconButtonProps,
+    type IconComponentProps,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import { glyphMapValueItems } from "../helpers";
 
-type Props = IconBaseDefaultProps & IconButtonProps;
+type Props = IconComponentProps<OcticonsIconName> & IconButtonProps;
 
 const defaultProps: Props = {
+    iconSet: Octicons,
     iconName: "arrow-both",
     variant: "primary",
     onPress: () => null,
@@ -40,6 +45,9 @@ const propDefinitions: PropDefinitions<Props> = {
     onPress: {
         type: "function",
         label: "Press action",
+    },
+    iconSet: {
+        type: "hidden",
     },
 };
 

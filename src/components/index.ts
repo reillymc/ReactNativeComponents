@@ -49,9 +49,9 @@ export {
     SwipeableContainer,
 } from "./container";
 export type {
-    IconBaseDefaultProps,
     IconBaseProps,
     IconBaseStyles,
+    IconComponentProps,
     IconProps,
     IconStyles,
     InteractiveIconStyles,
@@ -78,6 +78,7 @@ export type {
     NumberInputValue,
     NumberValue,
     RangeValue,
+    RatingInputIcons,
     RatingInputProps,
     RatingInputStyles,
     SelectionInputIcons,
@@ -129,6 +130,7 @@ export { Panel, type PanelProps } from "./Panel";
 export {
     getRatingIcons,
     Rating,
+    type RatingIcons,
     type RatingProps,
     type RatingStyles,
     ratingToValue,

@@ -1,17 +1,22 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: don't need to worry about type-safe usage here */
 import { type FunctionComponent, useState } from "react";
 import {
+    Octicons,
+    type OcticonsIconName,
+} from "@react-native-vector-icons/octicons";
+import {
     Icon,
-    type IconBaseDefaultProps,
+    type IconComponentProps,
     type IconProps,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import { glyphMapValueItems } from "../helpers";
 
-type Props = IconBaseDefaultProps & IconProps;
+type Props = IconComponentProps<OcticonsIconName> & IconProps;
 
 const defaultProps: Props = {
+    iconSet: Octicons,
     iconName: "arrow-both",
 };
 
@@ -20,6 +25,9 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "enum",
         label: "Icon Name",
         values: glyphMapValueItems,
+    },
+    iconSet: {
+        type: "hidden",
     },
 };
 

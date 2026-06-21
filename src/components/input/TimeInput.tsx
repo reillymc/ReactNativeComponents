@@ -60,7 +60,7 @@ export const TimeInput: FC<TimeInputProps> = ({
         <InputScaffold {...baseProps}>
             <View style={styles.container}>
                 <InputAction
-                    iconName={icons.time}
+                    {...icons.time}
                     variant={variant}
                     disabled={disabled}
                 />

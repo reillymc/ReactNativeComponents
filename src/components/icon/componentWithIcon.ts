@@ -1,23 +1,13 @@
 import type { ReactNode } from "react";
-import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 
-import type { IconComponent } from "../../theme";
+import type { IconSet } from "../../icons";
 
-export interface IconBaseDefaultProps {
-    iconSet?: never;
-    iconName: OcticonsIconName;
-}
-
-export interface IconBaseCustomProps<G extends string> {
-    iconSet: IconComponent<Record<G, number | string>>;
+export interface IconComponentProps<G extends string> {
+    iconSet: IconSet<G>;
     iconName: G;
 }
 
-export type IconComponentProps<G extends string> =
-    | IconBaseDefaultProps
-    | IconBaseCustomProps<G>;
-
-export const componentWithIcon = <P extends object>(
+export const withIcon = <P extends object>(
     component: <G extends string>(
         props: P & IconComponentProps<G>,
     ) => ReactNode,

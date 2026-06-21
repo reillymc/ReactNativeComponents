@@ -115,7 +115,7 @@ export const SelectionInput = <T,>({
                         </View>
                         <View style={styles.iconContainer}>
                             <InteractiveIcon
-                                iconName={icons.showOptions}
+                                {...icons.showOptions}
                                 disabled={disabled}
                                 style={style.icon}
                                 {...pressableState}

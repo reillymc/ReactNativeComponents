@@ -165,7 +165,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                 <InputAction
                     disabled={disabled}
                     variant={variant}
-                    iconName={icon}
+                    {...icon}
                     onPress={
                         enabledRepresentations.length > 1
                             ? handleChangeMode

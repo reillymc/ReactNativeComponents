@@ -1,65 +1,101 @@
 import type { FC } from "react";
-import type { ColorValue } from "react-native";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@react-native-vector-icons/octicons";
 
 import type {
     CounterInputIcons,
     InputScaffoldIcons,
     NumberInputIcons,
+    RatingIcons,
+    RatingInputIcons,
     SelectionInputIcons,
     TimeInputIcons,
     ToggleInputIcons,
 } from "../components";
-
-export type GlyphMap = Record<string, number | string>;
-
-export type IconComponent<G extends GlyphMap> = FC<
-    {
-        name: keyof G;
-        size?: number;
-        color?: ColorValue;
-    } & object
->;
+import { type IconSet, Octicons, Stars } from "../icons";
 
 export type ComponentIconAssets<K extends string> = K;
 
-type ComponentAssetMap<G extends string, K extends string> = Record<K, G>;
-
-export type Icons<G extends string> = {
-    iconSet: IconComponent<Record<G, number | string>>;
-
-    inputScaffold: ComponentAssetMap<G, InputScaffoldIcons>;
-    counterInput: ComponentAssetMap<G, CounterInputIcons>;
-    numberInput: ComponentAssetMap<G, NumberInputIcons>;
-    selectionInput: ComponentAssetMap<G, SelectionInputIcons>;
-    timeInput: ComponentAssetMap<G, TimeInputIcons>;
-    toggleInput: ComponentAssetMap<G, ToggleInputIcons>;
+type ComponentIcons = {
+    inputScaffold: InputScaffoldIcons;
+    counterInput: CounterInputIcons;
+    numberInput: NumberInputIcons;
+    selectionInput: SelectionInputIcons;
+    timeInput: TimeInputIcons;
+    toggleInput: ToggleInputIcons;
+    rating: RatingIcons;
+    ratingInput: RatingInputIcons;
 };
 
-export const DefaultIcons: Icons<OcticonsIconName> = {
-    iconSet: Octicons,
+export type Icons = {
+    [K in keyof ComponentIcons]: {
+        [I in ComponentIcons[K]]: {
+            iconSet: IconSet<any>;
+            iconName: string;
+        };
+    };
+};
+
+type InferGlyph<T> =
+    T extends IconSet<infer G>
+        ? G
+        : T extends FC<{ name: infer G }>
+          ? G
+          : string;
+
+export type ComponentIconsConfig = {
+    [Category in keyof ComponentIcons]: {
+        [SubKey in ComponentIcons[Category]]: {
+            iconSet: IconSet<any>;
+            iconName: string;
+        };
+    };
+};
+
+type ValidateConfig<C> = {
+    [Category in keyof ComponentIcons]: {
+        [SubKey in ComponentIcons[Category]]: Category extends keyof C
+            ? SubKey extends keyof C[Category]
+                ? C[Category][SubKey] extends { iconSet: infer S }
+                    ? { iconSet: S; iconName: InferGlyph<S> }
+                    : never
+                : never
+            : never;
+    };
+};
+
+export const createIcons = <C extends ComponentIconsConfig>(
+    config: C & ValidateConfig<C>,
+): C => config;
+
+export const DefaultIcons = createIcons({
     inputScaffold: {
-        error: "exclamation",
+        error: { iconSet: Octicons, iconName: "exclamation" },
     },
     counterInput: {
-        decrease: "dash",
-        increase: "plus",
+        decrease: { iconSet: Octicons, iconName: "dash" },
+        increase: { iconSet: Octicons, iconName: "plus" },
     },
     numberInput: {
-        number: "infinity",
-        fraction: "number",
-        range: "arrow-both",
+        number: { iconSet: Octicons, iconName: "infinity" },
+        fraction: { iconSet: Octicons, iconName: "number" },
+        range: { iconSet: Octicons, iconName: "arrow-both" },
     },
     selectionInput: {
-        showOptions: "chevron-down",
+        showOptions: { iconSet: Octicons, iconName: "chevron-down" },
     },
     timeInput: {
-        time: "clock",
+        time: { iconSet: Octicons, iconName: "clock" },
     },
     toggleInput: {
-        outline: "circle",
+        outline: { iconSet: Octicons, iconName: "circle" },
     },
-};
+    rating: {
+        empty: { iconSet: Stars, iconName: "empty" },
+        full: { iconSet: Stars, iconName: "full" },
+        half: { iconSet: Stars, iconName: "half" },
+    },
+    ratingInput: {
+        empty: { iconSet: Stars, iconName: "empty" },
+        full: { iconSet: Stars, iconName: "full" },
+        half: { iconSet: Stars, iconName: "half" },
+    },
+});

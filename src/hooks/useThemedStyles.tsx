@@ -20,22 +20,22 @@ function hasKey<T extends object, K extends PropertyKey>(
 }
 
 type StyleOnlyKey = keyof Styles;
-type IconOnlyKey = keyof Icons<any>;
+type IconOnlyKey = keyof Icons;
 type ComponentKey = StyleOnlyKey | IconOnlyKey;
 
 type ComponentRegistry = {
-    [K in keyof Styles | keyof Icons<any>]: K extends keyof Styles
-        ? K extends keyof Icons<any>
+    [K in keyof Styles | keyof Icons]: K extends keyof Styles
+        ? K extends keyof Icons
             ? {
                   style: Styles[K];
-                  icons: Icons<any>[K];
+                  icons: Icons[K];
               }
             : {
                   style: Styles[K];
               }
-        : K extends keyof Icons<any>
+        : K extends keyof Icons
           ? {
-                icons: Icons<any>[K];
+                icons: Icons[K];
             }
           : never;
 };

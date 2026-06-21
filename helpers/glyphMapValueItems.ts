@@ -11,7 +11,3 @@ export const glyphMapValueItems: ValueItem<OcticonsIconName>[] = Object.keys(
     label: name,
     value: name as any,
 }));
-
-export const glyphMapValueItemsNullable: ValueItem<
-    OcticonsIconName | undefined
->[] = [{ id: "None", label: "None", value: undefined }, ...glyphMapValueItems];

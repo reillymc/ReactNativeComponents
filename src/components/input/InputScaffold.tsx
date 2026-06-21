@@ -78,7 +78,7 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                 <View style={styles.helpText}>
                     {hasError && (
                         <Icon
-                            iconName={icons.error}
+                            {...icons.error}
                             style={{ color: color.error }}
                             size="small"
                         />

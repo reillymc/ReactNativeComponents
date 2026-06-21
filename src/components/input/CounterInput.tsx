@@ -46,7 +46,7 @@ export const CounterInput: FC<CounterInputProps> = ({
         >
             <View style={styles.container}>
                 <InputAction
-                    iconName={icons.decrease}
+                    {...icons.decrease}
                     variant={variant}
                     disabled={disabled}
                     onPress={() =>
@@ -77,7 +77,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     inputStyle={styles.input}
                 />
                 <InputAction
-                    iconName={icons.increase}
+                    {...icons.increase}
                     disabled={disabled}
                     variant={variant}
                     onPress={() =>

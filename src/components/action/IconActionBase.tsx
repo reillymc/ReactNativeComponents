@@ -2,11 +2,7 @@ import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import {
-    componentWithIcon,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
+import { InteractiveIcon, type InteractiveIconStyles, withIcon } from "../icon";
 import { InteractiveText, type InteractiveTextStyles } from "../text";
 import type { ActionProps } from "./Action";
 import { ActionBase } from "./ActionBase";
@@ -28,7 +24,7 @@ export interface IconActionBaseProps
     style?: DeepPartial<IconActionBaseStyles>;
 }
 
-export const IconActionBase = componentWithIcon<IconActionBaseProps>(
+export const IconActionBase = withIcon<IconActionBaseProps>(
     ({
         label,
         iconPosition = "left",

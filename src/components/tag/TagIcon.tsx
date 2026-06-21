@@ -1,7 +1,7 @@
 import { useTheme } from "../../hooks";
-import { componentWithIcon, IconBase } from "../icon";
+import { IconBase, withIcon } from "../icon";
 
-export const TagIcon = componentWithIcon(({ ...iconProps }) => {
+export const TagIcon = withIcon(({ ...iconProps }) => {
     const { theme, styles } = useTheme();
 
     return (

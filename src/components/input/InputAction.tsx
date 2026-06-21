@@ -6,7 +6,7 @@ import {
     type IconActionBaseProps,
     type IconActionBaseStyles,
 } from "../action";
-import { componentWithIcon } from "../icon";
+import { withIcon } from "../icon";
 import type { InputBaseProps } from "./InputBase";
 
 export interface InputActionStyles {
@@ -20,7 +20,7 @@ export interface InputActionProps
         >,
         Pick<InputBaseProps, "variant"> {}
 
-export const InputAction = componentWithIcon<InputActionProps>(
+export const InputAction = withIcon<InputActionProps>(
     ({ disabled = false, containerStyle, variant = "regular", ...props }) => {
         const [styles, { style }] = useThemedStyles(
             "inputAction",

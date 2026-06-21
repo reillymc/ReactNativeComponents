@@ -4,11 +4,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { ActionBase } from "../action";
-import {
-    componentWithIcon,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
+import { InteractiveIcon, type InteractiveIconStyles, withIcon } from "../icon";
 import { Text } from "../text";
 import type { InputBaseProps, InputVariant } from "./InputBase";
 import type { InputScaffoldProps } from "./InputScaffold";
@@ -39,7 +35,7 @@ export interface ToggleInputProps
     onChange: (value: boolean) => void;
 }
 
-export const ToggleInput = componentWithIcon<ToggleInputProps>(
+export const ToggleInput = withIcon<ToggleInputProps>(
     ({
         label,
         helpText,
@@ -71,7 +67,7 @@ export const ToggleInput = componentWithIcon<ToggleInputProps>(
                         <View style={styles.labelIconContainer}>
                             <View style={styles.iconContainer}>
                                 <InteractiveIcon
-                                    iconName={icons.outline}
+                                    {...icons.outline}
                                     style={{
                                         size: toggleInput.indicator.size[
                                             variant

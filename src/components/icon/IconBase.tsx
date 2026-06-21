@@ -1,7 +1,7 @@
 import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStyles, useTheme } from "../../hooks";
+import { useStyles } from "../../hooks";
 import type { IconComponentProps } from "./componentWithIcon";
 
 export interface IconBaseStyles {
@@ -16,24 +16,9 @@ export type IconBaseProps<G extends string> = IconComponentProps<G> & {
 export const IconBase = <G extends string>({
     style,
     iconName,
-    iconSet: OverrideIconSet,
+    iconSet: IconSet,
 }: IconBaseProps<G>) => {
     const { iconBase } = useStyles({ iconBase: style });
-    const {
-        icons: { iconSet },
-    } = useTheme();
-
-    if (OverrideIconSet) {
-        return (
-            <OverrideIconSet
-                size={iconBase.size}
-                color={iconBase.color}
-                name={iconName}
-            />
-        );
-    }
-
-    const IconSet = iconSet;
 
     return (
         <IconSet size={iconBase.size} color={iconBase.color} name={iconName} />

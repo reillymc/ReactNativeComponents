@@ -8,9 +8,11 @@ import {
 import { Animated, Easing, PanResponder, StyleSheet, View } from "react-native";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
+import { IconBase } from "../icon";
 import {
-    DefaultRatingIconSet,
     getRatingIcons,
+    type RatingIconVariant,
     type RatingProps,
     ratingToValue,
     valueToRating,
@@ -20,13 +22,15 @@ import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
 
 export type RatingInputStyles = null;
 
+export type RatingInputIcons = ComponentIconAssets<RatingIconVariant>;
+
 export interface RatingInputProps
     extends Pick<
             InputScaffoldProps,
             "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
         >,
         Pick<InputBaseProps, "disabled" | "variant">,
-        Pick<RatingProps, "ratingIconSet" | "max" | "value" | "scale"> {
+        Pick<RatingProps, "max" | "value" | "scale"> {
     /**
      * Change listener that gets called when rating changes.
      */
@@ -45,7 +49,6 @@ export const RatingInput: FC<RatingInputProps> = ({
     max = 5,
     disabled: disabledProp,
     variant = "regular",
-    ratingIconSet = DefaultRatingIconSet,
     scale,
     onChange,
     ...props
@@ -57,7 +60,7 @@ export const RatingInput: FC<RatingInputProps> = ({
         styles: { inputBase, rating },
     } = useTheme();
 
-    const [styles] = useThemedStyles("ratingInput", createStyles, {
+    const [styles, { icons }] = useThemedStyles("ratingInput", createStyles, {
         props: { disabled, variant },
     });
 
@@ -152,24 +155,25 @@ export const RatingInput: FC<RatingInputProps> = ({
                 {...panHandlers}
                 onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
             >
-                {ratingIcons.map((variant, i) => {
-                    const RatingIcon = ratingIconSet[variant];
-                    const color = rating.icon.color[variant];
-
-                    return (
-                        <AnimatedIcon
-                            // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
-                            key={i}
-                            active={
-                                isInteracting &&
-                                scaledRating > i &&
-                                scaledRating - 1 <= i
-                            }
-                        >
-                            <RatingIcon size={ratingIconSize} color={color} />
-                        </AnimatedIcon>
-                    );
-                })}
+                {ratingIcons.map((variant, i) => (
+                    <AnimatedIcon
+                        // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
+                        key={i}
+                        active={
+                            isInteracting &&
+                            scaledRating > i &&
+                            scaledRating - 1 <= i
+                        }
+                    >
+                        <IconBase
+                            {...icons[variant]}
+                            style={{
+                                size: ratingIconSize,
+                                color: rating.icon.color[variant],
+                            }}
+                        />
+                    </AnimatedIcon>
+                ))}
             </View>
         </InputScaffold>
     );

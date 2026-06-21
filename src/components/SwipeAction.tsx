@@ -2,7 +2,7 @@ import { StyleSheet } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../hooks";
 import { IconButton, type IconButtonProps } from "./button";
-import { componentWithIcon } from "./icon";
+import { withIcon } from "./icon";
 
 export type SwipeActionStyles = {
     width: number;
@@ -11,7 +11,7 @@ export type SwipeActionStyles = {
 export interface SwipeActionProps
     extends Pick<IconButtonProps, "onPress" | "variant"> {}
 
-export const SwipeAction = componentWithIcon<SwipeActionProps>((props) => {
+export const SwipeAction = withIcon<SwipeActionProps>((props) => {
     const [styles] = useThemedStyles("swipeAction", createStyles);
     return <IconButton {...props} containerStyle={styles.actionButton} />;
 });

@@ -1,6 +1,7 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any used for simple prop definition flexibility */
 import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
+import Octicons from "@react-native-vector-icons/octicons";
 import {
     CounterInput,
     SelectionInput,
@@ -33,6 +34,10 @@ type FunctionPropDefinition = {
     type: "function";
 };
 
+type HiddenPropDefinition = {
+    type: "hidden";
+};
+
 type ArrayPropDefinition = {
     type: "array";
     values: string[];
@@ -51,6 +56,7 @@ type PropDefinition<T> = PropDefinitionBase &
         | BooleanPropDefinition
         | FunctionPropDefinition
         | ArrayPropDefinition
+        | HiddenPropDefinition
         | EnumPropDefinition<T>
     );
 
@@ -160,6 +166,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     onChange={(value) =>
                                         onChange(propId, value)
                                     }
+                                    iconSet={Octicons}
                                     iconName="check"
                                 />
                             </View>

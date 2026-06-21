@@ -14,7 +14,7 @@ import {
 export interface ThemeContextDefinition {
     theme: Theme;
     styles: Styles;
-    icons: Icons<any>;
+    icons: Icons;
 }
 
 export const ThemeContext = createContext<ThemeContextDefinition>({
@@ -26,7 +26,7 @@ export const ThemeContext = createContext<ThemeContextDefinition>({
 interface ThemeProviderProps {
     theme?: DeepPartial<Theme>;
     styles?: Styles;
-    icons?: Icons<any>;
+    icons?: Icons;
     children?: ReactNode;
 }
 

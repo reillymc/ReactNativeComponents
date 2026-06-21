@@ -1,7 +1,7 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { componentWithIcon, type InteractiveIconStyles } from "../icon";
+import { type InteractiveIconStyles, withIcon } from "../icon";
 import {
     IconButtonBase,
     type IconButtonBaseProps,
@@ -33,7 +33,7 @@ export interface IconButtonProps
     onPress?: () => void;
 }
 
-export const IconButton = componentWithIcon<IconButtonProps>(
+export const IconButton = withIcon<IconButtonProps>(
     ({ variant = "secondary", style, ...props }) => {
         const { iconButton } = useStyles({
             iconButton: style,

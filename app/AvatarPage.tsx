@@ -1,4 +1,5 @@
 import React from "react";
+import Octicons from "@react-native-vector-icons/octicons";
 import {
     Avatar,
     type AvatarProps,
@@ -12,7 +13,13 @@ const defaultProps: AvatarProps = {
     lastName: "Smith",
     imageUri: undefined,
     size: "regular",
-    action: <IconAction iconName="x-circle" onPress={() => null} />,
+    action: (
+        <IconAction
+            iconSet={Octicons}
+            iconName="x-circle"
+            onPress={() => null}
+        />
+    ),
 };
 
 const propDefinitions: PropDefinitions<AvatarProps> = {
@@ -58,7 +65,13 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
             {
                 id: "Edit",
                 label: "Edit",
-                value: <IconAction iconName="pencil" onPress={() => null} />,
+                value: (
+                    <IconAction
+                        iconSet={Octicons}
+                        iconName="pencil"
+                        onPress={() => null}
+                    />
+                ),
             },
         ],
     },

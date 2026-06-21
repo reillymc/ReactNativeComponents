@@ -3,11 +3,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
-import {
-    componentWithIcon,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
+import { InteractiveIcon, type InteractiveIconStyles, withIcon } from "../icon";
 import type { ButtonBaseProps, ButtonBaseStyles } from "./ButtonBase";
 
 export type IconButtonBaseStyles = {
@@ -26,7 +22,7 @@ export interface IconButtonBaseProps
     onPress?: () => void;
 }
 
-export const IconButtonBase = componentWithIcon<IconButtonBaseProps>(
+export const IconButtonBase = withIcon<IconButtonBaseProps>(
     ({
         disabled: disabledProp,
         style: styleOverrides,

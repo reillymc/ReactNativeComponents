@@ -8,8 +8,12 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { StarBorder, StarFull, StarHalf } from "../assets";
 import { type ThemedStyles, useThemedStyles } from "../hooks";
+import type { ComponentIconAssets } from "../theme";
+import { IconBase } from "./icon";
+
+export type RatingIconVariant = "full" | "half" | "empty";
+export type RatingIcons = ComponentIconAssets<RatingIconVariant>;
 
 export const valueToRating = (
     rating: number,
@@ -61,8 +65,6 @@ export interface RatingProps {
      */
     scale?: number;
 
-    ratingIconSet?: RatingIconSet;
-
     style?: DeepPartial<RatingStyles>;
 
     /**
@@ -75,11 +77,10 @@ export const Rating: FC<RatingProps> = ({
     value = 0,
     max = 5,
     scale,
-    ratingIconSet = DefaultRatingIconSet,
     style: styleOverrides,
     containerStyle,
 }) => {
-    const [styles, { style }] = useThemedStyles("rating", createStyles, {
+    const [styles, { style, icons }] = useThemedStyles("rating", createStyles, {
         styles: { rating: styleOverrides },
     });
 
@@ -90,19 +91,17 @@ export const Rating: FC<RatingProps> = ({
             style={[styles.starRating, containerStyle]}
             accessibilityLabel={`star rating. ${scaledRating} of ${max}.`}
         >
-            {getRatingIcons(scaledRating, max).map((variant, i) => {
-                const RatingIcon = ratingIconSet[variant];
-                const color = style.icon.color[variant];
-
-                return (
-                    <RatingIcon
-                        // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
-                        key={i}
-                        size={style.icon.size}
-                        color={color}
-                    />
-                );
-            })}
+            {getRatingIcons(scaledRating, max).map((variant, i) => (
+                <IconBase
+                    // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
+                    key={i}
+                    {...icons[variant]}
+                    style={{
+                        size: style.icon.size,
+                        color: style.icon.color[variant],
+                    }}
+                />
+            ))}
         </View>
     );
 };
@@ -114,24 +113,3 @@ const createStyles = ({ styles: { rating } }: ThemedStyles) =>
             gap: rating.gap,
         },
     });
-
-export type RatingIconVariant = "full" | "half" | "empty";
-
-export type RatingIconVariantProps = {
-    size: number;
-    color: ColorValue;
-};
-
-export type StarIconProps = {
-    size: number;
-    color: string;
-    type: RatingIconVariant;
-};
-
-type RatingIconSet = Record<RatingIconVariant, FC<RatingIconVariantProps>>;
-
-export const DefaultRatingIconSet: RatingIconSet = {
-    full: StarFull,
-    half: StarHalf,
-    empty: StarBorder,
-};

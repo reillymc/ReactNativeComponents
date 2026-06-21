@@ -1,6 +1,10 @@
 import React from "react";
 import {
-    type IconBaseDefaultProps,
+    Octicons,
+    type OcticonsIconName,
+} from "@react-native-vector-icons/octicons";
+import {
+    type IconComponentProps,
     ToggleInput,
     type ToggleInputProps,
 } from "@reillymc/react-native-components";
@@ -8,7 +12,7 @@ import {
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import { CommonInputProps, glyphMapValueItems } from "../helpers";
 
-type Props = IconBaseDefaultProps & ToggleInputProps;
+type Props = IconComponentProps<OcticonsIconName> & ToggleInputProps;
 
 const propDefinitions: PropDefinitions<Props> = {
     ...CommonInputProps,
@@ -30,9 +34,13 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "function",
         label: "Change action",
     },
+    iconSet: {
+        type: "hidden",
+    },
 };
 
 const defaultProps: Props = {
+    iconSet: Octicons,
     disabled: false,
     onChange: () => null,
     toggleVariant: "primary",

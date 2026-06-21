@@ -1,4 +1,5 @@
 import { type FunctionComponent, useState } from "react";
+import Octicons from "@react-native-vector-icons/octicons";
 import {
     AlertIndicator,
     IconAction,
@@ -18,6 +19,7 @@ const defaultProps: ListItemProps = {
     avatar: (
         <ListItemAvatar>
             <IconAction
+                iconSet={Octicons}
                 onPress={() => null}
                 iconName="apps"
                 variant="primary"
@@ -41,12 +43,14 @@ const defaultProps: ListItemProps = {
     swipeActions: [
         <SwipeAction
             key="1"
+            iconSet={Octicons}
             iconName={"trash"}
             variant="destructive"
             onPress={() => null}
         />,
         <SwipeAction
             key="2"
+            iconSet={Octicons}
             iconName="pencil"
             variant="secondary"
             onPress={() => null}
@@ -135,12 +139,14 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 value: [
                     <SwipeAction
                         key="1"
+                        iconSet={Octicons}
                         iconName="trash"
                         variant="destructive"
                         onPress={() => null}
                     />,
                     <SwipeAction
                         key="2"
+                        iconSet={Octicons}
                         iconName="pencil"
                         variant="secondary"
                         onPress={() => null}

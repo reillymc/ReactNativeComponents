@@ -1,7 +1,7 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { componentWithIcon } from "./componentWithIcon";
+import { withIcon } from "./componentWithIcon";
 import { IconBase, type IconBaseStyles } from "./IconBase";
 
 export type IconSize = "small" | "medium" | "large";
@@ -17,7 +17,7 @@ export type IconProps = {
     style?: DeepPartial<IconStyles>;
 };
 
-export const Icon = componentWithIcon<IconProps>(
+export const Icon = withIcon<IconProps>(
     ({ size = "medium", style, ...iconProps }) => {
         const { icon } = useStyles({ icon: style });
 

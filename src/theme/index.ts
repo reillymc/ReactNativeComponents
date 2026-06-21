@@ -1,8 +1,7 @@
 export {
     type ComponentIconAssets,
+    createIcons,
     DefaultIcons,
-    type GlyphMap,
-    type IconComponent,
     type Icons,
 } from "./icons";
 export {

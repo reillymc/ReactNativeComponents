@@ -6,5 +6,10 @@ export {
     useTheme,
     useThemedStylesExternal as useThemedStyles,
 } from "./hooks";
+export {
+    type IconSet,
+    Stars,
+    type StarsIconName,
+} from "./icons";
 export * from "./providers";
 export * from "./theme";

@@ -1,4 +1,5 @@
 import React from "react";
+import Octicons from "@react-native-vector-icons/octicons";
 import { Tag, TagIcon, type TagProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
@@ -6,7 +7,7 @@ import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 const defaultProps: TagProps = {
     label: "Example Tag",
     variant: "dark",
-    icon: <TagIcon iconName="x-circle" />,
+    icon: <TagIcon iconSet={Octicons} iconName="x-circle" />,
 };
 
 const propDefinitions: PropDefinitions<TagProps> = {
@@ -26,7 +27,7 @@ const propDefinitions: PropDefinitions<TagProps> = {
             {
                 id: "close",
                 label: "close",
-                value: <TagIcon iconName="x-circle" />,
+                value: <TagIcon iconSet={Octicons} iconName="x-circle" />,
             },
         ],
     },

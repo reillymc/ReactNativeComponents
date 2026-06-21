@@ -6,6 +6,7 @@ import {
     View,
 } from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
+import Octicons from "@react-native-vector-icons/octicons";
 import {
     Action,
     Avatar,
@@ -73,7 +74,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Icon",
                 href: "/IconPage",
-                component: <Icon iconName="star" />,
+                component: <Icon iconSet={Octicons} iconName="star" />,
             },
         ],
     },
@@ -88,7 +89,13 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Icon Action",
                 href: "/IconActionPage",
-                component: <IconAction iconName="star" label="Icon Action" />,
+                component: (
+                    <IconAction
+                        iconSet={Octicons}
+                        iconName="star"
+                        label="Icon Action"
+                    />
+                ),
             },
         ],
     },
@@ -103,7 +110,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Icon Button",
                 href: "/IconButtonPage",
-                component: <IconButton iconName="star" />,
+                component: <IconButton iconSet={Octicons} iconName="star" />,
             },
         ],
     },
@@ -164,6 +171,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/ToggleInputPage",
                 component: (
                     <ToggleInput
+                        iconSet={Octicons}
                         onChange={() => null}
                         iconName="check"
                         label="Toggle Input"
@@ -233,6 +241,7 @@ const ComponentListScreen: React.FC = () => {
                 ListHeaderComponent={
                     <View style={styles.listHeader}>
                         <IconAction
+                            iconSet={Octicons}
                             label="Common Props"
                             iconName={collapsed ? "chevron-down" : "chevron-up"}
                             iconPosition="right"

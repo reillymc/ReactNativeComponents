@@ -31,7 +31,11 @@ export type {
     RangeValue,
 } from "./NumberInput";
 export { NumberInput } from "./NumberInput";
-export type { RatingInputProps, RatingInputStyles } from "./RatingInput";
+export type {
+    RatingInputIcons,
+    RatingInputProps,
+    RatingInputStyles,
+} from "./RatingInput";
 export { RatingInput } from "./RatingInput";
 export type {
     SelectionInputIcons,
