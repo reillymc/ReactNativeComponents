@@ -1,13 +1,8 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.238.0/containers/typescript-node
 {
     "name": "React Native Components",
-    "dockerComposeFile": "docker-compose.yml",
-    // Configure tool-specific properties.
+    "build": { "dockerfile": "Dockerfile" },
     "customizations": {
-        // Configure properties specific to VS Code.
         "vscode": {
-            // Add the IDs of extensions you want installed when the container is created.
             "extensions": [
                 "biomejs.biome",
                 "expo.vscode-expo-tools",
@@ -15,7 +10,10 @@
             ]
         }
     },
-    "remoteUser": "node",
-    "workspaceFolder": "/workspace",
-    "service": "react-native-components"
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "configureZshAsDefaultShell": true
+        }
+    },
+    "remoteUser": "node"
 }
