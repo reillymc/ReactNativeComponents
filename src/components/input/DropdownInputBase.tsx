@@ -110,8 +110,6 @@ export const DropdownInputBase = <T,>({
             onSelect(item);
         }
 
-        onChangeText?.(item.label);
-
         if (selectBehaviour === "blurAndSelect") {
             inputRef.current?.blur();
         }
