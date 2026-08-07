@@ -2,10 +2,12 @@ name: Publish package to GitHub Packages
 on:
     push:
         branches: ["latest/**"]
+
 jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
+            id-token: write  # Required for OIDC
             contents: write
             packages: write
         steps:
@@ -17,7 +19,7 @@ jobs:
             - uses: actions/setup-node@v4
               with:
                   node-version: "22.x"
-                  registry-url: "https://npm.pkg.github.com"
+                  registry-url: 'https://registry.npmjs.org'
                   # Defaults to the user or organization that owns the workflow file
                   scope: "@reillymc"
             - name: Install dependencies
@@ -35,6 +37,6 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish package
-              run: npm publish --access restricted
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: npm publish --provenance --access public
+
+

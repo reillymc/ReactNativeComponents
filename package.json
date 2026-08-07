@@ -41,7 +41,7 @@
         "registry": "https://registry.npmjs.org/"
     },
     "dependencies": {
-        "@reillymc/es-utils": "^0.0.4",
+        "@reillymc/es-utils": "^0.0.7",
         "lodash.merge": "^4.6.2"
     },
     "devDependencies": {
