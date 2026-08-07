@@ -4,7 +4,6 @@ import {
     Image,
     type StyleProp,
     StyleSheet,
-    Text,
     type TextStyle,
     View,
     type ViewStyle,
@@ -12,6 +11,7 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../hooks";
+import { Text } from "./text";
 
 const getBackgroundColor = (
     colors: Array<{ background: ColorValue; foreground: ColorValue }>,

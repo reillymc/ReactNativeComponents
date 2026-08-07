@@ -26,6 +26,7 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
 const defaultProps: CounterInputProps = {
     placeholder: "0",
     disabled: false,
+    label: "Counter Input",
 };
 
 const CounterInputPage: React.FunctionComponent = () => {

@@ -16,6 +16,7 @@ export interface CounterInputProps
             "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
         > {
     disableKeyboardInput?: boolean;
+    interval?: number;
 }
 
 export const CounterInput: FC<CounterInputProps> = ({
@@ -28,6 +29,7 @@ export const CounterInput: FC<CounterInputProps> = ({
     disabled = false,
     variant = "regular",
     containerStyle,
+    interval = 1,
     ...props
 }) => {
     const [styles, { icons }] = useThemedStyles("counterInput", createStyles, {
@@ -51,7 +53,10 @@ export const CounterInput: FC<CounterInputProps> = ({
                     disabled={disabled}
                     onPress={() =>
                         onChangeText?.(
-                            Math.max(value - 1, props.min ?? 0).toString(),
+                            Math.max(
+                                value - interval,
+                                props.min ?? 0,
+                            ).toString(),
                         )
                     }
                 />
@@ -83,7 +88,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     onPress={() =>
                         onChangeText?.(
                             Math.min(
-                                value + 1,
+                                value + interval,
                                 props.max ?? Number.MAX_VALUE,
                             ).toString(),
                         )

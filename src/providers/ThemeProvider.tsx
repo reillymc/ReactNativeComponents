@@ -41,6 +41,8 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({
     const icons = initialIcons ?? DefaultIcons;
 
     return (
-        <ThemeContext value={{ theme, styles, icons }}>{children}</ThemeContext>
+        <ThemeContext.Provider value={{ theme, styles, icons }}>
+            {children}
+        </ThemeContext.Provider>
     );
 };
