@@ -36,7 +36,7 @@ export const CounterInput: FC<CounterInputProps> = ({
         props: { disabled },
     });
 
-    const value = Number.parseInt(props.value ?? "0", 10) || 0;
+    const value = Number.parseFloat(props.value ?? "0") || 0;
 
     return (
         <InputScaffold
@@ -61,6 +61,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                     }
                 />
                 <NumberInputBase
+                    clearButtonMode="never"
                     {...props}
                     variant={variant}
                     onChangeText={(newValue) => {
@@ -71,7 +72,7 @@ export const CounterInput: FC<CounterInputProps> = ({
                         onChangeText?.(
                             Math.min(
                                 Math.max(
-                                    Number.parseInt(newValue ?? "0", 10),
+                                    Number.parseFloat(newValue ?? "0"),
                                     props.min ?? 0,
                                 ),
                                 props.max ?? Number.MAX_VALUE,
