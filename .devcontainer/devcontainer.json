@@ -10,10 +10,5 @@
             ]
         }
     },
-    "features": {
-        "ghcr.io/devcontainers/features/common-utils:2": {
-            "configureZshAsDefaultShell": true
-        }
-    },
     "remoteUser": "node"
 }
