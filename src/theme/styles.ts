@@ -33,6 +33,35 @@ import type {
     ToastStyles,
     ToggleInputStyles,
 } from "../components";
+import { defaultActionStyles } from "../components/action/Action.styles";
+import { defaultIconActionStyles } from "../components/action/IconAction.styles";
+import { defaultIconActionBaseStyles } from "../components/action/IconActionBase.styles";
+import { defaultAlertIndicatorStyles } from "../components/alert/AlertIndicator.styles";
+import { defaultAvatarStyles } from "../components/avatar/Avatar.styles";
+import { defaultButtonStyles } from "../components/button/Button.styles";
+import { defaultButtonBaseStyles } from "../components/button/ButtonBase.styles";
+import { defaultIconButtonStyles } from "../components/button/IconButton.styles";
+import { defaultIconButtonBaseStyles } from "../components/button/IconButtonBase.styles";
+import { defaultFloatingContainerStyles } from "../components/container/FloatingContainer.styles";
+import { defaultIconStyles } from "../components/icon/Icon.styles";
+import { defaultIconBaseStyles } from "../components/icon/IconBase.styles";
+import { defaultInteractiveIconStyles } from "../components/icon/InteractiveIcon.styles";
+import { defaultDropdownInputStyles } from "../components/input/DropdownInput.styles";
+import { defaultInputActionStyles } from "../components/input/InputAction.styles";
+import { defaultInputBaseStyles } from "../components/input/InputBase.styles";
+import { defaultInputScaffoldStyles } from "../components/input/InputScaffold.styles";
+import { defaultSelectionInputStyles } from "../components/input/SelectionInput.styles";
+import { defaultToggleInputStyles } from "../components/input/ToggleInput.styles";
+import { defaultListItemStyles } from "../components/listItem/ListItem.styles";
+import { defaultMenuStyles } from "../components/menu/Menu.styles";
+import { defaultMenuItemStyles } from "../components/menu/MenuItem.styles";
+import { defaultRatingStyles } from "../components/rating/Rating.styles";
+import { defaultSwipeActionStyles } from "../components/swipe/SwipeAction.styles";
+import { defaultTagStyles } from "../components/tag/Tag.styles";
+import { defaultHighlightedTextStyles } from "../components/text/HighlightedText.styles";
+import { defaultInteractiveTextStyles } from "../components/text/InteractiveText.styles";
+import { defaultTextStyles } from "../components/text/Text.styles";
+import { defaultToastStyles } from "../components/toast/Toast.styles";
 import type { Theme } from "./theme";
 
 export type Styles = {
@@ -85,431 +114,53 @@ export type StyleOverrides = DeepPartial<Styles>;
 
 export type CreateStyles = (theme: Theme) => Styles;
 
-export const createDefaultStyles: CreateStyles = ({
-    border,
-    color,
-    font,
-    spacing,
-}) => {
-    const interactiveText: InteractiveTextStyles = {
-        color: {
-            enabled: color.primary,
-            pressed: color.primaryLight,
-            disabled: color.primaryLight,
-        },
-    };
+/**
+ * Composes the default `Styles` registry from each component's `styles.ts`
+ * factory. Defaults live next to the component that owns them; this module only
+ * assembles them (and holds the shared `common` token).
+ */
+export const createDefaultStyles: CreateStyles = (theme) => ({
+    interactiveText: defaultInteractiveTextStyles(theme),
+    highlightedText: defaultHighlightedTextStyles(),
+    iconBase: defaultIconBaseStyles(theme),
+    icon: defaultIconStyles(theme),
+    interactiveIcon: defaultInteractiveIconStyles(theme),
+    action: defaultActionStyles(theme),
+    iconActionBase: defaultIconActionBaseStyles(theme),
+    iconAction: defaultIconActionStyles(theme),
+    buttonBase: defaultButtonBaseStyles(theme),
+    button: defaultButtonStyles(theme),
+    iconButtonBase: defaultIconButtonBaseStyles(theme),
+    iconButton: defaultIconButtonStyles(theme),
 
-    const highlightedText: HighlightedTextStyles = {
-        highlightedWeight: {
-            body: "800",
-            caption: "800",
-            display: "800",
-            heading: "800",
-            label: "800",
-            title: "800",
-        },
-    };
+    inputBase: defaultInputBaseStyles(theme),
+    inputScaffold: defaultInputScaffoldStyles(theme),
+    inputAction: defaultInputActionStyles(theme),
+    selectionInput: defaultSelectionInputStyles(theme),
+    ratingInput: null,
 
-    const iconBase: IconBaseStyles = {
-        color: color.textPrimary,
-        size: 20,
-    };
+    swipeAction: defaultSwipeActionStyles(theme),
+    floatingContainer: defaultFloatingContainerStyles(theme),
+    menu: defaultMenuStyles(theme),
+    menuItem: defaultMenuItemStyles(theme),
+    rating: defaultRatingStyles(theme),
+    alertIndicator: defaultAlertIndicatorStyles(theme),
+    tag: defaultTagStyles(theme),
 
-    const icon: IconStyles = {
-        color: color.textPrimary,
-        size: {
-            small: 16,
-            medium: iconBase.size,
-            large: 24,
-        },
-    };
-
-    const interactiveIcon: InteractiveIconStyles = {
-        size: iconBase.size,
-        color: {
-            enabled: color.primary,
-            pressed: color.primaryLight,
-            disabled: color.primaryLight,
-        },
-    };
-
-    const action: ActionStyles = {
-        label: {
-            color: {
-                primary: {
-                    enabled: color.primary,
-                    pressed: color.primaryLight,
-                    disabled: color.primaryLight,
-                },
-                secondary: {
-                    enabled: color.secondary,
-                    pressed: color.secondaryHighlight,
-                    disabled: color.secondaryHighlight,
-                },
-                destructive: {
-                    enabled: color.destructive,
-                    pressed: color.destructiveHighlight,
-                    disabled: color.destructiveHighlight,
-                },
+    common: {
+        action: {
+            fontSize: {
+                ...theme.font.size,
             },
         },
-    };
-
-    const iconActionBase: IconActionBaseStyles = {
-        gap: spacing.small,
-        icon: interactiveText,
-        text: interactiveText,
-    };
-
-    const iconAction: IconActionStyles = {
-        icon: action.label,
-        text: action.label,
-    };
-
-    const buttonBase: ButtonBaseStyles = {
-        height: 42,
-        width: {
-            medium: "50%",
-        },
-        borderRadius: border.radius.regular,
-        paddingHorizontal: spacing.medium,
-        paddingVertical: spacing.small,
-        backgroundColor: {
-            enabled: color.primary,
-            pressed: color.primaryLight,
-            disabled: color.primaryLight,
-        },
-    };
-
-    const button: ButtonStyles = {
-        container: {
-            borderRadius: buttonBase.borderRadius,
-            color: {
-                secondary: {
-                    enabled: color.textOnPrimary,
-                    disabled: color.textOnPrimary,
-                    pressed: color.textOnPrimary,
-                },
-                primary: {
-                    enabled: color.primary,
-                    disabled: color.primaryLight,
-                    pressed: color.primaryLight,
-                },
-                destructive: {
-                    enabled: color.textOnDestructive,
-                    disabled: color.textOnDestructive,
-                    pressed: color.textOnDestructive,
-                },
-            },
-        },
-        label: {
-            color: {
-                secondary: {
-                    enabled: color.primary,
-                    disabled: color.primaryLight,
-                    pressed: color.primaryLight,
-                },
-                primary: {
-                    enabled: color.textOnPrimary,
-                    disabled: color.textOnPrimary,
-                    pressed: color.textOnPrimary,
-                },
-                destructive: {
-                    enabled: color.destructive,
-                    disabled: color.destructiveHighlight,
-                    pressed: color.destructiveHighlight,
-                },
-            },
-        },
-    };
-
-    const iconButtonBase: IconButtonBaseStyles = {
-        container: {
-            padding: 4,
-            size: 48,
-            backgroundColor: {
-                enabled: color.inputBackground,
-                disabled: color.inputBackgroundDisabled,
-                pressed: color.inputBackground,
-            },
-            borderRadius: "50%",
-        },
-        icon: interactiveIcon,
-    };
-
-    const iconButton: IconButtonStyles = {
-        container: {
-            size: icon.size.medium + spacing.small,
-
-            backgroundColor: {
-                primary: {
-                    enabled: color.background,
-                    disabled: color.backgroundHighlight,
-                    pressed: color.backgroundHighlight,
-                },
-                secondary: {
-                    enabled: color.background,
-                    disabled: color.backgroundHighlight,
-                    pressed: color.backgroundHighlight,
-                },
-                destructive: {
-                    enabled: color.destructive,
-                    disabled: color.destructiveHighlight,
-                    pressed: color.destructiveHighlight,
-                },
-            },
-        },
-        icon: {
-            color: {
-                ...action.label.color,
-                destructive: {
-                    enabled: color.textOnDestructive,
-                    pressed: color.textOnDestructive,
-                    disabled: color.textOnDestructive,
-                },
-            },
-        },
-    };
-
-    const inputBase: InputBaseStyles = {
-        container: {
-            height: {
-                regular: 48,
-                compact: 36,
-            },
-            borderRadius: border.radius.regular,
-            padding: spacing.small,
-            backgroundColor: {
-                enabled: color.inputBackground,
-                disabled: color.inputBackgroundDisabled,
-            },
-        },
-        text: {
-            fontSize: font.size.regular,
-            fontFamily: font.family.sans,
-            color: {
-                enabled: color.textPrimary,
-                disabled: color.textSecondary,
-            },
-            placeholderColor: color.textSecondary,
-        },
-    };
-
-    const inputScaffold: InputScaffoldStyles = {
-        gap: spacing.tiny,
-        mandatoryIndicator: {
-            color: color.primaryDark,
-        },
-        helpText: {
-            gap: spacing.tiny,
-        },
-    };
-
-    const inputAction: InputActionStyles = {
-        icon: {
-            color: action.label.color.secondary,
-        },
-    };
-
-    const selectionInput: SelectionInputStyles = {
-        container: {
-            backgroundColor: {
-                ...inputBase.container.backgroundColor,
-                pressed: color.backgroundHighlight,
-            },
-        },
-        selectionContainer: {
-            gap: spacing.tiny,
-        },
-        icon: inputAction.icon,
-    };
-
-    const swipeAction: SwipeActionStyles = {
-        width: 75,
-    };
-
-    const floatingContainer: FloatingContainerStyles = {
-        parentMargin: spacing.small,
-    };
-
-    const menu: MenuStyles = {
-        backgroundColor: color.inputBackground,
-        borderRadius: inputBase.container.borderRadius,
-        gap: spacing.tiny,
-        padding: spacing.tiny,
-        parentMargin: spacing.medium,
-    };
-
-    const menuItem: MenuItemStyles = {
-        paddingHorizontal: inputBase.container.padding - menu.padding,
-        paddingVertical: spacing.small + spacing.tiny,
-        borderRadius: menu.borderRadius / 2,
-    };
-
-    const rating: RatingStyles = {
-        gap: spacing.tiny,
-        icon: {
-            color: {
-                empty: color.primaryLight,
-                half: color.primary,
-                full: color.primary,
-            },
-            size: icon.size.large,
-        },
-    };
-
-    const alertIndicator: AlertIndicatorStyles = {
-        size: 28,
-        borderRadius: 14,
-        backgroundColor: {
-            primary: color.primary,
-            secondary: color.secondary,
-        },
-        color: {
-            primary: color.textOnPrimary,
-            secondary: color.textOnSecondary,
-        },
-    };
-
-    const tag: TagStyles = {
-        borderRadius: border.radius.loose,
-        internalSpacing: spacing.small,
-        padding: spacing.small,
-    };
-
-    const styles: Styles = {
-        interactiveText,
-        iconBase,
-        icon,
-        interactiveIcon,
-        action,
-        iconActionBase,
-        iconAction,
-        buttonBase,
-        button,
-        iconButtonBase,
-        iconButton,
-
-        inputBase,
-        inputScaffold,
-        inputAction,
-        selectionInput,
-        ratingInput: null,
-
-        swipeAction,
-        floatingContainer,
-        menu,
-        menuItem,
-        rating,
-        alertIndicator,
-        tag,
-
-        common: {
-            action: {
-                fontSize: {
-                    ...font.size,
-                },
-            },
-        },
-        text: {
-            color: color.textPrimary,
-            font: {
-                caption: {
-                    family: font.family.sans,
-                    weight: "200",
-                    size: font.size.small,
-                },
-                body: {
-                    family: font.family.sans,
-                    weight: "400",
-                    size: font.size.regular,
-                },
-                label: {
-                    family: font.family.sans,
-                    weight: "500",
-                    size: font.size.emphasised,
-                },
-                heading: {
-                    family: font.family.sans,
-                    weight: "600",
-                    size: font.size.large,
-                },
-                title: {
-                    family: font.family.sans,
-                    weight: "800",
-                    size: font.size.xLarge,
-                },
-                display: {
-                    family: font.family.sans,
-                    weight: "800",
-                    size: font.size.xxLarge,
-                },
-            },
-        },
-        highlightedText,
-        dropdownInput: {
-            panelGap: 4,
-        },
-        toggleInput: {
-            indicator: {
-                size: {
-                    compact: icon.size.small,
-                    regular: icon.size.medium,
-                },
-                color: {
-                    selected: action.label.color,
-                    deselected: {
-                        enabled: color.border,
-                        disabled: color.border,
-                        pressed: color.border,
-                    },
-                },
-            },
-            label: {
-                gap: spacing.small,
-            },
-        },
-        listItem: {
-            spacingMargin: 12,
-            internalSpacing: 16,
-            borderRadius: border.radius.loose,
-            contentItemSpacing: 8,
-            contentItemTopMargin: 4,
-        },
-        avatar: {
-            size: {
-                large: 80,
-                regular: 40,
-                small: 32,
-            },
-            initials: {
-                fontWeight: "600",
-                fontSize: {
-                    large: font.size.xxLarge,
-                    regular: font.size.xLarge,
-                    small: font.size.large,
-                },
-            },
-            label: {
-                fontSize: font.size.tiny,
-                fontWeight: "500",
-            },
-            colors: [
-                { background: color.red, foreground: color.textPrimary },
-                { background: color.orange, foreground: color.textPrimary },
-                { background: color.green, foreground: color.textPrimary },
-                { background: color.blue, foreground: color.textPrimary },
-                { background: color.purple, foreground: color.textPrimary },
-            ],
-        },
-        toast: {
-            horizontalInset: spacing.pageHorizontal + spacing.medium,
-            bottomInset: 100,
-        },
-    };
-
-    return styles;
-};
+    },
+    text: defaultTextStyles(theme),
+    dropdownInput: defaultDropdownInputStyles(theme),
+    toggleInput: defaultToggleInputStyles(theme),
+    listItem: defaultListItemStyles(theme),
+    avatar: defaultAvatarStyles(theme),
+    toast: defaultToastStyles(theme),
+});
 
 export const MergeStyles = (
     styles: Styles,
