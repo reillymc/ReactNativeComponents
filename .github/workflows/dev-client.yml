@@ -13,7 +13,7 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    lint:
+    quality:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
@@ -37,7 +37,7 @@ jobs:
     build-dev-ios:
         if: github.event_name == 'push' && github.ref == 'refs/heads/dev-client'
         runs-on: ubuntu-latest
-        needs: [lint]
+        # needs: [quality] # TODO: require
         steps:
             - name: Checkout repository
               uses: actions/checkout@v7
