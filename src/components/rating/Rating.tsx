@@ -8,36 +8,16 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../hooks";
-import type { ComponentIconAssets } from "../theme";
-import { IconBase } from "./icon";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import type { ComponentIconAssets } from "../../theme";
+import { IconBase } from "../icon";
+import {
+    getRatingIcons,
+    type RatingIconVariant,
+    valueToRating,
+} from "./ratingUtils";
 
-export type RatingIconVariant = "full" | "half" | "empty";
 export type RatingIcons = ComponentIconAssets<RatingIconVariant>;
-
-export const valueToRating = (
-    rating: number,
-    starCount: number,
-    scale: number,
-): number => (rating / scale) * starCount;
-
-export const ratingToValue = (
-    stars: number,
-    starCount: number,
-    scale: number,
-): number => (stars * scale) / starCount;
-
-export const getRatingIcons = (
-    rating: number,
-    maxRating: number,
-): RatingIconVariant[] =>
-    [...Array(maxRating)].map((_, i) => {
-        if (rating - i >= 1) {
-            return "full";
-        }
-
-        return rating - i >= 0.5 ? "half" : "empty";
-    });
 
 export type RatingStyles = {
     gap: number;

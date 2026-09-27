@@ -10,7 +10,7 @@ import type {
     TimeInputIcons,
     ToggleInputIcons,
 } from "../components";
-import { type IconSet, Octicons, Stars } from "../icons";
+import { type AnyIconSet, type IconSet, Octicons, Stars } from "../icons";
 
 export type ComponentIconAssets<K extends string> = K;
 
@@ -28,7 +28,7 @@ type ComponentIcons = {
 export type Icons = {
     [K in keyof ComponentIcons]: {
         [I in ComponentIcons[K]]: {
-            iconSet: IconSet<any>;
+            iconSet: AnyIconSet;
             iconName: string;
         };
     };
@@ -44,7 +44,7 @@ type InferGlyph<T> =
 export type ComponentIconsConfig = {
     [Category in keyof ComponentIcons]: {
         [SubKey in ComponentIcons[Category]]: {
-            iconSet: IconSet<any>;
+            iconSet: AnyIconSet;
             iconName: string;
         };
     };

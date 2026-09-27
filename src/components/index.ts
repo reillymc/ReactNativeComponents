@@ -140,7 +140,7 @@ export {
     type RatingStyles,
     ratingToValue,
     valueToRating,
-} from "./Rating";
+} from "./rating";
 export {
     SwipeAction,
     type SwipeActionProps,
