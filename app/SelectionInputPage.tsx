@@ -1,9 +1,9 @@
 import React from "react";
+import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     SelectionInput,
     type SelectionInputProps,
-    type ValueItem,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

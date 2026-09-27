@@ -1,5 +1,8 @@
 import React from "react";
-import { Button, type ButtonProps } from "@reillymc/react-native-components";
+import {
+    Button,
+    type ButtonProps,
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

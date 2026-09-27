@@ -4,7 +4,7 @@ import {
     Avatar,
     type AvatarProps,
     IconAction,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

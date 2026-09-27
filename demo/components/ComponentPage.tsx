@@ -5,7 +5,7 @@ import {
     type ThemedStyles,
     useTheme,
     useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/hooks";
 
 export interface ComponentPageProps {
     componentName?: string;

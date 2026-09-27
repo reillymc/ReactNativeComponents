@@ -3,7 +3,7 @@ import {
     Button,
     Panel,
     type PanelProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

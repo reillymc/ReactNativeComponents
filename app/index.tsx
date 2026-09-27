@@ -27,12 +27,14 @@ import {
     Tag,
     Text,
     TextInput,
-    type ThemedStyles,
     TimeInput,
     ToggleInput,
+} from "@reillymc/react-native-components/components";
+import {
+    type ThemedStyles,
     useTheme,
     useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/hooks";
 
 interface ComponentScreen {
     name: string;

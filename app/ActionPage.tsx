@@ -1,5 +1,8 @@
 import { type FC, useState } from "react";
-import { Action, type ActionProps } from "@reillymc/react-native-components";
+import {
+    Action,
+    type ActionProps,
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

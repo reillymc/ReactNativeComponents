@@ -2,15 +2,15 @@
 import React, { useEffect, useMemo } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
+import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     CounterInput,
     SelectionInput,
     TextInput,
-    type Theme,
     ToggleInput,
-    useTheme,
-    type ValueItem,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useTheme } from "@reillymc/react-native-components/hooks";
+import type { Theme } from "@reillymc/react-native-components/theme";
 
 import { useSelectionModal } from "./useSelectionModal";
 

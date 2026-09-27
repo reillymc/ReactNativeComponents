@@ -1,7 +1,7 @@
 import type {
     InputBaseProps,
     InputScaffoldProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
 import type { PropDefinitions } from "../components";
 

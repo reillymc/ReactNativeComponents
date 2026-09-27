@@ -2,7 +2,7 @@ import React from "react";
 import {
     DropdownInput,
     type DropdownInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

@@ -8,11 +8,13 @@ import {
     FormContainer,
     FormRow,
     TextInput,
-    type ThemedStyles,
     ToggleInput,
+} from "@reillymc/react-native-components/components";
+import {
+    type ThemedStyles,
     useTheme,
     useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/hooks";
 
 const FormPage: React.FC = () => {
     const { theme } = useTheme();

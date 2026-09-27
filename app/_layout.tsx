@@ -8,12 +8,12 @@ import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import type { DeepPartial } from "@reillymc/es-utils";
+import { ThemeProvider } from "@reillymc/react-native-components/providers";
 import {
     createDefaultStyles,
     MergeTheme,
     type Theme,
-    ThemeProvider,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/theme";
 
 export {
     // Catch any errors thrown by the Layout component.

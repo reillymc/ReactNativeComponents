@@ -1,6 +1,10 @@
 import React from "react";
 import Octicons from "@react-native-vector-icons/octicons";
-import { Tag, TagIcon, type TagProps } from "@reillymc/react-native-components";
+import {
+    Tag,
+    TagIcon,
+    type TagProps,
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

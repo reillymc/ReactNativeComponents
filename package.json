@@ -2,16 +2,41 @@
     "name": "@reillymc/react-native-components",
     "version": "0.11.2",
     "description": "A collection of React Native components and resources",
-    "module": "lib/index.js",
-    "react-native": "lib/index.js",
-    "source": "lib/index.js",
-    "types": "lib/types/index.d.ts",
+    "type": "module",
+    "sideEffects": false,
+    "exports": {
+        "./components": {
+            "types": "./lib/types/components/index.d.ts",
+            "default": "./lib/components/index.js"
+        },
+        "./hooks": {
+            "types": "./lib/types/hooks/index.d.ts",
+            "default": "./lib/hooks/index.js"
+        },
+        "./icons": {
+            "types": "./lib/types/icons/index.d.ts",
+            "default": "./lib/icons/index.js"
+        },
+        "./providers": {
+            "types": "./lib/types/providers/index.d.ts",
+            "default": "./lib/providers/index.js"
+        },
+        "./theme": {
+            "types": "./lib/types/theme/index.d.ts",
+            "default": "./lib/theme/index.js"
+        },
+        "./common": {
+            "types": "./lib/types/common/index.d.ts",
+            "default": "./lib/common/index.js"
+        },
+        "./package.json": "./package.json"
+    },
     "files": [
         "lib/**/*"
     ],
     "scripts": {
         "clean": "rm -rf ./lib",
-        "build": "npm run clean && tsc -p ./tsconfig.build.json && babel --config-file ./babel.config.build.js --extensions .ts,.tsx ./src -d ./lib",
+        "build": "npm run clean && tsc -p ./tsconfig.build.json && babel --config-file ./babel.config.build.cjs --extensions .ts,.tsx ./src -d ./lib",
         "lint": "biome check --error-on-warnings",
         "lint:fix": "biome check --fix",
         "prepare": "npm run build",

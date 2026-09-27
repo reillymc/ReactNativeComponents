@@ -3,16 +3,18 @@ import { type FC, useCallback, useMemo } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
+import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     Action,
     MenuItem,
     Tag,
     TagIcon,
     Text,
+} from "@reillymc/react-native-components/components";
+import {
     type ThemedStyles,
     useThemedStyles,
-    type ValueItem,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/hooks";
 
 const SelectionModal: FC = () => {
     const styles = useThemedStyles(createStyles);

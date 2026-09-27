@@ -3,7 +3,7 @@ import {
     TimeInput,
     type TimeInputProps,
     type TimeInputValue,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
 import {
     ComponentPage,

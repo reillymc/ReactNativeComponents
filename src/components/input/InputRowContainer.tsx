@@ -1,7 +1,7 @@
 import type { FC, ReactNode } from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
-import { type ThemedStyles, useThemedStylesExternal } from "../../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export interface InputRowContainerProps {
     disabled?: boolean;
@@ -18,7 +18,7 @@ export const InputRowContainer: FC<InputRowContainerProps> = ({
     style,
     children,
 }) => {
-    const styles = useThemedStylesExternal(createStyles, {
+    const styles = useThemedStyles(createStyles, {
         props: { disabled },
     });
 

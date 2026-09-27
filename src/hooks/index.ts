@@ -6,5 +6,4 @@ export {
     type ThemedStyles,
     useStyles,
     useThemedStyles,
-    useThemedStylesExternal,
 } from "./useThemedStyles";

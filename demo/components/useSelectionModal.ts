@@ -1,10 +1,8 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
 import { useCallback, useEffect, useMemo } from "react";
 import { useGlobalSearchParams, useRouter } from "expo-router";
-import type {
-    SelectionInputProps,
-    ValueItem,
-} from "@reillymc/react-native-components";
+import type { ValueItem } from "@reillymc/react-native-components/common";
+import type { SelectionInputProps } from "@reillymc/react-native-components/components";
 
 type UseSelectionModalParams<T> = Pick<
     SelectionInputProps<T>,
