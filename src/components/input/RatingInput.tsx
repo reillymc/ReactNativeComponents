@@ -167,10 +167,8 @@ export const RatingInput: FC<RatingInputProps> = ({
                     >
                         <IconBase
                             {...icons[variant]}
-                            style={{
-                                size: ratingIconSize,
-                                color: rating.icon.color[variant],
-                            }}
+                            size={ratingIconSize}
+                            color={rating.icon.color[variant]}
                         />
                     </AnimatedIcon>
                 ))}

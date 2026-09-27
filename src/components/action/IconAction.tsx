@@ -1,7 +1,7 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { type InteractiveIconStyles, withIcon } from "../icon";
+import type { IconComponentProps, InteractiveIconStyles } from "../icon";
 import type { InteractiveTextStyles } from "../text";
 import { IconActionBase, type IconActionBaseProps } from "./IconActionBase";
 
@@ -25,18 +25,20 @@ export interface IconActionProps extends Omit<IconActionBaseProps, "style"> {
     style?: DeepPartial<IconActionStyles>;
 }
 
-export const IconAction = withIcon<IconActionProps>(
-    ({ variant = "secondary", style, ...props }) => {
-        const { iconAction } = useStyles({ iconAction: style });
+export const IconAction = <G extends string>({
+    variant = "secondary",
+    style,
+    ...props
+}: IconActionProps & IconComponentProps<G>) => {
+    const { iconAction } = useStyles({ iconAction: style });
 
-        return (
-            <IconActionBase
-                {...props}
-                style={{
-                    icon: { color: iconAction.icon.color[variant] },
-                    text: { color: iconAction.text.color[variant] },
-                }}
-            />
-        );
-    },
-);
+    return (
+        <IconActionBase
+            {...props}
+            style={{
+                icon: { color: iconAction.icon.color[variant] },
+                text: { color: iconAction.text.color[variant] },
+            }}
+        />
+    );
+};

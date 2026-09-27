@@ -2,8 +2,8 @@ import type { PressableStateCallbackType } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { withIcon } from "./componentWithIcon";
 import { IconBase, type IconBaseStyles } from "./IconBase";
+import type { IconComponentProps } from "./IconComponentProps";
 
 export type InteractiveIconState = "enabled" | "disabled" | "pressed";
 
@@ -19,24 +19,23 @@ export interface InteractiveIconProps extends PressableStateCallbackType {
     disabled?: boolean;
 }
 
-export const InteractiveIcon = withIcon<InteractiveIconProps>(
-    ({ pressed, style, disabled = false, ...iconProps }) => {
-        const { interactiveIcon } = useStyles({
-            interactiveIcon: style,
-        });
+export const InteractiveIcon = <G extends string>({
+    pressed,
+    style,
+    disabled = false,
+    ...iconProps
+}: InteractiveIconProps & IconComponentProps<G>) => {
+    const { interactiveIcon } = useStyles({ interactiveIcon: style });
 
-        return (
-            <IconBase
-                {...iconProps}
-                style={{
-                    size: interactiveIcon.size,
-                    color: pressed
-                        ? interactiveIcon.color.pressed
-                        : interactiveIcon.color[
-                              disabled ? "disabled" : "enabled"
-                          ],
-                }}
-            />
-        );
-    },
-);
+    return (
+        <IconBase
+            {...iconProps}
+            size={interactiveIcon.size}
+            color={
+                pressed
+                    ? interactiveIcon.color.pressed
+                    : interactiveIcon.color[disabled ? "disabled" : "enabled"]
+            }
+        />
+    );
+};

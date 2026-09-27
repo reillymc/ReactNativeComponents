@@ -76,10 +76,8 @@ export const Rating: FC<RatingProps> = ({
                     // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
                     key={i}
                     {...icons[variant]}
-                    style={{
-                        size: style.icon.size,
-                        color: style.icon.color[variant],
-                    }}
+                    size={style.icon.size}
+                    color={style.icon.color[variant]}
                 />
             ))}
         </View>

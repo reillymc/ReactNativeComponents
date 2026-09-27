@@ -4,7 +4,11 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { ActionBase } from "../action";
-import { InteractiveIcon, type InteractiveIconStyles, withIcon } from "../icon";
+import {
+    type IconComponentProps,
+    InteractiveIcon,
+    type InteractiveIconStyles,
+} from "../icon";
 import { Text } from "../text";
 import type { InputBaseProps, InputVariant } from "./InputBase";
 import type { InputScaffoldFieldProps } from "./InputScaffold";
@@ -38,91 +42,87 @@ export interface ToggleInputProps
     onChange: (value: boolean) => void;
 }
 
-export const ToggleInput = withIcon<ToggleInputProps>(
-    ({
-        label,
-        helpText,
-        value = false,
-        toggleVariant = "primary",
-        containerStyle,
-        variant = "regular",
-        disabled: disabledProp,
-        styles: styleOverrides,
-        onChange,
-        ...iconProps
-    }) => {
-        const disabled = disabledProp || !onChange;
+export const ToggleInput = <G extends string>({
+    label,
+    helpText,
+    value = false,
+    toggleVariant = "primary",
+    containerStyle,
+    variant = "regular",
+    disabled: disabledProp,
+    styles: styleOverrides,
+    onChange,
+    ...iconProps
+}: ToggleInputProps & IconComponentProps<G>) => {
+    const disabled = disabledProp || !onChange;
 
-        const [styles, { style: toggleInput, icons }] = useThemedStyles(
-            "toggleInput",
-            createStyles,
-            { styles: { toggleInput: styleOverrides }, props: { variant } },
-        );
+    const [styles, { style: toggleInput, icons }] = useThemedStyles(
+        "toggleInput",
+        createStyles,
+        { styles: { toggleInput: styleOverrides }, props: { variant } },
+    );
 
-        return (
-            <ActionBase
-                disabled={disabled}
-                containerStyle={[styles.container, containerStyle]}
-                onPress={() => onChange(!value)}
-            >
-                {(pressableState) => (
-                    <>
-                        <View style={styles.labelIconContainer}>
-                            <View style={styles.iconContainer}>
-                                <InteractiveIcon
-                                    {...icons.outline}
-                                    style={{
-                                        size: toggleInput.indicator.size[
-                                            variant
-                                        ],
-                                        color: value
-                                            ? toggleInput.indicator.color
-                                                  .selected[toggleVariant]
-                                            : toggleInput.indicator.color
-                                                  .deselected,
-                                    }}
-                                    disabled={disabled}
-                                    {...pressableState}
-                                />
-                                <View style={styles.icon}>
-                                    {!!value && (
-                                        <InteractiveIcon
-                                            {...iconProps}
-                                            style={{
-                                                size: toggleInput.indicator
-                                                    .size[variant],
-                                                color: toggleInput.indicator
-                                                    .color.selected[
-                                                    toggleVariant
-                                                ],
-                                            }}
-                                            disabled={disabled}
-                                            {...pressableState}
-                                        />
-                                    )}
-                                </View>
-                            </View>
-                            {label && (
-                                <Text variant="label" disabled={disabled}>
-                                    {label}
-                                </Text>
-                            )}
-                        </View>
-                        {helpText && (
-                            <View style={styles.helpText}>
-                                {typeof helpText === "string" ? (
-                                    <Text variant="caption">{helpText}</Text>
-                                ) : (
-                                    helpText
+    return (
+        <ActionBase
+            disabled={disabled}
+            containerStyle={[styles.container, containerStyle]}
+            onPress={() => onChange(!value)}
+        >
+            {(pressableState) => (
+                <>
+                    <View style={styles.labelIconContainer}>
+                        <View style={styles.iconContainer}>
+                            <InteractiveIcon
+                                {...icons.outline}
+                                style={{
+                                    size: toggleInput.indicator.size[variant],
+                                    color: value
+                                        ? toggleInput.indicator.color.selected[
+                                              toggleVariant
+                                          ]
+                                        : toggleInput.indicator.color
+                                              .deselected,
+                                }}
+                                disabled={disabled}
+                                {...pressableState}
+                            />
+                            <View style={styles.icon}>
+                                {!!value && (
+                                    <InteractiveIcon
+                                        {...iconProps}
+                                        style={{
+                                            size: toggleInput.indicator.size[
+                                                variant
+                                            ],
+                                            color: toggleInput.indicator.color
+                                                .selected[toggleVariant],
+                                        }}
+                                        disabled={disabled}
+                                        {...pressableState}
+                                    />
                                 )}
                             </View>
+                        </View>
+                        {label && (
+                            <Text variant="label" disabled={disabled}>
+                                {label}
+                            </Text>
                         )}
-                    </>
-                )}
-            </ActionBase>
-        );
-    },
-);
+                    </View>
+                    {helpText && (
+                        <View style={styles.helpText}>
+                            {typeof helpText === "string" ? (
+                                <Text variant="caption">{helpText}</Text>
+                            ) : (
+                                helpText
+                            )}
+                        </View>
+                    )}
+                </>
+            )}
+        </ActionBase>
+    );
+};
 
 const createStyles = (
     { styles: { toggleInput, inputScaffold } }: ThemedStyles,

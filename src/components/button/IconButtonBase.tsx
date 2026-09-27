@@ -3,7 +3,11 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
-import { InteractiveIcon, type InteractiveIconStyles, withIcon } from "../icon";
+import {
+    type IconComponentProps,
+    InteractiveIcon,
+    type InteractiveIconStyles,
+} from "../icon";
 import type { ButtonBaseProps, ButtonBaseStyles } from "./ButtonBase";
 
 export type IconButtonBaseStyles = {
@@ -22,54 +26,52 @@ export interface IconButtonBaseProps
     onPress?: () => void;
 }
 
-export const IconButtonBase = withIcon<IconButtonBaseProps>(
-    ({
-        disabled: disabledProp,
-        style: styleOverrides,
-        containerStyle,
-        onPress,
-        ...iconProps
-    }) => {
-        const disabled = disabledProp || !onPress;
+export const IconButtonBase = <G extends string>({
+    disabled: disabledProp,
+    style: styleOverrides,
+    containerStyle,
+    onPress,
+    ...iconProps
+}: IconButtonBaseProps & IconComponentProps<G>) => {
+    const disabled = disabledProp || !onPress;
 
-        const [styles, { style }] = useThemedStyles(
-            "iconButtonBase",
-            createStyles,
-            {
-                styles: { iconButtonBase: styleOverrides },
-                props: { disabled },
-            },
-        );
+    const [styles, { style }] = useThemedStyles(
+        "iconButtonBase",
+        createStyles,
+        {
+            styles: { iconButtonBase: styleOverrides },
+            props: { disabled },
+        },
+    );
 
-        return (
-            <ActionBase
-                disabled={disabled}
-                onPress={onPress}
-                containerStyle={(pressableState) => [
-                    pressableState.pressed
-                        ? {
-                              backgroundColor:
-                                  style.container.backgroundColor.pressed,
-                          }
-                        : undefined,
-                    styles.iconButtonBase,
-                    typeof containerStyle === "function"
-                        ? containerStyle(pressableState)
-                        : containerStyle,
-                ]}
-            >
-                {(pressableState) => (
-                    <InteractiveIcon
-                        {...pressableState}
-                        {...iconProps}
-                        disabled={disabled}
-                        style={style.icon}
-                    />
-                )}
-            </ActionBase>
-        );
-    },
-);
+    return (
+        <ActionBase
+            disabled={disabled}
+            onPress={onPress}
+            containerStyle={(pressableState) => [
+                pressableState.pressed
+                    ? {
+                          backgroundColor:
+                              style.container.backgroundColor.pressed,
+                      }
+                    : undefined,
+                styles.iconButtonBase,
+                typeof containerStyle === "function"
+                    ? containerStyle(pressableState)
+                    : containerStyle,
+            ]}
+        >
+            {(pressableState) => (
+                <InteractiveIcon
+                    {...pressableState}
+                    {...iconProps}
+                    disabled={disabled}
+                    style={style.icon}
+                />
+            )}
+        </ActionBase>
+    );
+};
 
 const createStyles = (
     { styles: { iconButtonBase } }: ThemedStyles,

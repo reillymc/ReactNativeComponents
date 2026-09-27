@@ -58,11 +58,7 @@ export type {
     IconStyles,
     InteractiveIconStyles,
 } from "./icon";
-export {
-    Icon,
-    IconBase,
-    withIcon,
-} from "./icon";
+export { Icon, IconBase } from "./icon";
 export type {
     CounterInputIcons,
     CounterInputProps,

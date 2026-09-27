@@ -1,16 +1,16 @@
 import { useTheme } from "../../hooks";
-import { IconBase, withIcon } from "../icon";
+import { IconBase, type IconComponentProps } from "../icon";
 
-export const TagIcon = withIcon(({ ...iconProps }) => {
+export const TagIcon = <G extends string>({
+    ...iconProps
+}: IconComponentProps<G>) => {
     const { theme, styles } = useTheme();
 
     return (
         <IconBase
             {...iconProps}
-            style={{
-                color: theme.color.textPrimary,
-                size: styles.text.font.body.size,
-            }}
+            color={theme.color.textPrimary}
+            size={styles.text.font.body.size}
         />
     );
-});
+};
