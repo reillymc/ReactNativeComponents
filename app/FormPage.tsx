@@ -78,7 +78,7 @@ const FormPage: React.FC = () => {
                         multiline
                         helpText="This multiline field grows with its content."
                     />
-                    <FormRow ratios={[1, 2]}>
+                    <FormRow>
                         <TextInput label="City" placeholder="London" />
                         <TextInput
                             label="Address"

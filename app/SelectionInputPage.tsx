@@ -2,19 +2,27 @@ import React from "react";
 import {
     SelectionInput,
     type SelectionInputProps,
+    type ValueItem,
 } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import { CommonInputProps } from "../helpers";
 
-const propDefinitions: PropDefinitions<SelectionInputProps> = {
+type SelectionInputDemoProps = Pick<
+    SelectionInputProps,
+    Exclude<keyof SelectionInputProps, "selection" | "selectionMode">
+> & {
+    selectionMode: "single" | "multi";
+    selection?: ValueItem | Array<ValueItem>;
+};
+
+const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
     ...CommonInputProps,
     selectionMode: {
         type: "enum",
         label: "Selection mode",
         values: [
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            { label: "Single", value: "single" as any },
+            { label: "Single", value: "single" },
             { label: "Multi", value: "multi" },
         ],
     },
@@ -53,22 +61,26 @@ const SelectionInputPage: React.FunctionComponent = () => {
         <ComponentPage
             componentName="Selection Input"
             component={
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 <SelectionInput
                     {...props}
-                    onRemoveItem={(e: any) =>
-                        setProps((prev) => ({
-                            ...prev,
-                            selection: (Array.isArray(prev.selection)
-                                ? prev.selection.filter((x) => x !== e)
-                                : undefined) as any,
-                        }))
+                    onRemoveItem={(e: ValueItem | undefined) =>
+                        setProps(
+                            (prev) =>
+                                ({
+                                    ...prev,
+                                    selection: Array.isArray(prev.selection)
+                                        ? prev.selection.filter(
+                                              (item) => item !== e,
+                                          )
+                                        : undefined,
+                                }) as SelectionInputProps,
+                        )
                     }
                     onAdd={() => null}
                 />
             }
             propsPanel={
-                <PropsPanel
+                <PropsPanel<SelectionInputDemoProps>
                     propValues={props}
                     propDefinitions={propDefinitions}
                     onChange={(propId, value) => {

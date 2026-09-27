@@ -12,7 +12,7 @@ import {
     type ValueItem,
 } from "@reillymc/react-native-components";
 
-import { useSelectionModal } from "../app/SelectionModal";
+import { useSelectionModal } from "./useSelectionModal";
 
 type PropDefinitionBase = {
     label?: string;

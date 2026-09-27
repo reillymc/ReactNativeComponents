@@ -1,7 +1,7 @@
 import type React from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
-    Layout,
+    LinearTransition,
     SlideInDown,
     SlideOutDown,
 } from "react-native-reanimated";
@@ -30,14 +30,14 @@ export const Toast: React.FunctionComponent<ToastProps> = ({
             style={[styles.container, containerStyle]}
             entering={SlideInDown.springify().mass(0.5)}
             exiting={SlideOutDown.springify().mass(0.5)}
-            layout={Layout.springify().mass(0.5)}
+            layout={LinearTransition.springify().mass(0.5)}
         >
             <View style={styles.innerContainer}>
                 <View style={styles.contentContainer}>{children}</View>
                 {action && (
                     <View style={styles.actionContainer}>
                         <Animated.View
-                            layout={Layout.springify().mass(0.5)}
+                            layout={LinearTransition.springify().mass(0.5)}
                             style={styles.separator}
                         />
                         {action}

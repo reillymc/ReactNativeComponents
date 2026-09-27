@@ -37,7 +37,7 @@ import {
 interface ComponentScreen {
     name: string;
     href: Href;
-    component?: ReactElement;
+    component?: ReactElement<Record<string, unknown>>;
 }
 type ComponentScreenSection = SectionListData<
     ComponentScreen,
@@ -46,7 +46,7 @@ type ComponentScreenSection = SectionListData<
 /**
  * Map of all components to their respective screen
  */
-export const ComponentScreens: Array<ComponentScreenSection> = [
+const ComponentScreens: Array<ComponentScreenSection> = [
     {
         sectionName: "Text",
         data: [
@@ -282,7 +282,7 @@ const ComponentListScreen: React.FC = () => {
                                     <ListItemAlert>
                                         <View style={styles.listItemDisplay}>
                                             {React.cloneElement(component, {
-                                                ...(component.props as any),
+                                                ...component.props,
                                                 variant,
                                             })}
                                         </View>

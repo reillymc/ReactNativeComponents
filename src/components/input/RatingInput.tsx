@@ -16,7 +16,7 @@ import {
     type RatingProps,
     ratingToValue,
     valueToRating,
-} from "../Rating";
+} from "../rating";
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 

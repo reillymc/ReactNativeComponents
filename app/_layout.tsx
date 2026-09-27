@@ -22,7 +22,7 @@ export {
 
 const Font = "Comfortaa" as const;
 
-// biome-ignore lint/style/useNamingConvention: expo naming convention
+// biome-ignore lint/style/useComponentExportOnlyModules lint/style/useNamingConvention: expo-router requires the `unstable_settings` export and its naming convention.
 export const unstable_settings = {
     // Ensure that reloading on `/modal` keeps a back button present.
     initialRouteName: "index",
