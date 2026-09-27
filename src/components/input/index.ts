@@ -16,6 +16,8 @@ export type {
 export { InputAction } from "./InputAction";
 export type { InputBaseProps, InputBaseStyles } from "./InputBase";
 export { InputBase } from "./InputBase";
+export type { InputRowContainerProps } from "./InputRowContainer";
+export { InputRowContainer } from "./InputRowContainer";
 export type {
     InputScaffoldIcons,
     InputScaffoldProps,

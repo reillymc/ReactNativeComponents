@@ -40,12 +40,14 @@ export type {
     FloatingContainerProps,
     FloatingContainerStyles,
     FormContainerProps,
+    FormRowProps,
     SwipeableContainerProps,
 } from "./container";
 export {
     CollapsibleContainer,
     FloatingContainer,
     FormContainer,
+    FormRow,
     SwipeableContainer,
 } from "./container";
 export type {
@@ -71,6 +73,7 @@ export type {
     InputActionStyles,
     InputBaseProps,
     InputBaseStyles,
+    InputRowContainerProps,
     InputScaffoldIcons,
     InputScaffoldProps,
     InputScaffoldStyles,
@@ -100,6 +103,7 @@ export {
     DropdownInputBase,
     InputAction,
     InputBase,
+    InputRowContainer,
     InputScaffold,
     NumberInput,
     RatingInput,

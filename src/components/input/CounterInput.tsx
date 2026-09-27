@@ -1,20 +1,18 @@
 import type { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { InputAction } from "./InputAction";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputRowContainer } from "./InputRowContainer";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type CounterInputIcons = ComponentIconAssets<"decrease" | "increase">;
 
 export interface CounterInputProps
     extends Omit<NumberInputBaseProps, "style" | "inputStyle">,
-        Pick<
-            InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
-        > {
+        InputScaffoldFieldProps {
     disableKeyboardInput?: boolean;
     interval?: number;
 }
@@ -32,9 +30,7 @@ export const CounterInput: FC<CounterInputProps> = ({
     interval = 1,
     ...props
 }) => {
-    const [styles, { icons }] = useThemedStyles("counterInput", createStyles, {
-        props: { disabled },
-    });
+    const [styles, { icons }] = useThemedStyles("counterInput", createStyles);
 
     const value = Number.parseFloat(props.value ?? "0") || 0;
 
@@ -46,7 +42,7 @@ export const CounterInput: FC<CounterInputProps> = ({
             hasError={hasError}
             containerStyle={containerStyle}
         >
-            <View style={styles.container}>
+            <InputRowContainer disabled={disabled}>
                 <InputAction
                     {...icons.decrease}
                     variant={variant}
@@ -95,27 +91,16 @@ export const CounterInput: FC<CounterInputProps> = ({
                         )
                     }
                 />
-            </View>
+            </InputRowContainer>
         </InputScaffold>
     );
 };
 
-const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    { disabled }: Required<Pick<CounterInputProps, "disabled">>,
-) =>
+const createStyles = ({ styles: { inputBase } }: ThemedStyles) =>
     StyleSheet.create({
-        container: {
-            flexDirection: "row",
-            borderRadius: inputBase.container.borderRadius,
-            overflow: "hidden",
-            backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
-        },
         input: {
             flexGrow: 1,
+            flexBasis: 0,
             textAlign: "center",
             // Override disabled style. TODO: indicate keyboard enabled/disabled visually
             backgroundColor: inputBase.container.backgroundColor.enabled,

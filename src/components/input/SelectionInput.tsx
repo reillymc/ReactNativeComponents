@@ -9,7 +9,7 @@ import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
 import { Tag } from "../tag";
 import { Text } from "../text";
 import type { InputBaseProps } from "./InputBase";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
 export type SelectionInputState = "enabled" | "disabled" | "pressed";
 
@@ -42,10 +42,7 @@ export type SelectionInputProps<T = string> = Pick<
     InputBaseProps,
     "disabled" | "variant"
 > &
-    Pick<
-        InputScaffoldProps,
-        "helpText" | "hasError" | "mandatory" | "containerStyle" | "label"
-    > &
+    InputScaffoldFieldProps &
     SelectionProps<T> & {
         hideLabel?: boolean;
         style?: DeepPartial<SelectionInputStyles>;
@@ -136,14 +133,16 @@ const createStyles = (
         disabled,
         variant,
     }: Required<Pick<SelectionInputProps, "disabled" | "variant">>,
-) =>
-    StyleSheet.create({
+) => {
+    const { borderRadius, padding, height } = inputBase.container;
+
+    return StyleSheet.create({
         container: {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            borderRadius: inputBase.container.borderRadius,
-            minHeight: inputBase.container.height[variant],
+            minHeight: height[variant],
+            borderRadius,
             backgroundColor:
                 inputBase.container.backgroundColor[
                     disabled ? "disabled" : "enabled"
@@ -154,11 +153,12 @@ const createStyles = (
         },
         selectionContainer: {
             flex: 1,
+            minWidth: 0,
             flexDirection: "row",
             flexWrap: "wrap",
             gap: selectionInput.selectionContainer.gap,
-            paddingLeft: inputBase.container.padding,
-            marginVertical: inputBase.container.padding,
+            paddingLeft: padding,
+            marginVertical: padding,
         },
         selectionItemLabel: {
             color: inputBase.text.color[disabled ? "disabled" : "enabled"],
@@ -167,9 +167,10 @@ const createStyles = (
             color: inputBase.text.placeholderColor,
         },
         iconContainer: {
-            width: inputBase.container.height[variant],
-            height: inputBase.container.height[variant],
+            width: height[variant],
+            height: height[variant],
             alignItems: "center",
             justifyContent: "center",
         },
     });
+};

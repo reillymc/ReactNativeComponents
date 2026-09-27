@@ -1,9 +1,5 @@
 import { type FC, type Ref, useCallback } from "react";
-import type {
-    NativeSyntheticEvent,
-    TextInput,
-    TextInputChangeEventData,
-} from "react-native";
+import type { TextInput, TextInputChangeEvent } from "react-native";
 
 import { InputBase, type InputBaseProps } from "./InputBase";
 
@@ -26,7 +22,7 @@ export interface NumberInputBaseProps extends InputBaseProps {
     /**
      * Passes through raw event. No number validation performed.
      */
-    onChange?: (e: NativeSyntheticEvent<TextInputChangeEventData>) => void;
+    onChange?: (e: TextInputChangeEvent) => void;
 }
 
 export const NumberInputBase: FC<NumberInputBaseProps> = ({

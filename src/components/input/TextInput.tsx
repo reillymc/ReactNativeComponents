@@ -1,16 +1,13 @@
 import type { FC } from "react";
 
 import { InputBase, type InputBaseProps } from "./InputBase";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
 export type TextInputStyles = never;
 
 export interface TextInputProps
     extends InputBaseProps,
-        Pick<
-            InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
-        > {}
+        InputScaffoldFieldProps {}
 
 export const TextInput: FC<TextInputProps> = ({
     label,

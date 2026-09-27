@@ -18,17 +18,14 @@ import {
     valueToRating,
 } from "../Rating";
 import type { InputBaseProps } from "./InputBase";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
 export type RatingInputStyles = null;
 
 export type RatingInputIcons = ComponentIconAssets<RatingIconVariant>;
 
 export interface RatingInputProps
-    extends Pick<
-            InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
-        >,
+    extends InputScaffoldFieldProps,
         Pick<InputBaseProps, "disabled" | "variant">,
         Pick<RatingProps, "max" | "value" | "scale"> {
     /**
@@ -67,7 +64,7 @@ export const RatingInput: FC<RatingInputProps> = ({
     const [width, setWidth] = useState<number>();
 
     const ratingIconSize = useMemo(() => {
-        if (!width) return 0;
+        if (!width || width <= 0) return 0;
 
         const maxSizeForWidth = Math.floor(
             (width -
@@ -81,7 +78,7 @@ export const RatingInput: FC<RatingInputProps> = ({
             inputBase.container.padding -
             theme.spacing.tiny * 2;
 
-        return Math.min(maxSizeForWidth, maxSizeForHeight);
+        return Math.max(0, Math.min(maxSizeForWidth, maxSizeForHeight));
     }, [
         width,
         inputBase.container.padding,
@@ -153,7 +150,10 @@ export const RatingInput: FC<RatingInputProps> = ({
             <View
                 style={styles.container}
                 {...panHandlers}
-                onLayout={(e) => setWidth(e.nativeEvent.layout.width)}
+                onLayout={(e) => {
+                    const nextWidth = e.nativeEvent.layout.width;
+                    if (nextWidth > 0) setWidth(nextWidth);
+                }}
             >
                 {ratingIcons.map((variant, i) => (
                     <AnimatedIcon
@@ -219,18 +219,21 @@ const createStyles = (
         disabled,
         variant,
     }: Required<Pick<RatingInputProps, "disabled" | "variant">>,
-) =>
-    StyleSheet.create({
+) => {
+    const { borderRadius, padding, height } = inputBase.container;
+
+    return StyleSheet.create({
         container: {
-            height: inputBase.container.height[variant],
-            borderRadius: inputBase.container.borderRadius,
+            height: height[variant],
+            borderRadius,
             backgroundColor:
                 inputBase.container.backgroundColor[
                     disabled ? "disabled" : "enabled"
                 ],
-            padding: inputBase.container.padding,
+            padding,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-evenly",
         },
     });
+};

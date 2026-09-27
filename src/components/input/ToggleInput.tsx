@@ -7,7 +7,7 @@ import { ActionBase } from "../action";
 import { InteractiveIcon, type InteractiveIconStyles, withIcon } from "../icon";
 import { Text } from "../text";
 import type { InputBaseProps, InputVariant } from "./InputBase";
-import type { InputScaffoldProps } from "./InputScaffold";
+import type { InputScaffoldFieldProps } from "./InputScaffold";
 
 type ToggleVariant = "primary" | "secondary";
 
@@ -27,7 +27,10 @@ export type ToggleInputStyles = {
 };
 
 export interface ToggleInputProps
-    extends Pick<InputScaffoldProps, "helpText" | "label" | "containerStyle">,
+    extends Pick<
+            InputScaffoldFieldProps,
+            "helpText" | "label" | "containerStyle"
+        >,
         Pick<InputBaseProps, "variant" | "disabled"> {
     value?: boolean;
     toggleVariant?: ToggleVariant;

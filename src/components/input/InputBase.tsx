@@ -73,21 +73,24 @@ const createStyles = (
         multiline,
         variant,
     }: Required<Pick<InputBaseProps, "multiline" | "disabled" | "variant">>,
-) =>
-    StyleSheet.create({
+) => {
+    const { borderRadius, padding, height } = inputBase.container;
+
+    return StyleSheet.create({
         input: {
-            height: multiline ? "auto" : inputBase.container.height[variant],
-            minHeight: multiline
-                ? inputBase.container.height[variant]
-                : undefined,
-            borderRadius: inputBase.container.borderRadius,
+            alignSelf: "stretch",
+            minWidth: 0,
+            height: multiline ? undefined : height[variant],
+            minHeight: height[variant],
+            padding,
+            borderRadius,
             backgroundColor:
                 inputBase.container.backgroundColor[
                     disabled ? "disabled" : "enabled"
                 ],
-            padding: inputBase.container.padding,
             fontSize: inputBase.text.fontSize,
             fontFamily: inputBase.text.fontFamily,
             color: inputBase.text.color[disabled ? "disabled" : "enabled"],
         },
     });
+};

@@ -181,6 +181,10 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
         ],
     },
     {
+        sectionName: "Layouts",
+        data: [{ name: "Form Layout", href: "/FormPage" }],
+    },
+    {
         sectionName: "Other",
         data: [
             { name: "List Item", href: "/ListItemPage" },

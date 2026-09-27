@@ -24,7 +24,11 @@ export interface InputScaffoldStyles {
 
 export type InputScaffoldIcons = ComponentIconAssets<"error">;
 
-export interface InputScaffoldProps {
+/**
+ * Standard set of scaffold props accepted by every input field, forwarded
+ * straight through to `InputScaffold`.
+ */
+export type InputScaffoldFieldProps = {
     /**
      * Supports
      *
@@ -32,13 +36,13 @@ export interface InputScaffoldProps {
      * - string
      */
     label?: ReactNode;
-
     helpText?: string;
-    hasError?: boolean;
     mandatory?: boolean;
-
+    hasError?: boolean;
     containerStyle?: StyleProp<ViewStyle>;
+};
 
+export interface InputScaffoldProps extends InputScaffoldFieldProps {
     children: ReactNode;
 }
 
@@ -98,7 +102,8 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
 const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
     StyleSheet.create({
         container: {
-            flex: 1,
+            alignSelf: "stretch",
+            minWidth: 0,
             gap: inputScaffold.gap,
         },
         labelContainer: {

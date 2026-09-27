@@ -3,7 +3,6 @@ import {
     Pressable,
     type TextInput as RnTextInput,
     StyleSheet,
-    View,
 } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
@@ -11,7 +10,8 @@ import type { ComponentIconAssets } from "../../theme";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputBase } from "./InputBase";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputRowContainer } from "./InputRowContainer";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type TimeInputValue = { hours: string; minutes: string };
@@ -23,10 +23,7 @@ export interface TimeInputProps
             NumberInputBaseProps,
             "disabled" | "onSubmitEditing" | "clearButtonMode" | "variant"
         >,
-        Pick<
-            InputScaffoldProps,
-            "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
-        > {
+        InputScaffoldFieldProps {
     value?: TimeInputValue;
 
     hoursPlaceholder?: string;
@@ -51,14 +48,14 @@ export const TimeInput: FC<TimeInputProps> = ({
     const hoursRef = useRef<RnTextInput>(null);
     const minutesRef = useRef<RnTextInput>(null);
     const [styles, { icons }] = useThemedStyles("timeInput", createStyles, {
-        props: { variant, disabled },
+        props: { variant },
     });
 
     const [isFocused, setIsFocused] = useState(false);
 
     return (
         <InputScaffold {...baseProps}>
-            <View style={styles.container}>
+            <InputRowContainer disabled={disabled}>
                 <InputAction
                     {...icons.time}
                     variant={variant}
@@ -150,32 +147,20 @@ export const TimeInput: FC<TimeInputProps> = ({
                     inputStyle={styles.clearInput}
                     onFocus={() => onChange?.({ hours: "", minutes: "" })}
                 />
-            </View>
+            </InputRowContainer>
         </InputScaffold>
     );
 };
 
 const createStyles = (
     { styles: { inputBase } }: ThemedStyles,
-    {
-        disabled,
-        variant,
-    }: Required<Pick<TimeInputProps, "disabled" | "variant">>,
+    { variant }: Required<Pick<TimeInputProps, "variant">>,
 ) =>
     StyleSheet.create({
-        container: {
-            flexDirection: "row",
-            borderRadius: inputBase.container.borderRadius,
-            overflow: "hidden",
-            backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
-        },
         input: {
-            textAlign: "right",
             flexGrow: 1,
-            flexBasis: 1,
+            flexBasis: 0,
+            textAlign: "right",
         },
         clearInput: {
             flexShrink: 1,

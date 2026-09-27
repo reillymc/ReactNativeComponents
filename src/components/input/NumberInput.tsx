@@ -9,7 +9,8 @@ import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputRowContainer } from "./InputRowContainer";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type NumberValue = { representation: "number"; value: string };
@@ -78,10 +79,7 @@ export interface NumberInputProps
             | "clearButtonMode"
             | "variant"
         >,
-        Pick<
-            InputScaffoldProps,
-            "label" | "mandatory" | "helpText" | "containerStyle"
-        > {
+        InputScaffoldFieldProps {
     keyboardType?: "decimal-pad" | "number-pad";
 
     enabledRepresentations?: Representations[];
@@ -111,7 +109,7 @@ export const NumberInput: FC<NumberInputProps> = ({
     ...baseProps
 }) => {
     const [styles, { icons }] = useThemedStyles("numberInput", createStyles, {
-        props: { value, disabled },
+        props: { value },
     });
 
     const icon = icons[value.representation];
@@ -161,7 +159,7 @@ export const NumberInput: FC<NumberInputProps> = ({
 
     return (
         <InputScaffold {...baseProps}>
-            <View style={styles.container}>
+            <InputRowContainer disabled={disabled}>
                 <InputAction
                     disabled={disabled}
                     variant={variant}
@@ -271,37 +269,22 @@ export const NumberInput: FC<NumberInputProps> = ({
                         />
                     </>
                 )}
-            </View>
+            </InputRowContainer>
         </InputScaffold>
     );
 };
 
 const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    { value, disabled }: Required<Pick<NumberInputProps, "value" | "disabled">>,
-) => {
-    const styles = StyleSheet.create({
-        container: {
-            flexDirection: "row",
-            borderRadius: inputBase.container.borderRadius,
-            overflow: "hidden",
-            backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
-        },
-        primaryInput: {
-            textAlign: value.representation === "range" ? "center" : "left",
-            flexGrow: 1,
-            flexBasis: 1,
-        },
+    _: ThemedStyles,
+    { value }: Required<Pick<NumberInputProps, "value">>,
+) =>
+    StyleSheet.create({
         input: {
-            textAlign: value.representation === "number" ? "left" : "center",
             flexGrow: 1,
+            flexBasis: 0,
+            textAlign: value.representation === "number" ? "left" : "center",
         },
         separator: {
             justifyContent: "center",
         },
     });
-    return styles;
-};

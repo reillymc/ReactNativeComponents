@@ -2,7 +2,7 @@ import {
     DropdownInputBase,
     type DropdownInputBaseProps,
 } from "./DropdownInputBase";
-import { InputScaffold, type InputScaffoldProps } from "./InputScaffold";
+import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
 export interface DropdownInputStyles {
     panelGap: number;
@@ -33,10 +33,7 @@ export type DropdownInputProps<T = string> = Pick<
     | "ref"
     | "selectBehaviour"
 > &
-    Pick<
-        InputScaffoldProps,
-        "label" | "helpText" | "mandatory" | "hasError" | "containerStyle"
-    >;
+    InputScaffoldFieldProps;
 export const DropdownInput = <T,>({
     label,
     helpText,

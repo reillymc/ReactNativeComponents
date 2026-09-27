@@ -50,11 +50,13 @@ const createStyles = (
         disabled,
         variant,
     }: Required<Pick<InputActionProps, "disabled" | "variant">>,
-) =>
-    StyleSheet.create({
+) => {
+    const { height } = inputBase.container;
+
+    return StyleSheet.create({
         container: {
-            height: inputBase.container.height[variant],
-            width: inputBase.container.height[variant],
+            height: height[variant],
+            width: height[variant],
             backgroundColor:
                 inputBase.container.backgroundColor[
                     disabled ? "disabled" : "enabled"
@@ -63,3 +65,4 @@ const createStyles = (
             justifyContent: "center",
         },
     });
+};
