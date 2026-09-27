@@ -3,7 +3,7 @@ import { Button, type ButtonProps } from "@reillymc/react-native-components";
 
 import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 
-export const defaultProps: ButtonProps = {
+const defaultProps: ButtonProps = {
     label: "Secondary Button",
     variant: "secondary",
     width: "auto",

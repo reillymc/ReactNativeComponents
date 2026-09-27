@@ -1,4 +1,4 @@
-import { createContext, type FC, type ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import {
@@ -10,18 +10,7 @@ import {
     type Styles,
     type Theme,
 } from "../theme";
-
-export interface ThemeContextDefinition {
-    theme: Theme;
-    styles: Styles;
-    icons: Icons;
-}
-
-export const ThemeContext = createContext<ThemeContextDefinition>({
-    theme: DefaultTheme,
-    styles: createDefaultStyles(DefaultTheme),
-    icons: DefaultIcons,
-});
+import { ThemeContext } from "./ThemeContext";
 
 interface ThemeProviderProps {
     theme?: DeepPartial<Theme>;

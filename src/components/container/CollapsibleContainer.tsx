@@ -9,7 +9,7 @@ import Animated, {
     FadeOutLeft,
     FadeOutRight,
     FadeOutUp,
-    Layout,
+    LinearTransition,
 } from "react-native-reanimated";
 
 export interface CollapsibleContainerProps {
@@ -42,7 +42,7 @@ export const CollapsibleContainer: React.FunctionComponent<
         <>
             {!collapsed && (
                 <Animated.View
-                    layout={Layout}
+                    layout={LinearTransition}
                     style={[styles.collapsible, style]}
                     entering={transitionEntering}
                     exiting={transitionExiting}
