@@ -515,3 +515,6 @@ export const MergeStyles = (
     styles: Styles,
     overrides: StyleOverrides | undefined = {},
 ): Styles => merge({}, styles, overrides);
+
+export const MergeStyleSlice = <T>(base: T, override: unknown): T =>
+    override === undefined ? base : (merge({}, base, override) as T);
