@@ -6,7 +6,11 @@ import {
     IconAction,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: AvatarProps = {
     firstName: "John",

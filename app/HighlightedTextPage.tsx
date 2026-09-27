@@ -4,7 +4,11 @@ import {
     type HighlightedTextProps,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: HighlightedTextProps = {
     text: "HighlightedText",

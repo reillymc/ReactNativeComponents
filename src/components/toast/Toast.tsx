@@ -6,7 +6,7 @@ import Animated, {
     SlideOutDown,
 } from "react-native-reanimated";
 
-import { type ThemedStyles, useThemedStyles } from "../hooks";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export interface ToastStyles {
     horizontalInset: number;

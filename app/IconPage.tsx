@@ -10,8 +10,12 @@ import {
     type IconProps,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { glyphMapValueItems } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconProps;
 

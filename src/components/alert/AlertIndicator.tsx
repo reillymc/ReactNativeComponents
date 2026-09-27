@@ -7,8 +7,8 @@ import {
     type ViewStyle,
 } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../hooks";
-import { Text } from "./text";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { Text } from "../text";
 
 export type AlertVariant = "primary" | "secondary";
 

@@ -2,7 +2,11 @@ import React from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import { Tag, TagIcon, type TagProps } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: TagProps = {
     label: "Example Tag",

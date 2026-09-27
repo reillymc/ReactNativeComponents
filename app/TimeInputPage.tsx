@@ -5,11 +5,15 @@ import {
     type TimeInputValue,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 import {
     InputBasePropDefinitions,
     InputScaffoldPropDefinitions,
-} from "../helpers";
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
     label: InputScaffoldPropDefinitions.label,

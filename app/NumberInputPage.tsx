@@ -5,8 +5,12 @@ import {
     type NumberInputValue,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { CommonInputProps } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
     ...CommonInputProps,

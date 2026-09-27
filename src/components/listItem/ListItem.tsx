@@ -9,7 +9,7 @@ import {
 import { Undefined } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { SwipeableContainer, type SwipeableContainerProps } from "../container";
+import { SwipeableContainer, type SwipeableContainerProps } from "../swipe";
 import { Text } from "../text";
 
 type ListItemVariant = "default" | "compact";

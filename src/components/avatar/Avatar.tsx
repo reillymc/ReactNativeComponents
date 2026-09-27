@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../hooks";
-import { Text } from "./text";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { Text } from "../text";
 
 const getBackgroundColor = (
     colors: Array<{ background: ColorValue; foreground: ColorValue }>,

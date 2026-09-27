@@ -9,8 +9,12 @@ import {
     type ToggleInputProps,
 } from "@reillymc/react-native-components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps, glyphMapValueItems } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { CommonInputProps, glyphMapValueItems } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & ToggleInputProps;
 

@@ -1,9 +1,3 @@
-export {
-    AlertIndicator,
-    type AlertIndicatorProps,
-    type AlertIndicatorStyles,
-} from "./AlertIndicator";
-export { Avatar, type AvatarProps, type AvatarStyles } from "./Avatar";
 export type {
     ActionBaseProps,
     ActionProps,
@@ -19,6 +13,12 @@ export {
     IconAction,
     IconActionBase,
 } from "./action";
+export {
+    AlertIndicator,
+    type AlertIndicatorProps,
+    type AlertIndicatorStyles,
+} from "./alert";
+export { Avatar, type AvatarProps, type AvatarStyles } from "./avatar";
 export type {
     ButtonBaseProps,
     ButtonBaseStyles,
@@ -41,14 +41,14 @@ export type {
     FloatingContainerStyles,
     FormContainerProps,
     FormRowProps,
-    SwipeableContainerProps,
+    PanelProps,
 } from "./container";
 export {
     CollapsibleContainer,
     FloatingContainer,
     FormContainer,
     FormRow,
-    SwipeableContainer,
+    Panel,
 } from "./container";
 export type {
     IconBaseProps,
@@ -131,7 +131,6 @@ export {
     Menu,
     MenuItem,
 } from "./menu";
-export { Panel, type PanelProps } from "./Panel";
 export {
     getRatingIcons,
     Rating,
@@ -145,8 +144,9 @@ export {
     SwipeAction,
     type SwipeActionProps,
     type SwipeActionStyles,
-} from "./SwipeAction";
-export { Toast, type ToastProps, type ToastStyles } from "./Toast";
+    SwipeableContainer,
+    type SwipeableContainerProps,
+} from "./swipe";
 export { Tag, TagIcon, type TagProps, type TagStyles } from "./tag";
 export type {
     HighlightedTextProps,
@@ -159,3 +159,4 @@ export {
     HighlightedText,
     Text,
 } from "./text";
+export { Toast, type ToastProps, type ToastStyles } from "./toast";
