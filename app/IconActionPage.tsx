@@ -1,13 +1,13 @@
 import React from "react";
 import {
+    Octicons,
+    type OcticonsIconName,
+} from "@react-native-vector-icons/octicons";
+import {
     IconAction,
     type IconActionProps,
     type IconComponentProps,
 } from "@reillymc/react-native-components/components";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@reillymc/react-native-components/icons";
 
 import {
     ComponentPage,

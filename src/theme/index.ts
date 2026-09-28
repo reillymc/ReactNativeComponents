@@ -3,6 +3,7 @@ export {
     createIcons,
     DefaultIcons,
     type Icons,
+    MergeIcons,
 } from "./icons";
 export {
     type CreateStyles,

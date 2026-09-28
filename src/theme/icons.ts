@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import type {
     CounterInputIcons,
@@ -10,7 +11,7 @@ import type {
     TimeInputIcons,
     ToggleInputIcons,
 } from "../components";
-import { type AnyIconSet, type IconSet, Octicons, Stars } from "../icons";
+import { type AnyIconSet, type IconSet, UiIcons } from "../icons";
 
 export type ComponentIconAssets<K extends string> = K;
 
@@ -68,34 +69,50 @@ export const createIcons = <C extends ComponentIconsConfig>(
 
 export const DefaultIcons = createIcons({
     inputScaffold: {
-        error: { iconSet: Octicons, iconName: "exclamation" },
+        error: { iconSet: UiIcons, iconName: "exclamation" },
     },
     counterInput: {
-        decrease: { iconSet: Octicons, iconName: "dash" },
-        increase: { iconSet: Octicons, iconName: "plus" },
+        decrease: { iconSet: UiIcons, iconName: "dash" },
+        increase: { iconSet: UiIcons, iconName: "plus" },
     },
     numberInput: {
-        number: { iconSet: Octicons, iconName: "infinity" },
-        fraction: { iconSet: Octicons, iconName: "number" },
-        range: { iconSet: Octicons, iconName: "arrow-both" },
+        number: { iconSet: UiIcons, iconName: "infinity" },
+        fraction: { iconSet: UiIcons, iconName: "number" },
+        range: { iconSet: UiIcons, iconName: "arrow-both" },
     },
     selectionInput: {
-        showOptions: { iconSet: Octicons, iconName: "chevron-down" },
+        showOptions: { iconSet: UiIcons, iconName: "chevron-down" },
     },
     timeInput: {
-        time: { iconSet: Octicons, iconName: "clock" },
+        time: { iconSet: UiIcons, iconName: "clock" },
     },
     toggleInput: {
-        outline: { iconSet: Octicons, iconName: "circle" },
+        outline: { iconSet: UiIcons, iconName: "circle" },
     },
     rating: {
-        empty: { iconSet: Stars, iconName: "empty" },
-        full: { iconSet: Stars, iconName: "full" },
-        half: { iconSet: Stars, iconName: "half" },
+        empty: { iconSet: UiIcons, iconName: "star-empty" },
+        full: { iconSet: UiIcons, iconName: "star-full" },
+        half: { iconSet: UiIcons, iconName: "star-half" },
     },
     ratingInput: {
-        empty: { iconSet: Stars, iconName: "empty" },
-        full: { iconSet: Stars, iconName: "full" },
-        half: { iconSet: Stars, iconName: "half" },
+        empty: { iconSet: UiIcons, iconName: "star-empty" },
+        full: { iconSet: UiIcons, iconName: "star-full" },
+        half: { iconSet: UiIcons, iconName: "star-half" },
     },
 });
+
+export const MergeIcons = (overrides?: DeepPartial<Icons>): Icons => {
+    if (!overrides) return DefaultIcons;
+
+    const merged = { ...DefaultIcons } as Record<
+        string,
+        Record<string, unknown> | undefined
+    >;
+
+    for (const [category, slots] of Object.entries(overrides)) {
+        if (!slots) continue;
+        merged[category] = { ...merged[category], ...slots };
+    }
+
+    return merged as Icons;
+};

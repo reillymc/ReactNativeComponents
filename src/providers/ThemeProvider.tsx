@@ -3,9 +3,8 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import {
     createDefaultStyles,
-    DefaultIcons,
-    DefaultTheme,
     type Icons,
+    MergeIcons,
     MergeStyles,
     MergeTheme,
     type StyleOverrides,
@@ -16,7 +15,7 @@ import { ThemeContext } from "./ThemeContext";
 interface ThemeProviderProps {
     theme?: DeepPartial<Theme>;
     styles?: StyleOverrides;
-    icons?: Icons;
+    icons?: DeepPartial<Icons>;
     children?: ReactNode;
 }
 
@@ -26,15 +25,12 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({
     icons: initialIcons,
     children,
 }: ThemeProviderProps) => {
-    const theme = useMemo(
-        () => MergeTheme(DefaultTheme, initialTheme),
-        [initialTheme],
-    );
+    const theme = useMemo(() => MergeTheme(initialTheme), [initialTheme]);
     const styles = useMemo(
         () => MergeStyles(createDefaultStyles(theme), initialStyles),
         [theme, initialStyles],
     );
-    const icons = initialIcons ?? DefaultIcons;
+    const icons = useMemo(() => MergeIcons(initialIcons), [initialIcons]);
 
     const value = useMemo(
         () => ({ theme, styles, icons }),

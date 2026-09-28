@@ -1,11 +1,13 @@
 import { type FunctionComponent, useState } from "react";
-import { Octicons } from "@react-native-vector-icons/octicons";
+import {
+    Octicons,
+    type OcticonsIconName,
+} from "@react-native-vector-icons/octicons";
 import {
     IconButton,
     type IconButtonProps,
     type IconComponentProps,
 } from "@reillymc/react-native-components/components";
-import type { OcticonsIconName } from "@reillymc/react-native-components/icons";
 
 import {
     ComponentPage,
