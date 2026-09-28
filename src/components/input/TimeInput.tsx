@@ -170,7 +170,7 @@ const createStyles = (
             marginLeft: inputBase.container.padding,
         },
         timeLabel: {
-            height: inputBase.container.height[variant],
+            minHeight: inputBase.container.height[variant],
             justifyContent: "center",
         },
     });

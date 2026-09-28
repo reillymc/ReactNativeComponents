@@ -1,6 +1,6 @@
 import type React from "react";
 import { StrictMode, useEffect, useMemo } from "react";
-import { Platform, useColorScheme, useWindowDimensions } from "react-native";
+import { Platform, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -32,7 +32,6 @@ SplashScreen.preventAutoHideAsync();
 
 const Layout: React.FC = () => {
     const colorScheme = useColorScheme();
-    const { fontScale } = useWindowDimensions();
 
     useEffect(() => {
         SplashScreen.hideAsync();
@@ -44,15 +43,6 @@ const Layout: React.FC = () => {
                 family: {
                     mono: Font,
                     sans: Font,
-                },
-
-                size: {
-                    tiny: 12 * fontScale,
-                    small: 14 * fontScale,
-                    regular: 16 * fontScale,
-                    large: 18 * fontScale,
-                    xLarge: 24 * fontScale,
-                    xxLarge: 32 * fontScale,
                 },
             },
         };
@@ -76,7 +66,7 @@ const Layout: React.FC = () => {
         const theme = colorScheme === "dark" ? darkTheme : lightTheme;
 
         return [theme, createDefaultStyles(theme)];
-    }, [colorScheme, fontScale]);
+    }, [colorScheme]);
 
     if (Platform.OS === "web") {
         // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime

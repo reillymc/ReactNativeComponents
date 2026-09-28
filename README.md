@@ -11,7 +11,7 @@ npm install @reillymc/react-native-components
 ## Usage
 
 ```js
-import { Button } from "@reillymc/react-native-components";
+import { Button } from "@reillymc/react-native-components/components";
 ```
 
 ## Contributing

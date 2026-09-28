@@ -6,6 +6,7 @@ import {
     type TextStyle,
 } from "react-native";
 
+import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type TextVariant =
@@ -43,7 +44,11 @@ export const Text: FC<TextProps> = ({
     });
 
     return (
-        <RnText {...props} style={[styles.text, style]}>
+        <RnText
+            maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
+            {...props}
+            style={[styles.text, style]}
+        >
             {children}
         </RnText>
     );

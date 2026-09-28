@@ -222,7 +222,7 @@ const createStyles = (
 
     return StyleSheet.create({
         container: {
-            height: height[variant],
+            minHeight: height[variant],
             borderRadius,
             backgroundColor:
                 inputBase.container.backgroundColor[
