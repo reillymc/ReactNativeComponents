@@ -1,18 +1,9 @@
-import {
-    type FC,
-    type ReactNode,
-    type RefObject,
-    useRef,
-    useState,
-} from "react";
+import { type FC, useRef, useState } from "react";
 import {
     type LayoutChangeEvent,
-    type StyleProp,
     StyleSheet,
-    type TextInput,
     useWindowDimensions,
     View,
-    type ViewStyle,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
@@ -21,34 +12,23 @@ import {
     usePersistentKeyboardHeight,
     useThemedStyles,
 } from "../../hooks";
+import type { FloatingContainerProps, PanelLayout } from "./FloatingContainer";
 
-export type FloatingContainerStyles = {
-    parentMargin: number;
-};
-
-type PanelLayout = {
-    parentHeight: number;
-    inverted: boolean;
-};
-
-export interface FloatingContainerProps {
-    parentRef: RefObject<TextInput | null>;
-    children?: ReactNode | ((panelLayout: PanelLayout) => ReactNode);
-    containerStyle?: StyleProp<ViewStyle>;
-}
-
-const EMPTY_LAYOUT: PanelLayout = {
-    inverted: false,
+const EMPTY_PANEL_LAYOUT: PanelLayout = {
+    parentY: 0,
     parentHeight: 0,
+    inverted: false,
+    visibleAreaHeight: 0,
 };
 
 export const FloatingContainer: FC<FloatingContainerProps> = ({
     parentRef,
+    show,
+    position = "auto",
     containerStyle,
     children,
 }) => {
     const containerRef = useRef<View>(null);
-
     const [layout, setLayout] = useState<PanelLayout>();
 
     const [styles] = useThemedStyles("floatingContainer", createStyles, {
@@ -68,8 +48,10 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
                 const screenMaxHeight = screenHeight - keyboardHeight - top;
 
                 setLayout({
+                    parentY,
                     parentHeight,
-                    inverted: size > screenMaxHeight,
+                    inverted: position === "above" || size > screenMaxHeight,
+                    visibleAreaHeight: screenMaxHeight,
                 });
             },
         );
@@ -81,9 +63,10 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
             style={[styles.container, containerStyle]}
             onLayout={onLayout}
         >
-            {typeof children === "function"
-                ? children(layout ?? EMPTY_LAYOUT)
-                : children}
+            {show &&
+                (typeof children === "function"
+                    ? children(layout ?? EMPTY_PANEL_LAYOUT)
+                    : children)}
         </View>
     );
 };

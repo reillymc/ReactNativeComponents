@@ -1,4 +1,4 @@
-import { type FunctionComponent, type ReactNode, useMemo, useRef } from "react";
+import { type FunctionComponent, type ReactNode, useRef } from "react";
 import { StyleSheet, View, type ViewStyle } from "react-native";
 import Swipeable, {
     type SwipeableMethods,
@@ -22,26 +22,33 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     children,
 }) => {
     const swipeableRef = useRef<SwipeableMethods>(null);
-    const actions = useMemo(() => [...rightActions].reverse(), [rightActions]);
+    const actions = [...rightActions].reverse();
 
-    const handleActionsPress = () => {
+    const close = () => {
         swipeableRef.current?.close();
     };
 
-    const renderRightActions = () => {
-        return (
-            <View
-                style={styles.actionsContainer}
-                onTouchEnd={handleActionsPress}
-            >
-                {actions}
-            </View>
-        );
-    };
+    const renderRightActions = () => (
+        <View style={styles.actionsContainer}>
+            {actions.map((action, index) => (
+                <View
+                    // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
+                    key={index}
+                    onTouchEnd={close}
+                >
+                    {action}
+                </View>
+            ))}
+        </View>
+    );
+
+    if (actions.length === 0) {
+        return <View style={containerStyle}>{children}</View>;
+    }
 
     return (
         <Swipeable
-            hitSlop={{ left: -20 }}
+            hitSlop={{ left: -20, right: -20 }}
             ref={swipeableRef}
             renderRightActions={renderRightActions}
             enableTrackpadTwoFingerGesture
