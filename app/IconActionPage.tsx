@@ -48,10 +48,10 @@ const propDefinitions: PropDefinitions<Props> = {
     iconPosition: {
         type: "enum",
         label: "Icon position",
-        default: "left",
+        default: "start",
         values: [
-            { label: "Left", value: "left" },
-            { label: "Right", value: "right" },
+            { label: "Start", value: "start" },
+            { label: "End", value: "end" },
         ],
     },
     disabled: {

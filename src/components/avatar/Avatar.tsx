@@ -146,7 +146,7 @@ const createStyles = (
         action: {
             position: "absolute",
             top: -spacing.tiny,
-            right: -spacing.small,
+            end: -spacing.small,
         },
     });
     return styles;

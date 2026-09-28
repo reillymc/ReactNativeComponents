@@ -107,17 +107,17 @@ const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
             gap: inputScaffold.gap,
         },
         labelContainer: {
-            marginLeft: inputBase.container.padding,
+            marginStart: inputBase.container.padding,
         },
         mandatoryIndicator: {
             position: "absolute",
             color: inputScaffold.mandatoryIndicator.color,
-            left: inputBase.container.padding,
+            start: inputBase.container.padding,
         },
         helpText: {
             flexDirection: "row",
             gap: inputScaffold.gap,
-            marginLeft: inputBase.container.padding,
+            marginStart: inputBase.container.padding,
             alignItems: "center",
         },
     });

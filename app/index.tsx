@@ -246,7 +246,7 @@ const ComponentListScreen: React.FC = () => {
                             iconSet={Octicons}
                             label="Common Props"
                             iconName={collapsed ? "chevron-down" : "chevron-up"}
-                            iconPosition="right"
+                            iconPosition="end"
                             onPress={() => setCollapsed((prev) => !prev)}
                         />
                         <Panel

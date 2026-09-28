@@ -24,13 +24,13 @@ export type IconActionBaseStyles = {
 export interface IconActionBaseProps
     extends Pick<ActionProps, "onPress" | "disabled" | "containerStyle"> {
     label?: string;
-    iconPosition?: "left" | "right";
+    iconPosition?: "start" | "end";
     style?: DeepPartial<IconActionBaseStyles>;
 }
 
 export const IconActionBase = <G extends string>({
     label,
-    iconPosition = "left",
+    iconPosition = "start",
     disabled: disabledProp,
     containerStyle,
     style: styleOverrides,
@@ -80,13 +80,13 @@ export const IconActionBase = <G extends string>({
 const createStyles = (
     { styles: { iconActionBase } }: ThemedStyles,
     {
-        iconPosition = "right",
+        iconPosition = "start",
     }: Required<Pick<IconActionBaseProps, "iconPosition">>,
 ) =>
     StyleSheet.create({
         container: {
             display: "flex",
-            flexDirection: iconPosition === "left" ? "row" : "row-reverse",
+            flexDirection: iconPosition === "start" ? "row" : "row-reverse",
             alignItems: "center",
             gap: iconActionBase.gap,
         },

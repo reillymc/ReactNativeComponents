@@ -160,7 +160,7 @@ const createStyles = (
             alignSelf: "center",
         },
         helpText: {
-            marginLeft:
+            marginStart:
                 toggleInput.indicator.size[variant] + toggleInput.label.gap,
             marginTop: inputScaffold.gap,
         },

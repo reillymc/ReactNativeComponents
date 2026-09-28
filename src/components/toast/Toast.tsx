@@ -56,8 +56,8 @@ const createStyles = ({
         container: {
             position: "absolute",
             bottom: toast.bottomInset,
-            left: toast.horizontalInset,
-            right: toast.horizontalInset,
+            start: toast.horizontalInset,
+            end: toast.horizontalInset,
             backgroundColor: color.backgroundHighlight,
             padding: spacing.medium,
             borderRadius: border.radius.loose,
@@ -76,8 +76,8 @@ const createStyles = ({
             height: "100%",
         },
         separator: {
-            borderLeftWidth: StyleSheet.hairlineWidth,
-            borderLeftColor: color.textSecondary,
+            borderStartWidth: StyleSheet.hairlineWidth,
+            borderStartColor: color.textSecondary,
             height: "100%",
             marginHorizontal: spacing.medium,
         },

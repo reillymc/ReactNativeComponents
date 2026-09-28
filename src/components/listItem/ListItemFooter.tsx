@@ -17,7 +17,7 @@ const createStyles = ({ styles: { listItem } }: ThemedStyles) =>
         footer: {
             display: "flex",
             marginBottom: listItem.internalSpacing,
-            marginLeft: listItem.internalSpacing,
-            marginRight: listItem.internalSpacing,
+            marginStart: listItem.internalSpacing,
+            marginEnd: listItem.internalSpacing,
         },
     });

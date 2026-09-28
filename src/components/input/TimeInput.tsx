@@ -167,7 +167,7 @@ const createStyles = (
         },
         clearInput: {
             flexShrink: 1,
-            marginLeft: inputBase.container.padding,
+            marginStart: inputBase.container.padding,
         },
         timeLabel: {
             minHeight: inputBase.container.height[variant],

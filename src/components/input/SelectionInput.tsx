@@ -163,7 +163,7 @@ const createStyles = (
             flexDirection: "row",
             flexWrap: "wrap",
             gap: selectionInput.selectionContainer.gap,
-            paddingLeft: padding,
+            paddingStart: padding,
             marginVertical: padding,
         },
         selectionItemLabel: {
