@@ -17,7 +17,7 @@ export const defaultTextStyles = ({ color, font }: Theme): TextStyles => ({
         label: {
             family: font.family.sans,
             weight: "500",
-            size: font.size.emphasised,
+            size: font.size.large,
         },
         heading: {
             family: font.family.sans,

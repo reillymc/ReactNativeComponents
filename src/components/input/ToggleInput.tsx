@@ -66,6 +66,7 @@ export const ToggleInput = <G extends string>({
         <View style={containerStyle}>
             <ActionBase
                 disabled={disabled}
+                hitSlop={20}
                 containerStyle={styles.container}
                 onPress={() => onChange(!value)}
             >
