@@ -53,6 +53,8 @@ export interface ListItemProps {
     onPress?: () => void;
 }
 
+const EMPTY_CONTENT_ROWS: Array<ReactNode> = [];
+
 export const ListItem: FC<ListItemProps> = ({
     avatar,
     alert,
@@ -60,7 +62,7 @@ export const ListItem: FC<ListItemProps> = ({
     footer,
     header,
     variant = "default",
-    contentRows = [],
+    contentRows = EMPTY_CONTENT_ROWS,
     swipeActions,
     style,
     contentContainerStyle,
@@ -102,7 +104,7 @@ export const ListItem: FC<ListItemProps> = ({
     return (
         <View style={styles.container}>
             {filteredActions?.length ? (
-                <SwipeableContainer rightActions={swipeActions}>
+                <SwipeableContainer rightActions={filteredActions}>
                     <View>{innerContent}</View>
                 </SwipeableContainer>
             ) : (

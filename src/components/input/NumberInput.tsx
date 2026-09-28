@@ -65,6 +65,17 @@ const getNextValue = (
 
 export type NumberInputValue = NumberValue | FractionValue | RangeValue;
 
+const DEFAULT_ENABLED_REPRESENTATIONS: Representations[] = [
+    "number",
+    "fraction",
+    "range",
+];
+
+const DEFAULT_VALUE: NumberInputValue = {
+    representation: "number",
+    value: "",
+};
+
 export type NumberInputIcons = ComponentIconAssets<
     "number" | "range" | "fraction"
 >;
@@ -95,13 +106,13 @@ export interface NumberInputProps
 
 export const NumberInput: FC<NumberInputProps> = ({
     keyboardType = "number-pad",
-    enabledRepresentations = ["number", "fraction", "range"],
+    enabledRepresentations = DEFAULT_ENABLED_REPRESENTATIONS,
     disabled = false,
     clearButtonMode,
     placeholder,
     placeholder2,
     maxLength,
-    value = { representation: "number", value: "" },
+    value = DEFAULT_VALUE,
     variant = "regular",
     onChange,
     onSubmitEditing,
@@ -282,7 +293,7 @@ const createStyles = (
         input: {
             flexGrow: 1,
             flexBasis: 0,
-            textAlign: value.representation === "number" ? "left" : "center",
+            textAlign: value.representation === "number" ? "auto" : "center",
         },
         separator: {
             justifyContent: "center",

@@ -14,13 +14,15 @@ export interface SwipeableContainerProps {
     children?: ReactNode;
 }
 
+const EMPTY_ACTIONS: Array<ReactNode> = [];
+
 export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
-    rightActions = [],
+    rightActions = EMPTY_ACTIONS,
     containerStyle,
     children,
 }) => {
     const swipeableRef = useRef<SwipeableMethods>(null);
-    const actions = useMemo(() => rightActions.reverse(), [rightActions]);
+    const actions = useMemo(() => [...rightActions].reverse(), [rightActions]);
 
     const handleActionsPress = () => {
         swipeableRef.current?.close();

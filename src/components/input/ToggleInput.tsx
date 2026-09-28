@@ -38,7 +38,7 @@ export interface ToggleInputProps
         Pick<InputBaseProps, "variant" | "disabled"> {
     value?: boolean;
     toggleVariant?: ToggleVariant;
-    styles?: DeepPartial<ToggleInputStyles>;
+    style?: DeepPartial<ToggleInputStyles>;
     onChange: (value: boolean) => void;
 }
 
@@ -50,7 +50,7 @@ export const ToggleInput = <G extends string>({
     containerStyle,
     variant = "regular",
     disabled: disabledProp,
-    styles: styleOverrides,
+    style: styleOverrides,
     onChange,
     ...iconProps
 }: ToggleInputProps & IconComponentProps<G>) => {
@@ -63,74 +63,88 @@ export const ToggleInput = <G extends string>({
     );
 
     return (
-        <ActionBase
-            disabled={disabled}
-            containerStyle={[styles.container, containerStyle]}
-            onPress={() => onChange(!value)}
-        >
-            {(pressableState) => (
-                <>
-                    <View style={styles.labelIconContainer}>
-                        <View style={styles.iconContainer}>
-                            <InteractiveIcon
-                                {...icons.outline}
-                                style={{
-                                    size: toggleInput.indicator.size[variant],
-                                    color: value
-                                        ? toggleInput.indicator.color.selected[
-                                              toggleVariant
-                                          ]
-                                        : toggleInput.indicator.color
-                                              .deselected,
-                                }}
-                                disabled={disabled}
-                                {...pressableState}
-                            />
-                            <View style={styles.icon}>
-                                {!!value && (
-                                    <InteractiveIcon
-                                        {...iconProps}
-                                        style={{
-                                            size: toggleInput.indicator.size[
-                                                variant
-                                            ],
-                                            color: toggleInput.indicator.color
-                                                .selected[toggleVariant],
-                                        }}
-                                        disabled={disabled}
-                                        {...pressableState}
-                                    />
-                                )}
+        <View style={containerStyle}>
+            <ActionBase
+                disabled={disabled}
+                containerStyle={styles.container}
+                onPress={() => onChange(!value)}
+            >
+                {(pressableState) => (
+                    <>
+                        <View style={styles.labelIconContainer}>
+                            <View style={styles.iconContainer}>
+                                <InteractiveIcon
+                                    {...icons.outline}
+                                    style={{
+                                        size: toggleInput.indicator.size[
+                                            variant
+                                        ],
+                                        color: value
+                                            ? toggleInput.indicator.color
+                                                  .selected[toggleVariant]
+                                            : toggleInput.indicator.color
+                                                  .deselected,
+                                    }}
+                                    disabled={disabled}
+                                    {...pressableState}
+                                />
+                                <View style={styles.icon}>
+                                    {!!value && (
+                                        <InteractiveIcon
+                                            {...iconProps}
+                                            style={{
+                                                size: toggleInput.indicator
+                                                    .size[variant],
+                                                color: toggleInput.indicator
+                                                    .color.selected[
+                                                    toggleVariant
+                                                ],
+                                            }}
+                                            disabled={disabled}
+                                            {...pressableState}
+                                        />
+                                    )}
+                                </View>
                             </View>
-                        </View>
-                        {label && (
-                            <Text variant="label" disabled={disabled}>
-                                {label}
-                            </Text>
-                        )}
-                    </View>
-                    {helpText && (
-                        <View style={styles.helpText}>
-                            {typeof helpText === "string" ? (
-                                <Text variant="caption">{helpText}</Text>
-                            ) : (
-                                helpText
+                            {label && (
+                                <Text
+                                    variant="label"
+                                    style={
+                                        disabled
+                                            ? styles.disabledLabel
+                                            : undefined
+                                    }
+                                >
+                                    {label}
+                                </Text>
                             )}
                         </View>
-                    )}
-                </>
-            )}
-        </ActionBase>
+                        {helpText && (
+                            <View style={styles.helpText}>
+                                {typeof helpText === "string" ? (
+                                    <Text variant="caption">{helpText}</Text>
+                                ) : (
+                                    helpText
+                                )}
+                            </View>
+                        )}
+                    </>
+                )}
+            </ActionBase>
+        </View>
     );
 };
 
 const createStyles = (
-    { styles: { toggleInput, inputScaffold } }: ThemedStyles,
+    { styles: { toggleInput, inputScaffold, inputBase } }: ThemedStyles,
     { variant }: Required<Pick<ToggleInputProps, "variant">>,
 ) => {
     const styles = StyleSheet.create({
         container: {
             justifyContent: "center",
+        },
+        disabledLabel: {
+            color: inputBase.text.color.disabled,
         },
         labelIconContainer: {
             flexDirection: "row",

@@ -5,6 +5,17 @@ import { InputBase, type InputBaseProps } from "./InputBase";
 
 export type NumberInputBaseStyles = never;
 
+const INTEGER_PATTERN = /^\d*/;
+const DECIMAL_PATTERN = /^\d*\.?\d*/;
+const LEADING_ZEROS_PATTERN = /^0+(?=\d)/;
+
+const sanitizeNumber = (text: string, allowDecimal: boolean) => {
+    const pattern = allowDecimal ? DECIMAL_PATTERN : INTEGER_PATTERN;
+    const matched = text.match(pattern)?.[0] ?? "";
+
+    return matched.replace(LEADING_ZEROS_PATTERN, "");
+};
+
 export interface NumberInputBaseProps extends InputBaseProps {
     keyboardType?: "decimal-pad" | "number-pad";
 
@@ -33,20 +44,9 @@ export const NumberInputBase: FC<NumberInputBaseProps> = ({
     const handleChangeText = useCallback(
         (text: string) => {
             if (onChangeText) {
-                const regExp =
-                    keyboardType === "decimal-pad"
-                        ? /^([0-9]*\.*[0-9]*)/g
-                        : /^([0-9]*)/g;
-                const validatedString = text.match(regExp)?.[0];
-                const num = Number.parseFloat(validatedString ?? "");
-
-                if (Number.isNaN(num) || validatedString !== num.toString()) {
-                    onChangeText?.(validatedString ?? "");
-
-                    return;
-                }
-
-                onChangeText?.(num.toString());
+                onChangeText(
+                    sanitizeNumber(text, keyboardType === "decimal-pad"),
+                );
             }
         },
         [onChangeText, keyboardType],

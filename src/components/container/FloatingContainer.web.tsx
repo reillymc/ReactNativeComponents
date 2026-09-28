@@ -37,6 +37,11 @@ export interface FloatingContainerProps {
     containerStyle?: StyleProp<ViewStyle>;
 }
 
+const EMPTY_LAYOUT: PanelLayout = {
+    inverted: false,
+    parentHeight: 0,
+};
+
 export const FloatingContainer: FC<FloatingContainerProps> = ({
     parentRef,
     containerStyle,
@@ -77,12 +82,7 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
             onLayout={onLayout}
         >
             {typeof children === "function"
-                ? children(
-                      layout ?? {
-                          inverted: false,
-                          parentHeight: 0,
-                      },
-                  )
+                ? children(layout ?? EMPTY_LAYOUT)
                 : children}
         </View>
     );

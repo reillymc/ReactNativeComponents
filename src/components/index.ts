@@ -36,7 +36,6 @@ export {
     IconButtonBase,
 } from "./button";
 export type {
-    CollapsibleContainerProps,
     FloatingContainerProps,
     FloatingContainerStyles,
     FormContainerProps,
@@ -44,7 +43,6 @@ export type {
     PanelProps,
 } from "./container";
 export {
-    CollapsibleContainer,
     FloatingContainer,
     FormContainer,
     FormRow,

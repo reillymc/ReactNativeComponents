@@ -49,13 +49,10 @@ export const IconButtonBase = <G extends string>({
             disabled={disabled}
             onPress={onPress}
             containerStyle={(pressableState) => [
-                pressableState.pressed
-                    ? {
-                          backgroundColor:
-                              style.container.backgroundColor.pressed,
-                      }
-                    : undefined,
                 styles.iconButtonBase,
+                pressableState.pressed && {
+                    backgroundColor: style.container.backgroundColor.pressed,
+                },
                 typeof containerStyle === "function"
                     ? containerStyle(pressableState)
                     : containerStyle,

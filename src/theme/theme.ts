@@ -107,51 +107,58 @@ export const DefaultTheme = {
     },
 };
 
-export const MergeTheme = (
+export function MergeTheme(overrides?: ThemeOverrides): Theme;
+export function MergeTheme(
     first: ThemeOverrides,
     second: ThemeOverrides | undefined,
-): Theme => ({
-    ...DefaultTheme,
-    ...first,
-    ...second,
-    color: {
-        ...DefaultTheme.color,
-        ...first.color,
-        ...second?.color,
-    },
-    font: {
-        ...DefaultTheme.font,
-        ...first.font,
-        ...second?.font,
-        family: {
-            ...DefaultTheme.font.family,
-            ...first.font?.family,
-            ...second?.font?.family,
+): Theme;
+export function MergeTheme(
+    first?: ThemeOverrides,
+    second?: ThemeOverrides,
+): Theme {
+    return {
+        ...DefaultTheme,
+        ...first,
+        ...second,
+        color: {
+            ...DefaultTheme.color,
+            ...first?.color,
+            ...second?.color,
         },
-        size: {
-            ...DefaultTheme.font.size,
-            ...first.font?.size,
-            ...second?.font?.size,
+        font: {
+            ...DefaultTheme.font,
+            ...first?.font,
+            ...second?.font,
+            family: {
+                ...DefaultTheme.font.family,
+                ...first?.font?.family,
+                ...second?.font?.family,
+            },
+            size: {
+                ...DefaultTheme.font.size,
+                ...first?.font?.size,
+                ...second?.font?.size,
+            },
         },
-    },
-    spacing: {
-        ...DefaultTheme.spacing,
-        ...first.spacing,
-        ...second?.spacing,
-    },
-    border: {
-        ...DefaultTheme.border,
-        ...first.border,
-        ...second?.border,
-        radius: {
-            ...DefaultTheme.border.radius,
-            ...first.border?.radius,
-            ...second?.border?.radius,
+        spacing: {
+            ...DefaultTheme.spacing,
+            ...first?.spacing,
+            ...second?.spacing,
         },
-        width: {
-            ...DefaultTheme.border.width,
-            ...first.border?.width,
-            ...second?.border?.width,
+        border: {
+            ...DefaultTheme.border,
+            ...first?.border,
+            ...second?.border,
+            radius: {
+                ...DefaultTheme.border.radius,
+                ...first?.border?.radius,
+                ...second?.border?.radius,
+            },
+            width: {
+                ...DefaultTheme.border.width,
+                ...first?.border?.width,
+                ...second?.border?.width,
+            },
         },
-    },
-});
+    };
+}

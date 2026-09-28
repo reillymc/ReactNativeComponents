@@ -9,40 +9,32 @@ export interface PanelProps {
     children?: React.ReactNode;
 }
 
+const LAYOUT_TRANSITION = LinearTransition.easing(Easing.inOut(Easing.cubic))
+    .mass(0.3)
+    .springify();
+
 export const Panel: React.FunctionComponent<PanelProps> = ({
     collapsed,
     style,
     header,
     children,
-}) => {
-    const styles = createStyles({ collapsed });
-
-    return (
+}) => (
+    <Animated.View layout={LAYOUT_TRANSITION} style={style}>
+        {header}
         <Animated.View
-            layout={LinearTransition.easing(Easing.inOut(Easing.cubic))
-                .mass(0.3)
-                .springify()}
-            style={style}
+            layout={LAYOUT_TRANSITION}
+            style={[styles.collapsible, collapsed && styles.collapsed]}
         >
-            {header}
-            <Animated.View
-                layout={LinearTransition.easing(Easing.inOut(Easing.cubic))
-                    .mass(0.3)
-                    .springify()}
-                style={styles.collapsible}
-            >
-                {children}
-            </Animated.View>
+            {children}
         </Animated.View>
-    );
-};
+    </Animated.View>
+);
 
-const createStyles = ({ collapsed }: PanelProps) => {
-    const styles = StyleSheet.create({
-        collapsible: {
-            overflow: "hidden",
-            height: collapsed ? 0 : undefined,
-        },
-    });
-    return styles;
-};
+const styles = StyleSheet.create({
+    collapsible: {
+        overflow: "hidden",
+    },
+    collapsed: {
+        height: 0,
+    },
+});

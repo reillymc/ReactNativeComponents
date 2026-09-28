@@ -68,8 +68,10 @@ export type DropdownInputBaseProps<T = string> = Pick<
     ref?: RefObject<DefaultTextInput | null>;
 };
 
+const EMPTY_ITEMS: never[] = [];
+
 export const DropdownInputBase = <T,>({
-    items = [],
+    items = EMPTY_ITEMS,
     selectedValue,
     minimumSearchLength = 1,
     maxSuggestionCount = 5,

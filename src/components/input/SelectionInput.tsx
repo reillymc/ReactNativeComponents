@@ -60,6 +60,7 @@ export const SelectionInput = <T,>({
     style: styleOverrides,
     variant = "regular",
     onAdd,
+    onRemoveItem,
     ...props
 }: SelectionInputProps<T>) => {
     const disabled = disabledProp || !onAdd;
@@ -101,6 +102,11 @@ export const SelectionInput = <T,>({
                                             "id" in item ? item.id : item.value
                                         }
                                         label={item.label}
+                                        onPress={
+                                            onRemoveItem
+                                                ? () => onRemoveItem(item)
+                                                : undefined
+                                        }
                                     />
                                 ))}
 

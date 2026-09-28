@@ -1,8 +1,4 @@
 export {
-    CollapsibleContainer,
-    type CollapsibleContainerProps,
-} from "./CollapsibleContainer";
-export {
     FloatingContainer,
     type FloatingContainerProps,
     type FloatingContainerStyles,

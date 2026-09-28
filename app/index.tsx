@@ -11,7 +11,6 @@ import {
     Action,
     Avatar,
     Button,
-    CollapsibleContainer,
     CounterInput,
     DropdownInput,
     HighlightedText,
@@ -21,6 +20,7 @@ import {
     ListItem,
     ListItemAlert,
     NumberInput,
+    Panel,
     Rating,
     RatingInput,
     SelectionInput,
@@ -198,10 +198,6 @@ const ComponentScreens: Array<ComponentScreenSection> = [
             { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
             { name: "Panel", href: "/PanelPage" },
             {
-                name: "Collapsible Container",
-                href: "/CollapsibleContainerPage",
-            },
-            {
                 name: "Rating",
                 href: "/RatingPage",
                 component: <Rating value={3} max={5} />,
@@ -253,9 +249,8 @@ const ComponentListScreen: React.FC = () => {
                             iconPosition="right"
                             onPress={() => setCollapsed((prev) => !prev)}
                         />
-                        <CollapsibleContainer
+                        <Panel
                             collapsed={collapsed}
-                            direction="up"
                             style={styles.propsContainer}
                         >
                             <DropdownInput
@@ -266,7 +261,7 @@ const ComponentListScreen: React.FC = () => {
                                     { label: "Secondary", value: "secondary" },
                                 ]}
                             />
-                        </CollapsibleContainer>
+                        </Panel>
                     </View>
                 }
                 renderSectionHeader={({ section }) => (

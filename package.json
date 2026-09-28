@@ -40,7 +40,7 @@
         "lint": "biome check --error-on-warnings",
         "lint:fix": "biome check --fix",
         "prepare": "npm run build",
-        "depcruise:src": "depcruise src --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
+        "depcruise:src": "depcruise \"src/**/*.{ts,tsx}\" --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
         "start": "expo start",
         "typecheck": "tsc --noEmit -p ./tsconfig.build.json",
         "typecheck:full": "tsc --noEmit -p ./tsconfig.json"
