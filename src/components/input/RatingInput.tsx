@@ -2,10 +2,20 @@ import {
     type FC,
     type ReactElement,
     useEffect,
+    useEffectEvent,
     useMemo,
     useState,
 } from "react";
-import { Animated, Easing, PanResponder, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import Animated, {
+    Easing,
+    type SharedValue,
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
+import { scheduleOnRN } from "react-native-worklets";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
@@ -38,7 +48,17 @@ const animationConfig = {
     easing: Easing.elastic(2),
     duration: 300,
     scale: 1.2,
-    delay: 300,
+};
+
+const calculateRating = (x: number, width: number, max: number) => {
+    "worklet";
+
+    if (!width) return 0;
+
+    return Math.max(
+        0,
+        Math.min(Math.round((x / width) * max * 2 + 0.2) / 2, max),
+    );
 };
 
 export const RatingInput: FC<RatingInputProps> = ({
@@ -62,6 +82,58 @@ export const RatingInput: FC<RatingInputProps> = ({
     });
 
     const [width, setWidth] = useState<number>();
+
+    const widthShared = useSharedValue(0);
+    const activeIndex = useSharedValue(-1);
+    const interacting = useSharedValue(0);
+
+    useEffect(() => {
+        widthShared.value = width ?? 0;
+    }, [width, widthShared]);
+
+    const commitRating = useEffectEvent((nextRating: number) => {
+        if (disabled || nextRating === value) return;
+
+        onChange?.(scale ? ratingToValue(nextRating, max, scale) : nextRating);
+    });
+
+    const pan = useMemo(
+        () =>
+            Gesture.Pan()
+                .enabled(!disabled)
+                .onBegin((e) => {
+                    const nextRating = calculateRating(
+                        e.x,
+                        widthShared.value,
+                        max,
+                    );
+                    interacting.value = 1;
+                    activeIndex.value = Math.ceil(nextRating) - 1;
+                    scheduleOnRN(commitRating, nextRating);
+                })
+                .onUpdate((e) => {
+                    const nextRating = calculateRating(
+                        e.x,
+                        widthShared.value,
+                        max,
+                    );
+                    activeIndex.value = Math.ceil(nextRating) - 1;
+                    scheduleOnRN(commitRating, nextRating);
+                })
+                .onEnd((e) => {
+                    const nextRating = calculateRating(
+                        e.x,
+                        widthShared.value,
+                        max,
+                    );
+                    activeIndex.value = Math.ceil(nextRating) - 1;
+                    scheduleOnRN(commitRating, nextRating);
+                })
+                .onFinalize(() => {
+                    interacting.value = 0;
+                }),
+        [disabled, max, widthShared, activeIndex, interacting],
+    );
 
     const ratingIconSize = useMemo(() => {
         if (!width || width <= 0) return 0;
@@ -91,121 +163,67 @@ export const RatingInput: FC<RatingInputProps> = ({
     const scaledRating = scale ? valueToRating(value, max, scale) : value;
     const ratingIcons = getRatingIcons(scaledRating, max);
 
-    const [isInteracting, setInteracting] = useState(false);
-
-    const panHandlers = useMemo(() => {
-        const calculateRating = (x: number) => {
-            if (!width) return value;
-
-            return Math.max(
-                0,
-                Math.min(Math.round((x / width) * max * 2 + 0.2) / 2, max),
-            );
-        };
-
-        const handleChange = (newRating: number) => {
-            if (disabled || newRating === value) return;
-            onChange?.(
-                scale ? ratingToValue(newRating, max, scale) : newRating,
-            );
-        };
-
-        if (disabled) return {};
-
-        return PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
-            onStartShouldSetPanResponderCapture: () => true,
-            onMoveShouldSetPanResponder: () => true,
-            onMoveShouldSetPanResponderCapture: () => true,
-            onPanResponderMove: (e) => {
-                const newRating = calculateRating(e.nativeEvent.locationX);
-                handleChange(newRating);
-            },
-            onPanResponderStart: (e) => {
-                const newRating = calculateRating(e.nativeEvent.locationX);
-                handleChange(newRating);
-                if (disabled) return;
-
-                setInteracting(true);
-            },
-            onPanResponderEnd: (e) => {
-                const newRating = calculateRating(e.nativeEvent.locationX);
-                handleChange(newRating);
-
-                setTimeout(() => {
-                    setInteracting(false);
-                }, animationConfig.delay);
-            },
-            onPanResponderTerminate: () => {
-                // called when user drags outside of the component
-                setTimeout(() => {
-                    setInteracting(false);
-                }, animationConfig.delay);
-            },
-        }).panHandlers;
-    }, [value, max, width, disabled, scale, onChange]);
-
     return (
         <InputScaffold {...props}>
-            <View
-                style={styles.container}
-                {...panHandlers}
-                onLayout={(e) => {
-                    const nextWidth = e.nativeEvent.layout.width;
-                    if (nextWidth > 0) setWidth(nextWidth);
-                }}
-            >
-                {ratingIcons.map((variant, i) => (
-                    <AnimatedIcon
-                        // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
-                        key={i}
-                        active={
-                            isInteracting &&
-                            scaledRating > i &&
-                            scaledRating - 1 <= i
-                        }
-                    >
-                        <IconBase
-                            {...icons[variant]}
-                            size={ratingIconSize}
-                            color={rating.icon.color[variant]}
-                        />
-                    </AnimatedIcon>
-                ))}
-            </View>
+            <GestureDetector gesture={pan}>
+                <View
+                    style={styles.container}
+                    onLayout={(e) => {
+                        const nextWidth = e.nativeEvent.layout.width;
+                        if (nextWidth > 0) setWidth(nextWidth);
+                    }}
+                >
+                    {ratingIcons.map((ratingVariant, i) => (
+                        <AnimatedIcon
+                            // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
+                            key={i}
+                            index={i}
+                            activeIndex={activeIndex}
+                            interacting={interacting}
+                        >
+                            <IconBase
+                                {...icons[ratingVariant]}
+                                size={ratingIconSize}
+                                color={rating.icon.color[ratingVariant]}
+                            />
+                        </AnimatedIcon>
+                    ))}
+                </View>
+            </GestureDetector>
         </InputScaffold>
     );
 };
 
 type AnimatedIconProps = {
-    active: boolean;
+    index: number;
+    activeIndex: SharedValue<number>;
+    interacting: SharedValue<number>;
     children: ReactElement;
 };
 
-const AnimatedIcon: FC<AnimatedIconProps> = ({ active, children }) => {
-    const { scale, easing, duration } = animationConfig;
+const AnimatedIcon: FC<AnimatedIconProps> = ({
+    index,
+    activeIndex,
+    interacting,
+    children,
+}) => {
+    const animatedStyle = useAnimatedStyle(() => {
+        const active = interacting.value === 1 && activeIndex.value === index;
 
-    const [animatedSize] = useState(
-        () => new Animated.Value(active ? scale : 1),
-    );
-
-    useEffect(() => {
-        const animation = Animated.timing(animatedSize, {
-            toValue: active ? scale : 1,
-            useNativeDriver: true,
-            easing,
-            duration,
-        });
-
-        animation.start();
-        return animation.stop;
-    }, [active, animatedSize]);
+        return {
+            transform: [
+                {
+                    scale: withTiming(active ? animationConfig.scale : 1, {
+                        duration: animationConfig.duration,
+                        easing: animationConfig.easing,
+                    }),
+                },
+            ],
+        };
+    });
 
     return (
-        <Animated.View
-            pointerEvents="none"
-            style={{ transform: [{ scale: animatedSize }] }}
-        >
+        <Animated.View pointerEvents="none" style={animatedStyle}>
             {children}
         </Animated.View>
     );

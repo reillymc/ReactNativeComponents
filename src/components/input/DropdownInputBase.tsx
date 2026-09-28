@@ -1,4 +1,4 @@
-import { type RefObject, useMemo, useState } from "react";
+import { type RefObject, useDeferredValue, useMemo, useState } from "react";
 import type { BlurEvent, TextInput as DefaultTextInput } from "react-native";
 
 import type {
@@ -70,6 +70,25 @@ export type DropdownInputBaseProps<T = string> = Pick<
 
 const EMPTY_ITEMS: never[] = [];
 
+type NormalizedItem<T> = {
+    item: ValueItem<T>;
+    label: string;
+    description: string | undefined;
+};
+
+const isSelectableItem = <T,>(
+    { item, label, description }: NormalizedItem<T>,
+    search: string,
+    selectedValue: unknown,
+) => {
+    const itemId = "id" in item ? item.id : item.value;
+
+    if (selectedValue !== undefined && itemId === selectedValue) return false;
+    if (label === search) return false;
+
+    return label.includes(search) || !!description?.includes(search);
+};
+
 export const DropdownInputBase = <T,>({
     items = EMPTY_ITEMS,
     selectedValue,
@@ -88,16 +107,26 @@ export const DropdownInputBase = <T,>({
 
     const inputRef = useForwardedRef(ref);
 
+    const normalizedItems = useMemo<Array<NormalizedItem<T>>>(
+        () =>
+            items.map((item) => ({
+                item,
+                label: item.label.toLowerCase(),
+                description: item.description?.toLowerCase(),
+            })),
+        [items],
+    );
+
     const existingItemLabel = useMemo(() => {
-        const existingItem = items.find((item) => {
+        const existingItem = normalizedItems.find(({ item }) => {
             if ("id" in item) {
                 return item.id === selectedValue;
             }
             return item.value === selectedValue;
-        }) as ValueItem<T> | undefined;
+        });
 
-        return existingItem?.label;
-    }, [items, selectedValue]);
+        return existingItem?.item.label;
+    }, [normalizedItems, selectedValue]);
 
     const handleFocus = () => {
         setHasFocus(true);
@@ -119,11 +148,14 @@ export const DropdownInputBase = <T,>({
 
     const inputText = textValue ?? existingItemLabel ?? "";
 
+    const deferredInputText = useDeferredValue(inputText);
+    const search = deferredInputText.toLowerCase();
+
     const handleBlur = (e: BlurEvent) => {
-        const search = inputText.toLowerCase();
-        const existingItem = items.find(
-            (item) => item.label.toLowerCase() === search,
-        );
+        const blurSearch = inputText.toLowerCase();
+        const existingItem = normalizedItems.find(
+            ({ label }) => label === blurSearch,
+        )?.item;
 
         if (existingItem) {
             const existingItemId =
@@ -159,34 +191,18 @@ export const DropdownInputBase = <T,>({
         inputText === existingItemLabel;
 
     const filteredItems = useMemo(() => {
-        const search = inputText.toLowerCase();
+        const result: Array<ValueItem<T>> = [];
 
-        return items
-            .filter((item) => {
-                if (
-                    selectedValue &&
-                    "id" in item &&
-                    item.id === selectedValue
-                ) {
-                    return false; // Exclude the currently selected item
-                }
+        for (const normalized of normalizedItems) {
+            if (result.length >= maxSuggestionCount) break;
 
-                if (selectedValue && item.value === selectedValue) {
-                    return false; // Exclude the currently selected item
-                }
+            if (isSelectableItem(normalized, search, selectedValue)) {
+                result.push(normalized.item);
+            }
+        }
 
-                if (item.label.toLowerCase() === search) {
-                    return false; // Exclude exact match of search value
-                }
-
-                const inSearch =
-                    item.label.toLowerCase().includes(search) ||
-                    item.description?.toLowerCase().includes(search);
-
-                return inSearch;
-            })
-            .slice(0, maxSuggestionCount);
-    }, [items, maxSuggestionCount, inputText, selectedValue]);
+        return result;
+    }, [normalizedItems, maxSuggestionCount, search, selectedValue]);
 
     const showDropdownPanel =
         hasFocus &&
@@ -218,7 +234,7 @@ export const DropdownInputBase = <T,>({
                                 key={"id" in item ? item.id : item.value}
                                 label={item.label}
                                 description={item.description}
-                                searchValue={inputText}
+                                searchValue={deferredInputText}
                                 onPress={() => handleSelect(item)}
                             />
                         ))}

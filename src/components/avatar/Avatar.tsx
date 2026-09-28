@@ -18,10 +18,12 @@ const getBackgroundColor = (
     firstName: string | undefined,
     lastName: string | undefined,
 ): { background: ColorValue; foreground: ColorValue } => {
-    const hash =
-        (firstName || lastName || "")
-            .split("")
-            .reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length;
+    const name = firstName || lastName || "";
+    let hash = 0;
+
+    for (let i = 0; i < name.length; i++) {
+        hash = (hash + name.charCodeAt(i)) % colors.length;
+    }
 
     return (
         colors[hash] ?? colors[0] ?? { background: "#fff", foreground: "#000" }

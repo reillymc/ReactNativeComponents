@@ -1,14 +1,9 @@
 import type { FC, ReactNode } from "react";
-import {
-    Pressable,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import { Undefined } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { ActionBase } from "../action";
 import { SwipeableContainer, type SwipeableContainerProps } from "../swipe";
 import { Text } from "../text";
 
@@ -77,7 +72,11 @@ export const ListItem: FC<ListItemProps> = ({
     });
 
     const innerContent = (
-        <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
+        <ActionBase
+            hitSlop={0}
+            onPress={onPress}
+            containerStyle={[styles.pressableContainer, style]}
+        >
             {header}
             <View style={styles.bodyContainer}>
                 <View style={styles.innerContainer}>
@@ -98,7 +97,7 @@ export const ListItem: FC<ListItemProps> = ({
                 {alert}
             </View>
             {footer}
-        </Pressable>
+        </ActionBase>
     );
 
     return (

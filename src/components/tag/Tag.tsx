@@ -1,12 +1,8 @@
 import type { FC, ReactElement } from "react";
-import {
-    Pressable,
-    type StyleProp,
-    StyleSheet,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, type ViewStyle } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { ActionBase } from "../action";
 import { Text } from "../text";
 
 export interface TagStyles {
@@ -32,14 +28,13 @@ export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
     });
 
     return (
-        <Pressable
-            disabled={!onPress}
+        <ActionBase
             onPress={onPress}
-            style={[styles.container, style]}
+            containerStyle={[styles.container, style]}
         >
             {icon}
             <Text style={styles.text}>{label}</Text>
-        </Pressable>
+        </ActionBase>
     );
 };
 

@@ -1,3 +1,4 @@
+import { Platform } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 export type Theme = typeof DefaultTheme;
@@ -7,8 +8,16 @@ export type ThemeOverrides = DeepPartial<Theme>;
 export const DefaultTheme = {
     font: {
         family: {
-            sans: "Helvetica",
-            mono: "Helvetica",
+            sans: Platform.select({
+                ios: "System",
+                android: "sans-serif",
+                default: "system-ui",
+            }),
+            mono: Platform.select({
+                ios: "Menlo",
+                android: "monospace",
+                default: "monospace",
+            }),
         },
         size: {
             tiny: 10,

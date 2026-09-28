@@ -61,7 +61,7 @@ export const InputBase: FC<InputBaseProps> = ({
             placeholderTextColor={style.text.placeholderColor}
             style={[styles.input, inputStyle]}
             multiline={multiline}
-            scrollEnabled={scrollEnabled ?? false}
+            scrollEnabled={scrollEnabled ?? multiline}
             onChangeText={onChangeText}
             {...props}
         />

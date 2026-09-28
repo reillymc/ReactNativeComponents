@@ -22,7 +22,6 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     children,
 }) => {
     const swipeableRef = useRef<SwipeableMethods>(null);
-    const actions = [...rightActions].reverse();
 
     const close = () => {
         swipeableRef.current?.close();
@@ -30,7 +29,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
 
     const renderRightActions = () => (
         <View style={styles.actionsContainer}>
-            {actions.map((action, index) => (
+            {rightActions.map((action, index) => (
                 <View
                     // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
                     key={index}
@@ -42,7 +41,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
         </View>
     );
 
-    if (actions.length === 0) {
+    if (rightActions.length === 0) {
         return <View style={containerStyle}>{children}</View>;
     }
 
@@ -64,6 +63,6 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
 const styles = StyleSheet.create({
     actionsContainer: {
         display: "flex",
-        flexDirection: "row",
+        flexDirection: "row-reverse",
     },
 });

@@ -18,6 +18,10 @@ export interface ToastProps {
     children?: React.ReactNode;
 }
 
+const TOAST_ENTERING = SlideInDown.springify().mass(0.5);
+const TOAST_EXITING = SlideOutDown.springify().mass(0.5);
+const TOAST_LAYOUT = LinearTransition.springify().mass(0.5);
+
 export const Toast: React.FunctionComponent<ToastProps> = ({
     action,
     containerStyle,
@@ -28,16 +32,16 @@ export const Toast: React.FunctionComponent<ToastProps> = ({
     return (
         <Animated.View
             style={[styles.container, containerStyle]}
-            entering={SlideInDown.springify().mass(0.5)}
-            exiting={SlideOutDown.springify().mass(0.5)}
-            layout={LinearTransition.springify().mass(0.5)}
+            entering={TOAST_ENTERING}
+            exiting={TOAST_EXITING}
+            layout={TOAST_LAYOUT}
         >
             <View style={styles.innerContainer}>
                 <View style={styles.contentContainer}>{children}</View>
                 {action && (
                     <View style={styles.actionContainer}>
                         <Animated.View
-                            layout={LinearTransition.springify().mass(0.5)}
+                            layout={TOAST_LAYOUT}
                             style={styles.separator}
                         />
                         {action}
