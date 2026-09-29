@@ -11,10 +11,9 @@ import {
     TagIcon,
     Text,
 } from "@reillymc/react-native-components/components";
-import {
-    type ThemedStyles,
-    useThemedStyles,
-} from "@reillymc/react-native-components/hooks";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+
+import type { AppThemedStyles } from "../demo/theme";
 
 const SelectionModal: FC = () => {
     const styles = useThemedStyles(createStyles);
@@ -155,7 +154,7 @@ export default SelectionModal;
 const createStyles = ({
     styles: { inputBase },
     theme: { spacing, color },
-}: ThemedStyles) => {
+}: AppThemedStyles) => {
     const styles = StyleSheet.create({
         headerAction: {
             marginHorizontal: spacing.navigationActionHorizontal,

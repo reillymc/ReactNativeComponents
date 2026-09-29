@@ -167,5 +167,14 @@ export const MergeStyles = (
     overrides: StyleOverrides | undefined = {},
 ): Styles => merge({}, styles, overrides);
 
+/**
+ * Builds the full `Styles` registry for a theme, optionally merged with
+ * consumer style overrides.
+ */
+export const createStyles = (
+    theme: Theme,
+    overrides?: StyleOverrides,
+): Styles => MergeStyles(createDefaultStyles(theme), overrides);
+
 export const MergeStyleSlice = <T>(base: T, override: unknown): T =>
     override === undefined ? base : (merge({}, base, override) as T);

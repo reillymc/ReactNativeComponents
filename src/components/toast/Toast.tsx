@@ -1,5 +1,11 @@
 import type { FunctionComponent, ReactNode } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+    type ColorValue,
+    type StyleProp,
+    StyleSheet,
+    View,
+    type ViewStyle,
+} from "react-native";
 import Animated, {
     LinearTransition,
     SlideInDown,
@@ -9,8 +15,11 @@ import Animated, {
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export interface ToastStyles {
-    horizontalInset: number;
-    bottomInset: number;
+    container: {
+        backgroundColor: ColorValue;
+        padding: number;
+        borderRadius: number;
+    };
 }
 export interface ToastProps {
     action?: ReactNode;
@@ -53,18 +62,14 @@ export const Toast: FunctionComponent<ToastProps> = ({
 };
 
 const createStyles = ({
-    theme: { color, spacing, border },
+    theme: { color, spacing },
     styles: { toast },
 }: ThemedStyles) =>
     StyleSheet.create({
         container: {
-            position: "absolute",
-            bottom: toast.bottomInset,
-            start: toast.horizontalInset,
-            end: toast.horizontalInset,
-            backgroundColor: color.backgroundHighlight,
-            padding: spacing.medium,
-            borderRadius: border.radius.loose,
+            backgroundColor: toast.container.backgroundColor,
+            padding: toast.container.padding,
+            borderRadius: toast.container.borderRadius,
         },
         innerContainer: {
             flexDirection: "row",

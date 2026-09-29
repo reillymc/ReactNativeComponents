@@ -9,9 +9,9 @@ import {
     TextInput,
     ToggleInput,
 } from "@reillymc/react-native-components/components";
-import { useTheme } from "@reillymc/react-native-components/hooks";
 import type { Theme } from "@reillymc/react-native-components/theme";
 
+import { useTheme } from "../theme";
 import { useSelectionModal } from "./useSelectionModal";
 
 type PropDefinitionBase = {

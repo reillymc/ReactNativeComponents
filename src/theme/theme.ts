@@ -1,5 +1,6 @@
 import { Platform } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
+import merge from "lodash.merge";
 
 export type Theme = typeof DefaultTheme;
 
@@ -84,18 +85,6 @@ export const DefaultTheme = {
         warning: "#f5c61d",
     },
     spacing: {
-        // Screen
-        screenContentTop: 0,
-
-        // Page
-        pageHorizontal: 16,
-        pageBottom: 80,
-        pageTop: 16,
-
-        // Navigation
-        navigationActionHorizontal: 0,
-
-        // Body
         large: 24,
         medium: 16,
         small: 8,
@@ -115,58 +104,22 @@ export const DefaultTheme = {
     },
 };
 
-export function MergeTheme(overrides?: ThemeOverrides): Theme;
-export function MergeTheme(
-    first: ThemeOverrides,
-    second: ThemeOverrides | undefined,
-): Theme;
-export function MergeTheme(
-    first?: ThemeOverrides,
-    second?: ThemeOverrides,
-): Theme {
-    return {
-        ...DefaultTheme,
-        ...first,
-        ...second,
-        color: {
-            ...DefaultTheme.color,
-            ...first?.color,
-            ...second?.color,
-        },
-        font: {
-            ...DefaultTheme.font,
-            ...first?.font,
-            ...second?.font,
-            family: {
-                ...DefaultTheme.font.family,
-                ...first?.font?.family,
-                ...second?.font?.family,
-            },
-            size: {
-                ...DefaultTheme.font.size,
-                ...first?.font?.size,
-                ...second?.font?.size,
-            },
-        },
-        spacing: {
-            ...DefaultTheme.spacing,
-            ...first?.spacing,
-            ...second?.spacing,
-        },
-        border: {
-            ...DefaultTheme.border,
-            ...first?.border,
-            ...second?.border,
-            radius: {
-                ...DefaultTheme.border.radius,
-                ...first?.border?.radius,
-                ...second?.border?.radius,
-            },
-            width: {
-                ...DefaultTheme.border.width,
-                ...first?.border?.width,
-                ...second?.border?.width,
-            },
-        },
-    };
-}
+export const MergeTheme = <E extends object = Record<never, never>>(
+    first?: ThemeOverrides & E,
+    second?: ThemeOverrides & DeepPartial<NoInfer<E>>,
+): Theme & E => merge({}, DefaultTheme, first ?? {}, second ?? {}) as Theme & E;
+
+/**
+ * Builds a complete theme from a single set of base overrides, optionally
+ * deriving additional app-owned tokens from the resolved base theme.
+ */
+export const createTheme = <E extends object = Record<never, never>>(
+    overrides?: ThemeOverrides,
+    createExtras?: (theme: Theme) => E,
+): Theme & E => {
+    const base = MergeTheme(overrides);
+
+    return createExtras
+        ? (merge({}, base, createExtras(base)) as Theme & E)
+        : (base as Theme & E);
+};

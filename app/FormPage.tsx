@@ -10,11 +10,9 @@ import {
     TextInput,
     ToggleInput,
 } from "@reillymc/react-native-components/components";
-import {
-    type ThemedStyles,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components/hooks";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+
+import { type AppThemedStyles, useTheme } from "../demo/theme";
 
 const FormPage: FC = () => {
     const { theme } = useTheme();
@@ -101,7 +99,7 @@ const FormPage: FC = () => {
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
+const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
     StyleSheet.create({
         page: {
             backgroundColor: color.background,

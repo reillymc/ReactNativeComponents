@@ -1,10 +1,11 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any prop definition is permitted */
-import type { ThemeContextDefinition as ThemedStyles } from "../providers";
+import type { ThemeContextDefinition } from "../providers";
 import type { Icons, StyleOverrides, Styles } from "../theme";
 import { MergeStyleSlice } from "../theme/styles";
 import { useTheme } from "./useTheme";
 
-export type { ThemedStyles };
+export type ThemedStyles<E extends object = Record<never, never>> =
+    ThemeContextDefinition<E>;
 
 function hasKey<T extends object, K extends PropertyKey>(
     obj: T,
@@ -45,7 +46,7 @@ type AnyGenerator = (...args: any[]) => any;
 type GeneratorResult<G extends AnyGenerator> = ReturnType<G>;
 
 type GeneratorProps<G extends AnyGenerator> =
-    Parameters<G> extends [ThemedStyles, infer U] ? U : never;
+    Parameters<G> extends [ThemeContextDefinition<any>, infer U] ? U : never;
 
 type UseStylesOptions<G extends AnyGenerator> = [GeneratorProps<G>] extends [
     never,
@@ -153,12 +154,15 @@ export function useThemedStyles(...args: any[]) {
         ? mergeStylesForComponent(styles, name, componentStyles?.[name])
         : { config: undefined, styles };
 
+    const generatorInput = {
+        theme,
+        styles: stylesForGenerator,
+        icons,
+    } as ThemeContextDefinition<never>;
+
     const generated = hasProps
-        ? generator(
-              { theme, styles: stylesForGenerator, icons },
-              componentProps,
-          )
-        : generator({ theme, styles: stylesForGenerator, icons });
+        ? generator(generatorInput, componentProps)
+        : generator(generatorInput);
 
     return isComponent
         ? [generated, buildComponentResult(styles, icons, name, config)]

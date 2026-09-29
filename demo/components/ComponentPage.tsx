@@ -1,11 +1,9 @@
 import type { FunctionComponent, ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Stack } from "expo-router";
-import {
-    type ThemedStyles,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components/hooks";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+
+import { type AppThemedStyles, useTheme } from "../theme";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -59,7 +57,7 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = ({ theme: { color, border } }: ThemedStyles) =>
+const createStyles = ({ theme: { color, border } }: AppThemedStyles) =>
     StyleSheet.create({
         componentContainer: {
             flexGrow: 1,

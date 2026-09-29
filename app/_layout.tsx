@@ -6,13 +6,14 @@ import { Stack } from "expo-router";
 // biome-ignore lint/performance/noNamespaceImport: package import convention
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
-import type { DeepPartial } from "@reillymc/es-utils";
 import { ThemeProvider } from "@reillymc/react-native-components/providers";
 import {
-    createDefaultStyles,
-    MergeTheme,
-    type Theme,
+    createStyles,
+    createTheme,
+    type ThemeOverrides,
 } from "@reillymc/react-native-components/theme";
+
+import { createAppTheme } from "../demo/theme";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -20,6 +21,19 @@ export {
 } from "expo-router";
 
 const Font = "Comfortaa" as const;
+
+const DARK_COLORS: ThemeOverrides["color"] = {
+    textPrimary: "#fff",
+    textSecondary: "#999",
+    background: "#000",
+    backgroundHighlight: "#20252a",
+    backgroundOverlay: "#222",
+    foreground: "#1a1818",
+    border: "#20252a",
+    inputBackground: "#141210",
+    inputBackgroundDisabled: "#1a1818",
+    inputText: "#fff",
+};
 
 // biome-ignore lint/style/useComponentExportOnlyModules lint/style/useNamingConvention: expo-router requires the `unstable_settings` export and its naming convention.
 export const unstable_settings = {
@@ -36,33 +50,15 @@ const Layout: FC = () => {
         SplashScreen.hideAsync();
     }, []);
 
-    const baseTheme: DeepPartial<Theme> = {
-        font: {
-            family: {
-                mono: Font,
-                sans: Font,
-            },
+    const theme = createTheme(
+        {
+            font: { family: { mono: Font, sans: Font } },
+            color: colorScheme === "dark" ? DARK_COLORS : undefined,
         },
-    };
+        createAppTheme,
+    );
 
-    const lightTheme = MergeTheme(baseTheme, {});
-    const darkTheme = MergeTheme(baseTheme, {
-        color: {
-            textPrimary: "#fff",
-            textSecondary: "#999",
-            background: "#000",
-            backgroundHighlight: "#20252a",
-            backgroundOverlay: "#222",
-            foreground: "#1a1818",
-            border: "#20252a",
-            inputBackground: "#141210",
-            inputBackgroundDisabled: "#1a1818",
-            inputText: "#fff",
-        },
-    });
-
-    const theme = colorScheme === "dark" ? darkTheme : lightTheme;
-    const styles = createDefaultStyles(theme);
+    const styles = createStyles(theme);
 
     if (Platform.OS === "web") {
         // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime
