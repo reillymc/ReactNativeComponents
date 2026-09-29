@@ -32,7 +32,8 @@
         "./package.json": "./package.json"
     },
     "files": [
-        "lib/**/*"
+        "lib/**/*",
+        "THIRD_PARTY_NOTICES.md"
     ],
     "scripts": {
         "clean": "rm -rf ./lib",

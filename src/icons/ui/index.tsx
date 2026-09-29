@@ -1,3 +1,6 @@
+// Glyph path data derived from GitHub Octicons (https://github.com/primer/octicons),
+// MIT licensed. See THIRD_PARTY_NOTICES.md.
+
 import type { IconSet, IconSetGlyphMap } from "../base";
 import { ArrowBoth } from "./ArrowBoth";
 import { ChevronDown } from "./ChevronDown";

@@ -1,3 +1,6 @@
+// Glyph path data derived from GitHub Octicons (https://github.com/primer/octicons),
+// MIT licensed. See THIRD_PARTY_NOTICES.md.
+
 import type { FC } from "react";
 import Svg, { Path } from "react-native-svg";
 
