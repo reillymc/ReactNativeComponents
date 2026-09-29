@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     Octicons,
     type OcticonsIconName,
@@ -67,8 +67,8 @@ const propDefinitions: PropDefinitions<Props> = {
     },
 };
 
-const IconActionPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<Props>(defaultProps);
+const IconActionPage: FunctionComponent = () => {
+    const [props, setProps] = useState<Props>(defaultProps);
 
     return (
         <ComponentPage

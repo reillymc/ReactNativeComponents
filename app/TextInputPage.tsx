@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     TextInput,
     type TextInputProps,
@@ -35,8 +35,8 @@ const defaultProps: TextInputProps = {
     disabled: false,
 };
 
-const TextInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TextInputProps>(defaultProps);
+const TextInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TextInputProps>(defaultProps);
 
     return (
         <ComponentPage

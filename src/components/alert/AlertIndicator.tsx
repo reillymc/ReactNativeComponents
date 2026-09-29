@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FC } from "react";
 import {
     type ColorValue,
     type StyleProp,
@@ -25,7 +25,7 @@ export interface AlertIndicatorProps {
     style?: StyleProp<ViewStyle>;
 }
 
-export const AlertIndicator: React.FC<AlertIndicatorProps> = ({
+export const AlertIndicator: FC<AlertIndicatorProps> = ({
     label = "",
     variant = "primary",
     style,

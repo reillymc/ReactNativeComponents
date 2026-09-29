@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     CounterInput,
     type CounterInputProps,
@@ -33,11 +33,9 @@ const defaultProps: CounterInputProps = {
     label: "Counter Input",
 };
 
-const CounterInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<CounterInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<string | undefined>(
-        undefined,
-    );
+const CounterInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<CounterInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<string | undefined>(undefined);
 
     return (
         <ComponentPage

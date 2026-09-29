@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     Button,
     Panel,
@@ -50,8 +50,8 @@ const propDefinitions: PropDefinitions<PanelProps> = {
     },
 };
 
-const PanelPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<PanelProps>(defaultProps);
+const PanelPage: FunctionComponent = () => {
+    const [props, setProps] = useState<PanelProps>(defaultProps);
 
     return (
         <ComponentPage

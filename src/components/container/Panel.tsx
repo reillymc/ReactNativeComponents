@@ -1,19 +1,19 @@
-import type React from "react";
+import type { FunctionComponent, ReactNode } from "react";
 import { type StyleProp, StyleSheet, type ViewStyle } from "react-native";
 import Animated, { Easing, LinearTransition } from "react-native-reanimated";
 
 export interface PanelProps {
     collapsed: boolean | undefined;
     style?: StyleProp<ViewStyle>;
-    header?: React.ReactNode;
-    children?: React.ReactNode;
+    header?: ReactNode;
+    children?: ReactNode;
 }
 
 const LAYOUT_TRANSITION = LinearTransition.easing(Easing.inOut(Easing.cubic))
     .mass(0.3)
     .springify();
 
-export const Panel: React.FunctionComponent<PanelProps> = ({
+export const Panel: FunctionComponent<PanelProps> = ({
     collapsed,
     style,
     header,

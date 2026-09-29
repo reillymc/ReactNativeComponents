@@ -1,4 +1,4 @@
-import { type FC, type ReactNode, useMemo } from "react";
+import type { FC, ReactNode } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import {
@@ -25,17 +25,11 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({
     icons: initialIcons,
     children,
 }: ThemeProviderProps) => {
-    const theme = useMemo(() => MergeTheme(initialTheme), [initialTheme]);
-    const styles = useMemo(
-        () => MergeStyles(createDefaultStyles(theme), initialStyles),
-        [theme, initialStyles],
-    );
-    const icons = useMemo(() => MergeIcons(initialIcons), [initialIcons]);
+    const theme = MergeTheme(initialTheme);
+    const styles = MergeStyles(createDefaultStyles(theme), initialStyles);
+    const icons = MergeIcons(initialIcons);
 
-    const value = useMemo(
-        () => ({ theme, styles, icons }),
-        [theme, styles, icons],
-    );
+    const value = { theme, styles, icons };
 
     return (
         <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>

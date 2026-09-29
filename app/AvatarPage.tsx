@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     Avatar,
@@ -81,8 +81,8 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
     },
 };
 
-const AvatarPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<AvatarProps>(defaultProps);
+const AvatarPage: FunctionComponent = () => {
+    const [props, setProps] = useState<AvatarProps>(defaultProps);
 
     return (
         <ComponentPage

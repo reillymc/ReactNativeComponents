@@ -1,5 +1,4 @@
-import type React from "react";
-import { StrictMode, useEffect, useMemo } from "react";
+import { type FC, StrictMode, useEffect } from "react";
 import { Platform, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
@@ -30,43 +29,40 @@ export const unstable_settings = {
 
 SplashScreen.preventAutoHideAsync();
 
-const Layout: React.FC = () => {
+const Layout: FC = () => {
     const colorScheme = useColorScheme();
 
     useEffect(() => {
         SplashScreen.hideAsync();
     }, []);
 
-    const [theme, styles] = useMemo(() => {
-        const baseTheme: DeepPartial<Theme> = {
-            font: {
-                family: {
-                    mono: Font,
-                    sans: Font,
-                },
+    const baseTheme: DeepPartial<Theme> = {
+        font: {
+            family: {
+                mono: Font,
+                sans: Font,
             },
-        };
+        },
+    };
 
-        const lightTheme = MergeTheme(baseTheme, {});
-        const darkTheme = MergeTheme(baseTheme, {
-            color: {
-                textPrimary: "#fff",
-                textSecondary: "#999",
-                background: "#000",
-                backgroundHighlight: "#20252a",
-                backgroundOverlay: "#222",
-                foreground: "#1a1818",
-                border: "#20252a",
-                inputBackground: "#141210",
-                inputBackgroundDisabled: "#1a1818",
-                inputText: "#fff",
-            },
-        });
+    const lightTheme = MergeTheme(baseTheme, {});
+    const darkTheme = MergeTheme(baseTheme, {
+        color: {
+            textPrimary: "#fff",
+            textSecondary: "#999",
+            background: "#000",
+            backgroundHighlight: "#20252a",
+            backgroundOverlay: "#222",
+            foreground: "#1a1818",
+            border: "#20252a",
+            inputBackground: "#141210",
+            inputBackgroundDisabled: "#1a1818",
+            inputText: "#fff",
+        },
+    });
 
-        const theme = colorScheme === "dark" ? darkTheme : lightTheme;
-
-        return [theme, createDefaultStyles(theme)];
-    }, [colorScheme]);
+    const theme = colorScheme === "dark" ? darkTheme : lightTheme;
+    const styles = createDefaultStyles(theme);
 
     if (Platform.OS === "web") {
         // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime

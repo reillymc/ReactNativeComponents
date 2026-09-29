@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FC, ReactNode } from "react";
 import {
     type ColorValue,
     Image,
@@ -57,14 +57,14 @@ export interface AvatarProps {
 
     size?: AvatarSize;
 
-    action?: React.ReactNode;
+    action?: ReactNode;
 
     style?: DeepPartial<AvatarStyles>;
 
     containerStyle?: StyleProp<ViewStyle>;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
+export const Avatar: FC<AvatarProps> = ({
     firstName = "",
     lastName = "",
     imageUri,

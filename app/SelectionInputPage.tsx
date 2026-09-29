@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     SelectionInput,
@@ -58,8 +58,8 @@ const defaultProps: SelectionInputProps = {
     onRemoveItem: () => null,
 };
 
-const SelectionInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<SelectionInputProps>(defaultProps);
+const SelectionInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<SelectionInputProps>(defaultProps);
 
     return (
         <ComponentPage

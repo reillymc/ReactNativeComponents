@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FC } from "react";
 import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
@@ -16,7 +16,7 @@ import {
     useThemedStyles,
 } from "@reillymc/react-native-components/hooks";
 
-const FormPage: React.FC = () => {
+const FormPage: FC = () => {
     const { theme } = useTheme();
     const styles = useThemedStyles(createStyles);
 

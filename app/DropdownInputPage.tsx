@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     DropdownInput,
     type DropdownInputProps,
@@ -41,8 +41,8 @@ const defaultProps: DropdownInputProps = {
     onSelect: () => null,
 };
 
-const DropdownInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState(defaultProps);
+const DropdownInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState(defaultProps);
 
     console.log(props.selectedValue);
 

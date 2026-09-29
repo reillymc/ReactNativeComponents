@@ -3,7 +3,6 @@ import {
     type ReactElement,
     useEffect,
     useEffectEvent,
-    useMemo,
     useState,
 } from "react";
 import { StyleSheet, View } from "react-native";
@@ -21,7 +20,6 @@ import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
 import { IconBase } from "../icon";
 import {
-    getRatingIcons,
     type RatingIconVariant,
     type RatingProps,
     ratingToValue,
@@ -61,6 +59,23 @@ const calculateRating = (x: number, width: number, max: number) => {
     );
 };
 
+const computeIconSize = (
+    width: number | undefined,
+    padding: number,
+    gap: number,
+    height: number,
+    max: number,
+) => {
+    if (!width || width <= 0) return 0;
+
+    const maxSizeForWidth = Math.floor(
+        (width - padding - gap * (max - 1)) / max,
+    );
+    const maxSizeForHeight = height - padding - gap * 2;
+
+    return Math.max(0, Math.min(maxSizeForWidth, maxSizeForHeight));
+};
+
 export const RatingInput: FC<RatingInputProps> = ({
     value = 0,
     max = 5,
@@ -81,112 +96,102 @@ export const RatingInput: FC<RatingInputProps> = ({
         props: { disabled, variant },
     });
 
+    const scaledRating = scale ? valueToRating(value, max, scale) : value;
+
     const [width, setWidth] = useState<number>();
 
     const widthShared = useSharedValue(0);
-    const activeIndex = useSharedValue(-1);
+    const ratingShared = useSharedValue(scaledRating);
     const interacting = useSharedValue(0);
 
     useEffect(() => {
-        widthShared.value = width ?? 0;
-    }, [width, widthShared]);
+        ratingShared.value = scaledRating;
+    }, [scaledRating, ratingShared]);
 
     const commitRating = useEffectEvent((nextRating: number) => {
-        if (disabled || nextRating === value) return;
+        if (disabled || nextRating === scaledRating) return;
 
         onChange?.(scale ? ratingToValue(nextRating, max, scale) : nextRating);
     });
 
-    const pan = useMemo(
-        () =>
-            Gesture.Pan()
-                .enabled(!disabled)
-                .onBegin((e) => {
-                    const nextRating = calculateRating(
-                        e.x,
-                        widthShared.value,
-                        max,
-                    );
-                    interacting.value = 1;
-                    activeIndex.value = Math.ceil(nextRating) - 1;
-                    scheduleOnRN(commitRating, nextRating);
-                })
-                .onUpdate((e) => {
-                    const nextRating = calculateRating(
-                        e.x,
-                        widthShared.value,
-                        max,
-                    );
-                    activeIndex.value = Math.ceil(nextRating) - 1;
-                    scheduleOnRN(commitRating, nextRating);
-                })
-                .onEnd((e) => {
-                    const nextRating = calculateRating(
-                        e.x,
-                        widthShared.value,
-                        max,
-                    );
-                    activeIndex.value = Math.ceil(nextRating) - 1;
-                    scheduleOnRN(commitRating, nextRating);
-                })
-                .onFinalize(() => {
-                    interacting.value = 0;
-                }),
-        [disabled, max, widthShared, activeIndex, interacting],
-    );
+    const pan = Gesture.Pan()
+        .enabled(!disabled)
+        .onBegin((e) => {
+            interacting.value = 1;
+            ratingShared.value = calculateRating(e.x, widthShared.value, max);
+        })
+        .onUpdate((e) => {
+            ratingShared.value = calculateRating(e.x, widthShared.value, max);
+        })
+        .onEnd((e) => {
+            const nextRating = calculateRating(e.x, widthShared.value, max);
+            ratingShared.value = nextRating;
+            scheduleOnRN(commitRating, nextRating);
+        })
+        .onFinalize(() => {
+            interacting.value = 0;
+        });
 
-    const ratingIconSize = useMemo(() => {
-        if (!width || width <= 0) return 0;
-
-        const maxSizeForWidth = Math.floor(
-            (width -
-                inputBase.container.padding -
-                theme.spacing.tiny * (max - 1)) /
-                max,
+    const tap = Gesture.Tap().onEnd((e) => {
+        scheduleOnRN(
+            commitRating,
+            calculateRating(e.x, widthShared.value, max),
         );
+    });
 
-        const maxSizeForHeight =
-            inputBase.container.height[variant] -
-            inputBase.container.padding -
-            theme.spacing.tiny * 2;
+    const gesture = Gesture.Exclusive(pan, tap);
 
-        return Math.max(0, Math.min(maxSizeForWidth, maxSizeForHeight));
-    }, [
+    const ratingIconSize = computeIconSize(
         width,
         inputBase.container.padding,
         theme.spacing.tiny,
-        inputBase.container.height,
+        inputBase.container.height[variant],
         max,
-        variant,
-    ]);
-
-    const scaledRating = scale ? valueToRating(value, max, scale) : value;
-    const ratingIcons = getRatingIcons(scaledRating, max);
+    );
 
     return (
         <InputScaffold {...props}>
-            <GestureDetector gesture={pan}>
+            <GestureDetector gesture={gesture}>
                 <View
                     style={styles.container}
                     onLayout={(e) => {
                         const nextWidth = e.nativeEvent.layout.width;
-                        if (nextWidth > 0) setWidth(nextWidth);
+                        if (nextWidth > 0) {
+                            setWidth(nextWidth);
+                            widthShared.value = nextWidth;
+                        }
                     }}
                 >
-                    {ratingIcons.map((ratingVariant, i) => (
-                        <AnimatedIcon
+                    {Array.from({ length: max }, (_, index) => (
+                        <AnimatedStar
                             // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
-                            key={i}
-                            index={i}
-                            activeIndex={activeIndex}
+                            key={index}
+                            index={index}
+                            rating={ratingShared}
+                            size={ratingIconSize}
                             interacting={interacting}
-                        >
-                            <IconBase
-                                {...icons[ratingVariant]}
-                                size={ratingIconSize}
-                                color={rating.icon.color[ratingVariant]}
-                            />
-                        </AnimatedIcon>
+                            empty={
+                                <IconBase
+                                    {...icons.empty}
+                                    size={ratingIconSize}
+                                    color={rating.icon.color.empty}
+                                />
+                            }
+                            half={
+                                <IconBase
+                                    {...icons.half}
+                                    size={ratingIconSize}
+                                    color={rating.icon.color.half}
+                                />
+                            }
+                            full={
+                                <IconBase
+                                    {...icons.full}
+                                    size={ratingIconSize}
+                                    color={rating.icon.color.full}
+                                />
+                            }
+                        />
                     ))}
                 </View>
             </GestureDetector>
@@ -194,21 +199,38 @@ export const RatingInput: FC<RatingInputProps> = ({
     );
 };
 
-type AnimatedIconProps = {
+type AnimatedStarProps = {
     index: number;
-    activeIndex: SharedValue<number>;
+    rating: SharedValue<number>;
+    size: number;
     interacting: SharedValue<number>;
-    children: ReactElement;
+    empty: ReactElement;
+    half: ReactElement;
+    full: ReactElement;
 };
 
-const AnimatedIcon: FC<AnimatedIconProps> = ({
+const AnimatedStar: FC<AnimatedStarProps> = ({
     index,
-    activeIndex,
+    rating,
+    size,
     interacting,
-    children,
+    empty,
+    half,
+    full,
 }) => {
-    const animatedStyle = useAnimatedStyle(() => {
-        const active = interacting.value === 1 && activeIndex.value === index;
+    const emptyStyle = useAnimatedStyle(() => ({
+        opacity: rating.value >= index + 0.5 ? 0 : 1,
+    }));
+    const halfStyle = useAnimatedStyle(() => ({
+        opacity:
+            rating.value >= index + 0.5 && rating.value < index + 1 ? 1 : 0,
+    }));
+    const fullStyle = useAnimatedStyle(() => ({
+        opacity: rating.value >= index + 1 ? 1 : 0,
+    }));
+    const scaleStyle = useAnimatedStyle(() => {
+        const active =
+            interacting.value === 1 && Math.ceil(rating.value) - 1 === index;
 
         return {
             transform: [
@@ -223,8 +245,25 @@ const AnimatedIcon: FC<AnimatedIconProps> = ({
     });
 
     return (
-        <Animated.View pointerEvents="none" style={animatedStyle}>
-            {children}
+        <Animated.View
+            style={[
+                {
+                    width: size,
+                    height: size,
+                    pointerEvents: "none",
+                },
+                scaleStyle,
+            ]}
+        >
+            <Animated.View style={[StyleSheet.absoluteFill, emptyStyle]}>
+                {empty}
+            </Animated.View>
+            <Animated.View style={[StyleSheet.absoluteFill, halfStyle]}>
+                {half}
+            </Animated.View>
+            <Animated.View style={[StyleSheet.absoluteFill, fullStyle]}>
+                {full}
+            </Animated.View>
         </Animated.View>
     );
 };

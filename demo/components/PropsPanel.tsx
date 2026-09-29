@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any used for simple prop definition flexibility */
-import React, { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
 import type { ValueItem } from "@reillymc/react-native-components/common";
@@ -79,15 +79,15 @@ export const PropsPanel = <T extends Record<string, any>>({
 }: PropsPanelProps<T>) => {
     const { theme } = useTheme();
 
-    const [customLabels, setCustomLabels] = React.useState<{
+    const [customLabels, setCustomLabels] = useState<{
         [P in keyof T]?: string;
     }>({});
 
     const styles = createStyles(theme);
 
-    const [selectionId, setSelectionId] = React.useState<string>();
-    const [selectionItems, setSelectionItems] = React.useState<ValueItem[]>([]);
-    const [initialSelection, setInitialSelection] = React.useState<ValueItem>();
+    const [selectionId, setSelectionId] = useState<string>();
+    const [selectionItems, setSelectionItems] = useState<ValueItem[]>([]);
+    const [initialSelection, setInitialSelection] = useState<ValueItem>();
 
     const { selectedItems, openSelectionModal } = useSelectionModal({
         key: selectionId ?? "",
@@ -97,10 +97,7 @@ export const PropsPanel = <T extends Record<string, any>>({
         initialSelection: initialSelection ? [initialSelection] : [],
     });
 
-    const selectedValue = useMemo(
-        () => selectedItems[0]?.value,
-        [selectedItems],
-    );
+    const selectedValue = selectedItems[0]?.value;
 
     useEffect(() => {
         if (!(selectionId && selectedValue)) return;

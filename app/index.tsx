@@ -1,4 +1,4 @@
-import React, { type ReactElement, useState } from "react";
+import { cloneElement, type FC, type ReactElement, useState } from "react";
 import {
     SectionList,
     type SectionListData,
@@ -206,7 +206,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
     },
 ];
 
-const ComponentListScreen: React.FC = () => {
+const ComponentListScreen: FC = () => {
     const router = useRouter();
     const { theme } = useTheme();
 
@@ -278,7 +278,7 @@ const ComponentListScreen: React.FC = () => {
                                 component && (
                                     <ListItemAlert>
                                         <View style={styles.listItemDisplay}>
-                                            {React.cloneElement(component, {
+                                            {cloneElement(component, {
                                                 ...component.props,
                                                 variant,
                                             })}

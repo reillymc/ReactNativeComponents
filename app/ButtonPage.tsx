@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     Button,
     type ButtonProps,
@@ -50,8 +50,8 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
 };
 
-const ButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ButtonProps>(defaultProps);
+const ButtonPage: FunctionComponent = () => {
+    const [props, setProps] = useState<ButtonProps>(defaultProps);
 
     return (
         <ComponentPage

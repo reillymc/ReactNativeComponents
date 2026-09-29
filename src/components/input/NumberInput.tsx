@@ -1,4 +1,4 @@
-import { type FC, type Ref, useCallback } from "react";
+import type { FC, Ref } from "react";
 import {
     type TextInput as DefaultTextInput,
     StyleSheet,
@@ -125,7 +125,7 @@ export const NumberInput: FC<NumberInputProps> = ({
 
     const icon = icons[value.representation];
 
-    const handleChangeMode = useCallback(() => {
+    const handleChangeMode = () => {
         const nextMode = getNextMode(
             enabledRepresentations,
             value.representation,
@@ -136,37 +136,34 @@ export const NumberInput: FC<NumberInputProps> = ({
         if (!nextValue) return;
 
         onChange?.(nextValue);
-    }, [enabledRepresentations, onChange, value]);
+    };
 
-    const handlePrimaryInputChangeText = useCallback(
-        (text: string) => {
-            switch (value.representation) {
-                case "number":
-                    onChange?.({
-                        representation: value.representation,
-                        value: text,
-                    });
-                    break;
-                case "fraction":
-                    onChange?.({
-                        representation: value.representation,
-                        value: [
-                            text,
-                            value.value?.[1] ?? "",
-                            value.value?.[2] ?? "",
-                        ],
-                    });
-                    break;
-                case "range":
-                    onChange?.({
-                        representation: value.representation,
-                        value: [text, value.value?.[1] ?? ""],
-                    });
-                    break;
-            }
-        },
-        [onChange, value.representation, value.value],
-    );
+    const handlePrimaryInputChangeText = (text: string) => {
+        switch (value.representation) {
+            case "number":
+                onChange?.({
+                    representation: value.representation,
+                    value: text,
+                });
+                break;
+            case "fraction":
+                onChange?.({
+                    representation: value.representation,
+                    value: [
+                        text,
+                        value.value?.[1] ?? "",
+                        value.value?.[2] ?? "",
+                    ],
+                });
+                break;
+            case "range":
+                onChange?.({
+                    representation: value.representation,
+                    value: [text, value.value?.[1] ?? ""],
+                });
+                break;
+        }
+    };
 
     return (
         <InputScaffold {...baseProps}>

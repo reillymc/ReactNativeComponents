@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FunctionComponent } from "react";
 import { StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -8,6 +8,7 @@ import { Text, type TextProps, type TextVariant } from "./Text";
 type HighlightPart = {
     text: string;
     highlighted: boolean;
+    offset: number;
 };
 
 const escapeForRegex = (value: string) =>
@@ -17,18 +18,27 @@ const splitHighlight = (
     text: string,
     highlight: string,
 ): Array<HighlightPart> => {
-    if (!highlight) return [{ text, highlighted: false }];
+    if (!highlight) return [{ text, highlighted: false, offset: 0 }];
 
     const lowerHighlight = highlight.toLowerCase();
     const pattern = new RegExp(`(${escapeForRegex(highlight)})`, "gi");
 
-    return text
-        .split(pattern)
-        .filter((part) => part !== "")
-        .map((part) => ({
+    const parts: Array<HighlightPart> = [];
+    let offset = 0;
+
+    for (const part of text.split(pattern)) {
+        if (part === "") continue;
+
+        parts.push({
             text: part,
             highlighted: part.toLowerCase() === lowerHighlight,
-        }));
+            offset,
+        });
+
+        offset += part.length;
+    }
+
+    return parts;
 };
 
 export interface HighlightedTextStyles {
@@ -41,7 +51,7 @@ export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
     highlight?: string;
 }
 
-export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
+export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     text = "",
     highlight = "",
     textStyles,
@@ -61,12 +71,11 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
 
     return (
         <Text style={[styles.textWrapper, textStyles]}>
-            {parts.map((part, idx) => (
+            {parts.map((part) => (
                 <Text
                     {...props}
                     variant={variant}
-                    // biome-ignore lint/suspicious/noArrayIndexKey: don't currently have a better unique key
-                    key={`${part.text}${idx}`}
+                    key={part.offset}
                     style={
                         part.highlighted && {
                             fontWeight: style.highlightedWeight[variant],

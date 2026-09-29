@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import { type FC, useCallback, useMemo } from "react";
+import type { FC } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
@@ -28,48 +28,34 @@ const SelectionModal: FC = () => {
         placeholder = "Select items",
     } = useGlobalSearchParams();
 
-    const items = useMemo(() => {
-        if (!rawItems || rawItems === "undefined" || Array.isArray(rawItems))
-            return;
+    const items =
+        !rawItems || rawItems === "undefined" || Array.isArray(rawItems)
+            ? undefined
+            : (JSON.parse(rawItems) as Array<ValueItem & { id?: string }>);
 
-        return JSON.parse(rawItems);
-    }, [rawItems]) as Array<ValueItem & { id?: string }>;
+    const selectedItems =
+        !rawSelection ||
+        rawSelection === "undefined" ||
+        Array.isArray(rawSelection)
+            ? []
+            : (JSON.parse(rawSelection) as Array<
+                  ValueItem | ValueItem<unknown>
+              >);
 
-    const selectedItems = useMemo(() => {
-        if (
-            !rawSelection ||
-            rawSelection === "undefined" ||
-            Array.isArray(rawSelection)
-        )
-            return [];
+    const selectionMode =
+        rawSelectionMode === "multi" || rawSelectionMode === "single"
+            ? rawSelectionMode
+            : "single";
 
-        return JSON.parse(rawSelection) as Array<
-            ValueItem | ValueItem<unknown>
-        >;
-    }, [rawSelection]);
+    const handleItemPress = (item: ValueItem | ValueItem<unknown>) => {
+        router.setParams({
+            selection: JSON.stringify([item]),
+        });
 
-    const selectionMode = useMemo(() => {
-        switch (rawSelectionMode) {
-            case "multi":
-            case "single":
-                return rawSelectionMode;
-            default:
-                return "single";
+        if (selectionMode === "single") {
+            setTimeout(router.back, 1);
         }
-    }, [rawSelectionMode]);
-
-    const handleItemPress = useCallback(
-        (item: ValueItem | ValueItem<unknown>) => {
-            router.setParams({
-                selection: JSON.stringify([item]),
-            });
-
-            if (selectionMode === "single") {
-                setTimeout(router.back, 1);
-            }
-        },
-        [router, selectionMode, selectedItems],
-    );
+    };
 
     return (
         <>

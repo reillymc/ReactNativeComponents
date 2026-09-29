@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import { useCallback, useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useGlobalSearchParams, useRouter } from "expo-router";
 import type { ValueItem } from "@reillymc/react-native-components/common";
 import type { SelectionInputProps } from "@reillymc/react-native-components/components";
@@ -29,30 +29,21 @@ export const useSelectionModal = <T>({
     // TODO: investigate issues with params not updating when expected
     const isActive = true; //useMemo(() => key === keyParam, [key, keyParam]);
 
-    const selectedItemsFromParams = useMemo(() => {
-        if (
-            !(isActive && selectionParam) ||
-            selectionParam === "undefined" ||
-            Array.isArray(selectionParam)
-        )
-            return;
+    const selectedItemsFromParams =
+        isActive &&
+        selectionParam &&
+        selectionParam !== "undefined" &&
+        !Array.isArray(selectionParam)
+            ? (JSON.parse(selectionParam) as Array<ValueItem<T>>)
+            : undefined;
 
-        return JSON.parse(selectionParam) as Array<ValueItem<T>>;
-    }, [isActive, selectionParam]);
+    const selectedWithInitial =
+        selectedItemsFromParams ?? initialSelection ?? [];
 
-    const selectedWithInitial = useMemo(
-        () => selectedItemsFromParams ?? initialSelection ?? [],
-        [selectedItemsFromParams, initialSelection],
-    );
-
-    const stringItems = useMemo(() => JSON.stringify(items), [items]);
-    const stringSelectedWithInitial = useMemo(
-        () =>
-            selectedWithInitial
-                ? JSON.stringify(selectedWithInitial)
-                : undefined,
-        [selectedWithInitial],
-    );
+    const stringItems = JSON.stringify(items);
+    const stringSelectedWithInitial = selectedWithInitial
+        ? JSON.stringify(selectedWithInitial)
+        : undefined;
 
     useEffect(() => {
         if (!isActive) return;
@@ -76,7 +67,7 @@ export const useSelectionModal = <T>({
         selectionMode,
     ]);
 
-    const openSelectionModal = useCallback(() => {
+    const openSelectionModal = () => {
         router.push({
             pathname: "/SelectionModal",
             params: {
@@ -88,15 +79,7 @@ export const useSelectionModal = <T>({
                 selection: stringSelectedWithInitial,
             },
         });
-    }, [
-        stringItems,
-        key,
-        label,
-        placeholder,
-        stringSelectedWithInitial,
-        router,
-        selectionMode,
-    ]);
+    };
 
     return {
         selectedItems: selectedWithInitial,

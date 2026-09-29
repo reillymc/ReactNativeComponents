@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     Octicons,
     type OcticonsIconName,
@@ -52,10 +52,10 @@ const defaultProps: Props = {
     iconName: "check",
 };
 
-const ToggleInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<Props>(defaultProps);
+const ToggleInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<Props>(defaultProps);
 
-    const [toggled, setToggled] = React.useState(false);
+    const [toggled, setToggled] = useState(false);
 
     return (
         <ComponentPage

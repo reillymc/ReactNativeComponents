@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FunctionComponent, ReactNode } from "react";
 import { StyleSheet, View } from "react-native";
 import { Stack } from "expo-router";
 import {
@@ -9,12 +9,12 @@ import {
 
 export interface ComponentPageProps {
     componentName?: string;
-    component: React.ReactNode;
-    propsPanel?: React.ReactNode;
+    component: ReactNode;
+    propsPanel?: ReactNode;
     fullscreen?: boolean;
 }
 
-export const ComponentPage: React.FunctionComponent<ComponentPageProps> = ({
+export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
     component,
     componentName,
     propsPanel,

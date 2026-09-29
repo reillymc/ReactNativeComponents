@@ -2,7 +2,6 @@ import {
     type FC,
     type ReactNode,
     type RefObject,
-    useCallback,
     useRef,
     useState,
 } from "react";
@@ -69,9 +68,9 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
 
     const [visibleAreaHeight, setVisibleAreaHeight] = useState(screenHeight);
 
-    const onVisibleAreaLayout = useCallback((e: LayoutChangeEvent) => {
+    const onVisibleAreaLayout = (e: LayoutChangeEvent) => {
         setVisibleAreaHeight(e.nativeEvent.layout.height);
-    }, []);
+    };
 
     const onPanelLayout = (e: LayoutChangeEvent) => {
         parentRef.current?.measureInWindow(
@@ -109,15 +108,13 @@ export const FloatingContainer: FC<FloatingContainerProps> = ({
         <FullWindowOverlay>
             <KeyboardAvoidingView
                 behavior={Platform.select({ ios: "padding" })}
-                style={[styles.keyboardView]}
-                pointerEvents="box-none"
+                style={styles.keyboardView}
                 onLayout={onVisibleAreaLayout}
             >
                 {show && (
                     <View
                         ref={containerRef}
                         onLayout={onPanelLayout}
-                        pointerEvents="box-none"
                         style={[
                             styles.container,
                             panelX !== undefined && { left: panelX },
@@ -139,7 +136,10 @@ const createStyles = (
     { layout }: { layout: PanelLayout | undefined },
 ) =>
     StyleSheet.create({
-        keyboardView: StyleSheet.absoluteFill,
+        keyboardView: {
+            ...StyleSheet.absoluteFill,
+            pointerEvents: "box-none",
+        },
         container: layout
             ? {
                   position: "absolute",
@@ -155,5 +155,8 @@ const createStyles = (
                   marginTop: floatingContainer.parentMargin,
                   marginBottom: floatingContainer.parentMargin,
               }
-            : { opacity: 0 },
+            : {
+                  opacity: 0,
+                  pointerEvents: "box-none",
+              },
     });

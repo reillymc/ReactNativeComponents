@@ -1,7 +1,7 @@
-import React, { type RefObject } from "react";
+import { type RefObject, useRef } from "react";
 
 export const useForwardedRef = <T>(ref: RefObject<T> | undefined | null) => {
-    const localRef = React.useRef<T>(null);
+    const localRef = useRef<T>(null);
 
     return ref ?? localRef;
 };

@@ -1,4 +1,9 @@
-import { type FunctionComponent, type ReactNode, useRef } from "react";
+import {
+    Children,
+    type FunctionComponent,
+    type ReactNode,
+    useRef,
+} from "react";
 import { StyleSheet, View, type ViewStyle } from "react-native";
 import Swipeable, {
     type SwipeableMethods,
@@ -29,14 +34,8 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
 
     const renderRightActions = () => (
         <View style={styles.actionsContainer}>
-            {rightActions.map((action, index) => (
-                <View
-                    // biome-ignore lint/suspicious/noArrayIndexKey: index is the only available key
-                    key={index}
-                    onTouchEnd={close}
-                >
-                    {action}
-                </View>
+            {Children.map(rightActions, (action) => (
+                <View onTouchEnd={close}>{action}</View>
             ))}
         </View>
     );

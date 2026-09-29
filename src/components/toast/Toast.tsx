@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FunctionComponent, ReactNode } from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
     LinearTransition,
@@ -13,16 +13,16 @@ export interface ToastStyles {
     bottomInset: number;
 }
 export interface ToastProps {
-    action?: React.ReactNode;
+    action?: ReactNode;
     containerStyle?: StyleProp<ViewStyle>;
-    children?: React.ReactNode;
+    children?: ReactNode;
 }
 
 const TOAST_ENTERING = SlideInDown.springify().mass(0.5);
 const TOAST_EXITING = SlideOutDown.springify().mass(0.5);
 const TOAST_LAYOUT = LinearTransition.springify().mass(0.5);
 
-export const Toast: React.FunctionComponent<ToastProps> = ({
+export const Toast: FunctionComponent<ToastProps> = ({
     action,
     containerStyle,
     children,

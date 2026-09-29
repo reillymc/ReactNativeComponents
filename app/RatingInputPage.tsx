@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     RatingInput,
     type RatingInputProps,
@@ -28,9 +28,9 @@ const propDefinitions: PropDefinitions<RatingInputProps> = {
     },
 };
 
-const RatingInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<RatingInputProps>(defaultProps);
-    const [value, setValue] = React.useState<number | undefined>(undefined);
+const RatingInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<RatingInputProps>(defaultProps);
+    const [value, setValue] = useState<number | undefined>(undefined);
 
     return (
         <ComponentPage

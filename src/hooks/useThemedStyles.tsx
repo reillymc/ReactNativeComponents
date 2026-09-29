@@ -1,6 +1,4 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any prop definition is permitted */
-import { useMemo } from "react";
-
 import type { ThemeContextDefinition as ThemedStyles } from "../providers";
 import type { Icons, StyleOverrides, Styles } from "../theme";
 import { MergeStyleSlice } from "../theme/styles";
@@ -150,54 +148,37 @@ export function useThemedStyles(...args: any[]) {
     const componentStyles = "styles" in options ? options.styles : undefined;
     const { theme, styles, icons } = useTheme();
 
-    const themedStyles = useMemo(() => {
-        const name = componentName as ComponentKey;
-        const { config, styles: stylesForGenerator } = isComponent
-            ? mergeStylesForComponent(styles, name, componentStyles?.[name])
-            : { config: undefined, styles };
+    const name = componentName as ComponentKey;
+    const { config, styles: stylesForGenerator } = isComponent
+        ? mergeStylesForComponent(styles, name, componentStyles?.[name])
+        : { config: undefined, styles };
 
-        const generated = hasProps
-            ? generator(
-                  { theme, styles: stylesForGenerator, icons },
-                  componentProps,
-              )
-            : generator({ theme, styles: stylesForGenerator, icons });
+    const generated = hasProps
+        ? generator(
+              { theme, styles: stylesForGenerator, icons },
+              componentProps,
+          )
+        : generator({ theme, styles: stylesForGenerator, icons });
 
-        return isComponent
-            ? [generated, buildComponentResult(styles, icons, name, config)]
-            : generated;
-    }, [
-        generator,
-        theme,
-        icons,
-        componentProps,
-        componentStyles,
-        componentName,
-        styles,
-        hasProps,
-        isComponent,
-    ]);
-
-    return themedStyles;
+    return isComponent
+        ? [generated, buildComponentResult(styles, icons, name, config)]
+        : generated;
 }
 
 export const useStyles = (componentStyles: StyleOverrides) => {
     const { styles } = useTheme();
 
-    const themedStyles = useMemo(() => {
-        let merged: Styles = styles;
-        for (const key of Object.keys(componentStyles) as Array<keyof Styles>) {
-            const override = componentStyles[key];
-            if (override === undefined) continue;
+    let merged: Styles = styles;
+    for (const key of Object.keys(componentStyles) as Array<keyof Styles>) {
+        const override = componentStyles[key];
+        if (override === undefined) continue;
 
-            const base = styles[key];
-            const next = MergeStyleSlice(base, override);
-            if (next !== base) {
-                merged = { ...merged, [key]: next };
-            }
+        const base = styles[key];
+        const next = MergeStyleSlice(base, override);
+        if (next !== base) {
+            merged = { ...merged, [key]: next };
         }
-        return merged;
-    }, [componentStyles, styles]);
+    }
 
-    return themedStyles;
+    return merged;
 };

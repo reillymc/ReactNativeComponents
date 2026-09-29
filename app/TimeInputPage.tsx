@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     TimeInput,
     type TimeInputProps,
@@ -37,9 +37,9 @@ const defaultProps: TimeInputProps = {
     disabled: false,
 };
 
-const TimeInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TimeInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<TimeInputValue>();
+const TimeInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TimeInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<TimeInputValue>();
 
     console.debug(inputValue);
 

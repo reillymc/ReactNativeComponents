@@ -1,4 +1,4 @@
-import { type FC, type Ref, useCallback } from "react";
+import type { FC, Ref } from "react";
 import type { TextInput, TextInputChangeEvent } from "react-native";
 
 import { InputBase, type InputBaseProps } from "./InputBase";
@@ -41,16 +41,9 @@ export const NumberInputBase: FC<NumberInputBaseProps> = ({
     keyboardType = "number-pad",
     ...props
 }) => {
-    const handleChangeText = useCallback(
-        (text: string) => {
-            if (onChangeText) {
-                onChangeText(
-                    sanitizeNumber(text, keyboardType === "decimal-pad"),
-                );
-            }
-        },
-        [onChangeText, keyboardType],
-    );
+    const handleChangeText = (text: string) => {
+        onChangeText?.(sanitizeNumber(text, keyboardType === "decimal-pad"));
+    };
 
     return (
         <InputBase

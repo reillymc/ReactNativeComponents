@@ -1,4 +1,4 @@
-import { type RefObject, useDeferredValue, useMemo, useState } from "react";
+import { type RefObject, useDeferredValue, useState } from "react";
 import type { BlurEvent, TextInput as DefaultTextInput } from "react-native";
 
 import type {
@@ -107,26 +107,19 @@ export const DropdownInputBase = <T,>({
 
     const inputRef = useForwardedRef(ref);
 
-    const normalizedItems = useMemo<Array<NormalizedItem<T>>>(
-        () =>
-            items.map((item) => ({
-                item,
-                label: item.label.toLowerCase(),
-                description: item.description?.toLowerCase(),
-            })),
-        [items],
-    );
+    const normalizedItems: Array<NormalizedItem<T>> = items.map((item) => ({
+        item,
+        label: item.label.toLowerCase(),
+        description: item.description?.toLowerCase(),
+    }));
 
-    const existingItemLabel = useMemo(() => {
-        const existingItem = normalizedItems.find(({ item }) => {
-            if ("id" in item) {
-                return item.id === selectedValue;
-            }
-            return item.value === selectedValue;
-        });
-
-        return existingItem?.item.label;
-    }, [normalizedItems, selectedValue]);
+    const existingItem = normalizedItems.find(({ item }) => {
+        if ("id" in item) {
+            return item.id === selectedValue;
+        }
+        return item.value === selectedValue;
+    });
+    const existingItemLabel = existingItem?.item.label;
 
     const handleFocus = () => {
         setHasFocus(true);
@@ -190,19 +183,14 @@ export const DropdownInputBase = <T,>({
         existingItemLabel !== undefined &&
         inputText === existingItemLabel;
 
-    const filteredItems = useMemo(() => {
-        const result: Array<ValueItem<T>> = [];
+    const filteredItems: Array<ValueItem<T>> = [];
+    for (const normalized of normalizedItems) {
+        if (filteredItems.length >= maxSuggestionCount) break;
 
-        for (const normalized of normalizedItems) {
-            if (result.length >= maxSuggestionCount) break;
-
-            if (isSelectableItem(normalized, search, selectedValue)) {
-                result.push(normalized.item);
-            }
+        if (isSelectableItem(normalized, search, selectedValue)) {
+            filteredItems.push(normalized.item);
         }
-
-        return result;
-    }, [normalizedItems, maxSuggestionCount, search, selectedValue]);
+    }
 
     const showDropdownPanel =
         hasFocus &&
