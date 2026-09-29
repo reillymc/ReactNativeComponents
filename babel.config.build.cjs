@@ -20,8 +20,6 @@ module.exports = (api) => {
         plugins: [
             // React Compiler must run first.
             [require.resolve("babel-plugin-react-compiler"), { target: "19" }],
-            // Worklets must run last.
-            require.resolve("react-native-worklets/plugin"),
         ],
     };
 };
