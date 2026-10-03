@@ -6,7 +6,6 @@ export const defaultIconActionStyles = (theme: Theme): IconActionStyles => {
     const action = defaultActionStyles(theme);
 
     return {
-        icon: action.label,
-        text: action.label,
+        color: action.label.color,
     };
 };

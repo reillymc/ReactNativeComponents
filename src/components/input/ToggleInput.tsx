@@ -1,14 +1,10 @@
-import { StyleSheet, View } from "react-native";
+import { type ColorValue, StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
-import { ActionBase } from "../action";
-import {
-    type IconComponentProps,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
+import { ActionBase, StateTint } from "../action";
+import { IconBase, type IconComponentProps } from "../icon";
 import { Text } from "../text";
 import type { InputBaseProps, InputVariant } from "./InputBase";
 import type { InputScaffoldFieldProps } from "./InputScaffold";
@@ -21,8 +17,11 @@ export type ToggleInputStyles = {
     indicator: {
         size: { [Size in InputVariant]: number };
         color: {
-            deselected: InteractiveIconStyles["color"];
-            selected: Record<ToggleVariant, InteractiveIconStyles["color"]>;
+            deselected: {
+                enabled: ColorValue;
+                disabled: ColorValue;
+            };
+            selected: Record<ToggleVariant, ColorValue>;
         };
     };
     label: {
@@ -62,6 +61,10 @@ export const ToggleInput = <G extends string>({
         { styles: { toggleInput: styleOverrides }, props: { variant } },
     );
 
+    const deselectedColor = disabled
+        ? toggleInput.indicator.color.deselected.disabled
+        : toggleInput.indicator.color.deselected.enabled;
+
     return (
         <View style={containerStyle}>
             <ActionBase
@@ -70,39 +73,33 @@ export const ToggleInput = <G extends string>({
                 containerStyle={styles.container}
                 onPress={() => onChange(!value)}
             >
-                {(pressableState) => (
+                {(state) => (
                     <>
-                        <View style={styles.labelIconContainer}>
+                        <StateTint {...state} style={styles.labelIconContainer}>
                             <View style={styles.iconContainer}>
-                                <InteractiveIcon
+                                <IconBase
                                     {...icons.outline}
-                                    style={{
-                                        size: toggleInput.indicator.size[
-                                            variant
-                                        ],
-                                        color: value
+                                    size={toggleInput.indicator.size[variant]}
+                                    color={
+                                        value
                                             ? toggleInput.indicator.color
                                                   .selected[toggleVariant]
-                                            : toggleInput.indicator.color
-                                                  .deselected,
-                                    }}
-                                    disabled={disabled}
-                                    {...pressableState}
+                                            : deselectedColor
+                                    }
                                 />
                                 <View style={styles.icon}>
                                     {!!value && (
-                                        <InteractiveIcon
+                                        <IconBase
                                             {...iconProps}
-                                            style={{
-                                                size: toggleInput.indicator
-                                                    .size[variant],
-                                                color: toggleInput.indicator
-                                                    .color.selected[
-                                                    toggleVariant
-                                                ],
-                                            }}
-                                            disabled={disabled}
-                                            {...pressableState}
+                                            size={
+                                                toggleInput.indicator.size[
+                                                    variant
+                                                ]
+                                            }
+                                            color={
+                                                toggleInput.indicator.color
+                                                    .selected[toggleVariant]
+                                            }
                                         />
                                     )}
                                 </View>
@@ -119,7 +116,7 @@ export const ToggleInput = <G extends string>({
                                     {label}
                                 </Text>
                             )}
-                        </View>
+                        </StateTint>
                         {helpText && (
                             <View style={styles.helpText}>
                                 {typeof helpText === "string" ? (

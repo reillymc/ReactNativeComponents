@@ -11,7 +11,7 @@ export const defaultAlertIndicatorStyles = ({
         secondary: color.secondary,
     },
     color: {
-        primary: color.textOnPrimary,
-        secondary: color.textOnSecondary,
+        primary: color.primaryForeground,
+        secondary: color.secondaryForeground,
     },
 });

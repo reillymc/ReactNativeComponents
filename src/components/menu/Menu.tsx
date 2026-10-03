@@ -34,13 +34,15 @@ export const Menu: FC<MenuProps> = ({ style, reverse, children }) => {
     );
 };
 
-const createStyles = ({ styles: { menu } }: ThemedStyles) => {
+const createStyles = ({ theme: { color }, styles: { menu } }: ThemedStyles) => {
     const styles = StyleSheet.create({
         container: {
             backgroundColor: menu.backgroundColor,
             borderRadius: menu.borderRadius,
             padding: menu.padding,
             gap: menu.gap,
+            borderWidth: StyleSheet.hairlineWidth,
+            borderColor: color.border,
         },
     });
     return styles;

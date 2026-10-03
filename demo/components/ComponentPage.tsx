@@ -68,10 +68,11 @@ const createStyles = ({ theme: { color, border } }: AppThemedStyles) =>
         },
         component: {
             flex: 1,
-            backgroundColor: color.foreground,
+            backgroundColor: color.surface,
             width: "90%",
             minHeight: 80,
             justifyContent: "center",
+            alignItems: "center",
             borderRadius: border.radius.loose,
             padding: 12,
         },

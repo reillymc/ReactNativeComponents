@@ -70,6 +70,8 @@ const createStyles = ({
             backgroundColor: toast.container.backgroundColor,
             padding: toast.container.padding,
             borderRadius: toast.container.borderRadius,
+            borderWidth: StyleSheet.hairlineWidth,
+            borderColor: color.border,
         },
         innerContainer: {
             flexDirection: "row",
@@ -86,7 +88,7 @@ const createStyles = ({
         },
         separator: {
             borderStartWidth: StyleSheet.hairlineWidth,
-            borderStartColor: color.textSecondary,
+            borderStartColor: color.mutedForeground,
             height: "100%",
             marginHorizontal: spacing.medium,
         },

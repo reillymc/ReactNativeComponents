@@ -15,17 +15,17 @@ export const defaultInputBaseStyles = ({
         borderRadius: border.radius.regular,
         padding: spacing.small,
         backgroundColor: {
-            enabled: color.inputBackground,
-            disabled: color.inputBackgroundDisabled,
+            enabled: color.inset,
+            disabled: color.inset,
         },
     },
     text: {
         fontSize: font.size.regular,
         fontFamily: font.family.sans,
         color: {
-            enabled: color.textPrimary,
-            disabled: color.textSecondary,
+            enabled: color.insetForeground,
+            disabled: color.insetForeground,
         },
-        placeholderColor: color.textSecondary,
+        placeholderColor: color.mutedForeground,
     },
 });

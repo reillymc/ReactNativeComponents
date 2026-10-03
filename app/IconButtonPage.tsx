@@ -22,6 +22,7 @@ const defaultProps: Props = {
     iconSet: Octicons,
     iconName: "arrow-both",
     variant: "primary",
+    appearance: "subtle",
     onPress: () => null,
 };
 
@@ -38,8 +39,15 @@ const propDefinitions: PropDefinitions<Props> = {
         default: defaultProps.variant,
         values: [
             { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
             { label: "Destructive", value: "destructive" },
+        ],
+    },
+    appearance: {
+        type: "enum",
+        label: "Appearance",
+        values: [
+            { label: "Prominent", value: "prominent" },
+            { label: "Subtle", value: "subtle" },
         ],
     },
     disabled: {

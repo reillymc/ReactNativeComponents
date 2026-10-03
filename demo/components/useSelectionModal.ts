@@ -1,88 +1,46 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import { useEffect } from "react";
-import { useGlobalSearchParams, useRouter } from "expo-router";
+import { useCallback } from "react";
+import { useRouter } from "expo-router";
 import type { ValueItem } from "@reillymc/react-native-components/common";
-import type { SelectionInputProps } from "@reillymc/react-native-components/components";
 
-type UseSelectionModalParams<T> = Pick<
-    SelectionInputProps<T>,
-    "selectionMode" | "items"
-> & {
+import { useSelectionModalController } from "./SelectionModalContext";
+
+type OpenSelectionModalParams<T> = {
     key: string;
+    items: ValueItem<T>[];
+    selectionMode: "single" | "multi";
     label: string;
     placeholder?: string;
-    initialSelection?: ValueItem<T>[];
+    selection?: ValueItem<T>[];
+    onSelect?: (selection: ValueItem<T>[]) => void;
 };
 
-export const useSelectionModal = <T>({
-    key,
-    initialSelection,
-    label,
-    items,
-    placeholder,
-    selectionMode,
-}: UseSelectionModalParams<T>) => {
+export const useSelectionModal = () => {
     const router = useRouter();
+    const { open } = useSelectionModalController();
 
-    const { key: _, selection: selectionParam } = useGlobalSearchParams();
-
-    // TODO: investigate issues with params not updating when expected
-    const isActive = true; //useMemo(() => key === keyParam, [key, keyParam]);
-
-    const selectedItemsFromParams =
-        isActive &&
-        selectionParam &&
-        selectionParam !== "undefined" &&
-        !Array.isArray(selectionParam)
-            ? (JSON.parse(selectionParam) as Array<ValueItem<T>>)
-            : undefined;
-
-    const selectedWithInitial =
-        selectedItemsFromParams ?? initialSelection ?? [];
-
-    const stringItems = JSON.stringify(items);
-    const stringSelectedWithInitial = selectedWithInitial
-        ? JSON.stringify(selectedWithInitial)
-        : undefined;
-
-    useEffect(() => {
-        if (!isActive) return;
-
-        router.setParams({
+    const openSelectionModal = useCallback(
+        <T>({
             key,
-            selectionMode: selectionMode,
+            items,
+            selectionMode,
             label,
             placeholder,
-            items: stringItems,
-            selection: stringSelectedWithInitial,
-        });
-    }, [
-        isActive,
-        stringItems,
-        stringSelectedWithInitial,
-        key,
-        label,
-        placeholder,
-        router,
-        selectionMode,
-    ]);
-
-    const openSelectionModal = () => {
-        router.push({
-            pathname: "/SelectionModal",
-            params: {
+            selection,
+            onSelect,
+        }: OpenSelectionModalParams<T>) => {
+            open({
                 key,
-                selectionMode: selectionMode,
+                items,
+                selectionMode,
                 label,
                 placeholder,
-                items: stringItems,
-                selection: stringSelectedWithInitial,
-            },
-        });
-    };
+                selection: selection ?? [],
+                resolve: (value) => onSelect?.(value as ValueItem<T>[]),
+            });
+            router.push("/SelectionModal");
+        },
+        [open, router],
+    );
 
-    return {
-        selectedItems: selectedWithInitial,
-        openSelectionModal,
-    };
+    return { openSelectionModal };
 };

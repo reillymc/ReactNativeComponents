@@ -9,7 +9,7 @@ export const TagIcon = <G extends string>({
     return (
         <IconBase
             {...iconProps}
-            color={theme.color.textPrimary}
+            color={theme.color.foreground}
             size={styles.text.font.body.size}
         />
     );

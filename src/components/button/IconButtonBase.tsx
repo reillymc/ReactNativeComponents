@@ -1,13 +1,9 @@
-import { type DimensionValue, StyleSheet } from "react-native";
+import { type ColorValue, type DimensionValue, StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { ActionBase } from "../action";
-import {
-    type IconComponentProps,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
+import { IconBase, type IconComponentProps } from "../icon";
+import { InteractionSurface } from "../surface";
 import type { ButtonBaseProps, ButtonBaseStyles } from "./ButtonBase";
 
 export type IconButtonBaseStyles = {
@@ -15,9 +11,12 @@ export type IconButtonBaseStyles = {
         size: DimensionValue;
         padding: number;
         borderRadius: ButtonBaseStyles["borderRadius"];
-        backgroundColor: ButtonBaseStyles["backgroundColor"];
+        backgroundColor: ColorValue;
     };
-    icon: InteractiveIconStyles;
+    icon: {
+        size: number;
+        color: ColorValue;
+    };
 };
 
 export interface IconButtonBaseProps
@@ -40,53 +39,33 @@ export const IconButtonBase = <G extends string>({
         createStyles,
         {
             styles: { iconButtonBase: styleOverrides },
-            props: { disabled },
         },
     );
 
     return (
-        <ActionBase
+        <InteractionSurface
             disabled={disabled}
             onPress={onPress}
-            containerStyle={(pressableState) => [
-                styles.iconButtonBase,
-                pressableState.pressed && {
-                    backgroundColor: style.container.backgroundColor.pressed,
-                },
-                typeof containerStyle === "function"
-                    ? containerStyle(pressableState)
-                    : containerStyle,
-            ]}
+            containerStyle={[styles.iconButtonBase, containerStyle]}
         >
-            {(pressableState) => (
-                <InteractiveIcon
-                    {...pressableState}
-                    {...iconProps}
-                    disabled={disabled}
-                    style={style.icon}
-                />
-            )}
-        </ActionBase>
+            <IconBase
+                {...iconProps}
+                size={style.icon.size}
+                color={style.icon.color}
+            />
+        </InteractionSurface>
     );
 };
 
-const createStyles = (
-    { styles: { iconButtonBase } }: ThemedStyles,
-    { disabled }: Required<Pick<IconButtonBaseProps, "disabled">>,
-) => {
-    const styles = StyleSheet.create({
+const createStyles = ({ styles: { iconButtonBase } }: ThemedStyles) =>
+    StyleSheet.create({
         iconButtonBase: {
             justifyContent: "center",
             alignItems: "center",
             borderRadius: iconButtonBase.container.borderRadius,
-            minHeight: iconButtonBase.container.size,
-            minWidth: iconButtonBase.container.size,
-            backgroundColor:
-                iconButtonBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
+            width: iconButtonBase.container.size,
+            height: iconButtonBase.container.size,
+            backgroundColor: iconButtonBase.container.backgroundColor,
             padding: iconButtonBase.container.padding,
         },
     });
-    return styles;
-};

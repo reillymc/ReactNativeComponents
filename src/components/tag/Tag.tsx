@@ -1,5 +1,5 @@
 import type { FC, ReactElement } from "react";
-import { type StyleProp, StyleSheet, type ViewStyle } from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
@@ -27,14 +27,21 @@ export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
         props: { variant, label },
     });
 
-    return (
-        <ActionBase
-            onPress={onPress}
-            containerStyle={[styles.container, style]}
-        >
+    const content = (
+        <>
             {icon}
             <Text style={styles.text}>{label}</Text>
+        </>
+    );
+
+    const containerStyle = [styles.container, style];
+
+    return onPress ? (
+        <ActionBase onPress={onPress} containerStyle={containerStyle}>
+            {content}
         </ActionBase>
+    ) : (
+        <View style={containerStyle}>{content}</View>
     );
 };
 
@@ -50,12 +57,12 @@ const createStyles = (
             borderRadius: tag.borderRadius,
             padding: tag.padding,
             backgroundColor:
-                variant === "dark" ? color.background : color.foreground,
+                variant === "dark" ? color.background : color.surface,
             width: "auto",
             gap: tag.internalSpacing,
         },
         text: {
-            color: color.textPrimary,
+            color: color.foreground,
         },
     });
     return styles;

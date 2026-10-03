@@ -1,28 +1,20 @@
-import { StyleSheet, View } from "react-native";
+import { type ColorValue, StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import {
-    type IconComponentProps,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
-import { InteractiveText, type InteractiveTextStyles } from "../text";
-import type { ActionProps } from "./Action";
+import { IconBase, type IconComponentProps } from "../icon";
+import { Text } from "../text";
+import type { ActionBaseProps } from "./ActionBase";
 import { ActionBase } from "./ActionBase";
+import { StateTint } from "./StateTint";
 
 export type IconActionBaseStyles = {
     gap: number;
-    text: {
-        color: InteractiveTextStyles["color"];
-    };
-    icon: {
-        color: InteractiveIconStyles["color"];
-    };
+    color: ColorValue;
 };
 
 export interface IconActionBaseProps
-    extends Pick<ActionProps, "onPress" | "disabled" | "containerStyle"> {
+    extends Pick<ActionBaseProps, "onPress" | "disabled" | "containerStyle"> {
     label?: string;
     iconPosition?: "start" | "end";
     style?: DeepPartial<IconActionBaseStyles>;
@@ -51,27 +43,18 @@ export const IconActionBase = <G extends string>({
     return (
         <ActionBase
             disabled={disabled}
-            containerStyle={containerStyle}
             onPress={onPress}
+            containerStyle={containerStyle}
         >
-            {(pressableState) => (
-                <View style={styles.container}>
-                    <InteractiveIcon
-                        disabled={disabled}
-                        style={style.icon}
-                        {...iconProps}
-                        {...pressableState}
-                    />
+            {(state) => (
+                <StateTint {...state} style={styles.container}>
+                    <IconBase {...iconProps} color={style.color} />
                     {!!label && (
-                        <InteractiveText
-                            disabled={disabled}
-                            style={style.text}
-                            {...pressableState}
-                        >
+                        <Text numberOfLines={1} style={{ color: style.color }}>
                             {label}
-                        </InteractiveText>
+                        </Text>
                     )}
-                </View>
+                </StateTint>
             )}
         </ActionBase>
     );

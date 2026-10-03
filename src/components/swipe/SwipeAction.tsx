@@ -15,7 +15,13 @@ export const SwipeAction = <G extends string>(
     props: SwipeActionProps & IconComponentProps<G>,
 ) => {
     const [styles] = useThemedStyles("swipeAction", createStyles);
-    return <IconButton {...props} containerStyle={styles.actionButton} />;
+    return (
+        <IconButton
+            {...props}
+            appearance="prominent"
+            containerStyle={styles.actionButton}
+        />
+    );
 };
 
 const createStyles = ({ styles: { swipeAction } }: ThemedStyles) =>

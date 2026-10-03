@@ -6,7 +6,7 @@ export const defaultRatingStyles = (theme: Theme): RatingStyles => ({
     gap: theme.spacing.tiny,
     icon: {
         color: {
-            empty: theme.color.primaryLight,
+            empty: theme.color.mutedForeground,
             half: theme.color.primary,
             full: theme.color.primary,
         },

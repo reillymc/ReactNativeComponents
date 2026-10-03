@@ -1,4 +1,10 @@
-export { Button, type ButtonProps, type ButtonStyles } from "./Button";
+export {
+    Button,
+    type ButtonAppearance,
+    type ButtonAppearanceStyles,
+    type ButtonProps,
+    type ButtonStyles,
+} from "./Button";
 export {
     ButtonBase,
     type ButtonBaseProps,

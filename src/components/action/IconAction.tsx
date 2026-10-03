@@ -1,23 +1,14 @@
+import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import type { IconComponentProps, InteractiveIconStyles } from "../icon";
-import type { InteractiveTextStyles } from "../text";
+import type { IconComponentProps } from "../icon";
 import { IconActionBase, type IconActionBaseProps } from "./IconActionBase";
 
 export type IconActionVariant = "primary" | "secondary" | "destructive";
 
 export type IconActionStyles = {
-    text: {
-        color: {
-            [Variant in IconActionVariant]: InteractiveTextStyles["color"];
-        };
-    };
-    icon: {
-        color: {
-            [Variant in IconActionVariant]: InteractiveIconStyles["color"];
-        };
-    };
+    color: Record<IconActionVariant, ColorValue>;
 };
 
 export interface IconActionProps extends Omit<IconActionBaseProps, "style"> {
@@ -35,10 +26,7 @@ export const IconAction = <G extends string>({
     return (
         <IconActionBase
             {...props}
-            style={{
-                icon: { color: iconAction.icon.color[variant] },
-                text: { color: iconAction.text.color[variant] },
-            }}
+            style={{ color: iconAction.color[variant] }}
         />
     );
 };

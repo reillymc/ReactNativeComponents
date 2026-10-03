@@ -11,8 +11,9 @@ import {
 } from "../demo/components";
 
 const defaultProps: ButtonProps = {
-    label: "Secondary Button",
-    variant: "secondary",
+    label: "Primary Button",
+    variant: "primary",
+    appearance: "subtle",
     width: "auto",
     onPress: () => null,
 };
@@ -25,11 +26,18 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     variant: {
         type: "enum",
         label: "Style variant",
-        default: "Secondary",
+        default: "Primary",
         values: [
             { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
             { label: "Destructive", value: "destructive" },
+        ],
+    },
+    appearance: {
+        type: "enum",
+        label: "Appearance",
+        values: [
+            { label: "Prominent", value: "prominent" },
+            { label: "Subtle", value: "subtle" },
         ],
     },
     disabled: {

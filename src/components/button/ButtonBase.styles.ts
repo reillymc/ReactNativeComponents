@@ -13,9 +13,5 @@ export const defaultButtonBaseStyles = ({
     borderRadius: border.radius.regular,
     paddingHorizontal: spacing.medium,
     paddingVertical: spacing.small,
-    backgroundColor: {
-        enabled: color.primary,
-        pressed: color.primaryLight,
-        disabled: color.primaryLight,
-    },
+    backgroundColor: color.primary,
 });

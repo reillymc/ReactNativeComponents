@@ -20,10 +20,10 @@ export const defaultAvatarStyles = ({ color, font }: Theme): AvatarStyles => ({
         fontWeight: "500",
     },
     colors: [
-        { background: color.red, foreground: color.textPrimary },
-        { background: color.orange, foreground: color.textPrimary },
-        { background: color.green, foreground: color.textPrimary },
-        { background: color.blue, foreground: color.textPrimary },
-        { background: color.purple, foreground: color.textPrimary },
+        { background: color.tint1, foreground: color.foreground },
+        { background: color.tint2, foreground: color.foreground },
+        { background: color.tint3, foreground: color.foreground },
+        { background: color.tint4, foreground: color.foreground },
+        { background: color.tint5, foreground: color.foreground },
     ],
 });

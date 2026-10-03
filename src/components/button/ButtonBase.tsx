@@ -8,9 +8,7 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { ActionBase, type ActionBaseProps } from "../action";
-
-export type ButtonState = "enabled" | "disabled" | "pressed";
+import { InteractionSurface, type InteractionSurfaceProps } from "../surface";
 
 export type ButtonBaseStyles = {
     height: DimensionValue;
@@ -20,12 +18,12 @@ export type ButtonBaseStyles = {
     paddingHorizontal: number;
     paddingVertical: number;
     borderRadius: number | `${number}%`;
-    backgroundColor: Record<ButtonState, ColorValue>;
+    backgroundColor: ColorValue;
 };
 
 export interface ButtonBaseProps
     extends Pick<
-        ActionBaseProps,
+        InteractionSurfaceProps,
         "children" | "disabled" | "onPress" | "containerStyle"
     > {
     width?: "auto" | "medium";
@@ -42,39 +40,25 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
 }) => {
     const disabled = disabledProp || !onPress;
 
-    const [styles, { style }] = useThemedStyles("buttonBase", createStyles, {
+    const [styles] = useThemedStyles("buttonBase", createStyles, {
         styles: { buttonBase: styleOverrides },
-        props: { disabled, width },
+        props: { width },
     });
 
     return (
-        <ActionBase
+        <InteractionSurface
             onPress={onPress}
             disabled={disabled}
-            containerStyle={(pressableState) => [
-                styles.buttonBase,
-                pressableState.pressed && {
-                    backgroundColor: style.backgroundColor.pressed,
-                },
-                typeof containerStyle === "function"
-                    ? containerStyle(pressableState)
-                    : containerStyle,
-            ]}
+            containerStyle={[styles.buttonBase, containerStyle]}
         >
-            {(pressableState) => (
-                <View style={styles.innerContainer}>
-                    {typeof children === "function"
-                        ? children(pressableState)
-                        : children}
-                </View>
-            )}
-        </ActionBase>
+            <View style={styles.innerContainer}>{children}</View>
+        </InteractionSurface>
     );
 };
 
 const createStyles = (
     { styles: { buttonBase } }: ThemedStyles,
-    { disabled, width }: Required<Pick<ButtonBaseProps, "disabled" | "width">>,
+    { width }: Required<Pick<ButtonBaseProps, "width">>,
 ) => {
     const styles = StyleSheet.create({
         buttonBase: {
@@ -83,8 +67,7 @@ const createStyles = (
             borderRadius: buttonBase.borderRadius,
             minHeight: buttonBase.height,
             minWidth: width === "medium" ? buttonBase.width.medium : undefined,
-            backgroundColor:
-                buttonBase.backgroundColor[disabled ? "disabled" : "enabled"],
+            backgroundColor: buttonBase.backgroundColor,
         },
         innerContainer: {
             flex: width === "auto" ? 1 : undefined,

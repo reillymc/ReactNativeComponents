@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react";
 import {
+    type ColorValue,
     Text as RnText,
     type TextProps as RnTextProps,
     StyleSheet,
@@ -18,7 +19,7 @@ export type TextVariant =
     | "caption";
 
 export interface TextStyles {
-    color: string;
+    color: ColorValue;
     font: {
         [Variant in TextVariant]: {
             family: string;

@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { StyleSheet } from "react-native";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import { ActionBase } from "../action";
+import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { InteractionSurface } from "../surface";
 import { HighlightedText } from "../text";
 
 export type MenuItemStyles = {
@@ -24,20 +24,13 @@ export const MenuItem: FC<MenuItemProps> = ({
     searchValue,
     onPress,
 }) => {
-    const {
-        theme: { color },
-    } = useTheme();
-
     const [styles] = useThemedStyles("menuItem", createStyles);
 
     return (
-        <ActionBase
+        <InteractionSurface
             hitSlop={0}
             onPress={onPress}
-            containerStyle={({ pressed }) => [
-                styles.dropdownItem,
-                pressed && { backgroundColor: color.pressOverlay },
-            ]}
+            containerStyle={styles.dropdownItem}
         >
             <HighlightedText text={label} highlight={searchValue} />
             {!!description && (
@@ -47,7 +40,7 @@ export const MenuItem: FC<MenuItemProps> = ({
                     highlight={searchValue}
                 />
             )}
-        </ActionBase>
+        </InteractionSurface>
     );
 };
 

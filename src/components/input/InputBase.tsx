@@ -93,6 +93,7 @@ const createStyles = (
             fontSize: inputBase.text.fontSize,
             fontFamily: inputBase.text.fontFamily,
             color: inputBase.text.color[disabled ? "disabled" : "enabled"],
+            opacity: disabled ? 0.5 : 1,
         },
     });
 };

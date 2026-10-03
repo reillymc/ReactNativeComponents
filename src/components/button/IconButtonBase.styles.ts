@@ -1,5 +1,5 @@
 import type { Theme } from "../../theme/theme";
-import { defaultInteractiveIconStyles } from "../icon/InteractiveIcon.styles";
+import { defaultIconBaseStyles } from "../icon/IconBase.styles";
 import type { IconButtonBaseStyles } from "./IconButtonBase";
 
 export const defaultIconButtonBaseStyles = (
@@ -8,12 +8,11 @@ export const defaultIconButtonBaseStyles = (
     container: {
         padding: 4,
         size: 48,
-        backgroundColor: {
-            enabled: theme.color.inputBackground,
-            disabled: theme.color.inputBackgroundDisabled,
-            pressed: theme.color.inputBackground,
-        },
+        backgroundColor: theme.color.inset,
         borderRadius: "50%",
     },
-    icon: defaultInteractiveIconStyles(theme),
+    icon: {
+        size: defaultIconBaseStyles(theme).size,
+        color: theme.color.foreground,
+    },
 });

@@ -4,14 +4,14 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import type { ValueItem } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../theme";
-import { ActionBase } from "../action";
-import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
+import { IconBase, type IconBaseStyles } from "../icon";
+import { InteractionSurface } from "../surface";
 import { Tag } from "../tag";
 import { Text } from "../text";
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
-export type SelectionInputState = "enabled" | "disabled" | "pressed";
+export type SelectionInputState = "enabled" | "disabled";
 
 export type SelectionInputStyles = {
     container: {
@@ -20,7 +20,7 @@ export type SelectionInputStyles = {
     selectionContainer: {
         gap: number;
     };
-    icon: Pick<InteractiveIconStyles, "color">;
+    icon: Pick<IconBaseStyles, "color">;
 };
 
 export type SelectionInputIcons = ComponentIconAssets<"showOptions">;
@@ -78,55 +78,41 @@ export const SelectionInput = <T,>({
 
     return (
         <InputScaffold label={!hideLabel && label} {...props}>
-            <ActionBase
+            <InteractionSurface
                 disabled={disabled}
-                containerStyle={({ pressed }) => [
-                    styles.container,
-                    pressed && styles.containerPressed,
-                ]}
+                containerStyle={styles.container}
                 onPress={onAdd}
             >
-                {(pressableState) => (
-                    <>
-                        <View style={styles.selectionContainer}>
-                            {selectionMode === "single" && !!selection && (
-                                <Text style={styles.selectionItemLabel}>
-                                    {selection.label}
-                                </Text>
-                            )}
-                            {selectionMode === "multi" &&
-                                !!selection?.length &&
-                                selection.map((item) => (
-                                    <Tag
-                                        key={
-                                            "id" in item ? item.id : item.value
-                                        }
-                                        label={item.label}
-                                        onPress={
-                                            onRemoveItem
-                                                ? () => onRemoveItem(item)
-                                                : undefined
-                                        }
-                                    />
-                                ))}
-
-                            {!hasSelection && (
-                                <Text style={styles.placeholderText}>
-                                    {placeholder}
-                                </Text>
-                            )}
-                        </View>
-                        <View style={styles.iconContainer}>
-                            <InteractiveIcon
-                                {...icons.showOptions}
-                                disabled={disabled}
-                                style={style.icon}
-                                {...pressableState}
+                <View style={styles.selectionContainer}>
+                    {selectionMode === "single" && !!selection && (
+                        <Text style={styles.selectionItemLabel}>
+                            {selection.label}
+                        </Text>
+                    )}
+                    {selectionMode === "multi" &&
+                        !!selection?.length &&
+                        selection.map((item) => (
+                            <Tag
+                                key={"id" in item ? item.id : item.value}
+                                label={item.label}
+                                onPress={
+                                    onRemoveItem
+                                        ? () => onRemoveItem(item)
+                                        : undefined
+                                }
                             />
-                        </View>
-                    </>
-                )}
-            </ActionBase>
+                        ))}
+
+                    {!hasSelection && (
+                        <Text style={styles.placeholderText}>
+                            {placeholder}
+                        </Text>
+                    )}
+                </View>
+                <View style={styles.iconContainer}>
+                    <IconBase {...icons.showOptions} color={style.icon.color} />
+                </View>
+            </InteractionSurface>
         </InputScaffold>
     );
 };
@@ -150,12 +136,9 @@ const createStyles = (
             minHeight: height[variant],
             borderRadius,
             backgroundColor:
-                inputBase.container.backgroundColor[
+                selectionInput.container.backgroundColor[
                     disabled ? "disabled" : "enabled"
                 ],
-        },
-        containerPressed: {
-            backgroundColor: selectionInput.container.backgroundColor.pressed,
         },
         selectionContainer: {
             flex: 1,

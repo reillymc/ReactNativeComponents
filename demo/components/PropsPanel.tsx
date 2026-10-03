@@ -1,5 +1,5 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any used for simple prop definition flexibility */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
 import type { ValueItem } from "@reillymc/react-native-components/common";
@@ -85,25 +85,7 @@ export const PropsPanel = <T extends Record<string, any>>({
 
     const styles = createStyles(theme);
 
-    const [selectionId, setSelectionId] = useState<string>();
-    const [selectionItems, setSelectionItems] = useState<ValueItem[]>([]);
-    const [initialSelection, setInitialSelection] = useState<ValueItem>();
-
-    const { selectedItems, openSelectionModal } = useSelectionModal({
-        key: selectionId ?? "",
-        selectionMode: "single",
-        label: selectionId ?? ":(",
-        items: selectionItems,
-        initialSelection: initialSelection ? [initialSelection] : [],
-    });
-
-    const selectedValue = selectedItems[0]?.value;
-
-    useEffect(() => {
-        if (!(selectionId && selectedValue)) return;
-        onChange(selectionId, selectedValue);
-        setSelectionId(undefined);
-    }, [onChange, selectionId, selectedValue]);
+    const { openSelectionModal } = useSelectionModal();
 
     return (
         <ScrollView
@@ -195,21 +177,33 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         label: currentValue,
                                         value: currentValue,
                                     }}
-                                    onAdd={() => {
-                                        setSelectionId(propId);
-                                        setSelectionItems(
-                                            definition.values.map((value) => ({
-                                                value,
-                                                label: value,
-                                            })),
-                                        );
-                                        openSelectionModal();
-
-                                        setInitialSelection({
-                                            label: currentValue,
-                                            value: currentValue,
-                                        });
-                                    }}
+                                    onAdd={() =>
+                                        openSelectionModal({
+                                            key: propId,
+                                            items: definition.values.map(
+                                                (value) => ({
+                                                    value,
+                                                    label: value,
+                                                }),
+                                            ),
+                                            selectionMode: "single",
+                                            label: definition.label ?? propId,
+                                            selection:
+                                                currentValue == null
+                                                    ? []
+                                                    : [
+                                                          {
+                                                              label: currentValue,
+                                                              value: currentValue,
+                                                          },
+                                                      ],
+                                            onSelect: (items) =>
+                                                onChange(
+                                                    propId,
+                                                    items[0]?.value,
+                                                ),
+                                        })
+                                    }
                                 />
                             </View>
                         );
@@ -252,16 +246,23 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         }));
                                     }}
                                     selection={selectedItem}
-                                    onAdd={() => {
-                                        openSelectionModal();
-                                        setSelectionId(propId);
-                                        setSelectionItems(definition.values);
-
-                                        setInitialSelection({
-                                            label: currentValue,
-                                            value: currentValue,
-                                        });
-                                    }}
+                                    onAdd={() =>
+                                        openSelectionModal({
+                                            key: propId,
+                                            items: definition.values,
+                                            selectionMode: "single",
+                                            label: definition.label ?? propId,
+                                            selection:
+                                                currentValue == null
+                                                    ? []
+                                                    : [selectedItem],
+                                            onSelect: (items) =>
+                                                onChange(
+                                                    propId,
+                                                    items[0]?.value,
+                                                ),
+                                        })
+                                    }
                                 />
                             </View>
                         );
@@ -280,7 +281,7 @@ const createStyles = (theme: Theme) => {
     const styles = StyleSheet.create({
         container: {
             display: "flex",
-            backgroundColor: theme.color.foreground,
+            backgroundColor: theme.color.surface,
             borderTopStartRadius: 20,
             borderTopEndRadius: 20,
         },

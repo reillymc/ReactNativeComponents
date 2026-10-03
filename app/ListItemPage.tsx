@@ -56,7 +56,7 @@ const defaultProps: ListItemProps = {
             key="2"
             iconSet={Octicons}
             iconName="pencil"
-            variant="secondary"
+            variant="primary"
             onPress={() => null}
         />,
     ],
@@ -152,7 +152,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                         key="2"
                         iconSet={Octicons}
                         iconName="pencil"
-                        variant="secondary"
+                        variant="primary"
                         onPress={() => null}
                     />,
                 ],

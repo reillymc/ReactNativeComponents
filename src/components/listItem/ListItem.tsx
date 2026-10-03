@@ -71,12 +71,8 @@ export const ListItem: FC<ListItemProps> = ({
         props: { variant },
     });
 
-    const innerContent = (
-        <ActionBase
-            hitSlop={0}
-            onPress={onPress}
-            containerStyle={[styles.pressableContainer, style]}
-        >
+    const content = (
+        <>
             {header}
             <View style={styles.bodyContainer}>
                 <View style={styles.innerContainer}>
@@ -97,7 +93,19 @@ export const ListItem: FC<ListItemProps> = ({
                 {alert}
             </View>
             {footer}
+        </>
+    );
+
+    const innerContent = onPress ? (
+        <ActionBase
+            hitSlop={0}
+            onPress={onPress}
+            containerStyle={[styles.pressableContainer, style]}
+        >
+            {content}
         </ActionBase>
+    ) : (
+        <View style={[styles.pressableContainer, style]}>{content}</View>
     );
 
     return (
@@ -128,7 +136,7 @@ const createStyles = (
         pressableContainer: {
             display: "flex",
             flexDirection: "column",
-            backgroundColor: theme.color.foreground,
+            backgroundColor: theme.color.surface,
             borderRadius:
                 variant === "compact" ? undefined : listItem.borderRadius,
         },

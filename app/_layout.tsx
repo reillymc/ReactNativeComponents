@@ -10,9 +10,10 @@ import { ThemeProvider } from "@reillymc/react-native-components/providers";
 import {
     createStyles,
     createTheme,
-    type ThemeOverrides,
+    darkPalette,
 } from "@reillymc/react-native-components/theme";
 
+import { SelectionModalProvider } from "../demo/components/SelectionModalProvider";
 import { createAppTheme } from "../demo/theme";
 
 export {
@@ -21,19 +22,6 @@ export {
 } from "expo-router";
 
 const Font = "Comfortaa" as const;
-
-const DARK_COLORS: ThemeOverrides["color"] = {
-    textPrimary: "#fff",
-    textSecondary: "#999",
-    background: "#000",
-    backgroundHighlight: "#20252a",
-    backgroundOverlay: "#222",
-    foreground: "#1a1818",
-    border: "#20252a",
-    inputBackground: "#141210",
-    inputBackgroundDisabled: "#1a1818",
-    inputText: "#fff",
-};
 
 // biome-ignore lint/style/useComponentExportOnlyModules lint/style/useNamingConvention: expo-router requires the `unstable_settings` export and its naming convention.
 export const unstable_settings = {
@@ -53,7 +41,7 @@ const Layout: FC = () => {
     const theme = createTheme(
         {
             font: { family: { mono: Font, sans: Font } },
-            color: colorScheme === "dark" ? DARK_COLORS : undefined,
+            color: colorScheme === "dark" ? darkPalette : undefined,
         },
         createAppTheme,
     );
@@ -74,18 +62,20 @@ const Layout: FC = () => {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <ThemeProvider theme={theme} styles={styles}>
                     <StatusBar style="auto" />
-                    <Stack>
-                        <Stack.Screen name="index" />
-                        <Stack.Screen
-                            name="SelectionModal"
-                            options={{
-                                presentation: "formSheet",
-                                sheetAllowedDetents: [0.5, 1.0],
-                                sheetGrabberVisible: true,
-                                sheetExpandsWhenScrolledToEdge: true,
-                            }}
-                        />
-                    </Stack>
+                    <SelectionModalProvider>
+                        <Stack>
+                            <Stack.Screen name="index" />
+                            <Stack.Screen
+                                name="SelectionModal"
+                                options={{
+                                    presentation: "formSheet",
+                                    sheetAllowedDetents: [0.5, 1.0],
+                                    sheetGrabberVisible: true,
+                                    sheetExpandsWhenScrolledToEdge: true,
+                                }}
+                            />
+                        </Stack>
+                    </SelectionModalProvider>
                 </ThemeProvider>
             </GestureHandlerRootView>
         </StrictMode>

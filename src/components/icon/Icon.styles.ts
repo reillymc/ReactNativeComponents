@@ -6,7 +6,7 @@ export const defaultIconStyles = (theme: Theme): IconStyles => {
     const iconBase = defaultIconBaseStyles(theme);
 
     return {
-        color: theme.color.textPrimary,
+        color: theme.color.foreground,
         size: {
             small: 16,
             medium: iconBase.size,

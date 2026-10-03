@@ -6,8 +6,6 @@ export const defaultInputActionStyles = (theme: Theme): InputActionStyles => {
     const action = defaultActionStyles(theme);
 
     return {
-        icon: {
-            color: action.label.color.secondary,
-        },
+        color: action.label.color.secondary,
     };
 };

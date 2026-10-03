@@ -9,40 +9,23 @@ export const defaultButtonStyles = (theme: Theme): ButtonStyles => {
     return {
         container: {
             borderRadius: buttonBase.borderRadius,
-            color: {
-                secondary: {
-                    enabled: color.textOnPrimary,
-                    disabled: color.textOnPrimary,
-                    pressed: color.textOnPrimary,
+        },
+        appearance: {
+            prominent: {
+                container: {
+                    primary: color.primary,
+                    destructive: color.destructive,
                 },
-                primary: {
-                    enabled: color.primary,
-                    disabled: color.primaryLight,
-                    pressed: color.primaryLight,
-                },
-                destructive: {
-                    enabled: color.textOnDestructive,
-                    disabled: color.textOnDestructive,
-                    pressed: color.textOnDestructive,
+                content: {
+                    primary: color.primaryForeground,
+                    destructive: color.destructiveForeground,
                 },
             },
-        },
-        label: {
-            color: {
-                secondary: {
-                    enabled: color.primary,
-                    disabled: color.primaryLight,
-                    pressed: color.primaryLight,
-                },
-                primary: {
-                    enabled: color.textOnPrimary,
-                    disabled: color.textOnPrimary,
-                    pressed: color.textOnPrimary,
-                },
-                destructive: {
-                    enabled: color.destructive,
-                    disabled: color.destructiveHighlight,
-                    pressed: color.destructiveHighlight,
+            subtle: {
+                container: color.inset,
+                content: {
+                    primary: color.primary,
+                    destructive: color.destructive,
                 },
             },
         },

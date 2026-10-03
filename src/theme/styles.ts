@@ -2,6 +2,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import merge from "lodash.merge";
 
 import type {
+    ActionBaseStyles,
     ActionStyles,
     AlertIndicatorStyles,
     AvatarStyles,
@@ -19,14 +20,14 @@ import type {
     InputActionStyles,
     InputBaseStyles,
     InputScaffoldStyles,
-    InteractiveIconStyles,
-    InteractiveTextStyles,
     ListItemStyles,
     MenuItemStyles,
     MenuStyles,
     RatingInputStyles,
     RatingStyles,
     SelectionInputStyles,
+    StateLayerStyles,
+    StateTintStyles,
     SwipeActionStyles,
     TagStyles,
     TextStyles,
@@ -34,8 +35,10 @@ import type {
     ToggleInputStyles,
 } from "../components";
 import { defaultActionStyles } from "../components/action/Action.styles";
+import { defaultActionBaseStyles } from "../components/action/ActionBase.styles";
 import { defaultIconActionStyles } from "../components/action/IconAction.styles";
 import { defaultIconActionBaseStyles } from "../components/action/IconActionBase.styles";
+import { defaultStateTintStyles } from "../components/action/StateTint.styles";
 import { defaultAlertIndicatorStyles } from "../components/alert/AlertIndicator.styles";
 import { defaultAvatarStyles } from "../components/avatar/Avatar.styles";
 import { defaultButtonStyles } from "../components/button/Button.styles";
@@ -45,7 +48,6 @@ import { defaultIconButtonBaseStyles } from "../components/button/IconButtonBase
 import { defaultFloatingContainerStyles } from "../components/container/FloatingContainer.styles";
 import { defaultIconStyles } from "../components/icon/Icon.styles";
 import { defaultIconBaseStyles } from "../components/icon/IconBase.styles";
-import { defaultInteractiveIconStyles } from "../components/icon/InteractiveIcon.styles";
 import { defaultDropdownInputStyles } from "../components/input/DropdownInput.styles";
 import { defaultInputActionStyles } from "../components/input/InputAction.styles";
 import { defaultInputBaseStyles } from "../components/input/InputBase.styles";
@@ -56,23 +58,24 @@ import { defaultListItemStyles } from "../components/listItem/ListItem.styles";
 import { defaultMenuStyles } from "../components/menu/Menu.styles";
 import { defaultMenuItemStyles } from "../components/menu/MenuItem.styles";
 import { defaultRatingStyles } from "../components/rating/Rating.styles";
+import { defaultStateLayerStyles } from "../components/surface/StateLayer.styles";
 import { defaultSwipeActionStyles } from "../components/swipe/SwipeAction.styles";
 import { defaultTagStyles } from "../components/tag/Tag.styles";
 import { defaultHighlightedTextStyles } from "../components/text/HighlightedText.styles";
-import { defaultInteractiveTextStyles } from "../components/text/InteractiveText.styles";
 import { defaultTextStyles } from "../components/text/Text.styles";
 import { defaultToastStyles } from "../components/toast/Toast.styles";
 import type { Theme } from "./theme";
 
 export type Styles = {
     text: TextStyles;
-    interactiveText: InteractiveTextStyles;
     highlightedText: HighlightedTextStyles;
 
     icon: IconStyles;
     iconBase: IconBaseStyles;
-    interactiveIcon: InteractiveIconStyles;
 
+    actionBase: ActionBaseStyles;
+    stateLayer: StateLayerStyles;
+    stateTint: StateTintStyles;
     action: ActionStyles;
     iconAction: IconActionStyles;
     iconActionBase: IconActionBaseStyles;
@@ -120,11 +123,12 @@ export type CreateStyles = (theme: Theme) => Styles;
  * assembles them (and holds the shared `common` token).
  */
 export const createDefaultStyles: CreateStyles = (theme) => ({
-    interactiveText: defaultInteractiveTextStyles(theme),
     highlightedText: defaultHighlightedTextStyles(),
     iconBase: defaultIconBaseStyles(theme),
     icon: defaultIconStyles(theme),
-    interactiveIcon: defaultInteractiveIconStyles(theme),
+    actionBase: defaultActionBaseStyles(),
+    stateLayer: defaultStateLayerStyles(theme),
+    stateTint: defaultStateTintStyles(),
     action: defaultActionStyles(theme),
     iconActionBase: defaultIconActionBaseStyles(theme),
     iconAction: defaultIconActionStyles(theme),

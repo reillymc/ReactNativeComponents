@@ -1,18 +1,15 @@
 export type {
     ActionBaseProps,
+    ActionBaseStyles,
     ActionProps,
     ActionStyles,
     IconActionBaseProps,
     IconActionBaseStyles,
     IconActionProps,
     IconActionStyles,
+    StateTintStyles,
 } from "./action";
-export {
-    Action,
-    ActionBase,
-    IconAction,
-    IconActionBase,
-} from "./action";
+export { Action, ActionBase, IconAction, IconActionBase } from "./action";
 export {
     AlertIndicator,
     type AlertIndicatorProps,
@@ -20,6 +17,8 @@ export {
 } from "./alert";
 export { Avatar, type AvatarProps, type AvatarStyles } from "./avatar";
 export type {
+    ButtonAppearance,
+    ButtonAppearanceStyles,
     ButtonBaseProps,
     ButtonBaseStyles,
     ButtonProps,
@@ -54,7 +53,6 @@ export type {
     IconComponentProps,
     IconProps,
     IconStyles,
-    InteractiveIconStyles,
 } from "./icon";
 export { Icon, IconBase } from "./icon";
 export type {
@@ -134,6 +132,11 @@ export {
     ratingToValue,
     valueToRating,
 } from "./rating";
+export type {
+    InteractionSurfaceProps,
+    StateLayerStyles,
+} from "./surface";
+export { InteractionSurface } from "./surface";
 export {
     SwipeAction,
     type SwipeActionProps,
@@ -145,7 +148,6 @@ export { Tag, TagIcon, type TagProps, type TagStyles } from "./tag";
 export type {
     HighlightedTextProps,
     HighlightedTextStyles,
-    InteractiveTextStyles,
     TextProps,
     TextStyles,
 } from "./text";

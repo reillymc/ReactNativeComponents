@@ -18,8 +18,7 @@ export const defaultToggleInputStyles = (theme: Theme): ToggleInputStyles => {
                 selected: action.label.color,
                 deselected: {
                     enabled: color.border,
-                    disabled: color.border,
-                    pressed: color.border,
+                    disabled: color.muted,
                 },
             },
         },

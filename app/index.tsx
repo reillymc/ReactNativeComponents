@@ -1,5 +1,6 @@
 import { cloneElement, type FC, type ReactElement, useState } from "react";
 import {
+    Appearance,
     SectionList,
     type SectionListData,
     StyleSheet,
@@ -211,7 +212,7 @@ const ComponentListScreen: FC = () => {
     const styles = useThemedStyles(createStyles);
 
     const [collapsed, setCollapsed] = useState(true);
-    const [variant, setVariant] = useState<"primary" | "secondary">();
+    const [variant, setVariant] = useState<"primary" | "destructive">();
 
     return (
         <>
@@ -240,6 +241,29 @@ const ComponentListScreen: FC = () => {
                 keyExtractor={({ name }) => name}
                 ListHeaderComponent={
                     <View style={styles.listHeader}>
+                        <View style={styles.schemeRow}>
+                            <Action
+                                label="Light"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("light")
+                                }
+                            />
+                            <Action
+                                label="Dark"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("dark")
+                                }
+                            />
+                            <Action
+                                label="System"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("unspecified")
+                                }
+                            />
+                        </View>
                         <IconAction
                             iconSet={Octicons}
                             label="Common Props"
@@ -256,7 +280,10 @@ const ComponentListScreen: FC = () => {
                                 onSelect={(e) => setVariant(e?.value)}
                                 items={[
                                     { label: "Primary", value: "primary" },
-                                    { label: "Secondary", value: "secondary" },
+                                    {
+                                        label: "Destructive",
+                                        value: "destructive",
+                                    },
                                 ]}
                             />
                         </Panel>
@@ -303,6 +330,11 @@ const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
         },
         listHeader: {
             alignItems: "flex-end",
+        },
+        schemeRow: {
+            flexDirection: "row",
+            gap: spacing.small,
+            alignSelf: "flex-start",
         },
         propsContainer: {
             height: 120,

@@ -1,7 +1,6 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import type { FC } from "react";
+import { type FC, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
@@ -13,80 +12,75 @@ import {
 } from "@reillymc/react-native-components/components";
 import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
+import {
+    type SelectionRequest,
+    useSelectionModalController,
+} from "../demo/components/SelectionModalContext";
 import type { AppThemedStyles } from "../demo/theme";
 
-const SelectionModal: FC = () => {
+type ModalItem = ValueItem & { id?: string };
+
+const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
+    request,
+}) => {
     const styles = useThemedStyles(createStyles);
     const router = useRouter();
 
-    const {
-        items: rawItems,
-        selection: rawSelection,
-        selectionMode: rawSelectionMode,
-        label,
-        placeholder = "Select items",
-    } = useGlobalSearchParams();
+    const [selectedItems, setSelectedItems] = useState<ModalItem[]>(
+        request.selection,
+    );
 
-    const items =
-        !rawItems || rawItems === "undefined" || Array.isArray(rawItems)
-            ? undefined
-            : (JSON.parse(rawItems) as Array<ValueItem & { id?: string }>);
+    const closeWithSelection = (selection: ModalItem[]) => {
+        request.resolve(selection);
+        router.back();
+    };
 
-    const selectedItems =
-        !rawSelection ||
-        rawSelection === "undefined" ||
-        Array.isArray(rawSelection)
-            ? []
-            : (JSON.parse(rawSelection) as Array<
-                  ValueItem | ValueItem<unknown>
-              >);
-
-    const selectionMode =
-        rawSelectionMode === "multi" || rawSelectionMode === "single"
-            ? rawSelectionMode
-            : "single";
-
-    const handleItemPress = (item: ValueItem | ValueItem<unknown>) => {
-        router.setParams({
-            selection: JSON.stringify([item]),
-        });
-
-        if (selectionMode === "single") {
-            setTimeout(router.back, 1);
+    const handleItemPress = (item: ModalItem) => {
+        if (request.selectionMode === "single") {
+            closeWithSelection([item]);
+            return;
         }
+
+        setSelectedItems((previous) =>
+            previous.some((selected) => selected.value === item.value)
+                ? previous.filter((selected) => selected.value !== item.value)
+                : [...previous, item],
+        );
     };
 
     return (
         <>
             <Stack.Screen
                 options={{
-                    title: label as string,
+                    title: request.label,
                     headerLargeTitle: false,
                     headerRight: () => (
                         <Action
                             label="Done"
                             containerStyle={styles.headerAction}
-                            onPress={() => router.back()}
+                            onPress={() =>
+                                closeWithSelection(
+                                    request.selectionMode === "single"
+                                        ? selectedItems.slice(0, 1)
+                                        : selectedItems,
+                                )
+                            }
                         />
                     ),
                 }}
             />
             <FlatList
-                data={items}
+                data={request.items}
                 contentInsetAdjustmentBehavior="always"
                 contentContainerStyle={styles.list}
                 ListHeaderComponent={
-                    selectionMode === "multi" ? (
+                    request.selectionMode === "multi" ? (
                         <View style={styles.selectionDisplay}>
                             {!!selectedItems.length && (
                                 <View style={styles.clearButton}>
                                     <Action
                                         label="Clear"
-                                        onPress={() =>
-                                            router.setParams({
-                                                selection: JSON.stringify([]),
-                                            })
-                                        }
+                                        onPress={() => setSelectedItems([])}
                                     />
                                 </View>
                             )}
@@ -94,9 +88,7 @@ const SelectionModal: FC = () => {
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 keyExtractor={(item) =>
-                                    "id" in item
-                                        ? item.id
-                                        : item.value.toString()
+                                    item.id ?? item.value.toString()
                                 }
                                 data={selectedItems}
                                 contentContainerStyle={
@@ -107,7 +99,7 @@ const SelectionModal: FC = () => {
                                         variant="caption"
                                         style={styles.previewPlaceholder}
                                     >
-                                        {placeholder}
+                                        {request.placeholder}
                                     </Text>
                                 }
                                 renderItem={({ item }) => (
@@ -147,6 +139,14 @@ const SelectionModal: FC = () => {
             />
         </>
     );
+};
+
+const SelectionModal: FC = () => {
+    const { request } = useSelectionModalController();
+
+    if (!request) return null;
+
+    return <SelectionModalContent key={request.key} request={request} />;
 };
 
 export default SelectionModal;

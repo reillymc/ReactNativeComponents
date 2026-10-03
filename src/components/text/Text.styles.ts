@@ -2,7 +2,7 @@ import type { Theme } from "../../theme/theme";
 import type { TextStyles } from "./Text";
 
 export const defaultTextStyles = ({ color, font }: Theme): TextStyles => ({
-    color: color.textPrimary,
+    color: color.foreground,
     font: {
         caption: {
             family: font.family.sans,

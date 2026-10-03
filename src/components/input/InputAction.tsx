@@ -1,16 +1,12 @@
-import { StyleSheet } from "react-native";
+import { type ColorValue, StyleSheet } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import {
-    IconActionBase,
-    type IconActionBaseProps,
-    type IconActionBaseStyles,
-} from "../action";
+import { IconActionBase, type IconActionBaseProps } from "../action";
 import type { IconComponentProps } from "../icon";
 import type { InputBaseProps } from "./InputBase";
 
 export interface InputActionStyles {
-    icon: Pick<IconActionBaseStyles["icon"], "color">;
+    color: ColorValue;
 }
 
 export interface InputActionProps
@@ -34,13 +30,8 @@ export const InputAction = <G extends string>({
         <IconActionBase
             {...props}
             disabled={disabled}
-            containerStyle={(pressableState) => [
-                styles.container,
-                typeof containerStyle === "function"
-                    ? containerStyle(pressableState)
-                    : containerStyle,
-            ]}
-            style={{ icon: style.icon }}
+            containerStyle={[styles.container, containerStyle]}
+            style={{ color: style.color }}
         />
     );
 };

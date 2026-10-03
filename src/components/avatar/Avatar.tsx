@@ -17,7 +17,7 @@ const getBackgroundColor = (
     colors: Array<{ background: ColorValue; foreground: ColorValue }>,
     firstName: string | undefined,
     lastName: string | undefined,
-): { background: ColorValue; foreground: ColorValue } => {
+): { background: ColorValue; foreground: ColorValue } | undefined => {
     const name = firstName || lastName || "";
     let hash = 0;
 
@@ -25,9 +25,7 @@ const getBackgroundColor = (
         hash = (hash + name.charCodeAt(i)) % colors.length;
     }
 
-    return (
-        colors[hash] ?? colors[0] ?? { background: "#fff", foreground: "#000" }
-    );
+    return colors[hash] ?? colors[0];
 };
 
 type AvatarSize = "small" | "regular" | "large";
@@ -105,7 +103,7 @@ export const Avatar: FC<AvatarProps> = ({
 Avatar.displayName = "Avatar";
 
 const createStyles = (
-    { styles: { avatar }, theme: { spacing } }: ThemedStyles,
+    { styles: { avatar }, theme: { spacing, color } }: ThemedStyles,
     {
         size = "regular",
         firstName,
@@ -116,7 +114,10 @@ const createStyles = (
         avatar.colors,
         firstName,
         lastName,
-    );
+    ) ?? {
+        background: color.muted,
+        foreground: color.mutedForeground,
+    };
 
     const styles = StyleSheet.create({
         container: {

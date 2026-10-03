@@ -7,7 +7,7 @@ export const defaultToastStyles = ({
     border,
 }: Theme): ToastStyles => ({
     container: {
-        backgroundColor: color.backgroundHighlight,
+        backgroundColor: color.elevated,
         padding: spacing.medium,
         borderRadius: border.radius.loose,
     },

@@ -7,7 +7,7 @@ export const defaultInputScaffoldStyles = ({
 }: Theme): InputScaffoldStyles => ({
     gap: spacing.tiny,
     mandatoryIndicator: {
-        color: color.primaryDark,
+        color: color.primary,
     },
     helpText: {
         gap: spacing.tiny,
