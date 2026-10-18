@@ -1,15 +1,45 @@
-import type React from "react";
+import type { FunctionComponent } from "react";
 import { StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useThemedStyles } from "../../hooks";
 import { Text, type TextProps, type TextVariant } from "./Text";
 
-/**
- * Escapes any characters that would interfere with RegEx processing.
- */
-export const EscapeForRegexProcessing = (string: string) =>
-    string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+type HighlightPart = {
+    text: string;
+    highlighted: boolean;
+    offset: number;
+};
+
+const escapeForRegex = (value: string) =>
+    value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const splitHighlight = (
+    text: string,
+    highlight: string,
+): Array<HighlightPart> => {
+    if (!highlight) return [{ text, highlighted: false, offset: 0 }];
+
+    const lowerHighlight = highlight.toLowerCase();
+    const pattern = new RegExp(`(${escapeForRegex(highlight)})`, "gi");
+
+    const parts: Array<HighlightPart> = [];
+    let offset = 0;
+
+    for (const part of text.split(pattern)) {
+        if (part === "") continue;
+
+        parts.push({
+            text: part,
+            highlighted: part.toLowerCase() === lowerHighlight,
+            offset,
+        });
+
+        offset += part.length;
+    }
+
+    return parts;
+};
 
 export interface HighlightedTextStyles {
     highlightedWeight: Record<TextVariant, TextStyle["fontWeight"]>;
@@ -21,7 +51,7 @@ export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
     highlight?: string;
 }
 
-export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
+export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     text = "",
     highlight = "",
     textStyles,
@@ -37,24 +67,22 @@ export const HighlightedText: React.FunctionComponent<HighlightedTextProps> = ({
         },
     );
 
-    const highlightedString = EscapeForRegexProcessing(highlight.toLowerCase());
-    const parts = text.split(new RegExp(`(${highlightedString})`, "gi"));
+    const parts = splitHighlight(text, highlight);
 
     return (
         <Text style={[styles.textWrapper, textStyles]}>
-            {parts.map((part, idx) => (
+            {parts.map((part) => (
                 <Text
                     {...props}
                     variant={variant}
-                    // biome-ignore lint/suspicious/noArrayIndexKey: don't currently have a better unique key
-                    key={`${part}${idx}`}
+                    key={part.offset}
                     style={
-                        part.toLowerCase() === highlightedString && {
+                        part.highlighted && {
                             fontWeight: style.highlightedWeight[variant],
                         }
                     }
                 >
-                    {part}
+                    {part.text}
                 </Text>
             ))}
         </Text>

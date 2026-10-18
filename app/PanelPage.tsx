@@ -1,11 +1,15 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     Button,
     Panel,
     type PanelProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: PanelProps = {
     collapsed: false,
@@ -46,8 +50,8 @@ const propDefinitions: PropDefinitions<PanelProps> = {
     },
 };
 
-const PanelPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<PanelProps>(defaultProps);
+const PanelPage: FunctionComponent = () => {
+    const [props, setProps] = useState<PanelProps>(defaultProps);
 
     return (
         <ComponentPage

@@ -1,12 +1,8 @@
 import type { FC, ReactElement } from "react";
-import {
-    Pressable,
-    type StyleProp,
-    StyleSheet,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { ActionBase } from "../action";
 import { Text } from "../text";
 
 export interface TagStyles {
@@ -31,15 +27,21 @@ export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
         props: { variant, label },
     });
 
-    return (
-        <Pressable
-            disabled={!onPress}
-            onPress={onPress}
-            style={[styles.container, style]}
-        >
+    const content = (
+        <>
             {icon}
             <Text style={styles.text}>{label}</Text>
-        </Pressable>
+        </>
+    );
+
+    const containerStyle = [styles.container, style];
+
+    return onPress ? (
+        <ActionBase onPress={onPress} containerStyle={containerStyle}>
+            {content}
+        </ActionBase>
+    ) : (
+        <View style={containerStyle}>{content}</View>
     );
 };
 
@@ -55,12 +57,12 @@ const createStyles = (
             borderRadius: tag.borderRadius,
             padding: tag.padding,
             backgroundColor:
-                variant === "dark" ? color.background : color.foreground,
+                variant === "dark" ? color.background : color.surface,
             width: "auto",
             gap: tag.internalSpacing,
         },
         text: {
-            color: color.textPrimary,
+            color: color.foreground,
         },
     });
     return styles;

@@ -1,11 +1,15 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     TextInput,
     type TextInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { CommonInputProps } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TextInputProps> = {
     ...CommonInputProps,
@@ -31,8 +35,8 @@ const defaultProps: TextInputProps = {
     disabled: false,
 };
 
-const TextInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TextInputProps>(defaultProps);
+const TextInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TextInputProps>(defaultProps);
 
     return (
         <ComponentPage

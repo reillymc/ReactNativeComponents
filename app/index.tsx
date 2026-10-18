@@ -1,5 +1,6 @@
-import React, { type ReactElement, useState } from "react";
+import { cloneElement, type FC, type ReactElement, useState } from "react";
 import {
+    Appearance,
     SectionList,
     type SectionListData,
     StyleSheet,
@@ -11,7 +12,6 @@ import {
     Action,
     Avatar,
     Button,
-    CollapsibleContainer,
     CounterInput,
     DropdownInput,
     HighlightedText,
@@ -21,23 +21,24 @@ import {
     ListItem,
     ListItemAlert,
     NumberInput,
+    Panel,
     Rating,
     RatingInput,
     SelectionInput,
     Tag,
     Text,
     TextInput,
-    type ThemedStyles,
     TimeInput,
     ToggleInput,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+
+import { type AppThemedStyles, useTheme } from "../demo/theme";
 
 interface ComponentScreen {
     name: string;
     href: Href;
-    component?: ReactElement;
+    component?: ReactElement<Record<string, unknown>>;
 }
 type ComponentScreenSection = SectionListData<
     ComponentScreen,
@@ -46,7 +47,7 @@ type ComponentScreenSection = SectionListData<
 /**
  * Map of all components to their respective screen
  */
-export const ComponentScreens: Array<ComponentScreenSection> = [
+const ComponentScreens: Array<ComponentScreenSection> = [
     {
         sectionName: "Text",
         data: [
@@ -196,10 +197,6 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
             { name: "Panel", href: "/PanelPage" },
             {
-                name: "Collapsible Container",
-                href: "/CollapsibleContainerPage",
-            },
-            {
                 name: "Rating",
                 href: "/RatingPage",
                 component: <Rating value={3} max={5} />,
@@ -208,14 +205,14 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
     },
 ];
 
-const ComponentListScreen: React.FC = () => {
+const ComponentListScreen: FC = () => {
     const router = useRouter();
     const { theme } = useTheme();
 
     const styles = useThemedStyles(createStyles);
 
     const [collapsed, setCollapsed] = useState(true);
-    const [variant, setVariant] = useState<"primary" | "secondary">();
+    const [variant, setVariant] = useState<"primary" | "destructive">();
 
     return (
         <>
@@ -244,16 +241,38 @@ const ComponentListScreen: React.FC = () => {
                 keyExtractor={({ name }) => name}
                 ListHeaderComponent={
                     <View style={styles.listHeader}>
+                        <View style={styles.schemeRow}>
+                            <Action
+                                label="Light"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("light")
+                                }
+                            />
+                            <Action
+                                label="Dark"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("dark")
+                                }
+                            />
+                            <Action
+                                label="System"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("unspecified")
+                                }
+                            />
+                        </View>
                         <IconAction
                             iconSet={Octicons}
                             label="Common Props"
                             iconName={collapsed ? "chevron-down" : "chevron-up"}
-                            iconPosition="right"
+                            iconPosition="end"
                             onPress={() => setCollapsed((prev) => !prev)}
                         />
-                        <CollapsibleContainer
+                        <Panel
                             collapsed={collapsed}
-                            direction="up"
                             style={styles.propsContainer}
                         >
                             <DropdownInput
@@ -261,10 +280,13 @@ const ComponentListScreen: React.FC = () => {
                                 onSelect={(e) => setVariant(e?.value)}
                                 items={[
                                     { label: "Primary", value: "primary" },
-                                    { label: "Secondary", value: "secondary" },
+                                    {
+                                        label: "Destructive",
+                                        value: "destructive",
+                                    },
                                 ]}
                             />
-                        </CollapsibleContainer>
+                        </Panel>
                     </View>
                 }
                 renderSectionHeader={({ section }) => (
@@ -281,8 +303,8 @@ const ComponentListScreen: React.FC = () => {
                                 component && (
                                     <ListItemAlert>
                                         <View style={styles.listItemDisplay}>
-                                            {React.cloneElement(component, {
-                                                ...(component.props as any),
+                                            {cloneElement(component, {
+                                                ...component.props,
                                                 variant,
                                             })}
                                         </View>
@@ -298,16 +320,21 @@ const ComponentListScreen: React.FC = () => {
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
+const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
     StyleSheet.create({
         page: {
             backgroundColor: color.background,
             paddingHorizontal: spacing.pageHorizontal,
             paddingTop: spacing.pageTop,
-            paddingBottom: 64,
+            paddingBottom: spacing.pageBottom,
         },
         listHeader: {
             alignItems: "flex-end",
+        },
+        schemeRow: {
+            flexDirection: "row",
+            gap: spacing.small,
+            alignSelf: "flex-start",
         },
         propsContainer: {
             height: 120,

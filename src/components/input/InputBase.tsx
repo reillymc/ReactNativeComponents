@@ -7,6 +7,7 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
+import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type InputState = "enabled" | "disabled";
@@ -56,10 +57,11 @@ export const InputBase: FC<InputBaseProps> = ({
         <TextInput
             ref={ref}
             editable={!disabled}
+            maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
             placeholderTextColor={style.text.placeholderColor}
             style={[styles.input, inputStyle]}
             multiline={multiline}
-            scrollEnabled={scrollEnabled ?? false}
+            scrollEnabled={scrollEnabled ?? multiline}
             onChangeText={onChangeText}
             {...props}
         />
@@ -91,6 +93,7 @@ const createStyles = (
             fontSize: inputBase.text.fontSize,
             fontFamily: inputBase.text.fontFamily,
             color: inputBase.text.color[disabled ? "disabled" : "enabled"],
+            opacity: disabled ? 0.5 : 1,
         },
     });
 };

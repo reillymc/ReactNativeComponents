@@ -2,7 +2,7 @@
     "extends": "expo/tsconfig.base",
     "compilerOptions": {
         "paths": {
-            "@reillymc/react-native-components": ["./src/index"]
+            "@reillymc/react-native-components/*": ["./src/*"]
         },
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,

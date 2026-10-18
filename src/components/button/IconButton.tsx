@@ -1,26 +1,21 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { type InteractiveIconStyles, withIcon } from "../icon";
-import {
-    IconButtonBase,
-    type IconButtonBaseProps,
-    type IconButtonBaseStyles,
-} from "./IconButtonBase";
+import type { IconComponentProps } from "../icon";
+import type {
+    ButtonAppearance,
+    ButtonAppearanceStyles,
+    ButtonVariant,
+} from "./Button";
+import { IconButtonBase, type IconButtonBaseProps } from "./IconButtonBase";
 
-export type IconButtonVariant = "primary" | "secondary" | "destructive";
+export type IconButtonVariant = ButtonVariant;
 
 export type IconButtonStyles = {
     container: {
         size: number;
-        backgroundColor: Record<
-            IconButtonVariant,
-            IconButtonBaseStyles["container"]["backgroundColor"]
-        >;
     };
-    icon: {
-        color: Record<IconButtonVariant, InteractiveIconStyles["color"]>;
-    };
+    appearance: ButtonAppearanceStyles;
 };
 
 export interface IconButtonProps
@@ -29,30 +24,39 @@ export interface IconButtonProps
         "onPress" | "disabled" | "containerStyle"
     > {
     variant?: IconButtonVariant;
+    appearance?: ButtonAppearance;
     style?: DeepPartial<IconButtonStyles>;
     onPress?: () => void;
 }
 
-export const IconButton = withIcon<IconButtonProps>(
-    ({ variant = "secondary", style, ...props }) => {
-        const { iconButton } = useStyles({
-            iconButton: style,
-        });
+export const IconButton = <G extends string>({
+    variant = "primary",
+    appearance = "subtle",
+    style,
+    ...props
+}: IconButtonProps & IconComponentProps<G>) => {
+    const { iconButton } = useStyles({
+        iconButton: style,
+    });
 
-        return (
-            <IconButtonBase
-                {...props}
-                style={{
-                    container: {
-                        backgroundColor:
-                            iconButton.container.backgroundColor[variant],
-                        size: iconButton.container.size,
-                    },
-                    icon: {
-                        color: iconButton.icon.color[variant],
-                    },
-                }}
-            />
-        );
-    },
-);
+    const content = iconButton.appearance[appearance].content[variant];
+    const container =
+        appearance === "prominent"
+            ? iconButton.appearance.prominent.container[variant]
+            : iconButton.appearance.subtle.container;
+
+    return (
+        <IconButtonBase
+            {...props}
+            style={{
+                container: {
+                    backgroundColor: container,
+                    size: iconButton.container.size,
+                },
+                icon: {
+                    color: content,
+                },
+            }}
+        />
+    );
+};

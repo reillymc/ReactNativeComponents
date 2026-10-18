@@ -1,19 +1,4 @@
-export {
-    type ComponentIconAssets,
-    createIcons,
-    DefaultIcons,
-    type Icons,
-} from "./icons";
-export {
-    type CreateStyles,
-    createDefaultStyles,
-    MergeStyles,
-    type StyleOverrides,
-    type Styles,
-} from "./styles";
-export {
-    DefaultTheme,
-    MergeTheme,
-    type Theme,
-    type ThemeOverrides,
-} from "./theme";
+export type { ComponentIconAssets, Icons } from "./icons";
+export { darkPalette, lightPalette, type ThemeColors } from "./palette";
+export { createStyles, type StyleOverrides, type Styles } from "./styles";
+export { createTheme, type Theme, type ThemeOverrides } from "./theme";

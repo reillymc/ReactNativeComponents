@@ -7,10 +7,14 @@ import {
     IconButton,
     type IconButtonProps,
     type IconComponentProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { glyphMapValueItems } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconButtonProps;
 
@@ -18,6 +22,7 @@ const defaultProps: Props = {
     iconSet: Octicons,
     iconName: "arrow-both",
     variant: "primary",
+    appearance: "subtle",
     onPress: () => null,
 };
 
@@ -34,8 +39,15 @@ const propDefinitions: PropDefinitions<Props> = {
         default: defaultProps.variant,
         values: [
             { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
             { label: "Destructive", value: "destructive" },
+        ],
+    },
+    appearance: {
+        type: "enum",
+        label: "Appearance",
+        values: [
+            { label: "Prominent", value: "prominent" },
+            { label: "Subtle", value: "subtle" },
         ],
     },
     disabled: {

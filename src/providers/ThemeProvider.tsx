@@ -1,48 +1,40 @@
-import { createContext, type FC, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import {
-    createDefaultStyles,
-    DefaultIcons,
-    DefaultTheme,
+    createStyles,
     type Icons,
-    MergeTheme,
-    type Styles,
-    type Theme,
+    type StyleOverrides,
+    type ThemeOverrides,
 } from "../theme";
+import { MergeIcons } from "../theme/icons";
+import { MergeTheme } from "../theme/theme";
+import { ThemeContext } from "./ThemeContext";
 
-export interface ThemeContextDefinition {
-    theme: Theme;
-    styles: Styles;
-    icons: Icons;
-}
-
-export const ThemeContext = createContext<ThemeContextDefinition>({
-    theme: DefaultTheme,
-    styles: createDefaultStyles(DefaultTheme),
-    icons: DefaultIcons,
-});
-
-interface ThemeProviderProps {
-    theme?: DeepPartial<Theme>;
-    styles?: Styles;
-    icons?: Icons;
+export interface ThemeProviderProps<E extends object = Record<never, never>> {
+    /**
+     * The active theme. Consumers may extend it with their own tokens
+     * (`ThemeOverrides & E`) and read them back via `useTheme<E>()`.
+     */
+    theme?: ThemeOverrides & E;
+    styles?: StyleOverrides;
+    icons?: DeepPartial<Icons>;
     children?: ReactNode;
 }
 
-export const ThemeProvider: FC<ThemeProviderProps> = ({
+export const ThemeProvider = <E extends object = Record<never, never>>({
     theme: initialTheme,
     styles: initialStyles,
     icons: initialIcons,
     children,
-}: ThemeProviderProps) => {
-    const theme = MergeTheme(DefaultTheme, initialTheme);
-    const styles = initialStyles ?? createDefaultStyles(theme);
-    const icons = initialIcons ?? DefaultIcons;
+}: ThemeProviderProps<E>) => {
+    const theme = MergeTheme(initialTheme);
+    const styles = createStyles(theme, initialStyles);
+    const icons = MergeIcons(initialIcons);
+
+    const value = { theme, styles, icons };
 
     return (
-        <ThemeContext.Provider value={{ theme, styles, icons }}>
-            {children}
-        </ThemeContext.Provider>
+        <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
     );
 };

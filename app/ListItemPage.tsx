@@ -10,9 +10,13 @@ import {
     ListItemRow,
     SwipeAction,
     Text,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: ListItemProps = {
     heading: "Heading text",
@@ -52,7 +56,7 @@ const defaultProps: ListItemProps = {
             key="2"
             iconSet={Octicons}
             iconName="pencil"
-            variant="secondary"
+            variant="primary"
             onPress={() => null}
         />,
     ],
@@ -148,7 +152,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                         key="2"
                         iconSet={Octicons}
                         iconName="pencil"
-                        variant="secondary"
+                        variant="primary"
                         onPress={() => null}
                     />,
                 ],

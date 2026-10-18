@@ -1,5 +1,10 @@
 export { Action, type ActionProps, type ActionStyles } from "./Action";
-export { ActionBase, type ActionBaseProps } from "./ActionBase";
+export {
+    ActionBase,
+    type ActionBaseProps,
+    type ActionBaseStyles,
+    type ActionState,
+} from "./ActionBase";
 export {
     IconAction,
     type IconActionProps,
@@ -10,3 +15,8 @@ export {
     type IconActionBaseProps,
     type IconActionBaseStyles,
 } from "./IconActionBase";
+export {
+    StateTint,
+    type StateTintProps,
+    type StateTintStyles,
+} from "./StateTint";

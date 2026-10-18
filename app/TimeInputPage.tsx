@@ -1,15 +1,19 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     TimeInput,
     type TimeInputProps,
     type TimeInputValue,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 import {
     InputBasePropDefinitions,
     InputScaffoldPropDefinitions,
-} from "../helpers";
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
     label: InputScaffoldPropDefinitions.label,
@@ -33,9 +37,9 @@ const defaultProps: TimeInputProps = {
     disabled: false,
 };
 
-const TimeInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TimeInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<TimeInputValue>();
+const TimeInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TimeInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<TimeInputValue>();
 
     console.debug(inputValue);
 

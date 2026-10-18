@@ -1,206 +1,86 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import { type FC, useCallback, useEffect, useMemo } from "react";
+import { type FC, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
-import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
+import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     Action,
     MenuItem,
-    type SelectionInputProps,
     Tag,
     TagIcon,
     Text,
-    type ThemedStyles,
-    useThemedStyles,
-    type ValueItem,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-type UseSelectionModalParams<T> = Pick<
-    SelectionInputProps<T>,
-    "selectionMode" | "items"
-> & {
-    key: string;
-    label: string;
-    placeholder?: string;
-    initialSelection?: ValueItem<T>[];
-};
+import {
+    type SelectionRequest,
+    useSelectionModalController,
+} from "../demo/components/SelectionModalContext";
+import type { AppThemedStyles } from "../demo/theme";
 
-export const useSelectionModal = <T,>({
-    key,
-    initialSelection,
-    label,
-    items,
-    placeholder,
-    selectionMode,
-}: UseSelectionModalParams<T>) => {
-    const router = useRouter();
+type ModalItem = ValueItem & { id?: string };
 
-    const { key: _, selection: selectionParam } = useGlobalSearchParams();
-
-    // TODO: investigate issues with params not updating when expected
-    const isActive = true; //useMemo(() => key === keyParam, [key, keyParam]);
-
-    const selectedItemsFromParams = useMemo(() => {
-        if (
-            !(isActive && selectionParam) ||
-            selectionParam === "undefined" ||
-            Array.isArray(selectionParam)
-        )
-            return;
-
-        return JSON.parse(selectionParam) as Array<ValueItem<T>>;
-    }, [isActive, selectionParam]);
-
-    const selectedWithInitial = useMemo(
-        () => selectedItemsFromParams ?? initialSelection ?? [],
-        [selectedItemsFromParams, initialSelection],
-    );
-
-    const stringItems = useMemo(() => JSON.stringify(items), [items]);
-    const stringSelectedWithInitial = useMemo(
-        () =>
-            selectedWithInitial
-                ? JSON.stringify(selectedWithInitial)
-                : undefined,
-        [selectedWithInitial],
-    );
-
-    useEffect(() => {
-        if (!isActive) return;
-
-        router.setParams({
-            key,
-            selectionMode: selectionMode,
-            label,
-            placeholder,
-            items: stringItems,
-            selection: stringSelectedWithInitial,
-        });
-    }, [
-        isActive,
-        stringItems,
-        stringSelectedWithInitial,
-        key,
-        label,
-        placeholder,
-        router,
-        selectionMode,
-    ]);
-
-    const openSelectionModal = useCallback(() => {
-        router.push({
-            pathname: "/SelectionModal",
-            params: {
-                key,
-                selectionMode: selectionMode,
-                label,
-                placeholder,
-                items: stringItems,
-                selection: stringSelectedWithInitial,
-            },
-        });
-    }, [
-        stringItems,
-        key,
-        label,
-        placeholder,
-        stringSelectedWithInitial,
-        router,
-        selectionMode,
-    ]);
-
-    return {
-        selectedItems: selectedWithInitial,
-        openSelectionModal,
-    };
-};
-
-const SelectionModal: FC = () => {
+const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
+    request,
+}) => {
     const styles = useThemedStyles(createStyles);
     const router = useRouter();
 
-    const {
-        items: rawItems,
-        selection: rawSelection,
-        selectionMode: rawSelectionMode,
-        label,
-        placeholder = "Select items",
-    } = useGlobalSearchParams();
-
-    const items = useMemo(() => {
-        if (!rawItems || rawItems === "undefined" || Array.isArray(rawItems))
-            return;
-
-        return JSON.parse(rawItems);
-    }, [rawItems]) as Array<ValueItem & { id?: string }>;
-
-    const selectedItems = useMemo(() => {
-        if (
-            !rawSelection ||
-            rawSelection === "undefined" ||
-            Array.isArray(rawSelection)
-        )
-            return [];
-
-        return JSON.parse(rawSelection) as Array<
-            ValueItem | ValueItem<unknown>
-        >;
-    }, [rawSelection]);
-
-    const selectionMode = useMemo(() => {
-        switch (rawSelectionMode) {
-            case "multi":
-            case "single":
-                return rawSelectionMode;
-            default:
-                return "single";
-        }
-    }, [rawSelectionMode]);
-
-    const handleItemPress = useCallback(
-        (item: ValueItem | ValueItem<unknown>) => {
-            router.setParams({
-                selection: JSON.stringify([item]),
-            });
-
-            if (selectionMode === "single") {
-                setTimeout(router.back, 1);
-            }
-        },
-        [router, selectionMode, selectedItems],
+    const [selectedItems, setSelectedItems] = useState<ModalItem[]>(
+        request.selection,
     );
+
+    const closeWithSelection = (selection: ModalItem[]) => {
+        request.resolve(selection);
+        router.back();
+    };
+
+    const handleItemPress = (item: ModalItem) => {
+        if (request.selectionMode === "single") {
+            closeWithSelection([item]);
+            return;
+        }
+
+        setSelectedItems((previous) =>
+            previous.some((selected) => selected.value === item.value)
+                ? previous.filter((selected) => selected.value !== item.value)
+                : [...previous, item],
+        );
+    };
 
     return (
         <>
             <Stack.Screen
                 options={{
-                    title: label as string,
+                    title: request.label,
                     headerLargeTitle: false,
                     headerRight: () => (
                         <Action
                             label="Done"
                             containerStyle={styles.headerAction}
-                            onPress={() => router.back()}
+                            onPress={() =>
+                                closeWithSelection(
+                                    request.selectionMode === "single"
+                                        ? selectedItems.slice(0, 1)
+                                        : selectedItems,
+                                )
+                            }
                         />
                     ),
                 }}
             />
             <FlatList
-                data={items}
+                data={request.items}
                 contentInsetAdjustmentBehavior="always"
                 contentContainerStyle={styles.list}
                 ListHeaderComponent={
-                    selectionMode === "multi" ? (
+                    request.selectionMode === "multi" ? (
                         <View style={styles.selectionDisplay}>
                             {!!selectedItems.length && (
                                 <View style={styles.clearButton}>
                                     <Action
                                         label="Clear"
-                                        onPress={() =>
-                                            router.setParams({
-                                                selection: JSON.stringify([]),
-                                            })
-                                        }
+                                        onPress={() => setSelectedItems([])}
                                     />
                                 </View>
                             )}
@@ -208,9 +88,7 @@ const SelectionModal: FC = () => {
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 keyExtractor={(item) =>
-                                    "id" in item
-                                        ? item.id
-                                        : item.value.toString()
+                                    item.id ?? item.value.toString()
                                 }
                                 data={selectedItems}
                                 contentContainerStyle={
@@ -221,7 +99,7 @@ const SelectionModal: FC = () => {
                                         variant="caption"
                                         style={styles.previewPlaceholder}
                                     >
-                                        {placeholder}
+                                        {request.placeholder}
                                     </Text>
                                 }
                                 renderItem={({ item }) => (
@@ -263,12 +141,20 @@ const SelectionModal: FC = () => {
     );
 };
 
+const SelectionModal: FC = () => {
+    const { request } = useSelectionModalController();
+
+    if (!request) return null;
+
+    return <SelectionModalContent key={request.key} request={request} />;
+};
+
 export default SelectionModal;
 
 const createStyles = ({
     styles: { inputBase },
     theme: { spacing, color },
-}: ThemedStyles) => {
+}: AppThemedStyles) => {
     const styles = StyleSheet.create({
         headerAction: {
             marginHorizontal: spacing.navigationActionHorizontal,

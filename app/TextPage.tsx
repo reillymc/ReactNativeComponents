@@ -1,7 +1,14 @@
 import { type FC, useState } from "react";
-import { Text, type TextProps } from "@reillymc/react-native-components";
+import {
+    Text,
+    type TextProps,
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: TextProps = {
     children: "Text",

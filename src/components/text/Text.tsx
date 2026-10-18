@@ -1,11 +1,13 @@
 import type { FC, ReactNode } from "react";
 import {
+    type ColorValue,
     Text as RnText,
     type TextProps as RnTextProps,
     StyleSheet,
     type TextStyle,
 } from "react-native";
 
+import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
 export type TextVariant =
@@ -17,7 +19,7 @@ export type TextVariant =
     | "caption";
 
 export interface TextStyles {
-    color: string;
+    color: ColorValue;
     font: {
         [Variant in TextVariant]: {
             family: string;
@@ -43,7 +45,11 @@ export const Text: FC<TextProps> = ({
     });
 
     return (
-        <RnText {...props} style={[styles.text, style]}>
+        <RnText
+            maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
+            {...props}
+            style={[styles.text, style]}
+        >
             {children}
         </RnText>
     );

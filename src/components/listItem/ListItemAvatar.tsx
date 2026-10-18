@@ -18,6 +18,6 @@ const createStyles = ({ styles: { listItem } }: ThemedStyles) =>
         avatar: {
             alignItems: "center",
             justifyContent: "center",
-            marginLeft: listItem.internalSpacing,
+            marginStart: listItem.internalSpacing,
         },
     });

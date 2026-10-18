@@ -1,8 +1,9 @@
 import type { FC } from "react";
+import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { InteractiveText, type InteractiveTextStyles } from "../text";
+import { Text } from "../text";
 import {
     ButtonBase,
     type ButtonBaseProps,
@@ -10,16 +11,25 @@ import {
 } from "./ButtonBase";
 
 export type ButtonSize = "medium" | "large";
-export type ButtonVariant = "primary" | "secondary" | "destructive";
+export type ButtonVariant = "primary" | "destructive";
+export type ButtonAppearance = "prominent" | "subtle";
+
+export type ButtonAppearanceStyles = {
+    prominent: {
+        container: Record<ButtonVariant, ColorValue>;
+        content: Record<ButtonVariant, ColorValue>;
+    };
+    subtle: {
+        container: ColorValue;
+        content: Record<ButtonVariant, ColorValue>;
+    };
+};
 
 export type ButtonStyles = {
     container: {
         borderRadius: ButtonBaseStyles["borderRadius"];
-        color: Record<ButtonVariant, ButtonBaseStyles["backgroundColor"]>;
     };
-    label: {
-        color: Record<ButtonVariant, InteractiveTextStyles["color"]>;
-    };
+    appearance: ButtonAppearanceStyles;
 };
 
 export interface ButtonProps
@@ -28,13 +38,15 @@ export interface ButtonProps
         "onPress" | "disabled" | "width" | "containerStyle"
     > {
     variant?: ButtonVariant;
+    appearance?: ButtonAppearance;
     label: string;
     style?: DeepPartial<ButtonStyles>;
 }
 
 export const Button: FC<ButtonProps> = ({
     label,
-    variant = "secondary",
+    variant = "primary",
+    appearance = "subtle",
     disabled: disabledProp,
     style,
     onPress,
@@ -46,25 +58,25 @@ export const Button: FC<ButtonProps> = ({
         button: style,
     });
 
+    const content = button.appearance[appearance].content[variant];
+    const container =
+        appearance === "prominent"
+            ? button.appearance.prominent.container[variant]
+            : button.appearance.subtle.container;
+
     return (
         <ButtonBase
             {...props}
             style={{
                 borderRadius: button.container.borderRadius,
-                backgroundColor: button.container.color[variant],
+                backgroundColor: container,
             }}
             onPress={onPress}
             disabled={disabled}
         >
-            {(pressableState) => (
-                <InteractiveText
-                    {...pressableState}
-                    disabled={disabled}
-                    style={{ color: button.label.color[variant] }}
-                >
-                    {label}
-                </InteractiveText>
-            )}
+            <Text numberOfLines={1} style={{ color: content }}>
+                {label}
+            </Text>
         </ButtonBase>
     );
 };

@@ -16,6 +16,8 @@ import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type TimeInputValue = { hours: string; minutes: string };
 
+const DEFAULT_TIME_VALUE: TimeInputValue = { hours: "", minutes: "" };
+
 export type TimeInputIcons = ComponentIconAssets<"time">;
 
 export interface TimeInputProps
@@ -39,7 +41,7 @@ export const TimeInput: FC<TimeInputProps> = ({
     hoursPlaceholder,
     minutesPlaceholder,
     variant = "regular",
-    value = { hours: "", minutes: "" },
+    value = DEFAULT_TIME_VALUE,
     onChange,
     onSubmitEditing,
     ...baseProps
@@ -60,6 +62,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     {...icons.time}
                     variant={variant}
                     disabled={disabled}
+                    onPress={() => hoursRef.current?.focus()}
                 />
                 <NumberInputBase
                     ref={hoursRef}
@@ -164,10 +167,10 @@ const createStyles = (
         },
         clearInput: {
             flexShrink: 1,
-            marginLeft: inputBase.container.padding,
+            marginStart: inputBase.container.padding,
         },
         timeLabel: {
-            height: inputBase.container.height[variant],
+            minHeight: inputBase.container.height[variant],
             justifyContent: "center",
         },
     });

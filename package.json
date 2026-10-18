@@ -1,21 +1,47 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.10.14",
+    "version": "0.12.0",
     "description": "A collection of React Native components and resources",
-    "module": "lib/index.js",
-    "react-native": "lib/index.js",
-    "source": "lib/index.js",
-    "types": "lib/types/index.d.ts",
+    "type": "module",
+    "sideEffects": false,
+    "exports": {
+        "./components": {
+            "types": "./lib/types/components/index.d.ts",
+            "default": "./lib/components/index.js"
+        },
+        "./hooks": {
+            "types": "./lib/types/hooks/index.d.ts",
+            "default": "./lib/hooks/index.js"
+        },
+        "./icons": {
+            "types": "./lib/types/icons/index.d.ts",
+            "default": "./lib/icons/index.js"
+        },
+        "./providers": {
+            "types": "./lib/types/providers/index.d.ts",
+            "default": "./lib/providers/index.js"
+        },
+        "./theme": {
+            "types": "./lib/types/theme/index.d.ts",
+            "default": "./lib/theme/index.js"
+        },
+        "./common": {
+            "types": "./lib/types/common/index.d.ts",
+            "default": "./lib/common/index.js"
+        },
+        "./package.json": "./package.json"
+    },
     "files": [
-        "lib/**/*"
+        "lib/**/*",
+        "THIRD_PARTY_NOTICES.md"
     ],
     "scripts": {
         "clean": "rm -rf ./lib",
-        "build": "npm run clean && tsc -p ./tsconfig.build.json && babel --extensions .ts,.tsx ./src -d ./lib",
+        "build": "npm run clean && tsc -p ./tsconfig.build.json && babel --config-file ./babel.config.build.cjs --extensions .ts,.tsx ./src -d ./lib",
         "lint": "biome check --error-on-warnings",
         "lint:fix": "biome check --fix",
         "prepare": "npm run build",
-        "depcruise:src": "depcruise src --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
+        "depcruise:src": "depcruise \"src/**/*.{ts,tsx}\" --include-only 'src' --collapse 4 --output-type dot | dot -T svg > dependency-graph.svg",
         "start": "expo start",
         "typecheck": "tsc --noEmit -p ./tsconfig.build.json",
         "typecheck:full": "tsc --noEmit -p ./tsconfig.json"
@@ -49,6 +75,7 @@
         "@babel/preset-typescript": "^7.27.1",
         "@biomejs/biome": "2.4.9",
         "@expo/metro-runtime": "~56.0.15",
+        "@react-native/babel-preset": "0.85.3",
         "@react-native-vector-icons/octicons": "^21.1.2",
         "@types/lodash.merge": "^4.6.9",
         "@types/react": "~19.2.0",
@@ -69,13 +96,13 @@
         "typescript": "~6.0.3"
     },
     "peerDependencies": {
-        "@react-native-vector-icons/octicons": "^21.1.2",
         "react": "^19.2",
         "react-native": "^0.85 || ^0.86",
         "react-native-gesture-handler": "^2.31",
         "react-native-reanimated": "^4.3",
         "react-native-safe-area-context": "^5.7",
         "react-native-screens": "^4.23",
-        "react-native-svg": "^15.15"
+        "react-native-svg": "^15.15",
+        "react-native-worklets": "*"
     }
 }

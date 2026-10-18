@@ -1,12 +1,16 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     Avatar,
     type AvatarProps,
     IconAction,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: AvatarProps = {
     firstName: "John",
@@ -77,8 +81,8 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
     },
 };
 
-const AvatarPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<AvatarProps>(defaultProps);
+const AvatarPage: FunctionComponent = () => {
+    const [props, setProps] = useState<AvatarProps>(defaultProps);
 
     return (
         <ComponentPage

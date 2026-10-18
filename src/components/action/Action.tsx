@@ -1,15 +1,17 @@
 import type { FC } from "react";
+import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { InteractiveText, type InteractiveTextStyles } from "../text";
+import { Text } from "../text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
+import { StateTint } from "./StateTint";
 
 export type ActionVariant = "primary" | "secondary" | "destructive";
 
 export type ActionStyles = {
     label: {
-        color: Record<ActionVariant, InteractiveTextStyles["color"]>;
+        color: Record<ActionVariant, ColorValue>;
     };
 };
 
@@ -37,14 +39,15 @@ export const Action: FC<ActionProps> = ({
             onPress={onPress}
             containerStyle={containerStyle}
         >
-            {(pressableState) => (
-                <InteractiveText
-                    {...pressableState}
-                    disabled={disabled}
-                    style={{ color: action.label.color[variant] }}
-                >
-                    {label}
-                </InteractiveText>
+            {(state) => (
+                <StateTint {...state}>
+                    <Text
+                        numberOfLines={1}
+                        style={{ color: action.label.color[variant] }}
+                    >
+                        {label}
+                    </Text>
+                </StateTint>
             )}
         </ActionBase>
     );

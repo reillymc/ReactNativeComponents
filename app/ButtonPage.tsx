@@ -1,11 +1,19 @@
-import React from "react";
-import { Button, type ButtonProps } from "@reillymc/react-native-components";
+import { type FunctionComponent, useState } from "react";
+import {
+    Button,
+    type ButtonProps,
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
-export const defaultProps: ButtonProps = {
-    label: "Secondary Button",
-    variant: "secondary",
+const defaultProps: ButtonProps = {
+    label: "Primary Button",
+    variant: "primary",
+    appearance: "subtle",
     width: "auto",
     onPress: () => null,
 };
@@ -18,11 +26,18 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     variant: {
         type: "enum",
         label: "Style variant",
-        default: "Secondary",
+        default: "Primary",
         values: [
             { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
             { label: "Destructive", value: "destructive" },
+        ],
+    },
+    appearance: {
+        type: "enum",
+        label: "Appearance",
+        values: [
+            { label: "Prominent", value: "prominent" },
+            { label: "Subtle", value: "subtle" },
         ],
     },
     disabled: {
@@ -43,8 +58,8 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
 };
 
-const ButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ButtonProps>(defaultProps);
+const ButtonPage: FunctionComponent = () => {
+    const [props, setProps] = useState<ButtonProps>(defaultProps);
 
     return (
         <ComponentPage

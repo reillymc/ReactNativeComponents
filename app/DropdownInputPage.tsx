@@ -1,11 +1,15 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     DropdownInput,
     type DropdownInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { CommonInputProps } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
     ...CommonInputProps,
@@ -37,8 +41,8 @@ const defaultProps: DropdownInputProps = {
     onSelect: () => null,
 };
 
-const DropdownInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState(defaultProps);
+const DropdownInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState(defaultProps);
 
     console.log(props.selectedValue);
 

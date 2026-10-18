@@ -1,23 +1,14 @@
+import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { type InteractiveIconStyles, withIcon } from "../icon";
-import type { InteractiveTextStyles } from "../text";
+import type { IconComponentProps } from "../icon";
 import { IconActionBase, type IconActionBaseProps } from "./IconActionBase";
 
 export type IconActionVariant = "primary" | "secondary" | "destructive";
 
 export type IconActionStyles = {
-    text: {
-        color: {
-            [Variant in IconActionVariant]: InteractiveTextStyles["color"];
-        };
-    };
-    icon: {
-        color: {
-            [Variant in IconActionVariant]: InteractiveIconStyles["color"];
-        };
-    };
+    color: Record<IconActionVariant, ColorValue>;
 };
 
 export interface IconActionProps extends Omit<IconActionBaseProps, "style"> {
@@ -25,18 +16,17 @@ export interface IconActionProps extends Omit<IconActionBaseProps, "style"> {
     style?: DeepPartial<IconActionStyles>;
 }
 
-export const IconAction = withIcon<IconActionProps>(
-    ({ variant = "secondary", style, ...props }) => {
-        const { iconAction } = useStyles({ iconAction: style });
+export const IconAction = <G extends string>({
+    variant = "secondary",
+    style,
+    ...props
+}: IconActionProps & IconComponentProps<G>) => {
+    const { iconAction } = useStyles({ iconAction: style });
 
-        return (
-            <IconActionBase
-                {...props}
-                style={{
-                    icon: { color: iconAction.icon.color[variant] },
-                    text: { color: iconAction.text.color[variant] },
-                }}
-            />
-        );
-    },
-);
+    return (
+        <IconActionBase
+            {...props}
+            style={{ color: iconAction.color[variant] }}
+        />
+    );
+};

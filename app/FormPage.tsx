@@ -1,4 +1,4 @@
-import type React from "react";
+import type { FC } from "react";
 import { useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Stack } from "expo-router";
@@ -8,13 +8,13 @@ import {
     FormContainer,
     FormRow,
     TextInput,
-    type ThemedStyles,
     ToggleInput,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-const FormPage: React.FC = () => {
+import { type AppThemedStyles, useTheme } from "../demo/theme";
+
+const FormPage: FC = () => {
     const { theme } = useTheme();
     const styles = useThemedStyles(createStyles);
 
@@ -78,7 +78,7 @@ const FormPage: React.FC = () => {
                         multiline
                         helpText="This multiline field grows with its content."
                     />
-                    <FormRow ratios={[1, 2]}>
+                    <FormRow>
                         <TextInput label="City" placeholder="London" />
                         <TextInput
                             label="Address"
@@ -99,7 +99,7 @@ const FormPage: React.FC = () => {
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
+const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
     StyleSheet.create({
         page: {
             backgroundColor: color.background,
