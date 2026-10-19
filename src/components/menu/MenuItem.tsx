@@ -15,6 +15,7 @@ export interface MenuItemProps {
     label: string;
     description?: string;
     searchValue?: string;
+    active?: boolean;
     onPress: () => void;
 }
 
@@ -22,6 +23,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     label,
     description,
     searchValue,
+    active,
     onPress,
 }) => {
     const {
@@ -37,6 +39,7 @@ export const MenuItem: FC<MenuItemProps> = ({
             containerStyle={({ pressed }) => [
                 styles.dropdownItem,
                 pressed && { backgroundColor: color.pressOverlay },
+                active && { backgroundColor: color.pressOverlay },
             ]}
         >
             <HighlightedText text={label} highlight={searchValue} />

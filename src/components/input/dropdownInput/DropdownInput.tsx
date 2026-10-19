@@ -1,8 +1,8 @@
+import { InputScaffold, type InputScaffoldFieldProps } from "../InputScaffold";
 import {
     DropdownInputBase,
     type DropdownInputBaseProps,
 } from "./DropdownInputBase";
-import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
 export interface DropdownInputStyles {
     panelGap: number;
@@ -16,22 +16,26 @@ export type DropdownInputProps<T = string> = Pick<
     | "onBlur"
     | "placeholder"
     | "onChangeText"
-    | "textValue"
+    | "controllerRef"
     | "clearButtonMode"
     | "maxLength"
     | "onSubmitEditing"
     | "autoFocus"
-    | "submitBehavior"
     | "disabled"
     | "variant"
     | "items"
-    | "selectedValue"
+    | "value"
+    | "defaultValue"
+    | "onChange"
+    | "openOnFocus"
+    | "allowsCustomValue"
+    | "blurOnSelect"
+    | "filterItems"
     | "minimumSearchLength"
     | "maxSuggestionCount"
-    | "panelPosition"
-    | "onSelect"
+    | "maxContainerHeight"
+    | "containerPosition"
     | "ref"
-    | "selectBehaviour"
 > &
     InputScaffoldFieldProps;
 export const DropdownInput = <T,>({

@@ -44,7 +44,7 @@ const CounterInputPage: FunctionComponent = () => {
                 <CounterInput
                     {...props}
                     value={inputValue}
-                    onChangeText={setInputValue}
+                    onChange={setInputValue}
                 />
             }
             propsPanel={

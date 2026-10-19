@@ -27,12 +27,12 @@ export type SelectionInputIcons = ComponentIconAssets<"showOptions">;
 
 interface SingleSelection<T> {
     selectionMode: "single";
-    selection?: ValueItem<T>;
+    value?: ValueItem<T>;
 }
 
 interface MultiSelection<T> {
     selectionMode: "multi";
-    selection?: Array<ValueItem<T>>;
+    value?: Array<ValueItem<T>>;
 }
 
 export type SelectionProps<T = string> = Pick<InputBaseProps, "placeholder"> &
@@ -46,9 +46,14 @@ export type SelectionInputProps<T = string> = Pick<
     SelectionProps<T> & {
         hideLabel?: boolean;
         style?: DeepPartial<SelectionInputStyles>;
-        onRemoveItem?: (item: ValueItem<T> | undefined) => void;
-        onAdd?: () => void;
+        onChange?: (
+            value: ValueItem<T> | Array<ValueItem<T>> | undefined,
+        ) => void;
+        onOpen?: () => void;
     };
+
+const getItemKey = <T,>(item: ValueItem<T>) =>
+    "id" in item ? item.id : item.value;
 
 export const SelectionInput = <T,>({
     label,
@@ -56,14 +61,14 @@ export const SelectionInput = <T,>({
     placeholder,
     hideLabel,
     selectionMode,
-    selection,
+    value,
     style: styleOverrides,
     variant = "regular",
-    onAdd,
-    onRemoveItem,
+    onOpen,
+    onChange,
     ...props
 }: SelectionInputProps<T>) => {
-    const disabled = disabledProp || !onAdd;
+    const disabled = disabledProp || !onOpen;
     const [styles, { style, icons }] = useThemedStyles(
         "selectionInput",
         createStyles,
@@ -73,8 +78,25 @@ export const SelectionInput = <T,>({
         },
     );
 
-    const hasSelection =
-        selectionMode === "single" ? !!selection : !!selection?.length;
+    const hasSelection = selectionMode === "single" ? !!value : !!value?.length;
+
+    const handleRemove = (item: ValueItem<T>) => {
+        if (!onChange) return;
+
+        if (selectionMode === "single") {
+            onChange(undefined);
+            return;
+        }
+
+        if (Array.isArray(value)) {
+            onChange(
+                value.filter(
+                    (selectedItem) =>
+                        getItemKey(selectedItem) !== getItemKey(item),
+                ),
+            );
+        }
+    };
 
     return (
         <InputScaffold label={!hideLabel && label} {...props}>
@@ -84,27 +106,25 @@ export const SelectionInput = <T,>({
                     styles.container,
                     pressed && styles.containerPressed,
                 ]}
-                onPress={onAdd}
+                onPress={onOpen}
             >
                 {(pressableState) => (
                     <>
                         <View style={styles.selectionContainer}>
-                            {selectionMode === "single" && !!selection && (
+                            {selectionMode === "single" && !!value && (
                                 <Text style={styles.selectionItemLabel}>
-                                    {selection.label}
+                                    {value.label}
                                 </Text>
                             )}
                             {selectionMode === "multi" &&
-                                !!selection?.length &&
-                                selection.map((item) => (
+                                !!value?.length &&
+                                value.map((item) => (
                                     <Tag
-                                        key={
-                                            "id" in item ? item.id : item.value
-                                        }
+                                        key={getItemKey(item)}
                                         label={item.label}
                                         onPress={
-                                            onRemoveItem
-                                                ? () => onRemoveItem(item)
+                                            onChange
+                                                ? () => handleRemove(item)
                                                 : undefined
                                         }
                                     />

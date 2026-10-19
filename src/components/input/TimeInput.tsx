@@ -20,6 +20,11 @@ const DEFAULT_TIME_VALUE: TimeInputValue = { hours: "", minutes: "" };
 
 export type TimeInputIcons = ComponentIconAssets<"time">;
 
+export type TimeInputPlaceholders = {
+    hours?: string;
+    minutes?: string;
+};
+
 export interface TimeInputProps
     extends Pick<
             NumberInputBaseProps,
@@ -28,9 +33,7 @@ export interface TimeInputProps
         InputScaffoldFieldProps {
     value?: TimeInputValue;
 
-    hoursPlaceholder?: string;
-
-    minutesPlaceholder?: string;
+    placeholder?: TimeInputPlaceholders;
 
     onChange?: (e: TimeInputValue) => void;
 }
@@ -38,8 +41,7 @@ export interface TimeInputProps
 export const TimeInput: FC<TimeInputProps> = ({
     disabled: disabledProp,
     clearButtonMode,
-    hoursPlaceholder,
-    minutesPlaceholder,
+    placeholder,
     variant = "regular",
     value = DEFAULT_TIME_VALUE,
     onChange,
@@ -67,7 +69,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                 <NumberInputBase
                     ref={hoursRef}
                     disabled={disabled}
-                    placeholder={hoursPlaceholder}
+                    placeholder={placeholder?.hours}
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
                     value={value?.hours}
@@ -96,7 +98,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                 <NumberInputBase
                     ref={minutesRef}
                     disabled={disabled}
-                    placeholder={minutesPlaceholder}
+                    placeholder={placeholder?.minutes}
                     value={value.minutes}
                     maxLength={2}
                     clearButtonMode={clearButtonMode}

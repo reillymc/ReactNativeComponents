@@ -9,7 +9,7 @@
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "jsx": "react-native",
-        "lib": ["esnext"],
+        "lib": ["DOM", "esnext"],
         "module": "esnext",
         "moduleResolution": "bundler",
         "noFallthroughCasesInSwitch": true,

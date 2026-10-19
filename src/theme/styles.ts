@@ -4,11 +4,11 @@ import merge from "lodash.merge";
 import type {
     ActionStyles,
     AlertIndicatorStyles,
+    AnchoredContainerStyles,
     AvatarStyles,
     ButtonBaseStyles,
     ButtonStyles,
     DropdownInputStyles,
-    FloatingContainerStyles,
     HighlightedTextStyles,
     IconActionBaseStyles,
     IconActionStyles,
@@ -42,11 +42,11 @@ import { defaultButtonStyles } from "../components/button/Button.styles";
 import { defaultButtonBaseStyles } from "../components/button/ButtonBase.styles";
 import { defaultIconButtonStyles } from "../components/button/IconButton.styles";
 import { defaultIconButtonBaseStyles } from "../components/button/IconButtonBase.styles";
-import { defaultFloatingContainerStyles } from "../components/container/FloatingContainer.styles";
+import { defaultAnchoredContainerStyles } from "../components/container/anchoredContainer/AnchoredContainer.styles";
 import { defaultIconStyles } from "../components/icon/Icon.styles";
 import { defaultIconBaseStyles } from "../components/icon/IconBase.styles";
 import { defaultInteractiveIconStyles } from "../components/icon/InteractiveIcon.styles";
-import { defaultDropdownInputStyles } from "../components/input/DropdownInput.styles";
+import { defaultDropdownInputStyles } from "../components/input/dropdownInput/DropdownInput.styles";
 import { defaultInputActionStyles } from "../components/input/InputAction.styles";
 import { defaultInputBaseStyles } from "../components/input/InputBase.styles";
 import { defaultInputScaffoldStyles } from "../components/input/InputScaffold.styles";
@@ -106,7 +106,7 @@ export type Styles = {
     menu: MenuStyles;
     menuItem: MenuItemStyles;
     swipeAction: SwipeActionStyles;
-    floatingContainer: FloatingContainerStyles;
+    anchoredContainer: AnchoredContainerStyles;
     tag: TagStyles;
 };
 
@@ -140,7 +140,7 @@ export const createDefaultStyles: CreateStyles = (theme) => ({
     ratingInput: null,
 
     swipeAction: defaultSwipeActionStyles(theme),
-    floatingContainer: defaultFloatingContainerStyles(theme),
+    anchoredContainer: defaultAnchoredContainerStyles(theme),
     menu: defaultMenuStyles(theme),
     menuItem: defaultMenuItemStyles(theme),
     rating: defaultRatingStyles(theme),

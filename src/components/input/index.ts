@@ -1,14 +1,10 @@
 export type { CounterInputIcons, CounterInputProps } from "./CounterInput";
 export { CounterInput } from "./CounterInput";
-export type {
-    DropdownInputProps,
-    DropdownInputStyles,
-} from "./DropdownInput";
-export { DropdownInput } from "./DropdownInput";
 export {
-    DropdownInputBase,
-    type DropdownInputBaseProps,
-} from "./DropdownInputBase";
+    DropdownInput,
+    type DropdownInputProps,
+    type DropdownInputStyles,
+} from "./dropdownInput";
 export type {
     InputActionProps,
     InputActionStyles,
@@ -27,6 +23,7 @@ export { InputScaffold } from "./InputScaffold";
 export type {
     FractionValue,
     NumberInputIcons,
+    NumberInputPlaceholders,
     NumberInputProps,
     NumberInputValue,
     NumberValue,
@@ -49,6 +46,7 @@ export type { TextInputProps, TextInputStyles } from "./TextInput";
 export { TextInput } from "./TextInput";
 export type {
     TimeInputIcons,
+    TimeInputPlaceholders,
     TimeInputProps,
     TimeInputValue,
 } from "./TimeInput";

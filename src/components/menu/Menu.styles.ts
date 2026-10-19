@@ -11,5 +11,6 @@ export const defaultMenuStyles = (theme: Theme): MenuStyles => {
         gap: theme.spacing.tiny,
         padding: theme.spacing.tiny,
         parentMargin: theme.spacing.medium,
+        maxHeight: 240,
     };
 };

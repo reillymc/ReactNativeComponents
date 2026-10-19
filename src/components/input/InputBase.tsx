@@ -1,4 +1,4 @@
-import type { FC, Ref } from "react";
+import type { FC, RefObject } from "react";
 import {
     type ColorValue,
     StyleSheet,
@@ -34,7 +34,7 @@ export interface InputBaseProps
     variant?: InputVariant;
     style?: DeepPartial<InputBaseStyles>;
     inputStyle?: TextInputProps["style"];
-    ref?: Ref<TextInput>;
+    ref?: RefObject<TextInput | null>;
 }
 
 export const InputBase: FC<InputBaseProps> = ({

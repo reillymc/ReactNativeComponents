@@ -130,13 +130,13 @@ const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Number Input",
                 href: "/NumberInputPage",
-                component: <NumberInput placeholder="0" />,
+                component: <NumberInput placeholder={{ value: "0" }} />,
             },
             {
                 name: "Time Input",
                 href: "/TimeInputPage",
                 component: (
-                    <TimeInput hoursPlaceholder="0" minutesPlaceholder="0" />
+                    <TimeInput placeholder={{ hours: "0", minutes: "0" }} />
                 ),
             },
             {
@@ -154,12 +154,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Dropdown Input",
                 href: "/DropdownInputPage",
-                component: (
-                    <DropdownInput
-                        onSelect={() => null}
-                        placeholder="Dropdown Input"
-                    />
-                ),
+                component: <DropdownInput placeholder="Dropdown Input" />,
             },
             {
                 name: "Rating Input",
@@ -253,7 +248,8 @@ const ComponentListScreen: FC = () => {
                         >
                             <DropdownInput
                                 placeholder="Variant"
-                                onSelect={(e) => setVariant(e?.value)}
+                                value={variant}
+                                onChange={(item) => setVariant(item?.value)}
                                 items={[
                                     { label: "Primary", value: "primary" },
                                     { label: "Secondary", value: "secondary" },

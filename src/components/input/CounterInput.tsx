@@ -11,28 +11,35 @@ import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 export type CounterInputIcons = ComponentIconAssets<"decrease" | "increase">;
 
 export interface CounterInputProps
-    extends Omit<NumberInputBaseProps, "style" | "inputStyle">,
+    extends Omit<
+            NumberInputBaseProps,
+            "value" | "onChange" | "onChangeText" | "style" | "inputStyle"
+        >,
         InputScaffoldFieldProps {
+    value?: string;
+    onChange?: (value: string) => void;
     disableKeyboardInput?: boolean;
     interval?: number;
 }
 
 export const CounterInput: FC<CounterInputProps> = ({
-    onChangeText,
+    value,
+    onChange,
     label,
     helpText,
     mandatory,
     hasError,
     disableKeyboardInput,
-    disabled = false,
+    disabled: disabledProp,
     variant = "regular",
     containerStyle,
     interval = 1,
     ...props
 }) => {
     const [styles, { icons }] = useThemedStyles("counterInput", createStyles);
+    const disabled = disabledProp || !onChange;
 
-    const value = Number.parseFloat(props.value ?? "0") || 0;
+    const numericValue = Number.parseFloat(value ?? "0") || 0;
 
     return (
         <InputScaffold
@@ -48,9 +55,9 @@ export const CounterInput: FC<CounterInputProps> = ({
                     variant={variant}
                     disabled={disabled}
                     onPress={() =>
-                        onChangeText?.(
+                        onChange?.(
                             Math.max(
-                                value - interval,
+                                numericValue - interval,
                                 props.min ?? 0,
                             ).toString(),
                         )
@@ -59,13 +66,14 @@ export const CounterInput: FC<CounterInputProps> = ({
                 <NumberInputBase
                     clearButtonMode="never"
                     {...props}
+                    value={value}
                     variant={variant}
                     onChangeText={(newValue) => {
                         if (!newValue) {
-                            onChangeText?.("");
+                            onChange?.("");
                             return;
                         }
-                        onChangeText?.(
+                        onChange?.(
                             Math.min(
                                 Math.max(
                                     Number.parseFloat(newValue ?? "0"),
@@ -83,9 +91,9 @@ export const CounterInput: FC<CounterInputProps> = ({
                     disabled={disabled}
                     variant={variant}
                     onPress={() =>
-                        onChangeText?.(
+                        onChange?.(
                             Math.min(
-                                value + interval,
+                                numericValue + interval,
                                 props.max ?? Number.MAX_VALUE,
                             ).toString(),
                         )

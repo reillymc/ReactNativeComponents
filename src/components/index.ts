@@ -36,14 +36,15 @@ export {
     IconButtonBase,
 } from "./button";
 export type {
-    FloatingContainerProps,
-    FloatingContainerStyles,
+    AnchoredContainerProps,
+    AnchoredContainerStyles,
+    ContainerPlacement,
     FormContainerProps,
     FormRowProps,
     PanelProps,
 } from "./container";
 export {
-    FloatingContainer,
+    AnchoredContainer,
     FormContainer,
     FormRow,
     Panel,
@@ -72,6 +73,7 @@ export type {
     InputScaffoldProps,
     InputScaffoldStyles,
     NumberInputIcons,
+    NumberInputPlaceholders,
     NumberInputProps,
     NumberInputValue,
     NumberValue,
@@ -94,7 +96,6 @@ export type {
 export {
     CounterInput,
     DropdownInput,
-    DropdownInputBase,
     InputAction,
     InputBase,
     InputRowContainer,

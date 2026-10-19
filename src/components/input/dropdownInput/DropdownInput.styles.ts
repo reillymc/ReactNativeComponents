@@ -1,4 +1,4 @@
-import type { Theme } from "../../theme/theme";
+import type { Theme } from "../../../theme/theme";
 import type { DropdownInputStyles } from "./DropdownInput";
 
 export const defaultDropdownInputStyles = (

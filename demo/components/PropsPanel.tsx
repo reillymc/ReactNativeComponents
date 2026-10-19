@@ -141,7 +141,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                                 <CounterInput
                                     label={definition.label ?? propId}
                                     value={currentValue?.toString()}
-                                    onChangeText={(value) =>
+                                    onChange={(value) =>
                                         onChange(
                                             propId,
                                             Number.parseInt(value, 10),
@@ -181,21 +181,25 @@ export const PropsPanel = <T extends Record<string, any>>({
                                         label: value,
                                     }))}
                                     selectionMode="single"
-                                    onRemoveItem={(value) =>
-                                        onChange(
-                                            propId,
-                                            Array.isArray(currentValue)
-                                                ? currentValue.filter(
-                                                      (x) => x !== value,
-                                                  )
-                                                : undefined,
-                                        )
+                                    value={
+                                        currentValue === undefined
+                                            ? undefined
+                                            : {
+                                                  label: currentValue,
+                                                  value: currentValue,
+                                              }
                                     }
-                                    selection={{
-                                        label: currentValue,
-                                        value: currentValue,
+                                    onChange={(next) => {
+                                        if (Array.isArray(next)) {
+                                            onChange(
+                                                propId,
+                                                next.map((item) => item.value),
+                                            );
+                                            return;
+                                        }
+                                        onChange(propId, next?.value);
                                     }}
-                                    onAdd={() => {
+                                    onOpen={() => {
                                         setSelectionId(propId);
                                         setSelectionItems(
                                             definition.values.map((value) => ({
@@ -237,22 +241,22 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     label={definition.label}
                                     items={definition.values}
                                     selectionMode="single"
-                                    onRemoveItem={(value) => {
-                                        onChange(
-                                            propId,
-                                            Array.isArray(currentValue)
-                                                ? currentValue.filter(
-                                                      (x) => x !== value,
-                                                  )
-                                                : undefined,
-                                        );
+                                    value={selectedItem}
+                                    onChange={(next) => {
+                                        if (Array.isArray(next)) {
+                                            onChange(
+                                                propId,
+                                                next.map((item) => item.value),
+                                            );
+                                            return;
+                                        }
+                                        onChange(propId, next?.value);
                                         setCustomLabels((prev) => ({
                                             ...prev,
-                                            [propId]: value?.label,
+                                            [propId]: next?.label,
                                         }));
                                     }}
-                                    selection={selectedItem}
-                                    onAdd={() => {
+                                    onOpen={() => {
                                         openSelectionModal();
                                         setSelectionId(propId);
                                         setSelectionItems(definition.values);

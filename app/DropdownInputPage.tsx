@@ -13,17 +13,21 @@ import { CommonInputProps } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<DropdownInputProps> = {
     ...CommonInputProps,
-    onSelect: {
+    onChange: {
         type: "function",
-        label: "onSelect",
+        label: "onChange",
     },
-    selectBehaviour: {
-        type: "enum",
-        label: "Select Behaviour",
-        values: [
-            { label: "Blur and Select", value: "blurAndSelect" },
-            { label: "Keep Focus", value: "select" },
-        ],
+    openOnFocus: {
+        type: "boolean",
+        label: "Open on focus",
+    },
+    allowsCustomValue: {
+        type: "boolean",
+        label: "Allow custom value",
+    },
+    blurOnSelect: {
+        type: "boolean",
+        label: "Blur on select",
     },
 };
 
@@ -37,14 +41,20 @@ const defaultProps: DropdownInputProps = {
             description: "An item with description",
         },
         { value: "3", label: "Item 3" },
+        { value: "4", label: "Item 4" },
+        { value: "5", label: "Item 5" },
+        { value: "6", label: "Item 6" },
+        { value: "s1", label: "Something Else 1" },
+        { value: "s2", label: "Something Else 2" },
+        { value: "s3", label: "Something Else 3" },
     ],
-    onSelect: () => null,
+    openOnFocus: true,
+    allowsCustomValue: false,
+    blurOnSelect: true,
 };
 
 const DropdownInputPage: FunctionComponent = () => {
     const [props, setProps] = useState(defaultProps);
-
-    console.log(props.selectedValue);
 
     return (
         <ComponentPage
@@ -52,14 +62,11 @@ const DropdownInputPage: FunctionComponent = () => {
             component={
                 <DropdownInput
                     {...props}
-                    onSelect={(selection) =>
+                    onChange={(item) =>
                         setProps((prev) => ({
                             ...prev,
-                            selectedValue: selection?.value,
+                            value: item?.value,
                         }))
-                    }
-                    onChangeText={(textValue) =>
-                        setProps((prev) => ({ ...prev, textValue }))
                     }
                 />
             }

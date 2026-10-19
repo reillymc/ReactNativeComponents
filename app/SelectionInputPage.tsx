@@ -14,10 +14,10 @@ import { CommonInputProps } from "../demo/helpers";
 
 type SelectionInputDemoProps = Pick<
     SelectionInputProps,
-    Exclude<keyof SelectionInputProps, "selection" | "selectionMode">
+    Exclude<keyof SelectionInputProps, "value" | "selectionMode">
 > & {
     selectionMode: "single" | "multi";
-    selection?: ValueItem | Array<ValueItem>;
+    value?: ValueItem | Array<ValueItem>;
 };
 
 const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
@@ -30,7 +30,7 @@ const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
             { label: "Multi", value: "multi" },
         ],
     },
-    onRemoveItem: {
+    onChange: {
         label: "Press action",
         type: "function",
     },
@@ -54,8 +54,7 @@ const defaultProps: SelectionInputProps = {
     ],
     placeholder: "Select an item",
     selectionMode: "single",
-    selection: { label: "Item", value: "item1" },
-    onRemoveItem: () => null,
+    value: { label: "Item", value: "item1" },
 };
 
 const SelectionInputPage: FunctionComponent = () => {
@@ -67,20 +66,15 @@ const SelectionInputPage: FunctionComponent = () => {
             component={
                 <SelectionInput
                     {...props}
-                    onRemoveItem={(e: ValueItem | undefined) =>
+                    onChange={(next) =>
                         setProps(
                             (prev) =>
                                 ({
                                     ...prev,
-                                    selection: Array.isArray(prev.selection)
-                                        ? prev.selection.filter(
-                                              (item) => item !== e,
-                                          )
-                                        : undefined,
+                                    value: next,
                                 }) as SelectionInputProps,
                         )
                     }
-                    onAdd={() => null}
                 />
             }
             propsPanel={
@@ -91,7 +85,7 @@ const SelectionInputPage: FunctionComponent = () => {
                         if (propId === "selectionMode") {
                             setProps((prev) => ({
                                 ...prev,
-                                selection: undefined,
+                                value: undefined,
                             }));
                         }
                         setProps((prev) => ({ ...prev, [propId]: value }));
