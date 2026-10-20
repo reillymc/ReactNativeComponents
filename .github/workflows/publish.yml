@@ -27,6 +27,21 @@ jobs:
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+            - name: Determine npm release-tag
+              id: release-tag
+              run: |
+                line="${GITHUB_REF_NAME#latest/}"
+                highest="$(git ls-remote --heads origin 'refs/heads/latest/*' \
+                  | sed 's#.*refs/heads/latest/##' \
+                  | sort -V \
+                  | tail -n 1)"
+
+                if [ "$line" = "$highest" ]; then
+                  echo "tag=latest" >> "$GITHUB_OUTPUT"
+                else
+                  echo "tag=release-${line}" >> "$GITHUB_OUTPUT"
+                fi
+
             - name: Bump patch version and push
               run: |
                 git config user.name "github-actions[bot]"
@@ -37,6 +52,6 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish package
-              run: npm publish --provenance --access public
+              run: npm publish --provenance --access public --tag "${{ steps.release-tag.outputs.tag }}"
 
 
