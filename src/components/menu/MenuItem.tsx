@@ -5,12 +5,6 @@ import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
 import { HighlightedText } from "../text";
 
-export type MenuItemStyles = {
-    paddingHorizontal: number;
-    paddingVertical: number;
-    borderRadius: number;
-};
-
 export interface MenuItemProps {
     label: string;
     description?: string;

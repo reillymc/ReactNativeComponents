@@ -1,8 +1,26 @@
-import type { Theme } from "../../theme/theme";
+import type { StyleFactory } from "../../style/styleFactory";
+import type { InteractiveIconStyles } from "../icon/InteractiveIcon.styles";
+import type { InteractiveTextStyles } from "../text/InteractiveText.styles";
 import { defaultActionStyles } from "./Action.styles";
-import type { IconActionStyles } from "./IconAction";
 
-export const defaultIconActionStyles = (theme: Theme): IconActionStyles => {
+export type IconActionVariant = "primary" | "secondary" | "destructive";
+
+export type IconActionStyles = {
+    text: {
+        color: {
+            [Variant in IconActionVariant]: InteractiveTextStyles["color"];
+        };
+    };
+    icon: {
+        color: {
+            [Variant in IconActionVariant]: InteractiveIconStyles["color"];
+        };
+    };
+};
+
+export const defaultIconActionStyles: StyleFactory<IconActionStyles> = (
+    theme,
+) => {
     const action = defaultActionStyles(theme);
 
     return {

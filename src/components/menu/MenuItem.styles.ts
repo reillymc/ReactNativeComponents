@@ -1,9 +1,14 @@
-import type { Theme } from "../../theme/theme";
+import type { StyleFactory } from "../../style/styleFactory";
 import { defaultInputBaseStyles } from "../input/InputBase.styles";
 import { defaultMenuStyles } from "./Menu.styles";
-import type { MenuItemStyles } from "./MenuItem";
 
-export const defaultMenuItemStyles = (theme: Theme): MenuItemStyles => {
+export type MenuItemStyles = {
+    paddingHorizontal: number;
+    paddingVertical: number;
+    borderRadius: number;
+};
+
+export const defaultMenuItemStyles: StyleFactory<MenuItemStyles> = (theme) => {
     const inputBase = defaultInputBaseStyles(theme);
     const menu = defaultMenuStyles(theme);
 

@@ -2,33 +2,15 @@ import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { ActionBase } from "../action";
-import {
-    type IconComponentProps,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
+import { type IconComponentProps, InteractiveIcon } from "../icon";
 import { Text } from "../text";
-import type { InputBaseProps, InputVariant } from "./InputBase";
+import type { InputBaseProps } from "./InputBase";
 import type { InputScaffoldFieldProps } from "./InputScaffold";
-
-type ToggleVariant = "primary" | "secondary";
+import type { ToggleInputStyles, ToggleVariant } from "./ToggleInput.styles";
 
 export type ToggleInputIcons = ComponentIconAssets<"outline">;
-
-export type ToggleInputStyles = {
-    indicator: {
-        size: { [Size in InputVariant]: number };
-        color: {
-            deselected: InteractiveIconStyles["color"];
-            selected: Record<ToggleVariant, InteractiveIconStyles["color"]>;
-        };
-    };
-    label: {
-        gap: number;
-    };
-};
 
 export interface ToggleInputProps
     extends Pick<

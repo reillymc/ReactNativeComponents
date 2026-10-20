@@ -5,12 +5,6 @@ import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
 import { Text } from "../text";
 
-export interface TagStyles {
-    internalSpacing: number;
-    borderRadius: number;
-    padding: number;
-}
-
 export interface TagProps {
     label?: string;
     /**

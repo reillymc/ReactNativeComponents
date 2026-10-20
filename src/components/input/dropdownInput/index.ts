@@ -1,7 +1,4 @@
-export type {
-    DropdownInputProps,
-    DropdownInputStyles,
-} from "./DropdownInput";
+export type { DropdownInputProps } from "./DropdownInput";
 export { DropdownInput } from "./DropdownInput";
 export {
     DropdownInputBase,

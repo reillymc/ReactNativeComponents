@@ -2,24 +2,11 @@ import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import {
-    type IconComponentProps,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
-import { InteractiveText, type InteractiveTextStyles } from "../text";
+import { type IconComponentProps, InteractiveIcon } from "../icon";
+import { InteractiveText } from "../text";
 import type { ActionProps } from "./Action";
 import { ActionBase } from "./ActionBase";
-
-export type IconActionBaseStyles = {
-    gap: number;
-    text: {
-        color: InteractiveTextStyles["color"];
-    };
-    icon: {
-        color: InteractiveIconStyles["color"];
-    };
-};
+import type { IconActionBaseStyles } from "./IconActionBase.styles";
 
 export interface IconActionBaseProps
     extends Pick<ActionProps, "onPress" | "disabled" | "containerStyle"> {

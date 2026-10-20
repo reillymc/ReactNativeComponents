@@ -1,10 +1,18 @@
-import type { Theme } from "../../theme/theme";
-import { defaultIconBaseStyles } from "./IconBase.styles";
-import type { InteractiveIconStyles } from "./InteractiveIcon";
+import type { StyleFactory } from "../../style/styleFactory";
+import { defaultIconBaseStyles, type IconBaseStyles } from "./IconBase.styles";
 
-export const defaultInteractiveIconStyles = (
-    theme: Theme,
-): InteractiveIconStyles => {
+export type InteractiveIconState = "enabled" | "disabled" | "pressed";
+
+export type InteractiveIconStyles = {
+    size: IconBaseStyles["size"];
+    color: {
+        [State in InteractiveIconState]: IconBaseStyles["color"];
+    };
+};
+
+export const defaultInteractiveIconStyles: StyleFactory<
+    InteractiveIconStyles
+> = (theme) => {
     const iconBase = defaultIconBaseStyles(theme);
 
     return {

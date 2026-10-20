@@ -1,23 +1,9 @@
 import type { FC } from "react";
-import {
-    type ColorValue,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { Text } from "../text";
-
-export type AlertVariant = "primary" | "secondary";
-
-export type AlertIndicatorStyles = {
-    size: number;
-    borderRadius: number;
-    color: Record<AlertVariant, ColorValue>;
-    backgroundColor: Record<AlertVariant, ColorValue>;
-};
+import type { AlertVariant } from "./AlertIndicator.styles";
 
 export interface AlertIndicatorProps {
     label?: string;

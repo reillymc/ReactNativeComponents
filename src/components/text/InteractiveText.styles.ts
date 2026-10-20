@@ -1,9 +1,18 @@
-import type { Theme } from "../../theme/theme";
-import type { InteractiveTextStyles } from "./InteractiveText";
+import type { ColorValue } from "react-native";
 
-export const defaultInteractiveTextStyles = ({
-    color,
-}: Theme): InteractiveTextStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export type InteractiveTextState = "enabled" | "disabled" | "pressed";
+
+export type InteractiveTextStyles = {
+    color: {
+        [State in InteractiveTextState]: ColorValue;
+    };
+};
+
+export const defaultInteractiveTextStyles: StyleFactory<
+    InteractiveTextStyles
+> = ({ color }) => ({
     color: {
         enabled: color.primary,
         pressed: color.primaryLight,

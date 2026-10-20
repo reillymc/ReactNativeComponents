@@ -1,8 +1,11 @@
-import type { Theme } from "../../../theme/theme";
-import type { DropdownInputStyles } from "./DropdownInput";
+import type { StyleFactory } from "../../../style/styleFactory";
 
-export const defaultDropdownInputStyles = (
-    _theme: Theme,
-): DropdownInputStyles => ({
-    panelGap: 4,
+export interface DropdownInputStyles {
+    panelGap: number;
+}
+
+export const defaultDropdownInputStyles: StyleFactory<DropdownInputStyles> = ({
+    spacing,
+}) => ({
+    panelGap: spacing.tiny,
 });

@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
 import type { FC } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import type { ValueItem } from "@reillymc/react-native-components/common";
@@ -13,7 +13,7 @@ import {
 } from "@reillymc/react-native-components/components";
 import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import type { AppThemedStyles } from "../demo/theme";
+import { createThemedStyles } from "../demo/theme";
 
 const SelectionModal: FC = () => {
     const styles = useThemedStyles(createStyles);
@@ -151,16 +151,16 @@ const SelectionModal: FC = () => {
 
 export default SelectionModal;
 
-const createStyles = ({
-    styles: { inputBase },
-    theme: { spacing, color },
-}: AppThemedStyles) => {
-    const styles = StyleSheet.create({
+const createStyles = createThemedStyles(
+    ({
+        styles: { inputBase, page, selection },
+        theme: { spacing, color },
+    }) => ({
         headerAction: {
-            marginHorizontal: spacing.navigationActionHorizontal,
+            marginHorizontal: selection.navigationActionHorizontal,
         },
         list: {
-            paddingBottom: spacing.pageBottom,
+            paddingBottom: page.bottom,
         },
         tag: {
             marginVertical: 2,
@@ -190,6 +190,5 @@ const createStyles = ({
             borderRightWidth: 1,
             justifyContent: "center",
         },
-    });
-    return styles;
-};
+    }),
+);

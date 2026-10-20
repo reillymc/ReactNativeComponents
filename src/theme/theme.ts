@@ -104,22 +104,5 @@ export const DefaultTheme = {
     },
 };
 
-export const MergeTheme = <E extends object = Record<never, never>>(
-    first?: ThemeOverrides & E,
-    second?: ThemeOverrides & DeepPartial<NoInfer<E>>,
-): Theme & E => merge({}, DefaultTheme, first ?? {}, second ?? {}) as Theme & E;
-
-/**
- * Builds a complete theme from a single set of base overrides, optionally
- * deriving additional app-owned tokens from the resolved base theme.
- */
-export const createTheme = <E extends object = Record<never, never>>(
-    overrides?: ThemeOverrides,
-    createExtras?: (theme: Theme) => E,
-): Theme & E => {
-    const base = MergeTheme(overrides);
-
-    return createExtras
-        ? (merge({}, base, createExtras(base)) as Theme & E)
-        : (base as Theme & E);
-};
+export const MergeTheme = (overrides?: ThemeOverrides): Theme =>
+    merge({}, DefaultTheme, overrides ?? {}) as Theme;

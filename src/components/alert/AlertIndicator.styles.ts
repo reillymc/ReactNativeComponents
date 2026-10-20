@@ -1,9 +1,19 @@
-import type { Theme } from "../../theme/theme";
-import type { AlertIndicatorStyles } from "./AlertIndicator";
+import type { ColorValue } from "react-native";
 
-export const defaultAlertIndicatorStyles = ({
-    color,
-}: Theme): AlertIndicatorStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export type AlertVariant = "primary" | "secondary";
+
+export type AlertIndicatorStyles = {
+    size: number;
+    borderRadius: number;
+    color: Record<AlertVariant, ColorValue>;
+    backgroundColor: Record<AlertVariant, ColorValue>;
+};
+
+export const defaultAlertIndicatorStyles: StyleFactory<
+    AlertIndicatorStyles
+> = ({ color }) => ({
     size: 28,
     borderRadius: 14,
     backgroundColor: {

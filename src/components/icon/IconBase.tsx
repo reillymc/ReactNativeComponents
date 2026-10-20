@@ -1,12 +1,6 @@
-import type { ColorValue } from "react-native";
-
 import { useTheme } from "../../hooks";
+import type { IconBaseStyles } from "./IconBase.styles";
 import type { IconComponentProps } from "./IconComponentProps";
-
-export interface IconBaseStyles {
-    color: ColorValue;
-    size: number;
-}
 
 export type IconBaseProps<G extends string> = IconComponentProps<G> & {
     size?: IconBaseStyles["size"];

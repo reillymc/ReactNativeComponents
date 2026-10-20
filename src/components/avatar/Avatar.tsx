@@ -4,7 +4,6 @@ import {
     Image,
     type StyleProp,
     StyleSheet,
-    type TextStyle,
     View,
     type ViewStyle,
 } from "react-native";
@@ -12,6 +11,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { Text } from "../text";
+import type { AvatarSize, AvatarStyles } from "./Avatar.styles";
 
 const getBackgroundColor = (
     colors: Array<{ background: ColorValue; foreground: ColorValue }>,
@@ -28,21 +28,6 @@ const getBackgroundColor = (
     return (
         colors[hash] ?? colors[0] ?? { background: "#fff", foreground: "#000" }
     );
-};
-
-type AvatarSize = "small" | "regular" | "large";
-
-export type AvatarStyles = {
-    size: { [Key in AvatarSize]: number };
-    initials: {
-        fontWeight: TextStyle["fontWeight"];
-        fontSize: Record<AvatarSize, number>;
-    };
-    label: {
-        fontWeight: TextStyle["fontWeight"];
-        fontSize: number;
-    };
-    colors: Array<{ background: ColorValue; foreground: ColorValue }>;
 };
 
 export interface AvatarProps {

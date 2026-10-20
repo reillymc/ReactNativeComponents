@@ -1,10 +1,5 @@
 import { cloneElement, type FC, type ReactElement, useState } from "react";
-import {
-    SectionList,
-    type SectionListData,
-    StyleSheet,
-    View,
-} from "react-native";
+import { SectionList, type SectionListData, View } from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
@@ -32,7 +27,7 @@ import {
 } from "@reillymc/react-native-components/components";
 import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import { type AppThemedStyles, useTheme } from "../demo/theme";
+import { createThemedStyles, useTheme } from "../demo/theme";
 
 interface ComponentScreen {
     name: string;
@@ -283,19 +278,19 @@ const ComponentListScreen: FC = () => {
                         />
                     );
                 }}
-                contentContainerStyle={styles.page}
+                contentContainerStyle={styles.content}
             />
         </>
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
-    StyleSheet.create({
-        page: {
+const createStyles = createThemedStyles(
+    ({ styles: { page }, theme: { spacing, color } }) => ({
+        content: {
             backgroundColor: color.background,
-            paddingHorizontal: spacing.pageHorizontal,
-            paddingTop: spacing.pageTop,
-            paddingBottom: spacing.pageBottom,
+            paddingHorizontal: page.horizontal,
+            paddingTop: page.top,
+            paddingBottom: page.bottom,
         },
         listHeader: {
             alignItems: "flex-end",
@@ -315,6 +310,7 @@ const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
             alignItems: "flex-end",
             paddingVertical: 8,
         },
-    });
+    }),
+);
 
 export default ComponentListScreen;

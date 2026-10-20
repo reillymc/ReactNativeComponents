@@ -1,26 +1,10 @@
 import type { FC, ReactNode } from "react";
-import {
-    type ColorValue,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Icon } from "../icon";
 import { Text } from "../text";
-
-export interface InputScaffoldStyles {
-    gap: number;
-    mandatoryIndicator: {
-        color: ColorValue;
-    };
-    helpText: {
-        gap: number;
-    };
-}
 
 export type InputScaffoldIcons = ComponentIconAssets<"error">;
 

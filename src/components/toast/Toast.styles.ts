@@ -1,11 +1,20 @@
-import type { Theme } from "../../theme/theme";
-import type { ToastStyles } from "./Toast";
+import type { ColorValue } from "react-native";
 
-export const defaultToastStyles = ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export interface ToastStyles {
+    container: {
+        backgroundColor: ColorValue;
+        padding: number;
+        borderRadius: number;
+    };
+}
+
+export const defaultToastStyles: StyleFactory<ToastStyles> = ({
     color,
     spacing,
     border,
-}: Theme): ToastStyles => ({
+}) => ({
     container: {
         backgroundColor: color.backgroundHighlight,
         padding: spacing.medium,

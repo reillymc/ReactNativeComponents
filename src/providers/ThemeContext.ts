@@ -1,15 +1,14 @@
 import { createContext } from "react";
 
-import type { Icons, Styles, Theme } from "../theme";
-import { DefaultIcons } from "../theme/icons";
-import { createStyles } from "../theme/styles";
-import { DefaultTheme } from "../theme/theme";
+import { DefaultIcons, type Icons } from "../icons/componentIcons";
+import { createStyles, type Styles } from "../style/styles";
+import { DefaultTheme, type Theme } from "../theme/theme";
 
 export interface ThemeContextDefinition<
     E extends object = Record<never, never>,
 > {
-    theme: Theme & E;
-    styles: Styles;
+    theme: Theme;
+    styles: Styles & E;
     icons: Icons;
 }
 

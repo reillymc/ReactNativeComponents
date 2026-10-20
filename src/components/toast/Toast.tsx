@@ -1,11 +1,5 @@
 import type { FunctionComponent, ReactNode } from "react";
-import {
-    type ColorValue,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
     LinearTransition,
     SlideInDown,
@@ -14,13 +8,6 @@ import Animated, {
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 
-export interface ToastStyles {
-    container: {
-        backgroundColor: ColorValue;
-        padding: number;
-        borderRadius: number;
-    };
-}
 export interface ToastProps {
     action?: ReactNode;
     containerStyle?: StyleProp<ViewStyle>;

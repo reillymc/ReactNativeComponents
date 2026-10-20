@@ -4,10 +4,6 @@ import {
     type DropdownInputBaseProps,
 } from "./DropdownInputBase";
 
-export interface DropdownInputStyles {
-    panelGap: number;
-}
-
 export type DropdownInputProps<T = string> = Pick<
     DropdownInputBaseProps<T>,
     | "autoCapitalize"

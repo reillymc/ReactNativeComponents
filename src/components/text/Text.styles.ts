@@ -1,7 +1,30 @@
-import type { Theme } from "../../theme/theme";
-import type { TextStyles } from "./Text";
+import type { TextStyle } from "react-native";
 
-export const defaultTextStyles = ({ color, font }: Theme): TextStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export type TextVariant =
+    | "display"
+    | "title"
+    | "heading"
+    | "label"
+    | "body"
+    | "caption";
+
+export interface TextStyles {
+    color: string;
+    font: {
+        [Variant in TextVariant]: {
+            family: string;
+            weight: TextStyle["fontWeight"];
+            size: number;
+        };
+    };
+}
+
+export const defaultTextStyles: StyleFactory<TextStyles> = ({
+    color,
+    font,
+}) => ({
     color: color.textPrimary,
     font: {
         caption: {

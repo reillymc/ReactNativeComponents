@@ -1,27 +1,16 @@
-import { type ColorValue, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ValueItem } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { ActionBase } from "../action";
-import { InteractiveIcon, type InteractiveIconStyles } from "../icon";
+import { InteractiveIcon } from "../icon";
 import { Tag } from "../tag";
 import { Text } from "../text";
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
-
-export type SelectionInputState = "enabled" | "disabled" | "pressed";
-
-export type SelectionInputStyles = {
-    container: {
-        backgroundColor: Record<SelectionInputState, ColorValue>;
-    };
-    selectionContainer: {
-        gap: number;
-    };
-    icon: Pick<InteractiveIconStyles, "color">;
-};
+import type { SelectionInputStyles } from "./SelectionInput.styles";
 
 export type SelectionInputIcons = ComponentIconAssets<"showOptions">;
 

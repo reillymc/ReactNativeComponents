@@ -1,7 +1,15 @@
-import type { Theme } from "../../theme/theme";
-import type { TagStyles } from "./Tag";
+import type { StyleFactory } from "../../style/styleFactory";
 
-export const defaultTagStyles = ({ border, spacing }: Theme): TagStyles => ({
+export interface TagStyles {
+    internalSpacing: number;
+    borderRadius: number;
+    padding: number;
+}
+
+export const defaultTagStyles: StyleFactory<TagStyles> = ({
+    border,
+    spacing,
+}) => ({
     borderRadius: border.radius.loose,
     internalSpacing: spacing.small,
     padding: spacing.small,

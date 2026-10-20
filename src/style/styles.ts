@@ -1,38 +1,6 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 import merge from "lodash.merge";
 
-import type {
-    ActionStyles,
-    AlertIndicatorStyles,
-    AnchoredContainerStyles,
-    AvatarStyles,
-    ButtonBaseStyles,
-    ButtonStyles,
-    DropdownInputStyles,
-    HighlightedTextStyles,
-    IconActionBaseStyles,
-    IconActionStyles,
-    IconBaseStyles,
-    IconButtonBaseStyles,
-    IconButtonStyles,
-    IconStyles,
-    InputActionStyles,
-    InputBaseStyles,
-    InputScaffoldStyles,
-    InteractiveIconStyles,
-    InteractiveTextStyles,
-    ListItemStyles,
-    MenuItemStyles,
-    MenuStyles,
-    RatingInputStyles,
-    RatingStyles,
-    SelectionInputStyles,
-    SwipeActionStyles,
-    TagStyles,
-    TextStyles,
-    ToastStyles,
-    ToggleInputStyles,
-} from "../components";
 import { defaultActionStyles } from "../components/action/Action.styles";
 import { defaultIconActionStyles } from "../components/action/IconAction.styles";
 import { defaultIconActionBaseStyles } from "../components/action/IconActionBase.styles";
@@ -62,66 +30,16 @@ import { defaultHighlightedTextStyles } from "../components/text/HighlightedText
 import { defaultInteractiveTextStyles } from "../components/text/InteractiveText.styles";
 import { defaultTextStyles } from "../components/text/Text.styles";
 import { defaultToastStyles } from "../components/toast/Toast.styles";
-import type { Theme } from "./theme";
-
-export type Styles = {
-    text: TextStyles;
-    interactiveText: InteractiveTextStyles;
-    highlightedText: HighlightedTextStyles;
-
-    icon: IconStyles;
-    iconBase: IconBaseStyles;
-    interactiveIcon: InteractiveIconStyles;
-
-    action: ActionStyles;
-    iconAction: IconActionStyles;
-    iconActionBase: IconActionBaseStyles;
-
-    buttonBase: ButtonBaseStyles;
-    button: ButtonStyles;
-    iconButtonBase: IconButtonBaseStyles;
-    iconButton: IconButtonStyles;
-
-    inputBase: InputBaseStyles;
-    inputScaffold: InputScaffoldStyles;
-    inputAction: InputActionStyles;
-    toggleInput: ToggleInputStyles;
-    selectionInput: SelectionInputStyles;
-    ratingInput: RatingInputStyles;
-
-    rating: RatingStyles;
-    alertIndicator: AlertIndicatorStyles;
-
-    dropdownInput: DropdownInputStyles;
-    listItem: ListItemStyles;
-    avatar: AvatarStyles;
-    common: {
-        action: {
-            fontSize: {
-                [Size in "small" | "regular" | "large"]: number;
-            };
-        };
-    };
-    toast: ToastStyles;
-    menu: MenuStyles;
-    menuItem: MenuItemStyles;
-    swipeAction: SwipeActionStyles;
-    anchoredContainer: AnchoredContainerStyles;
-    tag: TagStyles;
-};
-
-export type StyleOverrides = DeepPartial<Styles>;
-
-export type CreateStyles = (theme: Theme) => Styles;
+import type { Theme } from "../theme/theme";
+import type { StyleFactory } from "./styleFactory";
 
 /**
- * Composes the default `Styles` registry from each component's `styles.ts`
- * factory. Defaults live next to the component that owns them; this module only
- * assembles them (and holds the shared `common` token).
+ * Composes the default style registry from each component's `styles.ts`
+ * factory.
  */
-export const createDefaultStyles: CreateStyles = (theme) => ({
+export const createDefaultStyles = (theme: Theme) => ({
     interactiveText: defaultInteractiveTextStyles(theme),
-    highlightedText: defaultHighlightedTextStyles(),
+    highlightedText: defaultHighlightedTextStyles(theme),
     iconBase: defaultIconBaseStyles(theme),
     icon: defaultIconStyles(theme),
     interactiveIcon: defaultInteractiveIconStyles(theme),
@@ -147,13 +65,6 @@ export const createDefaultStyles: CreateStyles = (theme) => ({
     alertIndicator: defaultAlertIndicatorStyles(theme),
     tag: defaultTagStyles(theme),
 
-    common: {
-        action: {
-            fontSize: {
-                ...theme.font.size,
-            },
-        },
-    },
     text: defaultTextStyles(theme),
     dropdownInput: defaultDropdownInputStyles(theme),
     toggleInput: defaultToggleInputStyles(theme),
@@ -162,19 +73,24 @@ export const createDefaultStyles: CreateStyles = (theme) => ({
     toast: defaultToastStyles(theme),
 });
 
-export const MergeStyles = (
-    styles: Styles,
-    overrides: StyleOverrides | undefined = {},
-): Styles => merge({}, styles, overrides);
+export type Styles = ReturnType<typeof createDefaultStyles>;
+
+export type StyleOverrides<E extends object = Record<never, never>> =
+    DeepPartial<Styles & E>;
 
 /**
  * Builds the full `Styles` registry for a theme, optionally merged with
- * consumer style overrides.
+ * app-owned component style overrides.
+ *
+ * Style overrides are supplied as a factory so they can derive values from
+ * the resolved base theme and are merged over the default registry.
  */
-export const createStyles = (
+export const createStyles = <E extends object = Record<never, never>>(
     theme: Theme,
-    overrides?: StyleOverrides,
-): Styles => MergeStyles(createDefaultStyles(theme), overrides);
+    createOverrides?: StyleFactory<E>,
+): Styles & E =>
+    merge({}, createDefaultStyles(theme), createOverrides?.(theme)) as Styles &
+        E;
 
-export const MergeStyleSlice = <T>(base: T, override: unknown): T =>
+export const mergeStyle = <T>(base: T, override: unknown): T =>
     override === undefined ? base : (merge({}, base, override) as T);

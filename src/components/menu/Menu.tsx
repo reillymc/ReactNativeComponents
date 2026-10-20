@@ -1,5 +1,4 @@
 import {
-    type ColorValue,
     FlatList,
     type FlatListProps,
     type ListRenderItem,
@@ -9,15 +8,7 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-
-export type MenuStyles = {
-    parentMargin: number;
-    backgroundColor: ColorValue;
-    borderRadius: number;
-    padding: number;
-    gap: number;
-    maxHeight: number;
-};
+import type { MenuStyles } from "./Menu.styles";
 
 export type MenuProps<T = unknown> = {
     data: ReadonlyArray<T>;

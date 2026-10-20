@@ -1,5 +1,1 @@
-export {
-    AlertIndicator,
-    type AlertIndicatorProps,
-    type AlertIndicatorStyles,
-} from "./AlertIndicator";
+export { AlertIndicator, type AlertIndicatorProps } from "./AlertIndicator";

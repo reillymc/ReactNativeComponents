@@ -1,8 +1,11 @@
-import type { Theme } from "../../../theme/theme";
-import type { AnchoredContainerStyles } from "./AnchoredContainer";
+import type { StyleFactory } from "../../../style/styleFactory";
 
-export const defaultAnchoredContainerStyles = ({
-    spacing,
-}: Theme): AnchoredContainerStyles => ({
+export type AnchoredContainerStyles = {
+    parentMargin: number;
+};
+
+export const defaultAnchoredContainerStyles: StyleFactory<
+    AnchoredContainerStyles
+> = ({ spacing }) => ({
     parentMargin: spacing.small,
 });

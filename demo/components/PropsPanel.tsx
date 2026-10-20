@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any used for simple prop definition flexibility */
 import { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
 import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
@@ -9,9 +9,9 @@ import {
     TextInput,
     ToggleInput,
 } from "@reillymc/react-native-components/components";
-import type { Theme } from "@reillymc/react-native-components/theme";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import { useTheme } from "../theme";
+import { createThemedStyles } from "../theme";
 import { useSelectionModal } from "./useSelectionModal";
 
 type PropDefinitionBase = {
@@ -77,13 +77,11 @@ export const PropsPanel = <T extends Record<string, any>>({
     propValues,
     onChange,
 }: PropsPanelProps<T>) => {
-    const { theme } = useTheme();
+    const styles = useThemedStyles(createStyles);
 
     const [customLabels, setCustomLabels] = useState<{
         [P in keyof T]?: string;
     }>({});
-
-    const styles = createStyles(theme);
 
     const [selectionId, setSelectionId] = useState<string>();
     const [selectionItems, setSelectionItems] = useState<ValueItem[]>([]);
@@ -280,24 +278,21 @@ export const PropsPanel = <T extends Record<string, any>>({
 
 PropsPanel.displayName = "PropsPanel";
 
-const createStyles = (theme: Theme) => {
-    const styles = StyleSheet.create({
-        container: {
-            display: "flex",
-            backgroundColor: theme.color.foreground,
-            borderTopStartRadius: 20,
-            borderTopEndRadius: 20,
-        },
-        contentContainer: {
-            width: "60%",
-            alignSelf: "center",
-            flexGrow: 1,
-            paddingBottom: 120,
-        },
-        propContainer: {
-            display: "flex",
-            marginTop: 24,
-        },
-    });
-    return styles;
-};
+const createStyles = createThemedStyles(({ styles: { propsPanel } }) => ({
+    container: {
+        display: "flex",
+        backgroundColor: propsPanel.backgroundColor,
+        borderTopStartRadius: propsPanel.borderRadius,
+        borderTopEndRadius: propsPanel.borderRadius,
+    },
+    contentContainer: {
+        width: propsPanel.contentWidth,
+        alignSelf: "center",
+        flexGrow: 1,
+        paddingBottom: propsPanel.contentBottomPadding,
+    },
+    propContainer: {
+        display: "flex",
+        marginTop: propsPanel.itemSpacing,
+    },
+}));

@@ -1,6 +1,15 @@
-import type { HighlightedTextStyles } from "./HighlightedText";
+import type { TextStyle } from "react-native";
 
-export const defaultHighlightedTextStyles = (): HighlightedTextStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+import type { TextVariant } from "./Text.styles";
+
+export interface HighlightedTextStyles {
+    highlightedWeight: Record<TextVariant, TextStyle["fontWeight"]>;
+}
+
+export const defaultHighlightedTextStyles: StyleFactory<
+    HighlightedTextStyles
+> = () => ({
     highlightedWeight: {
         body: "800",
         caption: "800",

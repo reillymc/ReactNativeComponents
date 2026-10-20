@@ -1,24 +1,11 @@
-import { type DimensionValue, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
-import {
-    type IconComponentProps,
-    InteractiveIcon,
-    type InteractiveIconStyles,
-} from "../icon";
-import type { ButtonBaseProps, ButtonBaseStyles } from "./ButtonBase";
-
-export type IconButtonBaseStyles = {
-    container: {
-        size: DimensionValue;
-        padding: number;
-        borderRadius: ButtonBaseStyles["borderRadius"];
-        backgroundColor: ButtonBaseStyles["backgroundColor"];
-    };
-    icon: InteractiveIconStyles;
-};
+import { type IconComponentProps, InteractiveIcon } from "../icon";
+import type { ButtonBaseProps } from "./ButtonBase";
+import type { IconButtonBaseStyles } from "./IconButtonBase.styles";
 
 export interface IconButtonBaseProps
     extends Pick<ButtonBaseProps, "onPress" | "disabled" | "containerStyle"> {

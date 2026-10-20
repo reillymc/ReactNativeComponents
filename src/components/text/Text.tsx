@@ -3,30 +3,11 @@ import {
     Text as RnText,
     type TextProps as RnTextProps,
     StyleSheet,
-    type TextStyle,
 } from "react-native";
 
 import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-
-export type TextVariant =
-    | "display"
-    | "title"
-    | "heading"
-    | "label"
-    | "body"
-    | "caption";
-
-export interface TextStyles {
-    color: string;
-    font: {
-        [Variant in TextVariant]: {
-            family: string;
-            weight: TextStyle["fontWeight"];
-            size: number;
-        };
-    };
-}
+import type { TextVariant } from "./Text.styles";
 
 export interface TextProps extends RnTextProps {
     variant?: TextVariant;

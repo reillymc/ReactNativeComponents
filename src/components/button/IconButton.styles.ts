@@ -1,9 +1,27 @@
-import type { Theme } from "../../theme/theme";
+import type { StyleFactory } from "../../style/styleFactory";
 import { defaultActionStyles } from "../action/Action.styles";
 import { defaultIconStyles } from "../icon/Icon.styles";
-import type { IconButtonStyles } from "./IconButton";
+import type { InteractiveIconStyles } from "../icon/InteractiveIcon.styles";
+import type { IconButtonBaseStyles } from "./IconButtonBase.styles";
 
-export const defaultIconButtonStyles = (theme: Theme): IconButtonStyles => {
+export type IconButtonVariant = "primary" | "secondary" | "destructive";
+
+export type IconButtonStyles = {
+    container: {
+        size: number;
+        backgroundColor: Record<
+            IconButtonVariant,
+            IconButtonBaseStyles["container"]["backgroundColor"]
+        >;
+    };
+    icon: {
+        color: Record<IconButtonVariant, InteractiveIconStyles["color"]>;
+    };
+};
+
+export const defaultIconButtonStyles: StyleFactory<IconButtonStyles> = (
+    theme,
+) => {
     const { color, spacing } = theme;
     const icon = defaultIconStyles(theme);
     const action = defaultActionStyles(theme);

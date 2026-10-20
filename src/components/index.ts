@@ -1,11 +1,8 @@
 export type {
     ActionBaseProps,
     ActionProps,
-    ActionStyles,
     IconActionBaseProps,
-    IconActionBaseStyles,
     IconActionProps,
-    IconActionStyles,
 } from "./action";
 export {
     Action,
@@ -13,21 +10,13 @@ export {
     IconAction,
     IconActionBase,
 } from "./action";
-export {
-    AlertIndicator,
-    type AlertIndicatorProps,
-    type AlertIndicatorStyles,
-} from "./alert";
-export { Avatar, type AvatarProps, type AvatarStyles } from "./avatar";
+export { AlertIndicator, type AlertIndicatorProps } from "./alert";
+export { Avatar, type AvatarProps } from "./avatar";
 export type {
     ButtonBaseProps,
-    ButtonBaseStyles,
     ButtonProps,
-    ButtonStyles,
     IconButtonBaseProps,
-    IconButtonBaseStyles,
     IconButtonProps,
-    IconButtonStyles,
 } from "./button";
 export {
     Button,
@@ -37,7 +26,6 @@ export {
 } from "./button";
 export type {
     AnchoredContainerProps,
-    AnchoredContainerStyles,
     ContainerPlacement,
     FormContainerProps,
     FormRowProps,
@@ -51,27 +39,20 @@ export {
 } from "./container";
 export type {
     IconBaseProps,
-    IconBaseStyles,
     IconComponentProps,
     IconProps,
-    IconStyles,
-    InteractiveIconStyles,
 } from "./icon";
 export { Icon, IconBase } from "./icon";
 export type {
     CounterInputIcons,
     CounterInputProps,
     DropdownInputProps,
-    DropdownInputStyles,
     FractionValue,
     InputActionProps,
-    InputActionStyles,
     InputBaseProps,
-    InputBaseStyles,
     InputRowContainerProps,
     InputScaffoldIcons,
     InputScaffoldProps,
-    InputScaffoldStyles,
     NumberInputIcons,
     NumberInputPlaceholders,
     NumberInputProps,
@@ -80,18 +61,14 @@ export type {
     RangeValue,
     RatingInputIcons,
     RatingInputProps,
-    RatingInputStyles,
     SelectionInputIcons,
     SelectionInputProps,
-    SelectionInputStyles,
     TextInputProps,
-    TextInputStyles,
     TimeInputIcons,
     TimeInputProps,
     TimeInputValue,
     ToggleInputIcons,
     ToggleInputProps,
-    ToggleInputStyles,
 } from "./input";
 export {
     CounterInput,
@@ -114,14 +91,8 @@ export {
     ListItemFooter,
     type ListItemProps,
     ListItemRow,
-    type ListItemStyles,
 } from "./listItem";
-export type {
-    MenuItemProps,
-    MenuItemStyles,
-    MenuProps,
-    MenuStyles,
-} from "./menu";
+export type { MenuItemProps, MenuProps } from "./menu";
 export {
     Menu,
     MenuItem,
@@ -131,27 +102,16 @@ export {
     Rating,
     type RatingIcons,
     type RatingProps,
-    type RatingStyles,
     ratingToValue,
     valueToRating,
 } from "./rating";
 export {
     SwipeAction,
     type SwipeActionProps,
-    type SwipeActionStyles,
     SwipeableContainer,
     type SwipeableContainerProps,
 } from "./swipe";
-export { Tag, TagIcon, type TagProps, type TagStyles } from "./tag";
-export type {
-    HighlightedTextProps,
-    HighlightedTextStyles,
-    InteractiveTextStyles,
-    TextProps,
-    TextStyles,
-} from "./text";
-export {
-    HighlightedText,
-    Text,
-} from "./text";
-export { Toast, type ToastProps, type ToastStyles } from "./toast";
+export { Tag, TagIcon, type TagProps } from "./tag";
+export type { HighlightedTextProps, TextProps } from "./text";
+export { HighlightedText, Text } from "./text";
+export { Toast, type ToastProps } from "./toast";

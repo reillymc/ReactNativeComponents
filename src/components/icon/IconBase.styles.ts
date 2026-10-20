@@ -1,7 +1,15 @@
-import type { Theme } from "../../theme/theme";
-import type { IconBaseStyles } from "./IconBase";
+import type { ColorValue } from "react-native";
 
-export const defaultIconBaseStyles = ({ color }: Theme): IconBaseStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export interface IconBaseStyles {
+    color: ColorValue;
+    size: number;
+}
+
+export const defaultIconBaseStyles: StyleFactory<IconBaseStyles> = ({
+    color,
+}) => ({
     color: color.textPrimary,
     size: 20,
 });

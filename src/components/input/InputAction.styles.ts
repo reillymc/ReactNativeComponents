@@ -1,8 +1,14 @@
-import type { Theme } from "../../theme/theme";
+import type { StyleFactory } from "../../style/styleFactory";
 import { defaultActionStyles } from "../action/Action.styles";
-import type { InputActionStyles } from "./InputAction";
+import type { IconActionBaseStyles } from "../action/IconActionBase.styles";
 
-export const defaultInputActionStyles = (theme: Theme): InputActionStyles => {
+export interface InputActionStyles {
+    icon: Pick<IconActionBaseStyles["icon"], "color">;
+}
+
+export const defaultInputActionStyles: StyleFactory<InputActionStyles> = (
+    theme,
+) => {
     const action = defaultActionStyles(theme);
 
     return {

@@ -2,17 +2,9 @@ import type { PressableStateCallbackType } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { IconBase, type IconBaseStyles } from "./IconBase";
+import { IconBase } from "./IconBase";
 import type { IconComponentProps } from "./IconComponentProps";
-
-export type InteractiveIconState = "enabled" | "disabled" | "pressed";
-
-export type InteractiveIconStyles = {
-    size: IconBaseStyles["size"];
-    color: {
-        [State in InteractiveIconState]: IconBaseStyles["color"];
-    };
-};
+import type { InteractiveIconStyles } from "./InteractiveIcon.styles";
 
 export interface InteractiveIconProps extends PressableStateCallbackType {
     style?: DeepPartial<InteractiveIconStyles>;

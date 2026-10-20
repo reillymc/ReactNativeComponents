@@ -1,27 +1,9 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import type { IconComponentProps, InteractiveIconStyles } from "../icon";
-import {
-    IconButtonBase,
-    type IconButtonBaseProps,
-    type IconButtonBaseStyles,
-} from "./IconButtonBase";
-
-export type IconButtonVariant = "primary" | "secondary" | "destructive";
-
-export type IconButtonStyles = {
-    container: {
-        size: number;
-        backgroundColor: Record<
-            IconButtonVariant,
-            IconButtonBaseStyles["container"]["backgroundColor"]
-        >;
-    };
-    icon: {
-        color: Record<IconButtonVariant, InteractiveIconStyles["color"]>;
-    };
-};
+import type { IconComponentProps } from "../icon";
+import type { IconButtonStyles, IconButtonVariant } from "./IconButton.styles";
+import { IconButtonBase, type IconButtonBaseProps } from "./IconButtonBase";
 
 export interface IconButtonProps
     extends Pick<

@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import { useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
@@ -12,7 +12,7 @@ import {
 } from "@reillymc/react-native-components/components";
 import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import { type AppThemedStyles, useTheme } from "../demo/theme";
+import { createThemedStyles, useTheme } from "../demo/theme";
 
 const FormPage: FC = () => {
     const { theme } = useTheme();
@@ -46,7 +46,7 @@ const FormPage: FC = () => {
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.page}
+                contentContainerStyle={styles.content}
             >
                 <FormContainer>
                     <TextInput label="Full name" placeholder="Ada Lovelace" />
@@ -99,14 +99,15 @@ const FormPage: FC = () => {
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
-    StyleSheet.create({
-        page: {
+const createStyles = createThemedStyles(
+    ({ styles: { page }, theme: { color } }) => ({
+        content: {
             backgroundColor: color.background,
-            paddingHorizontal: spacing.pageHorizontal,
-            paddingTop: spacing.pageTop,
-            paddingBottom: spacing.pageBottom,
+            paddingHorizontal: page.horizontal,
+            paddingTop: page.top,
+            paddingBottom: page.bottom,
         },
-    });
+    }),
+);
 
 export default FormPage;

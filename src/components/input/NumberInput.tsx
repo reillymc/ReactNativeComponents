@@ -6,7 +6,7 @@ import {
 } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputRowContainer } from "./InputRowContainer";

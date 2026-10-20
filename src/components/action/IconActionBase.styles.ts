@@ -1,10 +1,23 @@
-import type { Theme } from "../../theme/theme";
-import { defaultInteractiveTextStyles } from "../text/InteractiveText.styles";
-import type { IconActionBaseStyles } from "./IconActionBase";
+import type { StyleFactory } from "../../style/styleFactory";
+import type { InteractiveIconStyles } from "../icon/InteractiveIcon.styles";
+import {
+    defaultInteractiveTextStyles,
+    type InteractiveTextStyles,
+} from "../text/InteractiveText.styles";
 
-export const defaultIconActionBaseStyles = (
-    theme: Theme,
-): IconActionBaseStyles => {
+export type IconActionBaseStyles = {
+    gap: number;
+    text: {
+        color: InteractiveTextStyles["color"];
+    };
+    icon: {
+        color: InteractiveIconStyles["color"];
+    };
+};
+
+export const defaultIconActionBaseStyles: StyleFactory<IconActionBaseStyles> = (
+    theme,
+) => {
     const interactiveText = defaultInteractiveTextStyles(theme);
 
     return {

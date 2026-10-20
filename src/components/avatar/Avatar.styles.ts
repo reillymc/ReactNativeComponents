@@ -1,7 +1,26 @@
-import type { Theme } from "../../theme/theme";
-import type { AvatarStyles } from "./Avatar";
+import type { ColorValue, TextStyle } from "react-native";
 
-export const defaultAvatarStyles = ({ color, font }: Theme): AvatarStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export type AvatarSize = "small" | "regular" | "large";
+
+export type AvatarStyles = {
+    size: { [Key in AvatarSize]: number };
+    initials: {
+        fontWeight: TextStyle["fontWeight"];
+        fontSize: Record<AvatarSize, number>;
+    };
+    label: {
+        fontWeight: TextStyle["fontWeight"];
+        fontSize: number;
+    };
+    colors: Array<{ background: ColorValue; foreground: ColorValue }>;
+};
+
+export const defaultAvatarStyles: StyleFactory<AvatarStyles> = ({
+    color,
+    font,
+}) => ({
     size: {
         large: 80,
         regular: 40,

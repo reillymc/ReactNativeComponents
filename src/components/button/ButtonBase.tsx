@@ -1,27 +1,10 @@
 import type { FC } from "react";
-import {
-    type ColorValue,
-    type DimensionValue,
-    StyleSheet,
-    View,
-} from "react-native";
+import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase, type ActionBaseProps } from "../action";
-
-export type ButtonState = "enabled" | "disabled" | "pressed";
-
-export type ButtonBaseStyles = {
-    height: DimensionValue;
-    width: {
-        medium: DimensionValue;
-    };
-    paddingHorizontal: number;
-    paddingVertical: number;
-    borderRadius: number | `${number}%`;
-    backgroundColor: Record<ButtonState, ColorValue>;
-};
+import type { ButtonBaseStyles } from "./ButtonBase.styles";
 
 export interface ButtonBaseProps
     extends Pick<

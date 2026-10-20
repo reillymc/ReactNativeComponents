@@ -1,6 +1,5 @@
 export type {
     AnchoredContainerProps,
-    AnchoredContainerStyles,
     ContainerPlacement,
 } from "./anchoredContainer";
 export { AnchoredContainer } from "./anchoredContainer";

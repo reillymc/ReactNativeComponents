@@ -1,9 +1,27 @@
-import type { Theme } from "../../theme/theme";
+import type { StyleFactory } from "../../style/styleFactory";
 import { defaultActionStyles } from "../action/Action.styles";
 import { defaultIconStyles } from "../icon/Icon.styles";
-import type { ToggleInputStyles } from "./ToggleInput";
+import type { InteractiveIconStyles } from "../icon/InteractiveIcon.styles";
+import type { InputVariant } from "./InputBase.styles";
 
-export const defaultToggleInputStyles = (theme: Theme): ToggleInputStyles => {
+export type ToggleVariant = "primary" | "secondary";
+
+export type ToggleInputStyles = {
+    indicator: {
+        size: { [Size in InputVariant]: number };
+        color: {
+            deselected: InteractiveIconStyles["color"];
+            selected: Record<ToggleVariant, InteractiveIconStyles["color"]>;
+        };
+    };
+    label: {
+        gap: number;
+    };
+};
+
+export const defaultToggleInputStyles: StyleFactory<ToggleInputStyles> = (
+    theme,
+) => {
     const { color, spacing } = theme;
     const icon = defaultIconStyles(theme);
     const action = defaultActionStyles(theme);

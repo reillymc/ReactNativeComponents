@@ -3,8 +3,6 @@ import type { TextInput, TextInputChangeEvent } from "react-native";
 
 import { InputBase, type InputBaseProps } from "./InputBase";
 
-export type NumberInputBaseStyles = never;
-
 const INTEGER_PATTERN = /^\d*/;
 const DECIMAL_PATTERN = /^\d*\.?\d*/;
 const LEADING_ZEROS_PATTERN = /^0+(?=\d)/;

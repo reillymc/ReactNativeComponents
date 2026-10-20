@@ -9,14 +9,6 @@ import { Text } from "../text";
 
 type ListItemVariant = "default" | "compact";
 
-export interface ListItemStyles {
-    spacingMargin: number;
-    internalSpacing: number;
-    borderRadius: number;
-    contentItemTopMargin: number;
-    contentItemSpacing: number;
-}
-
 export interface ListItemProps {
     heading?: ReactNode;
     header?: ReactNode;

@@ -1,17 +1,9 @@
 import { StyleSheet } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import {
-    IconActionBase,
-    type IconActionBaseProps,
-    type IconActionBaseStyles,
-} from "../action";
+import { IconActionBase, type IconActionBaseProps } from "../action";
 import type { IconComponentProps } from "../icon";
 import type { InputBaseProps } from "./InputBase";
-
-export interface InputActionStyles {
-    icon: Pick<IconActionBaseStyles["icon"], "color">;
-}
 
 export interface InputActionProps
     extends Pick<

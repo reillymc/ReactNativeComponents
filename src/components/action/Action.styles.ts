@@ -1,7 +1,15 @@
-import type { Theme } from "../../theme/theme";
-import type { ActionStyles } from "./Action";
+import type { StyleFactory } from "../../style/styleFactory";
+import type { InteractiveTextStyles } from "../text/InteractiveText.styles";
 
-export const defaultActionStyles = ({ color }: Theme): ActionStyles => ({
+export type ActionVariant = "primary" | "secondary" | "destructive";
+
+export type ActionStyles = {
+    label: {
+        color: Record<ActionVariant, InteractiveTextStyles["color"]>;
+    };
+};
+
+export const defaultActionStyles: StyleFactory<ActionStyles> = ({ color }) => ({
     label: {
         color: {
             primary: {

@@ -1,10 +1,21 @@
-import type { Theme } from "../../theme/theme";
-import type { InputScaffoldStyles } from "./InputScaffold";
+import type { ColorValue } from "react-native";
 
-export const defaultInputScaffoldStyles = ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export interface InputScaffoldStyles {
+    gap: number;
+    mandatoryIndicator: {
+        color: ColorValue;
+    };
+    helpText: {
+        gap: number;
+    };
+}
+
+export const defaultInputScaffoldStyles: StyleFactory<InputScaffoldStyles> = ({
     color,
     spacing,
-}: Theme): InputScaffoldStyles => ({
+}) => ({
     gap: spacing.tiny,
     mandatoryIndicator: {
         color: color.primaryDark,

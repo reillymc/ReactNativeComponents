@@ -1,8 +1,18 @@
-import type { Theme } from "../../theme/theme";
-import { defaultInputBaseStyles } from "../input/InputBase.styles";
-import type { MenuStyles } from "./Menu";
+import type { ColorValue } from "react-native";
 
-export const defaultMenuStyles = (theme: Theme): MenuStyles => {
+import type { StyleFactory } from "../../style/styleFactory";
+import { defaultInputBaseStyles } from "../input/InputBase.styles";
+
+export type MenuStyles = {
+    parentMargin: number;
+    backgroundColor: ColorValue;
+    borderRadius: number;
+    padding: number;
+    gap: number;
+    maxHeight: number;
+};
+
+export const defaultMenuStyles: StyleFactory<MenuStyles> = (theme) => {
     const inputBase = defaultInputBaseStyles(theme);
 
     return {

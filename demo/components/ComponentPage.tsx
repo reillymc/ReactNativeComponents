@@ -1,9 +1,9 @@
 import type { FunctionComponent, ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Stack } from "expo-router";
 import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import { type AppThemedStyles, useTheme } from "../theme";
+import { createThemedStyles, useTheme } from "../theme";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -57,31 +57,30 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = ({ theme: { color, border } }: AppThemedStyles) =>
-    StyleSheet.create({
-        componentContainer: {
-            flexGrow: 1,
-            flexBasis: 1,
-            backgroundColor: color.background,
-            paddingTop: 160,
-            paddingBottom: 60,
-        },
-        component: {
-            flex: 1,
-            backgroundColor: color.foreground,
-            width: "90%",
-            minHeight: 80,
-            justifyContent: "center",
-            borderRadius: border.radius.loose,
-            padding: 12,
-        },
-        centred: {
-            alignItems: "center",
-        },
-        propsContainer: {
-            display: "flex",
-            flexGrow: 5,
-            flexBasis: 1,
-            backgroundColor: color.background,
-        },
-    });
+const createStyles = createThemedStyles(({ theme: { color, border } }) => ({
+    componentContainer: {
+        flexGrow: 1,
+        flexBasis: 1,
+        backgroundColor: color.background,
+        paddingTop: 160,
+        paddingBottom: 60,
+    },
+    component: {
+        flex: 1,
+        backgroundColor: color.foreground,
+        width: "90%",
+        minHeight: 80,
+        justifyContent: "center",
+        borderRadius: border.radius.loose,
+        padding: 12,
+    },
+    centred: {
+        alignItems: "center",
+    },
+    propsContainer: {
+        display: "flex",
+        flexGrow: 5,
+        flexBasis: 1,
+        backgroundColor: color.background,
+    },
+}));

@@ -1,10 +1,25 @@
-import type { Theme } from "../../theme/theme";
-import { defaultInteractiveIconStyles } from "../icon/InteractiveIcon.styles";
-import type { IconButtonBaseStyles } from "./IconButtonBase";
+import type { DimensionValue } from "react-native";
 
-export const defaultIconButtonBaseStyles = (
-    theme: Theme,
-): IconButtonBaseStyles => ({
+import type { StyleFactory } from "../../style/styleFactory";
+import {
+    defaultInteractiveIconStyles,
+    type InteractiveIconStyles,
+} from "../icon/InteractiveIcon.styles";
+import type { ButtonBaseStyles } from "./ButtonBase.styles";
+
+export type IconButtonBaseStyles = {
+    container: {
+        size: DimensionValue;
+        padding: number;
+        borderRadius: ButtonBaseStyles["borderRadius"];
+        backgroundColor: ButtonBaseStyles["backgroundColor"];
+    };
+    icon: InteractiveIconStyles;
+};
+
+export const defaultIconButtonBaseStyles: StyleFactory<IconButtonBaseStyles> = (
+    theme,
+) => ({
     container: {
         padding: 4,
         size: 48,

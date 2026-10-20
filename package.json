@@ -25,6 +25,10 @@
             "types": "./lib/types/theme/index.d.ts",
             "default": "./lib/theme/index.js"
         },
+        "./style": {
+            "types": "./lib/types/style/index.d.ts",
+            "default": "./lib/style/index.js"
+        },
         "./common": {
             "types": "./lib/types/common/index.d.ts",
             "default": "./lib/common/index.js"

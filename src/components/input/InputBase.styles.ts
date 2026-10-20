@@ -1,12 +1,31 @@
-import type { Theme } from "../../theme/theme";
-import type { InputBaseStyles } from "./InputBase";
+import type { ColorValue } from "react-native";
 
-export const defaultInputBaseStyles = ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export type InputState = "enabled" | "disabled";
+export type InputVariant = "regular" | "compact";
+
+export interface InputBaseStyles {
+    container: {
+        height: Record<InputVariant, number>;
+        padding: number;
+        borderRadius: number;
+        backgroundColor: Record<InputState, ColorValue>;
+    };
+    text: {
+        fontSize: number;
+        fontFamily: string;
+        color: Record<InputState, ColorValue>;
+        placeholderColor: ColorValue;
+    };
+}
+
+export const defaultInputBaseStyles: StyleFactory<InputBaseStyles> = ({
     border,
     color,
     font,
     spacing,
-}: Theme): InputBaseStyles => ({
+}) => ({
     container: {
         height: {
             regular: 48,

@@ -4,10 +4,6 @@ import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { IconButton, type IconButtonProps } from "../button";
 import type { IconComponentProps } from "../icon";
 
-export type SwipeActionStyles = {
-    width: number;
-};
-
 export interface SwipeActionProps
     extends Pick<IconButtonProps, "onPress" | "variant"> {}
 

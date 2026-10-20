@@ -1,16 +1,11 @@
 import type { FC } from "react";
-import {
-    type ColorValue,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { IconBase } from "../icon";
+import type { RatingStyles } from "./Rating.styles";
 import {
     getRatingIcons,
     type RatingIconVariant,
@@ -18,14 +13,6 @@ import {
 } from "./ratingUtils";
 
 export type RatingIcons = ComponentIconAssets<RatingIconVariant>;
-
-export type RatingStyles = {
-    gap: number;
-    icon: {
-        size: number;
-        color: Record<RatingIconVariant, ColorValue>;
-    };
-};
 
 export interface RatingProps {
     /**

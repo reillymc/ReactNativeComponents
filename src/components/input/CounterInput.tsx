@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { StyleSheet } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { InputAction } from "./InputAction";
 import { InputRowContainer } from "./InputRowContainer";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";

@@ -1,11 +1,25 @@
-import type { Theme } from "../../theme/theme";
-import type { ButtonBaseStyles } from "./ButtonBase";
+import type { ColorValue, DimensionValue } from "react-native";
 
-export const defaultButtonBaseStyles = ({
+import type { StyleFactory } from "../../style/styleFactory";
+
+export type ButtonState = "enabled" | "disabled" | "pressed";
+
+export type ButtonBaseStyles = {
+    height: DimensionValue;
+    width: {
+        medium: DimensionValue;
+    };
+    paddingHorizontal: number;
+    paddingVertical: number;
+    borderRadius: number | `${number}%`;
+    backgroundColor: Record<ButtonState, ColorValue>;
+};
+
+export const defaultButtonBaseStyles: StyleFactory<ButtonBaseStyles> = ({
     border,
     color,
     spacing,
-}: Theme): ButtonBaseStyles => ({
+}) => ({
     height: 42,
     width: {
         medium: "50%",

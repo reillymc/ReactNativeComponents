@@ -1,6 +1,11 @@
-import type { Theme } from "../../theme/theme";
-import type { SwipeActionStyles } from "./SwipeAction";
+import type { StyleFactory } from "../../style/styleFactory";
 
-export const defaultSwipeActionStyles = (_theme: Theme): SwipeActionStyles => ({
+export type SwipeActionStyles = {
+    width: number;
+};
+
+export const defaultSwipeActionStyles: StyleFactory<
+    SwipeActionStyles
+> = () => ({
     width: 75,
 });

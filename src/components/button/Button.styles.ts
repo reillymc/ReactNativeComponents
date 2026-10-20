@@ -1,8 +1,23 @@
-import type { Theme } from "../../theme/theme";
-import type { ButtonStyles } from "./Button";
-import { defaultButtonBaseStyles } from "./ButtonBase.styles";
+import type { StyleFactory } from "../../style/styleFactory";
+import type { InteractiveTextStyles } from "../text/InteractiveText.styles";
+import {
+    type ButtonBaseStyles,
+    defaultButtonBaseStyles,
+} from "./ButtonBase.styles";
 
-export const defaultButtonStyles = (theme: Theme): ButtonStyles => {
+export type ButtonVariant = "primary" | "secondary" | "destructive";
+
+export type ButtonStyles = {
+    container: {
+        borderRadius: ButtonBaseStyles["borderRadius"];
+        color: Record<ButtonVariant, ButtonBaseStyles["backgroundColor"]>;
+    };
+    label: {
+        color: Record<ButtonVariant, InteractiveTextStyles["color"]>;
+    };
+};
+
+export const defaultButtonStyles: StyleFactory<ButtonStyles> = (theme) => {
     const { color } = theme;
     const buttonBase = defaultButtonBaseStyles(theme);
 
