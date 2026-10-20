@@ -1,119 +1,19 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import { type FC, useCallback, useEffect, useMemo } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import type { FC } from "react";
+import { FlatList, View } from "react-native";
 import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
+import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     Action,
     MenuItem,
-    type SelectionInputProps,
     Tag,
     TagIcon,
     Text,
-    type ThemedStyles,
-    useThemedStyles,
-    type ValueItem,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-type UseSelectionModalParams<T> = Pick<
-    SelectionInputProps<T>,
-    "selectionMode" | "items"
-> & {
-    key: string;
-    label: string;
-    placeholder?: string;
-    initialSelection?: ValueItem<T>[];
-};
-
-export const useSelectionModal = <T,>({
-    key,
-    initialSelection,
-    label,
-    items,
-    placeholder,
-    selectionMode,
-}: UseSelectionModalParams<T>) => {
-    const router = useRouter();
-
-    const { key: _, selection: selectionParam } = useGlobalSearchParams();
-
-    // TODO: investigate issues with params not updating when expected
-    const isActive = true; //useMemo(() => key === keyParam, [key, keyParam]);
-
-    const selectedItemsFromParams = useMemo(() => {
-        if (
-            !(isActive && selectionParam) ||
-            selectionParam === "undefined" ||
-            Array.isArray(selectionParam)
-        )
-            return;
-
-        return JSON.parse(selectionParam) as Array<ValueItem<T>>;
-    }, [isActive, selectionParam]);
-
-    const selectedWithInitial = useMemo(
-        () => selectedItemsFromParams ?? initialSelection ?? [],
-        [selectedItemsFromParams, initialSelection],
-    );
-
-    const stringItems = useMemo(() => JSON.stringify(items), [items]);
-    const stringSelectedWithInitial = useMemo(
-        () =>
-            selectedWithInitial
-                ? JSON.stringify(selectedWithInitial)
-                : undefined,
-        [selectedWithInitial],
-    );
-
-    useEffect(() => {
-        if (!isActive) return;
-
-        router.setParams({
-            key,
-            selectionMode: selectionMode,
-            label,
-            placeholder,
-            items: stringItems,
-            selection: stringSelectedWithInitial,
-        });
-    }, [
-        isActive,
-        stringItems,
-        stringSelectedWithInitial,
-        key,
-        label,
-        placeholder,
-        router,
-        selectionMode,
-    ]);
-
-    const openSelectionModal = useCallback(() => {
-        router.push({
-            pathname: "/SelectionModal",
-            params: {
-                key,
-                selectionMode: selectionMode,
-                label,
-                placeholder,
-                items: stringItems,
-                selection: stringSelectedWithInitial,
-            },
-        });
-    }, [
-        stringItems,
-        key,
-        label,
-        placeholder,
-        stringSelectedWithInitial,
-        router,
-        selectionMode,
-    ]);
-
-    return {
-        selectedItems: selectedWithInitial,
-        openSelectionModal,
-    };
-};
+import { createThemedStyles } from "../demo/theme";
 
 const SelectionModal: FC = () => {
     const styles = useThemedStyles(createStyles);
@@ -127,48 +27,34 @@ const SelectionModal: FC = () => {
         placeholder = "Select items",
     } = useGlobalSearchParams();
 
-    const items = useMemo(() => {
-        if (!rawItems || rawItems === "undefined" || Array.isArray(rawItems))
-            return;
+    const items =
+        !rawItems || rawItems === "undefined" || Array.isArray(rawItems)
+            ? undefined
+            : (JSON.parse(rawItems) as Array<ValueItem & { id?: string }>);
 
-        return JSON.parse(rawItems);
-    }, [rawItems]) as Array<ValueItem & { id?: string }>;
+    const selectedItems =
+        !rawSelection ||
+        rawSelection === "undefined" ||
+        Array.isArray(rawSelection)
+            ? []
+            : (JSON.parse(rawSelection) as Array<
+                  ValueItem | ValueItem<unknown>
+              >);
 
-    const selectedItems = useMemo(() => {
-        if (
-            !rawSelection ||
-            rawSelection === "undefined" ||
-            Array.isArray(rawSelection)
-        )
-            return [];
+    const selectionMode =
+        rawSelectionMode === "multi" || rawSelectionMode === "single"
+            ? rawSelectionMode
+            : "single";
 
-        return JSON.parse(rawSelection) as Array<
-            ValueItem | ValueItem<unknown>
-        >;
-    }, [rawSelection]);
+    const handleItemPress = (item: ValueItem | ValueItem<unknown>) => {
+        router.setParams({
+            selection: JSON.stringify([item]),
+        });
 
-    const selectionMode = useMemo(() => {
-        switch (rawSelectionMode) {
-            case "multi":
-            case "single":
-                return rawSelectionMode;
-            default:
-                return "single";
+        if (selectionMode === "single") {
+            setTimeout(router.back, 1);
         }
-    }, [rawSelectionMode]);
-
-    const handleItemPress = useCallback(
-        (item: ValueItem | ValueItem<unknown>) => {
-            router.setParams({
-                selection: JSON.stringify([item]),
-            });
-
-            if (selectionMode === "single") {
-                setTimeout(router.back, 1);
-            }
-        },
-        [router, selectionMode, selectedItems],
-    );
+    };
 
     return (
         <>
@@ -265,16 +151,16 @@ const SelectionModal: FC = () => {
 
 export default SelectionModal;
 
-const createStyles = ({
-    styles: { inputBase },
-    theme: { spacing, color },
-}: ThemedStyles) => {
-    const styles = StyleSheet.create({
+const createStyles = createThemedStyles(
+    ({
+        styles: { inputBase, page, selection },
+        theme: { spacing, color },
+    }) => ({
         headerAction: {
-            marginHorizontal: spacing.navigationActionHorizontal,
+            marginHorizontal: selection.navigationActionHorizontal,
         },
         list: {
-            paddingBottom: spacing.pageBottom,
+            paddingBottom: page.bottom,
         },
         tag: {
             marginVertical: 2,
@@ -304,6 +190,5 @@ const createStyles = ({
             borderRightWidth: 1,
             justifyContent: "center",
         },
-    });
-    return styles;
-};
+    }),
+);

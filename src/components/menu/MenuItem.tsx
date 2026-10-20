@@ -1,19 +1,15 @@
 import type { FC } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { StyleSheet } from "react-native";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { ActionBase } from "../action";
 import { HighlightedText } from "../text";
-
-export type MenuItemStyles = {
-    paddingHorizontal: number;
-    paddingVertical: number;
-    borderRadius: number;
-};
 
 export interface MenuItemProps {
     label: string;
     description?: string;
     searchValue?: string;
+    active?: boolean;
     onPress: () => void;
 }
 
@@ -21,6 +17,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     label,
     description,
     searchValue,
+    active,
     onPress,
 }) => {
     const {
@@ -30,11 +27,13 @@ export const MenuItem: FC<MenuItemProps> = ({
     const [styles] = useThemedStyles("menuItem", createStyles);
 
     return (
-        <Pressable
+        <ActionBase
+            hitSlop={0}
             onPress={onPress}
-            style={({ pressed }) => [
+            containerStyle={({ pressed }) => [
                 styles.dropdownItem,
                 pressed && { backgroundColor: color.pressOverlay },
+                active && { backgroundColor: color.pressOverlay },
             ]}
         >
             <HighlightedText text={label} highlight={searchValue} />
@@ -45,7 +44,7 @@ export const MenuItem: FC<MenuItemProps> = ({
                     highlight={searchValue}
                 />
             )}
-        </Pressable>
+        </ActionBase>
     );
 };
 

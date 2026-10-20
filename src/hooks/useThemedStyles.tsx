@@ -1,16 +1,11 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: any prop definition is permitted */
-import { useMemo } from "react";
-
-import type { ThemeContextDefinition as ThemedStyles } from "../providers";
-import {
-    type Icons,
-    MergeStyles,
-    type StyleOverrides,
-    type Styles,
-} from "../theme";
+import type { Icons } from "../icons/componentIcons";
+import type { ThemeContextDefinition } from "../providers";
+import { mergeStyle, type StyleOverrides, type Styles } from "../style/styles";
 import { useTheme } from "./useTheme";
 
-export type { ThemedStyles };
+export type ThemedStyles<E extends object = Record<never, never>> =
+    ThemeContextDefinition<E>;
 
 function hasKey<T extends object, K extends PropertyKey>(
     obj: T,
@@ -19,145 +14,190 @@ function hasKey<T extends object, K extends PropertyKey>(
     return key in obj;
 }
 
-type StyleOnlyKey = keyof Styles;
+type StyleOnlyKey<E extends object> = keyof Styles | keyof E;
 type IconOnlyKey = keyof Icons;
-type ComponentKey = StyleOnlyKey | IconOnlyKey;
+type ComponentKey<E extends object> = StyleOnlyKey<E> | IconOnlyKey;
 
-type ComponentRegistry = {
-    [K in keyof Styles | keyof Icons]: K extends keyof Styles
-        ? K extends keyof Icons
-            ? {
-                  style: Styles[K];
-                  icons: Icons[K];
-              }
-            : {
-                  style: Styles[K];
-              }
-        : K extends keyof Icons
-          ? {
-                icons: Icons[K];
-            }
-          : never;
+type ComponentRegistry<E extends object> = {
+    [K in keyof Styles | keyof E | keyof Icons]: (K extends keyof Styles
+        ? { style: Styles[K] }
+        : K extends keyof E
+          ? { style: E[K] }
+          : Record<never, never>) &
+        (K extends keyof Icons ? { icons: Icons[K] } : Record<never, never>);
 };
 
-type StyleResult<C extends keyof ComponentRegistry> = ComponentRegistry[C];
+type StyleResult<
+    E extends object,
+    C extends ComponentKey<E>,
+> = ComponentRegistry<E>[C];
 
-type UseStylesReturn<C extends ComponentKey, G = undefined> = [
-    generated: G,
-    component: StyleResult<C>,
-];
+type UseStylesReturn<
+    E extends object,
+    C extends ComponentKey<E>,
+    G = undefined,
+> = [generated: G, component: StyleResult<E, C>];
 type AnyGenerator = (...args: any[]) => any;
 
 type GeneratorResult<G extends AnyGenerator> = ReturnType<G>;
 
 type GeneratorProps<G extends AnyGenerator> =
-    Parameters<G> extends [ThemedStyles, infer U] ? U : never;
+    Parameters<G> extends [ThemeContextDefinition<any>, infer U] ? U : never;
 
-type UseStylesOptions<G extends AnyGenerator> = [GeneratorProps<G>] extends [
-    never,
-]
+type GeneratorExtension<G extends AnyGenerator> =
+    Parameters<G>[0] extends ThemeContextDefinition<infer E>
+        ? E
+        : Record<never, never>;
+
+type UseStylesOptions<E extends object, G extends AnyGenerator> = [
+    GeneratorProps<G>,
+] extends [never]
     ? [
           options?: {
-              styles?: StyleOverrides;
+              styles?: StyleOverrides<E>;
           },
       ]
     : [
           options: {
-              styles?: StyleOverrides;
+              styles?: StyleOverrides<E>;
               props: GeneratorProps<G>;
           },
       ];
 
-export const useThemedStyles = <
-    C extends ComponentKey,
-    G extends (...args: any[]) => any,
+const EMPTY_OPTIONS: {
+    styles?: StyleOverrides;
+    props?: unknown;
+} = {};
+
+const mergeStylesForComponent = <E extends object>(
+    styles: Styles & E,
+    name: ComponentKey<E>,
+    override: unknown,
+): { config: unknown; styles: Styles & E } => {
+    if (!hasKey(styles, name)) {
+        return { config: undefined, styles };
+    }
+
+    const base = styles[name];
+    const config = mergeStyle(base, override);
+
+    return {
+        config,
+        styles:
+            config === base
+                ? styles
+                : ({ ...styles, [name]: config } as Styles & E),
+    };
+};
+
+/**
+ * Builds the `[style, icons]` result for a named component, matching the
+ * shape of `ComponentRegistry`.
+ */
+const buildComponentResult = <E extends object>(
+    styles: Styles & E,
+    icons: Icons,
+    name: ComponentKey<E>,
+    config: unknown,
+) => {
+    const hasStyle = hasKey(styles, name);
+    const hasIcons = hasKey(icons, name);
+
+    if (hasStyle && hasIcons) {
+        return { style: config, icons: icons[name] };
+    }
+
+    if (hasStyle) {
+        return { style: config };
+    }
+
+    if (hasIcons) {
+        return { icons: icons[name] };
+    }
+
+    return {};
+};
+
+/**
+ * Reads themed styles.
+ *
+ * Two call forms:
+ * - `useThemedStyles(componentName, generator, options?)` — component form.
+ *   Returns `[generated, { style, icons }]` for the named component.
+ * - `useThemedStyles(generator, options?)` — external form.
+ *   Returns just the generated styles.
+ *
+ * The style extension is inferred from the generator's context type, so app
+ * components can read their own style slices by annotating the generator with
+ * the app's `ThemedStyles<AppStyles>` type.
+ */
+export function useThemedStyles<
+    G extends AnyGenerator,
+    C extends ComponentKey<GeneratorExtension<G>> = ComponentKey<
+        GeneratorExtension<G>
+    >,
 >(
     componentName: C,
     generator: G,
-    ...[options = {}]: UseStylesOptions<G>
-): UseStylesReturn<C, GeneratorResult<G>> => {
-    const componentProps = "props" in options ? options.props : undefined;
-    const componentStyles = "styles" in options ? options.styles : undefined;
-    const { theme, styles: originalStyles, icons } = useTheme();
-
-    const themedStyles = useMemo(() => {
-        const styles = MergeStyles(originalStyles, componentStyles);
-
-        const generated =
-            "props" in options
-                ? generator({ theme, styles, icons }, componentProps)
-                : generator({ theme, styles, icons });
-
-        const componentResult = hasKey(styles, componentName)
-            ? hasKey(icons, componentName)
-                ? {
-                      style: styles[componentName],
-                      icons: icons[componentName],
-                  }
-                : {
-                      style: styles[componentName],
-                  }
-            : hasKey(icons, componentName)
-              ? {
-                    icons: icons[componentName],
-                }
-              : {};
-
-        return [generated, componentResult] as [
-            GeneratorResult<G>,
-            StyleResult<C>,
-        ];
-    }, [
-        generator,
-        theme,
-        icons,
-        options,
-        componentProps,
-        componentStyles,
-        componentName,
-        originalStyles,
-    ]);
-
-    return themedStyles;
-};
-
-export const useThemedStylesExternal = <G extends (...args: any[]) => any>(
+    ...options: UseStylesOptions<GeneratorExtension<G>, G>
+): UseStylesReturn<GeneratorExtension<G>, C, GeneratorResult<G>>;
+export function useThemedStyles<G extends AnyGenerator>(
     generator: G,
-    ...[options = {}]: UseStylesOptions<G>
-): GeneratorResult<G> => {
-    const componentProps = "props" in options ? options.props : undefined;
+    ...options: UseStylesOptions<GeneratorExtension<G>, G>
+): GeneratorResult<G>;
+export function useThemedStyles(...args: any[]) {
+    const first = args[0];
+    const isComponent = typeof first === "string";
+    const componentName = (isComponent ? first : undefined) as
+        | ComponentKey<Record<never, never>>
+        | undefined;
+    const generator = (isComponent ? args[1] : first) as AnyGenerator;
+    const options = (isComponent ? args[2] : args[1]) ?? EMPTY_OPTIONS;
+
+    const hasProps = "props" in options;
+    const componentProps = hasProps ? options.props : undefined;
     const componentStyles = "styles" in options ? options.styles : undefined;
-    const { theme, styles: originalStyles, icons } = useTheme();
+    const { theme, styles, icons } = useTheme();
 
-    const themedStyles = useMemo(() => {
-        const styles = MergeStyles(originalStyles, componentStyles);
+    const name = componentName as ComponentKey<Record<never, never>>;
+    const { config, styles: stylesForGenerator } = isComponent
+        ? mergeStylesForComponent(styles, name, componentStyles?.[name])
+        : { config: undefined, styles };
 
-        const generated =
-            "props" in options
-                ? generator({ theme, styles, icons }, componentProps)
-                : generator({ theme, styles, icons });
-
-        return generated;
-    }, [
-        generator,
+    const generatorInput = {
         theme,
+        styles: stylesForGenerator,
         icons,
-        options,
-        componentProps,
-        componentStyles,
-        originalStyles,
-    ]);
+    } as ThemeContextDefinition<never>;
 
-    return themedStyles;
-};
+    const generated = hasProps
+        ? generator(generatorInput, componentProps)
+        : generator(generatorInput);
 
-export const useStyles = (componentStyles: StyleOverrides) => {
-    const { styles: originalStyles } = useTheme();
+    return isComponent
+        ? [generated, buildComponentResult(styles, icons, name, config)]
+        : generated;
+}
 
-    const themedStyles = useMemo(
-        () => MergeStyles(originalStyles, componentStyles),
-        [componentStyles, originalStyles],
-    );
+export const useStyles = <E extends object = Record<never, never>>(
+    componentStyles: StyleOverrides<E>,
+): Styles & E => {
+    const { styles } = useTheme<E>();
 
-    return themedStyles;
+    let merged: Styles & E = styles;
+    const overrides = componentStyles as Record<string, unknown>;
+    for (const key of Object.keys(componentStyles) as Array<
+        keyof (Styles & E)
+    >) {
+        const override = overrides[key as string];
+        if (override === undefined) continue;
+
+        const base = styles[key];
+        const next = mergeStyle(base, override);
+        if (next !== base) {
+            merged = { ...merged, [key]: next };
+        }
+    }
+
+    return merged;
 };

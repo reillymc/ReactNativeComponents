@@ -1,21 +1,11 @@
 import type { FC } from "react";
-import {
-    type ColorValue,
-    type PressableStateCallbackType,
-    StyleSheet,
-} from "react-native";
+import type { PressableStateCallbackType } from "react-native";
+import { StyleSheet } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import type { InteractiveTextStyles } from "./InteractiveText.styles";
 import { Text, type TextProps } from "./Text";
-
-export type InteractiveTextState = "enabled" | "disabled" | "pressed";
-
-export type InteractiveTextStyles = {
-    color: {
-        [State in InteractiveTextState]: ColorValue;
-    };
-};
 
 export interface InteractiveTextProps extends PressableStateCallbackType {
     children: string;

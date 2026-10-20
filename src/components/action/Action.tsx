@@ -2,16 +2,9 @@ import type { FC } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { InteractiveText, type InteractiveTextStyles } from "../text";
+import { InteractiveText } from "../text";
+import type { ActionStyles, ActionVariant } from "./Action.styles";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
-
-export type ActionVariant = "primary" | "secondary" | "destructive";
-
-export type ActionStyles = {
-    label: {
-        color: Record<ActionVariant, InteractiveTextStyles["color"]>;
-    };
-};
 
 export interface ActionProps
     extends Pick<ActionBaseProps, "containerStyle" | "disabled" | "onPress"> {

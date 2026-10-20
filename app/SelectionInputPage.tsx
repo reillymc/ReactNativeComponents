@@ -1,24 +1,36 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
+import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     SelectionInput,
     type SelectionInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { CommonInputProps } from "../demo/helpers";
 
-const propDefinitions: PropDefinitions<SelectionInputProps> = {
+type SelectionInputDemoProps = Pick<
+    SelectionInputProps,
+    Exclude<keyof SelectionInputProps, "value" | "selectionMode">
+> & {
+    selectionMode: "single" | "multi";
+    value?: ValueItem | Array<ValueItem>;
+};
+
+const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
     ...CommonInputProps,
     selectionMode: {
         type: "enum",
         label: "Selection mode",
         values: [
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            { label: "Single", value: "single" as any },
+            { label: "Single", value: "single" },
             { label: "Multi", value: "multi" },
         ],
     },
-    onRemoveItem: {
+    onChange: {
         label: "Press action",
         type: "function",
     },
@@ -42,40 +54,38 @@ const defaultProps: SelectionInputProps = {
     ],
     placeholder: "Select an item",
     selectionMode: "single",
-    selection: { label: "Item", value: "item1" },
-    onRemoveItem: () => null,
+    value: { label: "Item", value: "item1" },
 };
 
-const SelectionInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<SelectionInputProps>(defaultProps);
+const SelectionInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<SelectionInputProps>(defaultProps);
 
     return (
         <ComponentPage
             componentName="Selection Input"
             component={
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 <SelectionInput
                     {...props}
-                    onRemoveItem={(e: any) =>
-                        setProps((prev) => ({
-                            ...prev,
-                            selection: (Array.isArray(prev.selection)
-                                ? prev.selection.filter((x) => x !== e)
-                                : undefined) as any,
-                        }))
+                    onChange={(next) =>
+                        setProps(
+                            (prev) =>
+                                ({
+                                    ...prev,
+                                    value: next,
+                                }) as SelectionInputProps,
+                        )
                     }
-                    onAdd={() => null}
                 />
             }
             propsPanel={
-                <PropsPanel
+                <PropsPanel<SelectionInputDemoProps>
                     propValues={props}
                     propDefinitions={propDefinitions}
                     onChange={(propId, value) => {
                         if (propId === "selectionMode") {
                             setProps((prev) => ({
                                 ...prev,
-                                selection: undefined,
+                                value: undefined,
                             }));
                         }
                         setProps((prev) => ({ ...prev, [propId]: value }));

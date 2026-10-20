@@ -1,26 +1,13 @@
 import type { FC, ReactNode } from "react";
-import {
-    Pressable,
-    type StyleProp,
-    StyleSheet,
-    View,
-    type ViewStyle,
-} from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import { Undefined } from "@reillymc/es-utils";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import { SwipeableContainer, type SwipeableContainerProps } from "../container";
+import { ActionBase } from "../action";
+import { SwipeableContainer, type SwipeableContainerProps } from "../swipe";
 import { Text } from "../text";
 
 type ListItemVariant = "default" | "compact";
-
-export interface ListItemStyles {
-    spacingMargin: number;
-    internalSpacing: number;
-    borderRadius: number;
-    contentItemTopMargin: number;
-    contentItemSpacing: number;
-}
 
 export interface ListItemProps {
     heading?: ReactNode;
@@ -53,6 +40,8 @@ export interface ListItemProps {
     onPress?: () => void;
 }
 
+const EMPTY_CONTENT_ROWS: Array<ReactNode> = [];
+
 export const ListItem: FC<ListItemProps> = ({
     avatar,
     alert,
@@ -60,7 +49,7 @@ export const ListItem: FC<ListItemProps> = ({
     footer,
     header,
     variant = "default",
-    contentRows = [],
+    contentRows = EMPTY_CONTENT_ROWS,
     swipeActions,
     style,
     contentContainerStyle,
@@ -75,7 +64,11 @@ export const ListItem: FC<ListItemProps> = ({
     });
 
     const innerContent = (
-        <Pressable onPress={onPress} style={[styles.pressableContainer, style]}>
+        <ActionBase
+            hitSlop={0}
+            onPress={onPress}
+            containerStyle={[styles.pressableContainer, style]}
+        >
             {header}
             <View style={styles.bodyContainer}>
                 <View style={styles.innerContainer}>
@@ -96,13 +89,13 @@ export const ListItem: FC<ListItemProps> = ({
                 {alert}
             </View>
             {footer}
-        </Pressable>
+        </ActionBase>
     );
 
     return (
         <View style={styles.container}>
             {filteredActions?.length ? (
-                <SwipeableContainer rightActions={swipeActions}>
+                <SwipeableContainer rightActions={filteredActions}>
                     <View>{innerContent}</View>
                 </SwipeableContainer>
             ) : (

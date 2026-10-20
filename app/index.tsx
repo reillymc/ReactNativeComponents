@@ -1,17 +1,11 @@
-import React, { type ReactElement, useState } from "react";
-import {
-    SectionList,
-    type SectionListData,
-    StyleSheet,
-    View,
-} from "react-native";
+import { cloneElement, type FC, type ReactElement, useState } from "react";
+import { SectionList, type SectionListData, View } from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     Action,
     Avatar,
     Button,
-    CollapsibleContainer,
     CounterInput,
     DropdownInput,
     HighlightedText,
@@ -21,23 +15,24 @@ import {
     ListItem,
     ListItemAlert,
     NumberInput,
+    Panel,
     Rating,
     RatingInput,
     SelectionInput,
     Tag,
     Text,
     TextInput,
-    type ThemedStyles,
     TimeInput,
     ToggleInput,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+
+import { createThemedStyles, useTheme } from "../demo/theme";
 
 interface ComponentScreen {
     name: string;
     href: Href;
-    component?: ReactElement;
+    component?: ReactElement<Record<string, unknown>>;
 }
 type ComponentScreenSection = SectionListData<
     ComponentScreen,
@@ -46,7 +41,7 @@ type ComponentScreenSection = SectionListData<
 /**
  * Map of all components to their respective screen
  */
-export const ComponentScreens: Array<ComponentScreenSection> = [
+const ComponentScreens: Array<ComponentScreenSection> = [
     {
         sectionName: "Text",
         data: [
@@ -130,13 +125,13 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Number Input",
                 href: "/NumberInputPage",
-                component: <NumberInput placeholder="0" />,
+                component: <NumberInput placeholder={{ value: "0" }} />,
             },
             {
                 name: "Time Input",
                 href: "/TimeInputPage",
                 component: (
-                    <TimeInput hoursPlaceholder="0" minutesPlaceholder="0" />
+                    <TimeInput placeholder={{ hours: "0", minutes: "0" }} />
                 ),
             },
             {
@@ -154,12 +149,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Dropdown Input",
                 href: "/DropdownInputPage",
-                component: (
-                    <DropdownInput
-                        onSelect={() => null}
-                        placeholder="Dropdown Input"
-                    />
-                ),
+                component: <DropdownInput placeholder="Dropdown Input" />,
             },
             {
                 name: "Rating Input",
@@ -196,10 +186,6 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
             { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
             { name: "Panel", href: "/PanelPage" },
             {
-                name: "Collapsible Container",
-                href: "/CollapsibleContainerPage",
-            },
-            {
                 name: "Rating",
                 href: "/RatingPage",
                 component: <Rating value={3} max={5} />,
@@ -208,7 +194,7 @@ export const ComponentScreens: Array<ComponentScreenSection> = [
     },
 ];
 
-const ComponentListScreen: React.FC = () => {
+const ComponentListScreen: FC = () => {
     const router = useRouter();
     const { theme } = useTheme();
 
@@ -248,23 +234,23 @@ const ComponentListScreen: React.FC = () => {
                             iconSet={Octicons}
                             label="Common Props"
                             iconName={collapsed ? "chevron-down" : "chevron-up"}
-                            iconPosition="right"
+                            iconPosition="end"
                             onPress={() => setCollapsed((prev) => !prev)}
                         />
-                        <CollapsibleContainer
+                        <Panel
                             collapsed={collapsed}
-                            direction="up"
                             style={styles.propsContainer}
                         >
                             <DropdownInput
                                 placeholder="Variant"
-                                onSelect={(e) => setVariant(e?.value)}
+                                value={variant}
+                                onChange={(item) => setVariant(item?.value)}
                                 items={[
                                     { label: "Primary", value: "primary" },
                                     { label: "Secondary", value: "secondary" },
                                 ]}
                             />
-                        </CollapsibleContainer>
+                        </Panel>
                     </View>
                 }
                 renderSectionHeader={({ section }) => (
@@ -281,8 +267,8 @@ const ComponentListScreen: React.FC = () => {
                                 component && (
                                     <ListItemAlert>
                                         <View style={styles.listItemDisplay}>
-                                            {React.cloneElement(component, {
-                                                ...(component.props as any),
+                                            {cloneElement(component, {
+                                                ...component.props,
                                                 variant,
                                             })}
                                         </View>
@@ -292,19 +278,19 @@ const ComponentListScreen: React.FC = () => {
                         />
                     );
                 }}
-                contentContainerStyle={styles.page}
+                contentContainerStyle={styles.content}
             />
         </>
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
-    StyleSheet.create({
-        page: {
+const createStyles = createThemedStyles(
+    ({ styles: { page }, theme: { spacing, color } }) => ({
+        content: {
             backgroundColor: color.background,
-            paddingHorizontal: spacing.pageHorizontal,
-            paddingTop: spacing.pageTop,
-            paddingBottom: 64,
+            paddingHorizontal: page.horizontal,
+            paddingTop: page.top,
+            paddingBottom: page.bottom,
         },
         listHeader: {
             alignItems: "flex-end",
@@ -324,6 +310,7 @@ const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
             alignItems: "flex-end",
             paddingVertical: 8,
         },
-    });
+    }),
+);
 
 export default ComponentListScreen;
