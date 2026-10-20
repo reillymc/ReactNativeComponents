@@ -153,7 +153,10 @@ module.exports = {
                 // type only dependencies are not a problem as they don't end up in the
                 // production code or are ignored by the runtime.
                 dependencyTypesNot: ["type-only"],
-                pathNot: ["node_modules/@types/"],
+                // react-dom is a web-only runtime requirement provided by
+                // react-native-web; it is a devDependency here but is only
+                // imported from `.web` platform files.
+                pathNot: ["node_modules/@types/", "node_modules/react-dom/"],
             },
         },
         {

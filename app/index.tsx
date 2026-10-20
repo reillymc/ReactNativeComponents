@@ -3,7 +3,6 @@ import {
     Appearance,
     SectionList,
     type SectionListData,
-    StyleSheet,
     View,
 } from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
@@ -33,7 +32,7 @@ import {
 } from "@reillymc/react-native-components/components";
 import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import { type AppThemedStyles, useTheme } from "../demo/theme";
+import { createThemedStyles, useTheme } from "../demo/theme";
 
 interface ComponentScreen {
     name: string;
@@ -131,13 +130,13 @@ const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Number Input",
                 href: "/NumberInputPage",
-                component: <NumberInput placeholder="0" />,
+                component: <NumberInput placeholder={{ value: "0" }} />,
             },
             {
                 name: "Time Input",
                 href: "/TimeInputPage",
                 component: (
-                    <TimeInput hoursPlaceholder="0" minutesPlaceholder="0" />
+                    <TimeInput placeholder={{ hours: "0", minutes: "0" }} />
                 ),
             },
             {
@@ -155,12 +154,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
             {
                 name: "Dropdown Input",
                 href: "/DropdownInputPage",
-                component: (
-                    <DropdownInput
-                        onSelect={() => null}
-                        placeholder="Dropdown Input"
-                    />
-                ),
+                component: <DropdownInput placeholder="Dropdown Input" />,
             },
             {
                 name: "Rating Input",
@@ -277,7 +271,8 @@ const ComponentListScreen: FC = () => {
                         >
                             <DropdownInput
                                 placeholder="Variant"
-                                onSelect={(e) => setVariant(e?.value)}
+                                value={variant}
+                                onChange={(item) => setVariant(item?.value)}
                                 items={[
                                     { label: "Primary", value: "primary" },
                                     {
@@ -314,19 +309,19 @@ const ComponentListScreen: FC = () => {
                         />
                     );
                 }}
-                contentContainerStyle={styles.page}
+                contentContainerStyle={styles.content}
             />
         </>
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
-    StyleSheet.create({
-        page: {
+const createStyles = createThemedStyles(
+    ({ styles: { page }, theme: { spacing, color } }) => ({
+        content: {
             backgroundColor: color.background,
-            paddingHorizontal: spacing.pageHorizontal,
-            paddingTop: spacing.pageTop,
-            paddingBottom: spacing.pageBottom,
+            paddingHorizontal: page.horizontal,
+            paddingTop: page.top,
+            paddingBottom: page.bottom,
         },
         listHeader: {
             alignItems: "flex-end",
@@ -351,6 +346,7 @@ const createStyles = ({ theme: { spacing, color } }: AppThemedStyles) =>
             alignItems: "flex-end",
             paddingVertical: 8,
         },
-    });
+    }),
+);
 
 export default ComponentListScreen;

@@ -1,5 +1,5 @@
 import { type FC, useState } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
+import { FlatList, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import type { ValueItem } from "@reillymc/react-native-components/common";
@@ -16,7 +16,7 @@ import {
     type SelectionRequest,
     useSelectionModalController,
 } from "../demo/components/SelectionModalContext";
-import type { AppThemedStyles } from "../demo/theme";
+import { createThemedStyles } from "../demo/theme";
 
 type ModalItem = ValueItem & { id?: string };
 
@@ -151,16 +151,16 @@ const SelectionModal: FC = () => {
 
 export default SelectionModal;
 
-const createStyles = ({
-    styles: { inputBase },
-    theme: { spacing, color },
-}: AppThemedStyles) => {
-    const styles = StyleSheet.create({
+const createStyles = createThemedStyles(
+    ({
+        styles: { inputBase, page, selection },
+        theme: { spacing, color },
+    }) => ({
         headerAction: {
-            marginHorizontal: spacing.navigationActionHorizontal,
+            marginHorizontal: selection.navigationActionHorizontal,
         },
         list: {
-            paddingBottom: spacing.pageBottom,
+            paddingBottom: page.bottom,
         },
         tag: {
             marginVertical: 2,
@@ -190,6 +190,5 @@ const createStyles = ({
             borderRightWidth: 1,
             justifyContent: "center",
         },
-    });
-    return styles;
-};
+    }),
+);

@@ -1,23 +1,22 @@
 import type { ReactNode } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import {
-    createStyles,
-    type Icons,
-    type StyleOverrides,
-    type ThemeOverrides,
-} from "../theme";
-import { MergeIcons } from "../theme/icons";
-import { MergeTheme } from "../theme/theme";
+import { type Icons, MergeIcons } from "../icons/componentIcons";
+import type { StyleFactory } from "../style/styleFactory";
+import { createStyles } from "../style/styles";
+import { MergeTheme, type ThemeOverrides } from "../theme/theme";
 import { ThemeContext } from "./ThemeContext";
 
 export interface ThemeProviderProps<E extends object = Record<never, never>> {
     /**
-     * The active theme. Consumers may extend it with their own tokens
-     * (`ThemeOverrides & E`) and read them back via `useTheme<E>()`.
+     * The active theme.
      */
-    theme?: ThemeOverrides & E;
-    styles?: StyleOverrides;
+    theme?: ThemeOverrides;
+    /**
+     * Style overrides factory. App-owned component slices can be added by
+     * extending `E`.
+     */
+    styles?: StyleFactory<E>;
     icons?: DeepPartial<Icons>;
     children?: ReactNode;
 }
@@ -29,7 +28,7 @@ export const ThemeProvider = <E extends object = Record<never, never>>({
     children,
 }: ThemeProviderProps<E>) => {
     const theme = MergeTheme(initialTheme);
-    const styles = createStyles(theme, initialStyles);
+    const styles = createStyles<E>(theme, initialStyles);
     const icons = MergeIcons(initialIcons);
 
     const value = { theme, styles, icons };

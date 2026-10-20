@@ -8,13 +8,12 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import { ThemeProvider } from "@reillymc/react-native-components/providers";
 import {
-    createStyles,
-    createTheme,
     darkPalette,
+    MergeTheme,
 } from "@reillymc/react-native-components/theme";
 
 import { SelectionModalProvider } from "../demo/components/SelectionModalProvider";
-import { createAppTheme } from "../demo/theme";
+import { createAppStyles } from "../demo/theme";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -38,15 +37,10 @@ const Layout: FC = () => {
         SplashScreen.hideAsync();
     }, []);
 
-    const theme = createTheme(
-        {
-            font: { family: { mono: Font, sans: Font } },
-            color: colorScheme === "dark" ? darkPalette : undefined,
-        },
-        createAppTheme,
-    );
-
-    const styles = createStyles(theme);
+    const theme = MergeTheme({
+        font: { family: { mono: Font, sans: Font } },
+        color: colorScheme === "dark" ? darkPalette : undefined,
+    });
 
     if (Platform.OS === "web") {
         // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime
@@ -60,7 +54,7 @@ const Layout: FC = () => {
     return (
         <StrictMode>
             <GestureHandlerRootView style={{ flex: 1 }}>
-                <ThemeProvider theme={theme} styles={styles}>
+                <ThemeProvider theme={theme} styles={createAppStyles}>
                     <StatusBar style="auto" />
                     <SelectionModalProvider>
                         <Stack>

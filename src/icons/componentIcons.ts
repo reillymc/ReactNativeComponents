@@ -11,9 +11,8 @@ import type {
     TimeInputIcons,
     ToggleInputIcons,
 } from "../components";
-import { type AnyIconSet, type IconSet, UiIcons } from "../icons";
-
-export type ComponentIconAssets<K extends string> = K;
+import type { AnyIconSet, IconSet } from "./base";
+import { UiIcons } from "./ui";
 
 type ComponentIcons = {
     inputScaffold: InputScaffoldIcons;

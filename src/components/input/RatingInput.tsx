@@ -17,7 +17,7 @@ import Animated, {
 import { scheduleOnRN } from "react-native-worklets";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { IconBase } from "../icon";
 import {
     type RatingIconVariant,
@@ -28,9 +28,9 @@ import {
 import type { InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
-export type RatingInputStyles = null;
-
 export type RatingInputIcons = ComponentIconAssets<RatingIconVariant>;
+
+export type RatingInputStyles = null;
 
 export interface RatingInputProps
     extends InputScaffoldFieldProps,

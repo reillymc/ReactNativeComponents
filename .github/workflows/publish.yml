@@ -19,13 +19,35 @@ jobs:
             - uses: actions/setup-node@v7
               with:
                   node-version: "24.x"
+                  cache: "npm"
                   registry-url: 'https://registry.npmjs.org'
                   # Defaults to the user or organization that owns the workflow file
                   scope: "@reillymc"
             - name: Install dependencies
-              run: npm ci
+              run: npm ci --ignore-scripts --no-audit --no-fund
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Lint
+              run: npm run lint
+
+            - name: Build package
+              run: npm run build
+
+            - name: Determine npm release-tag
+              id: release-tag
+              run: |
+                line="${GITHUB_REF_NAME#latest/}"
+                highest="$(git ls-remote --heads origin 'refs/heads/latest/*' \
+                  | sed 's#.*refs/heads/latest/##' \
+                  | sort -V \
+                  | tail -n 1)"
+
+                if [ "$line" = "$highest" ]; then
+                  echo "tag=latest" >> "$GITHUB_OUTPUT"
+                else
+                  echo "tag=release-${line}" >> "$GITHUB_OUTPUT"
+                fi
 
             - name: Bump patch version and push
               run: |
@@ -37,6 +59,8 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish package
-              run: npm publish --provenance --access public
+              run: |
+                npm publish --ignore-scripts --provenance --access public \
+                  --tag "${{ steps.release-tag.outputs.tag }}"
 
 

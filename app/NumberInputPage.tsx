@@ -12,12 +12,11 @@ import {
 } from "../demo/components";
 import { CommonInputProps } from "../demo/helpers";
 
+const { placeholder: _placeholder, ...numberInputCommonProps } =
+    CommonInputProps;
+
 const propDefinitions: PropDefinitions<NumberInputProps> = {
-    ...CommonInputProps,
-    placeholder2: {
-        type: "string",
-        label: "Placeholder 2 text",
-    },
+    ...numberInputCommonProps,
     enabledRepresentations: {
         type: "enum",
         label: "Enabled Modes",
@@ -56,8 +55,14 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
 };
 
 const defaultProps: NumberInputProps = {
-    placeholder: "0",
-    placeholder2: "0",
+    placeholder: {
+        value: "0",
+        start: "0",
+        end: "0",
+        whole: "0",
+        numerator: "0",
+        denominator: "0",
+    },
     disabled: false,
 };
 

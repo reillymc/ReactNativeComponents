@@ -3,16 +3,13 @@ export { CounterInput } from "./CounterInput";
 export type {
     DropdownInputProps,
     DropdownInputStyles,
-} from "./DropdownInput";
-export { DropdownInput } from "./DropdownInput";
+} from "./dropdownInput";
 export {
+    DropdownInput,
     DropdownInputBase,
     type DropdownInputBaseProps,
-} from "./DropdownInputBase";
-export type {
-    InputActionProps,
-    InputActionStyles,
-} from "./InputAction";
+} from "./dropdownInput";
+export type { InputActionProps, InputActionStyles } from "./InputAction";
 export { InputAction } from "./InputAction";
 export type { InputBaseProps, InputBaseStyles } from "./InputBase";
 export { InputBase } from "./InputBase";
@@ -27,6 +24,7 @@ export { InputScaffold } from "./InputScaffold";
 export type {
     FractionValue,
     NumberInputIcons,
+    NumberInputPlaceholders,
     NumberInputProps,
     NumberInputValue,
     NumberValue,
@@ -49,6 +47,7 @@ export type { TextInputProps, TextInputStyles } from "./TextInput";
 export { TextInput } from "./TextInput";
 export type {
     TimeInputIcons,
+    TimeInputPlaceholders,
     TimeInputProps,
     TimeInputValue,
 } from "./TimeInput";

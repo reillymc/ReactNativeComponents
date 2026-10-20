@@ -1,9 +1,7 @@
-import type { FC, Ref } from "react";
+import type { FC, RefObject } from "react";
 import type { TextInput, TextInputChangeEvent } from "react-native";
 
 import { InputBase, type InputBaseProps } from "./InputBase";
-
-export type NumberInputBaseStyles = never;
 
 const INTEGER_PATTERN = /^\d*/;
 const DECIMAL_PATTERN = /^\d*\.?\d*/;
@@ -23,7 +21,7 @@ export interface NumberInputBaseProps extends InputBaseProps {
 
     max?: number;
 
-    ref?: Ref<TextInput>;
+    ref?: RefObject<TextInput | null>;
 
     /**
      * Validates number entry and returns string.

@@ -1,10 +1,5 @@
-import {
-    type ThemedStyles,
-    useTheme as useBaseTheme,
-} from "@reillymc/react-native-components/hooks";
+import { useTheme as useBaseTheme } from "@reillymc/react-native-components/hooks";
 
-import type { AppTheme } from "./types";
+import type { AppStyles } from "./styles";
 
-export type AppThemedStyles = ThemedStyles<AppTheme>;
-
-export const useTheme = () => useBaseTheme<AppTheme>();
+export const useTheme = () => useBaseTheme<AppStyles>();

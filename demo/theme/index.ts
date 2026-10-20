@@ -1,3 +1,7 @@
-export { type AppThemedStyles, useTheme } from "./hooks";
-export { createAppTheme } from "./theme";
-export type { AppTheme } from "./types";
+export { createThemedStyles } from "./createThemedStyles";
+export { useTheme } from "./hooks";
+export {
+    type AppStyles,
+    type AppThemedStyles,
+    createAppStyles,
+} from "./styles";

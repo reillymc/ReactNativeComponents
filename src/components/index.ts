@@ -35,14 +35,14 @@ export {
     IconButtonBase,
 } from "./button";
 export type {
-    FloatingContainerProps,
-    FloatingContainerStyles,
+    AnchoredContainerProps,
+    ContainerPlacement,
     FormContainerProps,
     FormRowProps,
     PanelProps,
 } from "./container";
 export {
-    FloatingContainer,
+    AnchoredContainer,
     FormContainer,
     FormRow,
     Panel,

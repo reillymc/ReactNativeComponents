@@ -3,7 +3,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ValueItem } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { IconBase, type IconBaseStyles } from "../icon";
 import { InteractionSurface } from "../surface";
 import { Tag } from "../tag";

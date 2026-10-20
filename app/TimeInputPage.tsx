@@ -21,19 +21,13 @@ const propDefinitions: PropDefinitions<TimeInputProps> = {
     variant: InputBasePropDefinitions.variant,
     mandatory: InputScaffoldPropDefinitions.mandatory,
     disabled: InputBasePropDefinitions.disabled,
-    hoursPlaceholder: {
-        type: "string",
-        label: "Hours placeholder text",
-    },
-    minutesPlaceholder: {
-        type: "string",
-        label: "Minutes placeholder 2 text",
-    },
 };
 
 const defaultProps: TimeInputProps = {
-    hoursPlaceholder: "0",
-    minutesPlaceholder: "0",
+    placeholder: {
+        hours: "0",
+        minutes: "0",
+    },
     disabled: false,
 };
 

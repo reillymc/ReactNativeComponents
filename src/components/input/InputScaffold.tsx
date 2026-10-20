@@ -8,7 +8,7 @@ import {
 } from "react-native";
 
 import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Icon } from "../icon";
 import { Text } from "../text";
 
