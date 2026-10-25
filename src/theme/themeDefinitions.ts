@@ -12,6 +12,7 @@ import { defaultIconButtonBaseTheme } from "../components/button/IconButtonBase.
 import { defaultAnchoredContainerTheme } from "../components/container/anchoredContainer/AnchoredContainer.theme";
 import { defaultFormContainerTheme } from "../components/container/FormContainer.theme";
 import { defaultFormRowTheme } from "../components/container/FormRow.theme";
+import { defaultContentRowTheme } from "../components/contentRow/ContentRow.theme";
 import { defaultIconTheme } from "../components/icon/Icon.theme";
 import { defaultIconBaseTheme } from "../components/icon/IconBase.theme";
 import { defaultDropdownInputTheme } from "../components/input/dropdownInput/DropdownInput.theme";
@@ -68,6 +69,7 @@ export const definitions: ThemeDefinitions = {
     alertIndicator: defaultAlertIndicatorTheme,
     tag: defaultTagTheme,
     tagIcon: defaultTagIconTheme,
+    contentRow: defaultContentRowTheme,
     listItem: defaultListItemTheme,
     menu: defaultMenuTheme,
     menuItem: defaultMenuItemTheme,

@@ -6,7 +6,6 @@ export const defaultListItemTheme: ThemeFactory<"listItem"> = ({
     spacingMargin: 12,
     internalSpacing: 16,
     borderRadius: border.radius.loose,
-    contentItemSpacing: 8,
     backgroundColor: color.background,
     surfaceColor: color.surface,
 });

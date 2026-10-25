@@ -14,6 +14,7 @@ import type { IconButtonBaseTheme } from "../components/button/IconButtonBase";
 import type { AnchoredContainerTheme } from "../components/container/anchoredContainer/AnchoredContainer";
 import type { FormContainerTheme } from "../components/container/FormContainer";
 import type { FormRowTheme } from "../components/container/FormRow";
+import type { ContentRowTheme } from "../components/contentRow/ContentRow";
 import type { IconTheme } from "../components/icon/Icon";
 import type { IconBaseTheme } from "../components/icon/IconBase";
 import type { DropdownInputTheme } from "../components/input/dropdownInput/DropdownInput";
@@ -66,6 +67,7 @@ export interface Theme {
     alertIndicator: AlertIndicatorTheme;
     tag: TagTheme;
     tagIcon: TagIconTheme;
+    contentRow: ContentRowTheme;
     listItem: ListItemTheme;
     menu: MenuTheme;
     menuItem: MenuItemTheme;

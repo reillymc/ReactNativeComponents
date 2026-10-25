@@ -18,7 +18,6 @@ export interface ListItemTheme {
     spacingMargin: number;
     internalSpacing: number;
     borderRadius: number;
-    contentItemSpacing: number;
     backgroundColor: ColorValue;
     surfaceColor: ColorValue;
 }
@@ -26,25 +25,26 @@ export interface ListItemTheme {
 export interface ListItemProps {
     heading?: ReactNode;
     header?: ReactNode;
+
     /**
-     * [ListItemAvatar](./ListItemAvatar.tsx)
+     * Content for the leading slot.
      */
     avatar?: ReactNode;
+
     /**
-     * [ListItemAlert](./ListItemAlert.tsx)
+     * Content for the trailing slot.
      */
     alert?: ReactNode;
+
     variant?: ListItemVariant;
 
     /**
-     * Supports:
-     * - `<ListItemRow/>`
-     * - `<ListItemRow/>[]`
+     * Main content, typically one or more `ContentRow` elements.
      */
-    contentRows?: Array<ReactNode>;
+    content?: ReactNode;
 
     /**
-     * [ListItemFooter](./ListItemFooter.tsx)
+     * Content rendered below the body.
      */
     footer?: ReactNode;
 
@@ -55,8 +55,6 @@ export interface ListItemProps {
     onPress?: () => void;
 }
 
-const EMPTY_CONTENT_ROWS: Array<ReactNode> = [];
-
 export const ListItem: FC<ListItemProps> = ({
     avatar,
     alert,
@@ -64,15 +62,13 @@ export const ListItem: FC<ListItemProps> = ({
     footer,
     header,
     variant = "default",
-    contentRows = EMPTY_CONTENT_ROWS,
+    content,
     swipeActions,
     style,
     theme: themeOverrides,
     contentContainerStyle,
     onPress,
 }) => {
-    const filteredRows = contentRows.filter(Undefined);
-
     const filteredActions = swipeActions?.filter(Undefined);
 
     const { styles } = useComponent("listItem", {
@@ -81,12 +77,12 @@ export const ListItem: FC<ListItemProps> = ({
         createStyles,
     });
 
-    const content = (
+    const listContent = (
         <>
             {header}
             <View style={styles.bodyContainer}>
                 <View style={styles.innerContainer}>
-                    {avatar}
+                    {!!avatar && <View style={styles.avatar}>{avatar}</View>}
                     <View
                         style={[styles.contentContainer, contentContainerStyle]}
                     >
@@ -97,12 +93,12 @@ export const ListItem: FC<ListItemProps> = ({
                         ) : (
                             heading
                         )}
-                        {filteredRows}
+                        {content}
                     </View>
                 </View>
-                {alert}
+                {!!alert && <View style={styles.alert}>{alert}</View>}
             </View>
-            {footer}
+            {!!footer && <View style={styles.footer}>{footer}</View>}
         </>
     );
 
@@ -112,10 +108,10 @@ export const ListItem: FC<ListItemProps> = ({
             onPress={onPress}
             style={[styles.pressableContainer, style]}
         >
-            {content}
+            {listContent}
         </ActionBase>
     ) : (
-        <View style={[styles.pressableContainer, style]}>{content}</View>
+        <View style={[styles.pressableContainer, style]}>{listContent}</View>
     );
 
     return (
@@ -155,6 +151,11 @@ const createStyles = defineStyles(
             flexDirection: "row",
             flexShrink: 1,
         },
+        avatar: {
+            alignItems: "center",
+            justifyContent: "center",
+            marginStart: theme.internalSpacing,
+        },
         contentContainer: {
             flexShrink: 1,
             flexDirection: "column",
@@ -162,6 +163,17 @@ const createStyles = defineStyles(
             justifyContent: "center",
             width: "100%",
             padding: theme.internalSpacing,
+        },
+        alert: {
+            alignItems: "center",
+            justifyContent: "center",
+            marginStart: theme.spacingMargin,
+            marginEnd: theme.internalSpacing,
+        },
+        footer: {
+            marginBottom: theme.internalSpacing,
+            marginStart: theme.internalSpacing,
+            marginEnd: theme.internalSpacing,
         },
     }),
 );

@@ -18,7 +18,6 @@ import {
     IconAction,
     IconButton,
     ListItem,
-    ListItemAlert,
     NumberInput,
     Panel,
     Rating,
@@ -295,14 +294,12 @@ const ComponentListScreen: FC = () => {
                             onPress={() => router.push(href)}
                             alert={
                                 component && (
-                                    <ListItemAlert>
-                                        <View style={styles.listItemDisplay}>
-                                            {cloneElement(component, {
-                                                ...component.props,
-                                                variant,
-                                            })}
-                                        </View>
-                                    </ListItemAlert>
+                                    <View style={styles.listItemDisplay}>
+                                        {cloneElement(component, {
+                                            ...component.props,
+                                            variant,
+                                        })}
+                                    </View>
                                 )
                             }
                         />

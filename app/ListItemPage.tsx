@@ -2,12 +2,10 @@ import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     AlertIndicator,
+    ContentRow,
     IconAction,
     ListItem,
-    ListItemAlert,
-    ListItemAvatar,
     type ListItemProps,
-    ListItemRow,
     SwipeAction,
     Text,
 } from "@reillymc/react-native-components/components";
@@ -21,29 +19,20 @@ import {
 const defaultProps: ListItemProps = {
     heading: "Heading text",
     avatar: (
-        <ListItemAvatar>
-            <IconAction
-                iconSet={Octicons}
-                onPress={() => null}
-                iconName="apps"
-                variant="primary"
-            />
-        </ListItemAvatar>
+        <IconAction
+            iconSet={Octicons}
+            onPress={() => null}
+            iconName="apps"
+            variant="primary"
+        />
     ),
-    alert: (
-        <ListItemAlert>
-            <AlertIndicator variant="primary" label="8" />
-        </ListItemAlert>
+    alert: <AlertIndicator variant="primary" label="8" />,
+    content: (
+        <ContentRow>
+            <Text>Description</Text>
+            <Text>Description 2</Text>
+        </ContentRow>
     ),
-    contentRows: [
-        <ListItemRow
-            key={1}
-            contentItems={[
-                <Text key={1}>Description</Text>,
-                <Text key={2}>Description 2</Text>,
-            ]}
-        />,
-    ],
     swipeActions: [
         <SwipeAction
             key="1"
@@ -77,56 +66,47 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             { id: "Icon", label: "Icon", value: defaultProps.avatar },
         ],
     },
-    contentRows: {
+    content: {
         type: "enum",
-        label: "Content rows",
+        label: "Content",
         default: "One",
         values: [
             { id: "None", label: "None", value: undefined },
-            { id: "One", label: "One", value: defaultProps.contentRows },
+            { id: "One", label: "One", value: defaultProps.content },
             {
                 id: "Two",
                 label: "Two",
-                value: [
-                    <ListItemRow
-                        key={1}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                    <ListItemRow
-                        key={2}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                ],
+                value: (
+                    <>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                    </>
+                ),
             },
             {
                 id: "Three",
                 label: "Three",
-                value: [
-                    <ListItemRow
-                        key={1}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                    <ListItemRow
-                        key={2}
-                        contentItems={[<Text key={1}>Description</Text>]}
-                    />,
-                    <ListItemRow
-                        key={3}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                ],
+                value: (
+                    <>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                    </>
+                ),
             },
         ],
     },
@@ -169,13 +149,11 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 id: "Alert",
                 label: "Alert",
                 value: (
-                    <ListItemAlert>
-                        <AlertIndicator
-                            style={{ marginRight: 20 }}
-                            variant="primary"
-                            label="3"
-                        />
-                    </ListItemAlert>
+                    <AlertIndicator
+                        style={{ marginRight: 20 }}
+                        variant="primary"
+                        label="3"
+                    />
                 ),
             },
         ],
