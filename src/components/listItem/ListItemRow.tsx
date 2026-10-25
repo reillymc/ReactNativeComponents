@@ -1,15 +1,16 @@
 import type { FC, ReactElement } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import { Undefined } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
 import { Text } from "../text";
+import type { ListItemTheme } from "./ListItem";
 
 export interface ListItemRowProps {
     contentItems?: Array<ReactElement> | ReactElement;
 }
 export const ListItemRow: FC<ListItemRowProps> = ({ contentItems }) => {
-    const [styles] = useThemedStyles("listItem", createStyles);
+    const { styles } = useComponent("listItem", { createStyles });
 
     const items = (
         Array.isArray(contentItems) ? contentItems : [contentItems]
@@ -31,13 +32,12 @@ export const ListItemRow: FC<ListItemRowProps> = ({ contentItems }) => {
         </View>
     );
 };
-const createStyles = ({ styles: { listItem } }: ThemedStyles) =>
-    StyleSheet.create({
-        contentItem: {
-            flexDirection: "row",
-            flexShrink: 1,
-        },
-        spacer: {
-            marginHorizontal: listItem.contentItemSpacing,
-        },
-    });
+const createStyles = defineStyles((theme: ListItemTheme) => ({
+    contentItem: {
+        flexDirection: "row",
+        flexShrink: 1,
+    },
+    spacer: {
+        marginHorizontal: theme.contentItemSpacing,
+    },
+}));

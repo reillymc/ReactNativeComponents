@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import { type ThemedStyles, useThemedStyles } from "../../../hooks";
+import { useComponent } from "../../shared";
 import type {
     AnchoredContainerProps,
     ContainerGeometry,
@@ -29,22 +29,13 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     parentRef,
     show,
     position = "auto",
-    gap,
+    theme: themeOverrides,
     onInvertedChange,
-    containerStyle,
+    style,
     children,
 }) => {
     const [geometry, setGeometry] = useState<ContainerGeometry>();
-    const [styles] = useThemedStyles("anchoredContainer", createStyles);
-    const [{ parentMargin }] = useThemedStyles(
-        "anchoredContainer",
-        ({ styles: { anchoredContainer } }: ThemedStyles) => ({
-            parentMargin: anchoredContainer.parentMargin,
-        }),
-    );
-
-    const margin = gap ?? parentMargin;
-
+    const { theme } = useComponent("anchoredContainer", { themeOverrides });
     const inverted = geometry?.inverted;
 
     useEffect(() => {
@@ -71,7 +62,7 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
 
         const inverted =
             position === "above" ||
-            (availableBelow < contentHeight + margin &&
+            (availableBelow < contentHeight + theme.parentMargin &&
                 availableAbove > availableBelow);
 
         setGeometry({
@@ -85,10 +76,11 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
             visibleAreaHeight: viewportBottom - viewportTop,
             maxHeight: Math.max(
                 0,
-                (inverted ? availableAbove : availableBelow) - margin,
+                (inverted ? availableAbove : availableBelow) -
+                    theme.parentMargin,
             ),
         });
-    }, [position, margin, top, bottom, windowHeight]);
+    }, [position, theme.parentMargin, top, bottom, windowHeight]);
 
     const updateAnchor = useCallback(() => {
         const node = parentRef.current as unknown as {
@@ -167,13 +159,13 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
                           top: geometry.inverted
                               ? geometry.parentY -
                                 geometry.contentHeight -
-                                margin
+                                theme.parentMargin
                               : geometry.parentY +
                                 geometry.parentHeight +
-                                margin,
+                                theme.parentMargin,
                       }
                     : styles.hidden,
-                containerStyle,
+                style,
             ]}
         >
             {typeof children === "function"
@@ -184,16 +176,15 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     );
 };
 
-const createStyles = (_themed: ThemedStyles) =>
-    StyleSheet.create({
-        container: {
-            position: FIXED_POSITION,
-            zIndex: 9999,
-        },
-        hidden: {
-            position: FIXED_POSITION,
-            zIndex: 9999,
-            opacity: 0,
-            pointerEvents: "none",
-        },
-    });
+const styles = StyleSheet.create({
+    container: {
+        position: FIXED_POSITION,
+        zIndex: 9999,
+    },
+    hidden: {
+        position: FIXED_POSITION,
+        zIndex: 9999,
+        opacity: 0,
+        pointerEvents: "none",
+    },
+});

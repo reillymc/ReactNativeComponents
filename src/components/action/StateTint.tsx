@@ -4,17 +4,19 @@ import Animated, {
     useAnimatedStyle,
     withTiming,
 } from "react-native-reanimated";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useTheme } from "../../hooks";
+import { useComponent } from "../shared";
 import type { ActionState } from "./ActionBase";
 
-export type StateTintStyles = {
+export type StateTintTheme = {
     hoverOpacity: number;
     pressedOpacity: number;
 };
 
 export interface StateTintProps extends ActionState {
     style?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<StateTintTheme>;
     children?: ReactNode;
 }
 
@@ -22,14 +24,16 @@ export const StateTint: FC<StateTintProps> = ({
     pressed,
     hovered,
     style,
+    theme: themeOverrides,
     children,
 }) => {
-    const {
-        styles: { stateTint },
-    } = useTheme();
+    const { theme } = useComponent("stateTint", { themeOverrides });
 
-    const { hoverOpacity, pressedOpacity } = stateTint;
-    const target = pressed ? pressedOpacity : hovered ? hoverOpacity : 1;
+    const target = pressed
+        ? theme.pressedOpacity
+        : hovered
+          ? theme.hoverOpacity
+          : 1;
     const duration = pressed ? 25 : 250;
 
     const animatedStyle = useAnimatedStyle(

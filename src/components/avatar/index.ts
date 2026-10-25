@@ -1,5 +1,5 @@
 export {
     Avatar,
     type AvatarProps,
-    type AvatarStyles,
+    type AvatarTheme,
 } from "./Avatar";

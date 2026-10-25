@@ -6,7 +6,7 @@ import { StateLayer } from "./StateLayer";
 export interface InteractionSurfaceProps
     extends Pick<
         ActionBaseProps,
-        "containerStyle" | "disabled" | "onPress" | "hitSlop"
+        "style" | "disabled" | "highlighted" | "onPress" | "hitSlop"
     > {
     children?: ReactNode;
 }

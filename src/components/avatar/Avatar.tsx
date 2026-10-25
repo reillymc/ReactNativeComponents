@@ -3,21 +3,23 @@ import {
     type ColorValue,
     Image,
     type StyleProp,
-    StyleSheet,
     type TextStyle,
     View,
     type ViewStyle,
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { Text } from "../text";
 
+type AvatarColorSet = { background: ColorValue; foreground: ColorValue };
+type AvatarColorSets = [AvatarColorSet, ...AvatarColorSet[]];
+
 const getBackgroundColor = (
-    colors: Array<{ background: ColorValue; foreground: ColorValue }>,
+    colors: AvatarColorSets,
     firstName: string | undefined,
     lastName: string | undefined,
-): { background: ColorValue; foreground: ColorValue } | undefined => {
+): AvatarColorSet => {
     const name = firstName || lastName || "";
     let hash = 0;
 
@@ -30,7 +32,7 @@ const getBackgroundColor = (
 
 type AvatarSize = "small" | "regular" | "large";
 
-export type AvatarStyles = {
+export type AvatarTheme = {
     size: { [Key in AvatarSize]: number };
     initials: {
         fontWeight: TextStyle["fontWeight"];
@@ -39,8 +41,9 @@ export type AvatarStyles = {
     label: {
         fontWeight: TextStyle["fontWeight"];
         fontSize: number;
+        paddingHorizontal: number;
     };
-    colors: Array<{ background: ColorValue; foreground: ColorValue }>;
+    colors: AvatarColorSets;
 };
 
 export interface AvatarProps {
@@ -57,9 +60,9 @@ export interface AvatarProps {
 
     action?: ReactNode;
 
-    style?: DeepPartial<AvatarStyles>;
+    theme?: DeepPartial<AvatarTheme>;
 
-    containerStyle?: StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>;
 }
 
 export const Avatar: FC<AvatarProps> = ({
@@ -68,19 +71,20 @@ export const Avatar: FC<AvatarProps> = ({
     imageUri,
     size = "regular",
     action,
+    theme: themeOverrides,
     style,
-    containerStyle,
 }) => {
-    const [styles] = useThemedStyles("avatar", createStyles, {
-        styles: { avatar: style },
+    const { styles } = useComponent("avatar", {
+        themeOverrides,
         props: { size, firstName, lastName },
+        createStyles,
     });
 
     const initials =
         `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
 
     return (
-        <View style={[styles.container, containerStyle]}>
+        <View style={[styles.container, style]}>
             {imageUri ? (
                 <Image source={{ uri: imageUri }} style={styles.image} />
             ) : (
@@ -102,55 +106,49 @@ export const Avatar: FC<AvatarProps> = ({
 
 Avatar.displayName = "Avatar";
 
-const createStyles = (
-    { styles: { avatar }, theme: { spacing, color } }: ThemedStyles,
-    {
-        size = "regular",
-        firstName,
-        lastName,
-    }: Required<Pick<AvatarProps, "size" | "firstName" | "lastName">>,
-) => {
-    const { background, foreground } = getBackgroundColor(
-        avatar.colors,
-        firstName,
-        lastName,
-    ) ?? {
-        background: color.muted,
-        foreground: color.mutedForeground,
-    };
+const createStyles = defineStyles(
+    (
+        theme: AvatarTheme,
+        props: PropFilter<AvatarProps, "size" | "firstName" | "lastName">,
+    ) => {
+        const { background, foreground } = getBackgroundColor(
+            theme.colors,
+            props.firstName,
+            props.lastName,
+        );
 
-    const styles = StyleSheet.create({
-        container: {
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            backgroundColor: background,
-            height: avatar.size[size],
-            width: avatar.size[size],
-            borderRadius: avatar.size[size] / 2,
-        },
-        image: {
-            height: avatar.size[size],
-            width: avatar.size[size],
-            borderRadius: avatar.size[size] / 2,
-        },
-        initials: {
-            fontWeight: avatar.initials.fontWeight,
-            fontSize: avatar.initials.fontSize[size],
-            color: foreground,
-        },
-        label: {
-            fontSize: avatar.label.fontSize,
-            fontWeight: avatar.label.fontWeight,
-            paddingHorizontal: spacing.small,
-            textAlign: "center",
-            color: foreground,
-        },
-        action: {
-            position: "absolute",
-            top: -spacing.tiny,
-            end: -spacing.small,
-        },
-    });
-    return styles;
-};
+        return {
+            container: {
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: background,
+                height: theme.size[props.size],
+                width: theme.size[props.size],
+                borderRadius: theme.size[props.size] / 2,
+            },
+            image: {
+                height: theme.size[props.size],
+                width: theme.size[props.size],
+                borderRadius: theme.size[props.size] / 2,
+            },
+            initials: {
+                fontWeight: theme.initials.fontWeight,
+                fontSize: theme.initials.fontSize[props.size],
+                color: foreground,
+            },
+            label: {
+                fontSize: theme.label.fontSize,
+                fontWeight: theme.label.fontWeight,
+                paddingHorizontal: theme.label.paddingHorizontal,
+                textAlign: "center",
+                color: foreground,
+            },
+            action: {
+                position: "absolute",
+                top: -4,
+                end: -8,
+            },
+        };
+    },
+);

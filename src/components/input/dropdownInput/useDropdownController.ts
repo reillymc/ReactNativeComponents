@@ -6,9 +6,8 @@ import type {
     TextInputKeyPressEvent,
 } from "react-native";
 
-import type { ValueItem } from "../../../common";
-import { useControlledState } from "../../../hooks";
 import type { InputBaseProps } from "../InputBase";
+import type { ValueItem } from "../valueItem";
 import { type DropdownValue, filterDropdownItems, getItemKey } from "./helpers";
 
 type EditState<T> = {
@@ -284,4 +283,24 @@ export const useDropdownController = <T>({
             setActiveIndex(-1);
         },
     };
+};
+
+const useControlledState = <T>(
+    isControlled: boolean,
+    value: T | undefined,
+    defaultValue: T | undefined,
+) => {
+    const [internalValue, setInternalValue] = useState<T | undefined>(
+        defaultValue,
+    );
+
+    const currentValue = isControlled ? value : internalValue;
+
+    const setValue = (nextValue: T | undefined) => {
+        if (!isControlled) {
+            setInternalValue(nextValue);
+        }
+    };
+
+    return [currentValue, setValue] as const;
 };

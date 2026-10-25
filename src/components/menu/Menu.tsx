@@ -1,24 +1,30 @@
 import {
+    type ColorValue,
     FlatList,
     type FlatListProps,
     type ListRenderItem,
-    StyleSheet,
     View,
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { MenuStyles } from "./Menu.styles";
+import { defineStyles, useComponent } from "../shared";
+
+export type MenuTheme = {
+    backgroundColor: ColorValue;
+    borderRadius: number;
+    padding: number;
+    gap: number;
+    maxHeight: number;
+};
 
 export type MenuProps<T = unknown> = {
     data: ReadonlyArray<T>;
     renderItem: ListRenderItem<T>;
     keyExtractor: (item: T, index: number) => string;
     reverse?: boolean;
-    maxHeight?: number;
     onScroll?: FlatListProps<T>["onScroll"];
     showsScrollIndicator?: boolean;
-    style?: DeepPartial<MenuStyles>;
+    theme?: DeepPartial<MenuTheme>;
 
     /**
      * Passthrough for list features such as pagination/async loading
@@ -42,15 +48,14 @@ export const Menu = <T,>({
     renderItem,
     keyExtractor,
     reverse,
-    maxHeight,
     onScroll,
     showsScrollIndicator,
-    style,
+    theme: themeOverrides,
     listProps,
 }: MenuProps<T>) => {
-    const [styles] = useThemedStyles("menu", createStyles, {
-        styles: { menu: style },
-        props: { maxHeight },
+    const { styles } = useComponent("menu", {
+        themeOverrides,
+        createStyles,
     });
 
     return (
@@ -73,20 +78,16 @@ export const Menu = <T,>({
     );
 };
 
-const createStyles = (
-    { styles: { menu } }: ThemedStyles,
-    { maxHeight }: { maxHeight: number | undefined },
-) =>
-    StyleSheet.create({
-        container: {
-            backgroundColor: menu.backgroundColor,
-            borderRadius: menu.borderRadius,
-        },
-        scroll: {
-            maxHeight: maxHeight ?? menu.maxHeight,
-        },
-        content: {
-            padding: menu.padding,
-            gap: menu.gap,
-        },
-    });
+const createStyles = defineStyles((theme: MenuTheme) => ({
+    container: {
+        backgroundColor: theme.backgroundColor,
+        borderRadius: theme.borderRadius,
+    },
+    scroll: {
+        maxHeight: theme.maxHeight,
+    },
+    content: {
+        padding: theme.padding,
+        gap: theme.gap,
+    },
+}));

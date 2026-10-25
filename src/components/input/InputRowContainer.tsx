@@ -1,11 +1,24 @@
 import type { FC, ReactNode } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+    type ColorValue,
+    type StyleProp,
+    View,
+    type ViewStyle,
+} from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
+import type { InputState } from "./InputBase";
+
+export interface InputRowContainerTheme {
+    borderRadius: number;
+    backgroundColor: Record<InputState, ColorValue>;
+}
 
 export interface InputRowContainerProps {
     disabled?: boolean;
     style?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<InputRowContainerTheme>;
     children?: ReactNode;
 }
 
@@ -16,30 +29,29 @@ export interface InputRowContainerProps {
 export const InputRowContainer: FC<InputRowContainerProps> = ({
     disabled = false,
     style,
+    theme: themeOverrides,
     children,
 }) => {
-    const styles = useThemedStyles(createStyles, {
+    const { styles } = useComponent("inputRowContainer", {
+        themeOverrides,
         props: { disabled },
+        createStyles,
     });
 
     return <View style={[styles.container, style]}>{children}</View>;
 };
 
-const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    { disabled }: Required<Pick<InputRowContainerProps, "disabled">>,
-) => {
-    const { borderRadius } = inputBase.container;
-
-    return StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: InputRowContainerTheme,
+        props: PropFilter<InputRowContainerProps, "disabled">,
+    ) => ({
         container: {
             flexDirection: "row",
             overflow: "hidden",
-            borderRadius,
+            borderRadius: theme.borderRadius,
             backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
+                theme.backgroundColor[props.disabled ? "disabled" : "enabled"],
         },
-    });
-};
+    }),
+);

@@ -2,19 +2,18 @@ import type { FC } from "react";
 import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStyles } from "../../hooks";
+import { useComponent } from "../shared";
 import { Text } from "../text";
 import {
     ButtonBase,
     type ButtonBaseProps,
-    type ButtonBaseStyles,
+    type ButtonBaseTheme,
 } from "./ButtonBase";
 
-export type ButtonSize = "medium" | "large";
 export type ButtonVariant = "primary" | "destructive";
 export type ButtonAppearance = "prominent" | "subtle";
 
-export type ButtonAppearanceStyles = {
+export type ButtonAppearanceTheme = {
     prominent: {
         container: Record<ButtonVariant, ColorValue>;
         content: Record<ButtonVariant, ColorValue>;
@@ -25,22 +24,22 @@ export type ButtonAppearanceStyles = {
     };
 };
 
-export type ButtonStyles = {
+export type ButtonTheme = {
     container: {
-        borderRadius: ButtonBaseStyles["borderRadius"];
+        borderRadius: ButtonBaseTheme["borderRadius"];
     };
-    appearance: ButtonAppearanceStyles;
+    appearance: ButtonAppearanceTheme;
 };
 
 export interface ButtonProps
     extends Pick<
         ButtonBaseProps,
-        "onPress" | "disabled" | "width" | "containerStyle"
+        "onPress" | "disabled" | "highlighted" | "width" | "style"
     > {
     variant?: ButtonVariant;
     appearance?: ButtonAppearance;
     label: string;
-    style?: DeepPartial<ButtonStyles>;
+    theme?: DeepPartial<ButtonTheme>;
 }
 
 export const Button: FC<ButtonProps> = ({
@@ -48,27 +47,25 @@ export const Button: FC<ButtonProps> = ({
     variant = "primary",
     appearance = "subtle",
     disabled: disabledProp,
-    style,
+    theme: themeOverrides,
     onPress,
     ...props
 }) => {
     const disabled = disabledProp || !onPress;
 
-    const { button } = useStyles({
-        button: style,
-    });
+    const { theme } = useComponent("button", { themeOverrides });
 
-    const content = button.appearance[appearance].content[variant];
+    const content = theme.appearance[appearance].content[variant];
     const container =
         appearance === "prominent"
-            ? button.appearance.prominent.container[variant]
-            : button.appearance.subtle.container;
+            ? theme.appearance.prominent.container[variant]
+            : theme.appearance.subtle.container;
 
     return (
         <ButtonBase
             {...props}
-            style={{
-                borderRadius: button.container.borderRadius,
+            theme={{
+                borderRadius: theme.container.borderRadius,
                 backgroundColor: container,
             }}
             onPress={onPress}

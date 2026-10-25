@@ -1,57 +1,55 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStyles } from "../../hooks";
 import type { IconComponentProps } from "../icon";
+import { useComponent } from "../shared";
 import type {
     ButtonAppearance,
-    ButtonAppearanceStyles,
+    ButtonAppearanceTheme,
     ButtonVariant,
 } from "./Button";
 import { IconButtonBase, type IconButtonBaseProps } from "./IconButtonBase";
 
 export type IconButtonVariant = ButtonVariant;
 
-export type IconButtonStyles = {
+export type IconButtonTheme = {
     container: {
         size: number;
     };
-    appearance: ButtonAppearanceStyles;
+    appearance: ButtonAppearanceTheme;
 };
 
 export interface IconButtonProps
     extends Pick<
         IconButtonBaseProps,
-        "onPress" | "disabled" | "containerStyle"
+        "onPress" | "disabled" | "highlighted" | "style"
     > {
     variant?: IconButtonVariant;
     appearance?: ButtonAppearance;
-    style?: DeepPartial<IconButtonStyles>;
+    theme?: DeepPartial<IconButtonTheme>;
     onPress?: () => void;
 }
 
 export const IconButton = <G extends string>({
     variant = "primary",
     appearance = "subtle",
-    style,
+    theme: themeOverrides,
     ...props
 }: IconButtonProps & IconComponentProps<G>) => {
-    const { iconButton } = useStyles({
-        iconButton: style,
-    });
+    const { theme } = useComponent("iconButton", { themeOverrides });
 
-    const content = iconButton.appearance[appearance].content[variant];
+    const content = theme.appearance[appearance].content[variant];
     const container =
         appearance === "prominent"
-            ? iconButton.appearance.prominent.container[variant]
-            : iconButton.appearance.subtle.container;
+            ? theme.appearance.prominent.container[variant]
+            : theme.appearance.subtle.container;
 
     return (
         <IconButtonBase
             {...props}
-            style={{
+            theme={{
                 container: {
                     backgroundColor: container,
-                    size: iconButton.container.size,
+                    size: theme.container.size,
                 },
                 icon: {
                     color: content,

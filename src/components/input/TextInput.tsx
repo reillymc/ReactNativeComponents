@@ -3,10 +3,10 @@ import type { FC } from "react";
 import { InputBase, type InputBaseProps } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
-export type TextInputStyles = never;
+export type TextInputTheme = never;
 
 export interface TextInputProps
-    extends InputBaseProps,
+    extends Omit<InputBaseProps, "readOnly">,
         InputScaffoldFieldProps {}
 
 export const TextInput: FC<TextInputProps> = ({

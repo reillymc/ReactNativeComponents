@@ -1,26 +1,33 @@
-import { type ColorValue, StyleSheet, View } from "react-native";
+import { type ColorValue, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import type { ValueItem } from "../../common";
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
-import { IconBase, type IconBaseStyles } from "../icon";
+import { IconBase, type IconBaseTheme } from "../icon";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { InteractionSurface } from "../surface";
 import { Tag } from "../tag";
 import { Text } from "../text";
-import type { InputBaseProps } from "./InputBase";
+import type { InputBaseProps, InputState, InputVariant } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
+import type { ValueItem } from "./valueItem";
 
 export type SelectionInputState = "enabled" | "disabled";
 
-export type SelectionInputStyles = {
+export type SelectionInputTheme = {
     container: {
+        height: Record<InputVariant, number>;
+        padding: number;
+        borderRadius: number;
         backgroundColor: Record<SelectionInputState, ColorValue>;
     };
     selectionContainer: {
         gap: number;
     };
-    icon: Pick<IconBaseStyles, "color">;
+    text: {
+        color: Record<InputState, ColorValue>;
+        placeholderColor: ColorValue;
+    };
+    icon: Pick<IconBaseTheme, "color">;
 };
 
 export type SelectionInputIcons = ComponentIconAssets<"showOptions">;
@@ -45,7 +52,7 @@ export type SelectionInputProps<T = string> = Pick<
     InputScaffoldFieldProps &
     SelectionProps<T> & {
         hideLabel?: boolean;
-        style?: DeepPartial<SelectionInputStyles>;
+        theme?: DeepPartial<SelectionInputTheme>;
         onRemoveItem?: (item: ValueItem<T> | undefined) => void;
         onAdd?: () => void;
     };
@@ -57,21 +64,18 @@ export const SelectionInput = <T,>({
     hideLabel,
     selectionMode,
     selection,
-    style: styleOverrides,
+    theme: themeOverrides,
     variant = "regular",
     onAdd,
     onRemoveItem,
     ...props
 }: SelectionInputProps<T>) => {
     const disabled = disabledProp || !onAdd;
-    const [styles, { style, icons }] = useThemedStyles(
-        "selectionInput",
+    const { styles, theme, icons } = useComponent("selectionInput", {
+        themeOverrides,
+        props: { disabled, variant },
         createStyles,
-        {
-            styles: { selectionInput: styleOverrides },
-            props: { disabled, variant },
-        },
-    );
+    });
 
     const hasSelection =
         selectionMode === "single" ? !!selection : !!selection?.length;
@@ -80,7 +84,7 @@ export const SelectionInput = <T,>({
         <InputScaffold label={!hideLabel && label} {...props}>
             <InteractionSurface
                 disabled={disabled}
-                containerStyle={styles.container}
+                style={styles.container}
                 onPress={onAdd}
             >
                 <View style={styles.selectionContainer}>
@@ -110,7 +114,7 @@ export const SelectionInput = <T,>({
                     )}
                 </View>
                 <View style={styles.iconContainer}>
-                    <IconBase {...icons.showOptions} color={style.icon.color} />
+                    <IconBase {...icons.showOptions} color={theme.icon.color} />
                 </View>
             </InteractionSurface>
         </InputScaffold>
@@ -119,25 +123,20 @@ export const SelectionInput = <T,>({
 
 SelectionInput.displayName = "SelectionInput";
 
-const createStyles = (
-    { styles: { inputBase, selectionInput } }: ThemedStyles,
-    {
-        disabled,
-        variant,
-    }: Required<Pick<SelectionInputProps, "disabled" | "variant">>,
-) => {
-    const { borderRadius, padding, height } = inputBase.container;
-
-    return StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: SelectionInputTheme,
+        props: PropFilter<SelectionInputProps, "disabled" | "variant">,
+    ) => ({
         container: {
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "center",
-            minHeight: height[variant],
-            borderRadius,
+            minHeight: theme.container.height[props.variant],
+            borderRadius: theme.container.borderRadius,
             backgroundColor:
-                selectionInput.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
+                theme.container.backgroundColor[
+                    props.disabled ? "disabled" : "enabled"
                 ],
         },
         selectionContainer: {
@@ -145,21 +144,21 @@ const createStyles = (
             minWidth: 0,
             flexDirection: "row",
             flexWrap: "wrap",
-            gap: selectionInput.selectionContainer.gap,
-            paddingStart: padding,
-            marginVertical: padding,
+            gap: theme.selectionContainer.gap,
+            paddingStart: theme.container.padding,
+            marginVertical: theme.container.padding,
         },
         selectionItemLabel: {
-            color: inputBase.text.color[disabled ? "disabled" : "enabled"],
+            color: theme.text.color[props.disabled ? "disabled" : "enabled"],
         },
         placeholderText: {
-            color: inputBase.text.placeholderColor,
+            color: theme.text.placeholderColor,
         },
         iconContainer: {
-            width: height[variant],
-            height: height[variant],
+            width: theme.container.height[props.variant],
+            height: theme.container.height[props.variant],
             alignItems: "center",
             justifyContent: "center",
         },
-    });
-};
+    }),
+);

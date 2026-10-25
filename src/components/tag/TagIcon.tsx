@@ -1,16 +1,19 @@
-import { useTheme } from "../../hooks";
+import type { ColorValue } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
+
 import { IconBase, type IconComponentProps } from "../icon";
+import { useComponent } from "../shared";
+
+export interface TagIconTheme {
+    size: number;
+    color: ColorValue;
+}
 
 export const TagIcon = <G extends string>({
+    theme: themeOverrides,
     ...iconProps
-}: IconComponentProps<G>) => {
-    const { theme, styles } = useTheme();
+}: IconComponentProps<G> & { theme?: DeepPartial<TagIconTheme> }) => {
+    const { theme } = useComponent("tagIcon", { themeOverrides });
 
-    return (
-        <IconBase
-            {...iconProps}
-            color={theme.color.foreground}
-            size={styles.text.font.body.size}
-        />
-    );
+    return <IconBase {...iconProps} color={theme.color} size={theme.size} />;
 };

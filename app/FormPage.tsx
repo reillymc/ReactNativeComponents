@@ -1,5 +1,4 @@
-import type { FC } from "react";
-import { useState } from "react";
+import { type FC, useState } from "react";
 import { ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
@@ -10,13 +9,13 @@ import {
     TextInput,
     ToggleInput,
 } from "@reillymc/react-native-components/components";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+import { usePalette } from "@reillymc/react-native-components/theme";
 
-import { createThemedStyles, useTheme } from "../demo/theme";
+import { defineStyles, useStyles } from "../demo/theme";
 
 const FormPage: FC = () => {
-    const { theme } = useTheme();
-    const styles = useThemedStyles(createStyles);
+    const palette = usePalette();
+    const styles = useStyles(createStyles);
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -31,15 +30,15 @@ const FormPage: FC = () => {
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.family.sans,
+                        fontFamily: palette.font.family.sans,
                         fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.family.sans,
-                        fontSize: theme.font.size.regular,
+                        fontFamily: palette.font.family.sans,
+                        fontSize: palette.font.size.regular,
                     },
                     headerLargeStyle: {
-                        backgroundColor: theme.color.background,
+                        backgroundColor: palette.color.background,
                     },
                 }}
             />
@@ -99,15 +98,13 @@ const FormPage: FC = () => {
     );
 };
 
-const createStyles = createThemedStyles(
-    ({ styles: { page }, theme: { color } }) => ({
-        content: {
-            backgroundColor: color.background,
-            paddingHorizontal: page.horizontal,
-            paddingTop: page.top,
-            paddingBottom: page.bottom,
-        },
-    }),
-);
+const createStyles = defineStyles(({ appTheme }) => ({
+    content: {
+        backgroundColor: appTheme.page.backgroundColor,
+        paddingHorizontal: appTheme.page.horizontal,
+        paddingTop: appTheme.page.top,
+        paddingBottom: appTheme.page.bottom,
+    },
+}));
 
 export default FormPage;

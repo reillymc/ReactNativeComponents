@@ -1,14 +1,24 @@
 import type { FC, ReactElement } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+    type ColorValue,
+    type StyleProp,
+    View,
+    type ViewStyle,
+} from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { Text } from "../text";
 
-export interface TagStyles {
+export type TagVariant = "light" | "dark";
+
+export interface TagTheme {
     internalSpacing: number;
     borderRadius: number;
     padding: number;
+    backgroundColor: Record<TagVariant, ColorValue>;
+    textColor: ColorValue;
 }
 
 export interface TagProps {
@@ -17,14 +27,24 @@ export interface TagProps {
      * [TagIcon](./TagIcon.tsx)
      */
     icon?: ReactElement;
-    variant?: "light" | "dark";
+    variant?: TagVariant;
     style?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<TagTheme>;
     onPress?: () => void;
 }
 
-export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
-    const [styles] = useThemedStyles("tag", createStyles, {
-        props: { variant, label },
+export const Tag: FC<TagProps> = ({
+    label,
+    onPress,
+    icon,
+    variant = "dark",
+    style,
+    theme: themeOverrides,
+}) => {
+    const { styles } = useComponent("tag", {
+        themeOverrides,
+        props: { variant },
+        createStyles,
     });
 
     const content = (
@@ -37,7 +57,7 @@ export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
     const containerStyle = [styles.container, style];
 
     return onPress ? (
-        <ActionBase onPress={onPress} containerStyle={containerStyle}>
+        <ActionBase onPress={onPress} style={containerStyle}>
             {content}
         </ActionBase>
     ) : (
@@ -45,25 +65,20 @@ export const Tag: FC<TagProps> = ({ label, onPress, icon, variant, style }) => {
     );
 };
 
-const createStyles = (
-    { theme: { color }, styles: { tag } }: ThemedStyles,
-    { variant = "dark" }: Partial<TagProps>,
-) => {
-    const styles = StyleSheet.create({
+const createStyles = defineStyles(
+    (theme: TagTheme, props: PropFilter<TagProps, "variant">) => ({
         container: {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: tag.borderRadius,
-            padding: tag.padding,
-            backgroundColor:
-                variant === "dark" ? color.background : color.surface,
+            borderRadius: theme.borderRadius,
+            padding: theme.padding,
+            backgroundColor: theme.backgroundColor[props.variant],
             width: "auto",
-            gap: tag.internalSpacing,
+            gap: theme.internalSpacing,
         },
         text: {
-            color: color.foreground,
+            color: theme.textColor,
         },
-    });
-    return styles;
-};
+    }),
+);

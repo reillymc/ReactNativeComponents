@@ -1,2 +1,2 @@
-export { Tag, type TagProps, type TagStyles } from "./Tag";
-export { TagIcon } from "./TagIcon";
+export { Tag, type TagProps, type TagTheme } from "./Tag";
+export { TagIcon, type TagIconTheme } from "./TagIcon";

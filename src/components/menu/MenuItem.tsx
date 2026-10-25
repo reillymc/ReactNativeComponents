@@ -1,11 +1,10 @@
 import type { FC } from "react";
-import { StyleSheet } from "react-native";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
 import { InteractionSurface } from "../surface";
 import { HighlightedText } from "../text";
 
-export type MenuItemStyles = {
+export type MenuItemTheme = {
     paddingHorizontal: number;
     paddingVertical: number;
     borderRadius: number;
@@ -15,7 +14,7 @@ export interface MenuItemProps {
     label: string;
     description?: string;
     searchValue?: string;
-    active?: boolean;
+    highlighted?: boolean;
     onPress: () => void;
 }
 
@@ -23,23 +22,17 @@ export const MenuItem: FC<MenuItemProps> = ({
     label,
     description,
     searchValue,
-    active,
+    highlighted,
     onPress,
 }) => {
-    const {
-        theme: { color },
-    } = useTheme();
-
-    const [styles] = useThemedStyles("menuItem", createStyles);
+    const { styles } = useComponent("menuItem", { createStyles });
 
     return (
         <InteractionSurface
             hitSlop={0}
+            highlighted={highlighted}
             onPress={onPress}
-            containerStyle={[
-                styles.dropdownItem,
-                active && { backgroundColor: color.muted },
-            ]}
+            style={styles.dropdownItem}
         >
             <HighlightedText text={label} highlight={searchValue} />
             {!!description && (
@@ -55,5 +48,10 @@ export const MenuItem: FC<MenuItemProps> = ({
 
 MenuItem.displayName = "MenuItem";
 
-const createStyles = ({ styles: { menuItem } }: ThemedStyles) =>
-    StyleSheet.create({ dropdownItem: menuItem });
+const createStyles = defineStyles((theme: MenuItemTheme) => ({
+    dropdownItem: {
+        paddingHorizontal: theme.paddingHorizontal,
+        paddingVertical: theme.paddingVertical,
+        borderRadius: theme.borderRadius,
+    },
+}));

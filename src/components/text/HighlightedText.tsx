@@ -2,7 +2,7 @@ import type { FunctionComponent } from "react";
 import { StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useThemedStyles } from "../../hooks";
+import { useComponent } from "../shared";
 import { Text, type TextProps, type TextVariant } from "./Text";
 
 type HighlightPart = {
@@ -41,13 +41,13 @@ const splitHighlight = (
     return parts;
 };
 
-export interface HighlightedTextStyles {
+export interface HighlightedTextTheme {
     highlightedWeight: Record<TextVariant, TextStyle["fontWeight"]>;
 }
 export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
     text?: string;
     textStyles?: TextProps["style"];
-    style?: DeepPartial<HighlightedTextStyles>;
+    theme?: DeepPartial<HighlightedTextTheme>;
     highlight?: string;
 }
 
@@ -55,17 +55,11 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     text = "",
     highlight = "",
     textStyles,
-    style: styleOverrides,
+    theme: themeOverrides,
     variant = "body",
     ...props
 }) => {
-    const [styles, { style }] = useThemedStyles(
-        "highlightedText",
-        createStyles,
-        {
-            styles: { highlightedText: styleOverrides },
-        },
-    );
+    const { theme } = useComponent("highlightedText", { themeOverrides });
 
     const parts = splitHighlight(text, highlight);
 
@@ -78,7 +72,7 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
                     key={part.offset}
                     style={
                         part.highlighted && {
-                            fontWeight: style.highlightedWeight[variant],
+                            fontWeight: theme.highlightedWeight[variant],
                         }
                     }
                 >
@@ -89,10 +83,9 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     );
 };
 
-const createStyles = () =>
-    StyleSheet.create({
-        textWrapper: {
-            display: "flex",
-            flexDirection: "row",
-        },
-    });
+const styles = StyleSheet.create({
+    textWrapper: {
+        display: "flex",
+        flexDirection: "row",
+    },
+});

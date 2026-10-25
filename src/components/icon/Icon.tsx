@@ -1,30 +1,29 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStyles } from "../../hooks";
-import { IconBase, type IconBaseStyles } from "./IconBase";
+import { useComponent } from "../shared";
+import { IconBase, type IconBaseTheme } from "./IconBase";
 import type { IconComponentProps } from "./IconComponentProps";
 
 export type IconSize = "small" | "medium" | "large";
-export type IconVariant = "primary" | "secondary" | "text";
 
-export interface IconStyles {
-    color: IconBaseStyles["color"];
-    size: Record<IconSize, IconBaseStyles["size"]>;
+export interface IconTheme {
+    color: IconBaseTheme["color"];
+    size: Record<IconSize, IconBaseTheme["size"]>;
 }
 
 export type IconProps = {
     size?: IconSize;
-    style?: DeepPartial<IconStyles>;
+    theme?: DeepPartial<IconTheme>;
 };
 
 export const Icon = <G extends string>({
     size = "medium",
-    style,
+    theme: themeOverrides,
     ...iconProps
 }: IconProps & IconComponentProps<G>) => {
-    const { icon } = useStyles({ icon: style });
+    const { theme } = useComponent("icon", { themeOverrides });
 
     return (
-        <IconBase {...iconProps} size={icon.size[size]} color={icon.color} />
+        <IconBase {...iconProps} size={theme.size[size]} color={theme.color} />
     );
 };

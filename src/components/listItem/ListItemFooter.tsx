@@ -1,23 +1,23 @@
 import type { FC, ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
+import type { ListItemTheme } from "./ListItem";
 
 export interface ListItemFooterProps {
     children?: ReactNode;
 }
 
 export const ListItemFooter: FC<ListItemFooterProps> = ({ children }) => {
-    const [styles] = useThemedStyles("listItem", createStyles);
+    const { styles } = useComponent("listItem", { createStyles });
 
     return <View style={styles.footer}>{children}</View>;
 };
-const createStyles = ({ styles: { listItem } }: ThemedStyles) =>
-    StyleSheet.create({
-        footer: {
-            display: "flex",
-            marginBottom: listItem.internalSpacing,
-            marginStart: listItem.internalSpacing,
-            marginEnd: listItem.internalSpacing,
-        },
-    });
+const createStyles = defineStyles((theme: ListItemTheme) => ({
+    footer: {
+        display: "flex",
+        marginBottom: theme.internalSpacing,
+        marginStart: theme.internalSpacing,
+        marginEnd: theme.internalSpacing,
+    },
+}));

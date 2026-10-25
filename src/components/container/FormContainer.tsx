@@ -4,37 +4,34 @@ import {
     Platform,
     Pressable,
     type StyleProp,
-    StyleSheet,
     View,
     type ViewStyle,
 } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useTheme } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
+
+export interface FormContainerTheme {
+    gap: number;
+}
 
 export interface FormContainerProps {
-    /**
-     * Vertical gap between fields. Defaults to `spacing.medium`.
-     */
-    gap?: number;
-
+    theme?: DeepPartial<FormContainerTheme>;
     style?: StyleProp<ViewStyle>;
     children?: ReactNode;
 }
 
 export const FormContainer: FC<FormContainerProps> = ({
     style,
-    gap,
+    theme: themeOverrides,
     children,
 }) => {
-    const {
-        theme: { spacing },
-    } = useTheme();
+    const { styles } = useComponent("formContainer", {
+        themeOverrides,
+        createStyles,
+    });
 
-    const containerStyle = [
-        styles.container,
-        { gap: gap ?? spacing.medium },
-        style,
-    ];
+    const containerStyle = [styles.container, style];
 
     return Platform.OS === "web" ? (
         <View style={containerStyle}>{children}</View>
@@ -49,10 +46,11 @@ export const FormContainer: FC<FormContainerProps> = ({
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = defineStyles((theme: FormContainerTheme) => ({
     container: {
         alignSelf: "stretch",
         width: "100%",
         minWidth: 0,
+        gap: theme.gap,
     },
-});
+}));

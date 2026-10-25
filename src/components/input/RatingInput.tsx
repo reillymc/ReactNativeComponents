@@ -5,7 +5,7 @@ import {
     useEffectEvent,
     useState,
 } from "react";
-import { StyleSheet, View } from "react-native";
+import { type ColorValue, StyleSheet, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
     Easing,
@@ -15,8 +15,8 @@ import Animated, {
     withTiming,
 } from "react-native-reanimated";
 import { scheduleOnRN } from "react-native-worklets";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { IconBase } from "../icon";
 import {
@@ -25,17 +25,30 @@ import {
     ratingToValue,
     valueToRating,
 } from "../rating";
-import type { InputBaseProps } from "./InputBase";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
+import type { InputBaseProps, InputState, InputVariant } from "./InputBase";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 
 export type RatingInputIcons = ComponentIconAssets<RatingIconVariant>;
 
-export type RatingInputStyles = null;
+export interface RatingInputTheme {
+    container: {
+        height: Record<InputVariant, number>;
+        borderRadius: number;
+        padding: number;
+        backgroundColor: Record<InputState, ColorValue>;
+    };
+    icon: {
+        color: Record<RatingIconVariant, ColorValue>;
+    };
+    gap: number;
+}
 
 export interface RatingInputProps
     extends InputScaffoldFieldProps,
         Pick<InputBaseProps, "disabled" | "variant">,
         Pick<RatingProps, "max" | "value" | "scale"> {
+    theme?: DeepPartial<RatingInputTheme>;
     /**
      * Change listener that gets called when rating changes.
      */
@@ -83,17 +96,15 @@ export const RatingInput: FC<RatingInputProps> = ({
     variant = "regular",
     scale,
     onChange,
+    theme: themeOverrides,
     ...props
 }) => {
     const disabled = disabledProp || !onChange;
 
-    const {
-        theme,
-        styles: { inputBase, rating },
-    } = useTheme();
-
-    const [styles, { icons }] = useThemedStyles("ratingInput", createStyles, {
+    const { styles, theme, icons } = useComponent("ratingInput", {
+        themeOverrides,
         props: { disabled, variant },
+        createStyles,
     });
 
     const scaledRating = scale ? valueToRating(value, max, scale) : value;
@@ -143,9 +154,9 @@ export const RatingInput: FC<RatingInputProps> = ({
 
     const ratingIconSize = computeIconSize(
         width,
-        inputBase.container.padding,
-        theme.spacing.tiny,
-        inputBase.container.height[variant],
+        theme.container.padding,
+        theme.gap,
+        theme.container.height[variant],
         max,
     );
 
@@ -174,21 +185,21 @@ export const RatingInput: FC<RatingInputProps> = ({
                                 <IconBase
                                     {...icons.empty}
                                     size={ratingIconSize}
-                                    color={rating.icon.color.empty}
+                                    color={theme.icon.color.empty}
                                 />
                             }
                             half={
                                 <IconBase
                                     {...icons.half}
                                     size={ratingIconSize}
-                                    color={rating.icon.color.half}
+                                    color={theme.icon.color.half}
                                 />
                             }
                             full={
                                 <IconBase
                                     {...icons.full}
                                     size={ratingIconSize}
-                                    color={rating.icon.color.full}
+                                    color={theme.icon.color.full}
                                 />
                             }
                         />
@@ -268,27 +279,22 @@ const AnimatedStar: FC<AnimatedStarProps> = ({
     );
 };
 
-const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    {
-        disabled,
-        variant,
-    }: Required<Pick<RatingInputProps, "disabled" | "variant">>,
-) => {
-    const { borderRadius, padding, height } = inputBase.container;
-
-    return StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: RatingInputTheme,
+        props: PropFilter<RatingInputProps, "disabled" | "variant">,
+    ) => ({
         container: {
-            minHeight: height[variant],
-            borderRadius,
+            minHeight: theme.container.height[props.variant],
+            borderRadius: theme.container.borderRadius,
             backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
+                theme.container.backgroundColor[
+                    props.disabled ? "disabled" : "enabled"
                 ],
-            padding,
+            padding: theme.container.padding,
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-evenly",
         },
-    });
-};
+    }),
+);

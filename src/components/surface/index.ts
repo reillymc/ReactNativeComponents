@@ -5,5 +5,5 @@ export {
 export {
     StateLayer,
     type StateLayerProps,
-    type StateLayerStyles,
+    type StateLayerTheme,
 } from "./StateLayer";

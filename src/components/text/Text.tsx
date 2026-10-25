@@ -3,12 +3,16 @@ import {
     type ColorValue,
     Text as RnText,
     type TextProps as RnTextProps,
-    StyleSheet,
     type TextStyle,
 } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import {
+    defineStyles,
+    MAX_FONT_SIZE_MULTIPLIER,
+    type PropFilter,
+    useComponent,
+} from "../shared";
 
 export type TextVariant =
     | "display"
@@ -18,7 +22,7 @@ export type TextVariant =
     | "body"
     | "caption";
 
-export interface TextStyles {
+export interface TextTheme {
     color: ColorValue;
     font: {
         [Variant in TextVariant]: {
@@ -31,17 +35,21 @@ export interface TextStyles {
 
 export interface TextProps extends RnTextProps {
     variant?: TextVariant;
+    theme?: DeepPartial<TextTheme>;
     children?: ReactNode;
 }
 
 export const Text: FC<TextProps> = ({
     variant = "body",
     style,
+    theme: themeOverrides,
     children,
     ...props
 }) => {
-    const [styles] = useThemedStyles("text", createStyles, {
+    const { styles } = useComponent("text", {
+        themeOverrides,
         props: { variant },
+        createStyles,
     });
 
     return (
@@ -55,15 +63,13 @@ export const Text: FC<TextProps> = ({
     );
 };
 
-const createStyles = (
-    { styles: { text } }: ThemedStyles,
-    { variant = "body" }: Partial<TextProps>,
-) =>
-    StyleSheet.create({
+const createStyles = defineStyles(
+    (theme: TextTheme, props: PropFilter<TextProps, "variant">) => ({
         text: {
-            fontFamily: text.font[variant].family,
-            fontWeight: text.font[variant].weight,
-            fontSize: text.font[variant].size,
-            color: text.color,
+            fontFamily: theme.font[props.variant].family,
+            fontWeight: theme.font[props.variant].weight,
+            fontSize: theme.font[props.variant].size,
+            color: theme.color,
         },
-    });
+    }),
+);

@@ -2,7 +2,6 @@ import type { FunctionComponent, ReactNode } from "react";
 import {
     type ColorValue,
     type StyleProp,
-    StyleSheet,
     View,
     type ViewStyle,
 } from "react-native";
@@ -11,19 +10,25 @@ import Animated, {
     SlideInDown,
     SlideOutDown,
 } from "react-native-reanimated";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
 
-export interface ToastStyles {
+export interface ToastTheme {
     container: {
         backgroundColor: ColorValue;
         padding: number;
         borderRadius: number;
     };
+    borderColor: ColorValue;
+    borderWidth: number;
+    separatorColor: ColorValue;
+    separatorMarginHorizontal: number;
 }
 export interface ToastProps {
     action?: ReactNode;
-    containerStyle?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<ToastTheme>;
+    style?: StyleProp<ViewStyle>;
     children?: ReactNode;
 }
 
@@ -33,14 +38,18 @@ const TOAST_LAYOUT = LinearTransition.springify().mass(0.5);
 
 export const Toast: FunctionComponent<ToastProps> = ({
     action,
-    containerStyle,
+    theme: themeOverrides,
+    style,
     children,
 }) => {
-    const [styles] = useThemedStyles("toast", createStyles);
+    const { styles } = useComponent("toast", {
+        themeOverrides,
+        createStyles,
+    });
 
     return (
         <Animated.View
-            style={[styles.container, containerStyle]}
+            style={[styles.container, style]}
             entering={TOAST_ENTERING}
             exiting={TOAST_EXITING}
             layout={TOAST_LAYOUT}
@@ -61,35 +70,31 @@ export const Toast: FunctionComponent<ToastProps> = ({
     );
 };
 
-const createStyles = ({
-    theme: { color, spacing },
-    styles: { toast },
-}: ThemedStyles) =>
-    StyleSheet.create({
-        container: {
-            backgroundColor: toast.container.backgroundColor,
-            padding: toast.container.padding,
-            borderRadius: toast.container.borderRadius,
-            borderWidth: StyleSheet.hairlineWidth,
-            borderColor: color.border,
-        },
-        innerContainer: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-        },
-        contentContainer: {
-            flex: 1,
-        },
-        actionContainer: {
-            flex: 0,
-            alignItems: "center",
-            flexDirection: "row",
-            height: "100%",
-        },
-        separator: {
-            borderStartWidth: StyleSheet.hairlineWidth,
-            borderStartColor: color.mutedForeground,
-            height: "100%",
-            marginHorizontal: spacing.medium,
-        },
-    });
+const createStyles = defineStyles((theme: ToastTheme) => ({
+    container: {
+        backgroundColor: theme.container.backgroundColor,
+        padding: theme.container.padding,
+        borderRadius: theme.container.borderRadius,
+        borderWidth: theme.borderWidth,
+        borderColor: theme.borderColor,
+    },
+    innerContainer: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+    },
+    contentContainer: {
+        flex: 1,
+    },
+    actionContainer: {
+        flex: 0,
+        alignItems: "center",
+        flexDirection: "row",
+        height: "100%",
+    },
+    separator: {
+        borderStartWidth: theme.borderWidth,
+        borderStartColor: theme.separatorColor,
+        height: "100%",
+        marginHorizontal: theme.separatorMarginHorizontal,
+    },
+}));

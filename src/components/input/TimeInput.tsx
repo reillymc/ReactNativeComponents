@@ -1,15 +1,12 @@
 import { type FC, useRef, useState } from "react";
-import {
-    Pressable,
-    type TextInput as RnTextInput,
-    StyleSheet,
-} from "react-native";
+import { Pressable, type TextInput as RnTextInput } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
-import { InputBase } from "./InputBase";
+import { InputBase, type InputVariant } from "./InputBase";
 import { InputRowContainer } from "./InputRowContainer";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
 import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
@@ -19,6 +16,11 @@ export type TimeInputValue = { hours: string; minutes: string };
 const DEFAULT_TIME_VALUE: TimeInputValue = { hours: "", minutes: "" };
 
 export type TimeInputIcons = ComponentIconAssets<"time">;
+
+export interface TimeInputTheme {
+    padding: number;
+    height: Record<InputVariant, number>;
+}
 
 export type TimeInputPlaceholders = {
     hours?: string;
@@ -36,6 +38,7 @@ export interface TimeInputProps
     placeholder?: TimeInputPlaceholders;
 
     onChange?: (e: TimeInputValue) => void;
+    theme?: DeepPartial<TimeInputTheme>;
 }
 
 export const TimeInput: FC<TimeInputProps> = ({
@@ -46,13 +49,16 @@ export const TimeInput: FC<TimeInputProps> = ({
     value = DEFAULT_TIME_VALUE,
     onChange,
     onSubmitEditing,
+    theme: themeOverrides,
     ...baseProps
 }) => {
     const disabled = disabledProp || !onChange;
     const hoursRef = useRef<RnTextInput>(null);
     const minutesRef = useRef<RnTextInput>(null);
-    const [styles, { icons }] = useThemedStyles("timeInput", createStyles, {
+    const { styles, icons } = useComponent("timeInput", {
+        themeOverrides,
         props: { variant },
+        createStyles,
     });
 
     const [isFocused, setIsFocused] = useState(false);
@@ -77,7 +83,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     keyboardType="number-pad"
                     submitBehavior="submit"
                     returnKeyType="next"
-                    inputStyle={styles.input}
+                    style={styles.input}
                     onChangeText={(text) =>
                         onChange?.({
                             ...value,
@@ -105,7 +111,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     variant={variant}
                     keyboardType="number-pad"
                     returnKeyType="done"
-                    inputStyle={styles.input}
+                    style={styles.input}
                     onChangeText={(text) => {
                         const addToHours = text
                             ? Math.floor(Number.parseInt(text, 10) / 60)
@@ -149,7 +155,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                     contextMenuHidden
                     disabled={disabled}
                     showSoftInputOnFocus={false}
-                    inputStyle={styles.clearInput}
+                    style={styles.clearInput}
                     onFocus={() => onChange?.({ hours: "", minutes: "" })}
                 />
             </InputRowContainer>
@@ -157,11 +163,8 @@ export const TimeInput: FC<TimeInputProps> = ({
     );
 };
 
-const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    { variant }: Required<Pick<TimeInputProps, "variant">>,
-) =>
-    StyleSheet.create({
+const createStyles = defineStyles(
+    (theme: TimeInputTheme, props: PropFilter<TimeInputProps, "variant">) => ({
         input: {
             flexGrow: 1,
             flexBasis: 0,
@@ -169,10 +172,11 @@ const createStyles = (
         },
         clearInput: {
             flexShrink: 1,
-            marginStart: inputBase.container.padding,
+            marginStart: theme.padding,
         },
         timeLabel: {
-            minHeight: inputBase.container.height[variant],
+            minHeight: theme.height[props.variant],
             justifyContent: "center",
         },
-    });
+    }),
+);

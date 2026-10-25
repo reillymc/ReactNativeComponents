@@ -2,17 +2,17 @@ import type { FC } from "react";
 import {
     type ColorValue,
     type StyleProp,
-    StyleSheet,
     View,
     type ViewStyle,
 } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { Text } from "../text";
 
 export type AlertVariant = "primary" | "secondary";
 
-export type AlertIndicatorStyles = {
+export type AlertIndicatorTheme = {
     size: number;
     borderRadius: number;
     color: Record<AlertVariant, ColorValue>;
@@ -22,16 +22,20 @@ export type AlertIndicatorStyles = {
 export interface AlertIndicatorProps {
     label?: string;
     variant?: AlertVariant;
+    theme?: DeepPartial<AlertIndicatorTheme>;
     style?: StyleProp<ViewStyle>;
 }
 
 export const AlertIndicator: FC<AlertIndicatorProps> = ({
     label = "",
     variant = "primary",
+    theme: themeOverrides,
     style,
 }) => {
-    const [styles] = useThemedStyles("alertIndicator", createStyles, {
+    const { styles } = useComponent("alertIndicator", {
+        themeOverrides,
         props: { variant },
+        createStyles,
     });
 
     return (
@@ -45,24 +49,23 @@ export const AlertIndicator: FC<AlertIndicatorProps> = ({
 
 AlertIndicator.displayName = "AlertIndicator";
 
-const createStyles = (
-    { styles: { alertIndicator } }: ThemedStyles,
-    { variant = "primary" }: Partial<AlertIndicatorProps>,
-) => {
-    const styles = StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: AlertIndicatorTheme,
+        props: PropFilter<AlertIndicatorProps, "variant">,
+    ) => ({
         container: {
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            height: alertIndicator.size,
-            width: alertIndicator.size,
-            borderRadius: alertIndicator.borderRadius,
-            backgroundColor: alertIndicator.backgroundColor[variant],
+            height: theme.size,
+            width: theme.size,
+            borderRadius: theme.borderRadius,
+            backgroundColor: theme.backgroundColor[props.variant],
         },
         text: {
-            color: alertIndicator.color[variant],
+            color: theme.color[props.variant],
             fontWeight: "600",
         },
-    });
-    return styles;
-};
+    }),
+);

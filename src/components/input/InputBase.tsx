@@ -1,19 +1,20 @@
-import type { FC, Ref } from "react";
-import {
-    type ColorValue,
-    StyleSheet,
-    TextInput,
-    type TextInputProps,
-} from "react-native";
+import { type FC, type Ref, useState } from "react";
+import { type ColorValue, TextInput, type TextInputProps } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import {
+    createFocusRingStyle,
+    defineStyles,
+    type FocusRingTheme,
+    MAX_FONT_SIZE_MULTIPLIER,
+    type PropFilter,
+    useComponent,
+} from "../shared";
 
 export type InputState = "enabled" | "disabled";
 export type InputVariant = "regular" | "compact";
 
-export interface InputBaseStyles {
+export interface InputBaseTheme {
     container: {
         height: Record<InputVariant, number>;
         padding: number;
@@ -26,74 +27,97 @@ export interface InputBaseStyles {
         color: Record<InputState, ColorValue>;
         placeholderColor: ColorValue;
     };
+    focusRing: FocusRingTheme;
 }
 
 export interface InputBaseProps
     extends Omit<TextInputProps, "editable" | "style"> {
     disabled?: boolean;
+    readOnly?: boolean;
     variant?: InputVariant;
-    style?: DeepPartial<InputBaseStyles>;
-    inputStyle?: TextInputProps["style"];
+    theme?: DeepPartial<InputBaseTheme>;
+    style?: TextInputProps["style"];
     ref?: Ref<TextInput>;
 }
 
 export const InputBase: FC<InputBaseProps> = ({
     disabled = false,
+    readOnly = false,
     multiline = false,
     variant = "regular",
     scrollEnabled,
     onChangeText,
+    onFocus,
+    onBlur,
     ref,
-    style: styleOverrides,
-    inputStyle,
+    theme: themeOverrides,
+    style,
     ...props
 }) => {
-    const [styles, { style }] = useThemedStyles("inputBase", createStyles, {
-        styles: { inputBase: styleOverrides },
+    const [focused, setFocused] = useState(false);
+    const { styles, theme } = useComponent("inputBase", {
+        themeOverrides,
         props: { disabled, multiline, variant },
+        createStyles,
     });
+
+    const handleFocus: NonNullable<TextInputProps["onFocus"]> = (event) => {
+        setFocused(true);
+        onFocus?.(event);
+    };
+
+    const handleBlur: NonNullable<TextInputProps["onBlur"]> = (event) => {
+        setFocused(false);
+        onBlur?.(event);
+    };
 
     return (
         <TextInput
             ref={ref}
-            editable={!disabled}
+            editable={!(disabled || readOnly)}
             maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
-            placeholderTextColor={style.text.placeholderColor}
-            style={[styles.input, inputStyle]}
+            placeholderTextColor={theme.text.placeholderColor}
+            style={[
+                createFocusRingStyle(theme.focusRing, focused && !disabled),
+                styles.input,
+                style,
+            ]}
             multiline={multiline}
             scrollEnabled={scrollEnabled ?? multiline}
             onChangeText={onChangeText}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             {...props}
         />
     );
 };
 
-const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    {
-        disabled,
-        multiline,
-        variant,
-    }: Required<Pick<InputBaseProps, "multiline" | "disabled" | "variant">>,
-) => {
-    const { borderRadius, padding, height } = inputBase.container;
+const createStyles = defineStyles(
+    (
+        theme: InputBaseTheme,
+        props: PropFilter<InputBaseProps, "disabled" | "multiline" | "variant">,
+    ) => {
+        const { container, text } = theme;
 
-    return StyleSheet.create({
-        input: {
-            alignSelf: "stretch",
-            minWidth: 0,
-            height: multiline ? undefined : height[variant],
-            minHeight: height[variant],
-            padding,
-            borderRadius,
-            backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
-            fontSize: inputBase.text.fontSize,
-            fontFamily: inputBase.text.fontFamily,
-            color: inputBase.text.color[disabled ? "disabled" : "enabled"],
-            opacity: disabled ? 0.5 : 1,
-        },
-    });
-};
+        return {
+            input: {
+                alignSelf: "stretch",
+                minWidth: 0,
+                height: props.multiline
+                    ? undefined
+                    : container.height[props.variant],
+                minHeight: container.height[props.variant],
+                padding: container.padding,
+                borderRadius: container.borderRadius,
+                backgroundColor:
+                    container.backgroundColor[
+                        props.disabled ? "disabled" : "enabled"
+                    ],
+                fontSize: text.fontSize,
+                fontFamily: text.fontFamily,
+                color: text.color[props.disabled ? "disabled" : "enabled"],
+                opacity: props.disabled ? 0.5 : 1,
+            },
+        };
+    },
+);

@@ -10,17 +10,17 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     anchorRef,
     show,
     position,
-    gap,
+    theme,
     onInvertedChange,
-    containerStyle,
+    style,
     children,
 }) => {
-    const { geometry, inlineStyle, margin, onLayout } =
+    const { geometry, inlineStyle, parentMargin, onLayout } =
         useAnchoredContainerPosition({
             parentRef,
             show,
             position,
-            gap,
+            theme,
             onInvertedChange,
         });
 
@@ -30,9 +30,9 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
         return (
             <InlineMount
                 geometry={geometry}
-                style={inlineStyle}
+                containerStyle={inlineStyle}
                 onLayout={onLayout}
-                containerStyle={containerStyle}
+                style={style}
             >
                 {children}
             </InlineMount>
@@ -43,9 +43,9 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
         <OverlayMount
             anchorRef={anchorRef}
             geometry={geometry}
-            margin={margin}
+            margin={parentMargin}
             onLayout={onLayout}
-            containerStyle={containerStyle}
+            style={style}
         >
             {children}
         </OverlayMount>

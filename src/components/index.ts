@@ -1,32 +1,31 @@
 export type {
     ActionBaseProps,
-    ActionBaseStyles,
+    ActionBaseTheme,
     ActionProps,
-    ActionStyles,
+    ActionTheme,
     IconActionBaseProps,
-    IconActionBaseStyles,
+    IconActionBaseTheme,
     IconActionProps,
-    IconActionStyles,
-    StateTintStyles,
+    IconActionTheme,
 } from "./action";
 export { Action, ActionBase, IconAction, IconActionBase } from "./action";
 export {
     AlertIndicator,
     type AlertIndicatorProps,
-    type AlertIndicatorStyles,
+    type AlertIndicatorTheme,
 } from "./alert";
-export { Avatar, type AvatarProps, type AvatarStyles } from "./avatar";
+export { Avatar, type AvatarProps, type AvatarTheme } from "./avatar";
 export type {
     ButtonAppearance,
-    ButtonAppearanceStyles,
+    ButtonAppearanceTheme,
     ButtonBaseProps,
-    ButtonBaseStyles,
+    ButtonBaseTheme,
     ButtonProps,
-    ButtonStyles,
+    ButtonTheme,
     IconButtonBaseProps,
-    IconButtonBaseStyles,
+    IconButtonBaseTheme,
     IconButtonProps,
-    IconButtonStyles,
+    IconButtonTheme,
 } from "./button";
 export {
     Button,
@@ -36,9 +35,12 @@ export {
 } from "./button";
 export type {
     AnchoredContainerProps,
+    AnchoredContainerTheme,
     ContainerPlacement,
     FormContainerProps,
+    FormContainerTheme,
     FormRowProps,
+    FormRowTheme,
     PanelProps,
 } from "./container";
 export {
@@ -49,26 +51,26 @@ export {
 } from "./container";
 export type {
     IconBaseProps,
-    IconBaseStyles,
+    IconBaseTheme,
     IconComponentProps,
     IconProps,
-    IconStyles,
+    IconTheme,
 } from "./icon";
 export { Icon, IconBase } from "./icon";
 export type {
     CounterInputIcons,
     CounterInputProps,
     DropdownInputProps,
-    DropdownInputStyles,
     FractionValue,
     InputActionProps,
-    InputActionStyles,
+    InputActionTheme,
     InputBaseProps,
-    InputBaseStyles,
+    InputBaseTheme,
     InputRowContainerProps,
+    InputRowContainerTheme,
     InputScaffoldIcons,
     InputScaffoldProps,
-    InputScaffoldStyles,
+    InputScaffoldTheme,
     NumberInputIcons,
     NumberInputProps,
     NumberInputValue,
@@ -76,18 +78,22 @@ export type {
     RangeValue,
     RatingInputIcons,
     RatingInputProps,
-    RatingInputStyles,
+    RatingInputTheme,
     SelectionInputIcons,
     SelectionInputProps,
-    SelectionInputStyles,
+    SelectionInputTheme,
     TextInputProps,
-    TextInputStyles,
+    TextInputTheme,
     TimeInputIcons,
     TimeInputProps,
+    TimeInputTheme,
     TimeInputValue,
     ToggleInputIcons,
     ToggleInputProps,
-    ToggleInputStyles,
+    ToggleInputTheme,
+    ValueItem,
+    ValueItemComplex,
+    ValueItemSimple,
 } from "./input";
 export {
     CounterInput,
@@ -111,13 +117,13 @@ export {
     ListItemFooter,
     type ListItemProps,
     ListItemRow,
-    type ListItemStyles,
+    type ListItemTheme,
 } from "./listItem";
 export type {
     MenuItemProps,
-    MenuItemStyles,
+    MenuItemTheme,
     MenuProps,
-    MenuStyles,
+    MenuTheme,
 } from "./menu";
 export {
     Menu,
@@ -128,31 +134,34 @@ export {
     Rating,
     type RatingIcons,
     type RatingProps,
-    type RatingStyles,
+    type RatingTheme,
     ratingToValue,
     valueToRating,
 } from "./rating";
-export type {
-    InteractionSurfaceProps,
-    StateLayerStyles,
-} from "./surface";
+export type { InteractionSurfaceProps } from "./surface";
 export { InteractionSurface } from "./surface";
 export {
     SwipeAction,
     type SwipeActionProps,
-    type SwipeActionStyles,
+    type SwipeActionTheme,
     SwipeableContainer,
     type SwipeableContainerProps,
 } from "./swipe";
-export { Tag, TagIcon, type TagProps, type TagStyles } from "./tag";
+export {
+    Tag,
+    TagIcon,
+    type TagIconTheme,
+    type TagProps,
+    type TagTheme,
+} from "./tag";
 export type {
     HighlightedTextProps,
-    HighlightedTextStyles,
+    HighlightedTextTheme,
     TextProps,
-    TextStyles,
+    TextTheme,
 } from "./text";
 export {
     HighlightedText,
     Text,
 } from "./text";
-export { Toast, type ToastProps, type ToastStyles } from "./toast";
+export { Toast, type ToastProps, type ToastTheme } from "./toast";

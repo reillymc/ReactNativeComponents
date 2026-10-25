@@ -11,6 +11,10 @@ import type { AnimatedRef } from "react-native-reanimated";
 import { InlineMount } from "./InlineMount";
 import { useAnchoredContainerPosition } from "./useAnchoredContainerPosition";
 
+export type AnchoredContainerTheme = {
+    parentMargin: number;
+};
+
 export type ContainerGeometry = {
     parentY: number;
     parentHeight: number;
@@ -39,7 +43,7 @@ export type MountProps = {
     geometry: ContainerGeometry | undefined;
     onLayout: (event: LayoutChangeEvent) => void;
     children: AnchoredContainerChildren;
-    containerStyle?: StyleProp<ViewStyle>;
+    mountStyle?: StyleProp<ViewStyle>;
 };
 
 export interface AnchoredContainerProps {
@@ -54,26 +58,26 @@ export interface AnchoredContainerProps {
 
     show?: boolean;
     position?: "auto" | "above";
-    gap?: number;
     onInvertedChange?: (inverted: boolean) => void;
     children?: AnchoredContainerChildren;
-    containerStyle?: StyleProp<ViewStyle>;
+    theme?: AnchoredContainerTheme;
+    style?: StyleProp<ViewStyle>;
 }
 
 export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     parentRef,
     show,
     position,
-    gap,
     onInvertedChange,
-    containerStyle,
+    theme,
+    style,
     children,
 }) => {
     const { geometry, inlineStyle, onLayout } = useAnchoredContainerPosition({
         parentRef,
         show,
         position,
-        gap,
+        theme,
         onInvertedChange,
     });
 
@@ -82,9 +86,9 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     return (
         <InlineMount
             geometry={geometry}
-            style={inlineStyle}
+            containerStyle={inlineStyle}
             onLayout={onLayout}
-            containerStyle={containerStyle}
+            style={style}
         >
             {children}
         </InlineMount>

@@ -2,16 +2,15 @@
 import { useState } from "react";
 import { ScrollView, View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
-import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     CounterInput,
     SelectionInput,
     TextInput,
     ToggleInput,
+    type ValueItem,
 } from "@reillymc/react-native-components/components";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-import { createThemedStyles } from "../theme";
+import { defineStyles, useStyles } from "../theme";
 import { useSelectionModal } from "./useSelectionModal";
 
 type PropDefinitionBase = {
@@ -77,7 +76,7 @@ export const PropsPanel = <T extends Record<string, any>>({
     propValues,
     onChange,
 }: PropsPanelProps<T>) => {
-    const styles = useThemedStyles(createStyles);
+    const styles = useStyles(createStyles);
 
     const [customLabels, setCustomLabels] = useState<{
         [P in keyof T]?: string;
@@ -275,21 +274,21 @@ export const PropsPanel = <T extends Record<string, any>>({
 
 PropsPanel.displayName = "PropsPanel";
 
-const createStyles = createThemedStyles(({ styles: { propsPanel } }) => ({
+const createStyles = defineStyles(({ palette }) => ({
     container: {
         display: "flex",
-        backgroundColor: propsPanel.backgroundColor,
-        borderTopStartRadius: propsPanel.borderRadius,
-        borderTopEndRadius: propsPanel.borderRadius,
+        backgroundColor: palette.color.surface,
+        borderTopStartRadius: palette.border.radius.loose,
+        borderTopEndRadius: palette.border.radius.loose,
     },
     contentContainer: {
-        width: propsPanel.contentWidth,
+        width: "60%",
         alignSelf: "center",
         flexGrow: 1,
-        paddingBottom: propsPanel.contentBottomPadding,
+        paddingBottom: 120,
     },
     propContainer: {
         display: "flex",
-        marginTop: propsPanel.itemSpacing,
+        marginTop: palette.spacing.large,
     },
 }));

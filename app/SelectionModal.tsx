@@ -2,28 +2,27 @@ import { type FC, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
-import type { ValueItem } from "@reillymc/react-native-components/common";
 import {
     Action,
     MenuItem,
     Tag,
     TagIcon,
     Text,
+    type ValueItem,
 } from "@reillymc/react-native-components/components";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
 import {
     type SelectionRequest,
     useSelectionModalController,
 } from "../demo/components/SelectionModalContext";
-import { createThemedStyles } from "../demo/theme";
+import { defineStyles, useStyles } from "../demo/theme";
 
 type ModalItem = ValueItem & { id?: string };
 
 const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
     request,
 }) => {
-    const styles = useThemedStyles(createStyles);
+    const styles = useStyles(createStyles);
     const router = useRouter();
 
     const [selectedItems, setSelectedItems] = useState<ModalItem[]>(
@@ -57,7 +56,6 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
                     headerRight: () => (
                         <Action
                             label="Done"
-                            containerStyle={styles.headerAction}
                             onPress={() =>
                                 closeWithSelection(
                                     request.selectionMode === "single"
@@ -151,44 +149,36 @@ const SelectionModal: FC = () => {
 
 export default SelectionModal;
 
-const createStyles = createThemedStyles(
-    ({
-        styles: { inputBase, page, selection },
-        theme: { spacing, color },
-    }) => ({
-        headerAction: {
-            marginHorizontal: selection.navigationActionHorizontal,
-        },
-        list: {
-            paddingBottom: page.bottom,
-        },
-        tag: {
-            marginVertical: 2,
-        },
-        item: {
-            paddingHorizontal: spacing.small,
-        },
-        selectionDisplay: {
-            flexDirection: "row",
-            marginTop: spacing.tiny,
-            marginBottom: spacing.medium,
-            overflow: "hidden",
-        },
-        previewTagContainer: {
-            paddingLeft: inputBase.container.padding,
-            paddingVertical: spacing.tiny,
-            height: 48,
-        },
-        previewPlaceholder: {
-            alignSelf: "center",
-            paddingLeft: inputBase.container.padding,
-        },
-        clearButton: {
-            paddingHorizontal: spacing.medium,
-            marginVertical: spacing.tiny + 2,
-            borderRightColor: color.border,
-            borderRightWidth: 1,
-            justifyContent: "center",
-        },
-    }),
-);
+const createStyles = defineStyles(({ palette, theme, appTheme }) => ({
+    list: {
+        paddingBottom: appTheme.page.bottom,
+    },
+    tag: {
+        marginVertical: 2,
+    },
+    item: {
+        paddingHorizontal: palette.spacing.small,
+    },
+    selectionDisplay: {
+        flexDirection: "row",
+        marginTop: palette.spacing.tiny,
+        marginBottom: palette.spacing.medium,
+        overflow: "hidden",
+    },
+    previewTagContainer: {
+        paddingLeft: theme.inputBase.container.padding,
+        paddingVertical: palette.spacing.tiny,
+        height: 48,
+    },
+    previewPlaceholder: {
+        alignSelf: "center",
+        paddingLeft: theme.inputBase.container.padding,
+    },
+    clearButton: {
+        paddingHorizontal: palette.spacing.medium,
+        marginVertical: palette.spacing.tiny + 2,
+        borderRightColor: palette.color.border,
+        borderRightWidth: 1,
+        justifyContent: "center",
+    },
+}));

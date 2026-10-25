@@ -2,18 +2,19 @@ import type { FC, ReactNode } from "react";
 import {
     type ColorValue,
     type StyleProp,
-    StyleSheet,
     View,
     type ViewStyle,
 } from "react-native";
 
-import { type ThemedStyles, useTheme, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Icon } from "../icon";
+import { defineStyles, useComponent } from "../shared";
 import { Text } from "../text";
 
-export interface InputScaffoldStyles {
+export interface InputScaffoldTheme {
     gap: number;
+    inputPadding: number;
+    errorColor: ColorValue;
     mandatoryIndicator: {
         color: ColorValue;
     };
@@ -54,10 +55,9 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
     containerStyle,
     hasError,
 }) => {
-    const [styles, { icons }] = useThemedStyles("inputScaffold", createStyles);
-    const {
-        theme: { color },
-    } = useTheme();
+    const { styles, theme, icons } = useComponent("inputScaffold", {
+        createStyles,
+    });
 
     return (
         <View style={[styles.container, containerStyle]}>
@@ -83,7 +83,7 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
                     {hasError && (
                         <Icon
                             {...icons.error}
-                            style={{ color: color.destructive }}
+                            theme={{ color: theme.errorColor }}
                             size="small"
                         />
                     )}
@@ -99,25 +99,24 @@ export const InputScaffold: FC<InputScaffoldProps> = ({
     );
 };
 
-const createStyles = ({ styles: { inputBase, inputScaffold } }: ThemedStyles) =>
-    StyleSheet.create({
-        container: {
-            alignSelf: "stretch",
-            minWidth: 0,
-            gap: inputScaffold.gap,
-        },
-        labelContainer: {
-            marginStart: inputBase.container.padding,
-        },
-        mandatoryIndicator: {
-            position: "absolute",
-            color: inputScaffold.mandatoryIndicator.color,
-            start: inputBase.container.padding,
-        },
-        helpText: {
-            flexDirection: "row",
-            gap: inputScaffold.gap,
-            marginStart: inputBase.container.padding,
-            alignItems: "center",
-        },
-    });
+const createStyles = defineStyles((theme: InputScaffoldTheme) => ({
+    container: {
+        alignSelf: "stretch",
+        minWidth: 0,
+        gap: theme.gap,
+    },
+    labelContainer: {
+        marginStart: theme.inputPadding,
+    },
+    mandatoryIndicator: {
+        position: "absolute",
+        color: theme.mandatoryIndicator.color,
+        start: theme.inputPadding,
+    },
+    helpText: {
+        flexDirection: "row",
+        gap: theme.helpText.gap,
+        marginStart: theme.inputPadding,
+        alignItems: "center",
+    },
+}));

@@ -1,32 +1,29 @@
 import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStyles } from "../../hooks";
 import type { IconComponentProps } from "../icon";
+import { useComponent } from "../shared";
 import { IconActionBase, type IconActionBaseProps } from "./IconActionBase";
 
 export type IconActionVariant = "primary" | "secondary" | "destructive";
 
-export type IconActionStyles = {
+export type IconActionTheme = {
     color: Record<IconActionVariant, ColorValue>;
 };
 
-export interface IconActionProps extends Omit<IconActionBaseProps, "style"> {
+export interface IconActionProps extends Omit<IconActionBaseProps, "theme"> {
     variant?: IconActionVariant;
-    style?: DeepPartial<IconActionStyles>;
+    theme?: DeepPartial<IconActionTheme>;
 }
 
 export const IconAction = <G extends string>({
     variant = "secondary",
-    style,
+    theme: themeOverrides,
     ...props
 }: IconActionProps & IconComponentProps<G>) => {
-    const { iconAction } = useStyles({ iconAction: style });
+    const { theme } = useComponent("iconAction", { themeOverrides });
 
     return (
-        <IconActionBase
-            {...props}
-            style={{ color: iconAction.color[variant] }}
-        />
+        <IconActionBase {...props} theme={{ color: theme.color[variant] }} />
     );
 };

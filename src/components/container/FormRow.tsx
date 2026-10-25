@@ -1,28 +1,34 @@
 import { Children, type FC, isValidElement, type ReactNode } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import { type StyleProp, View, type ViewStyle } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useTheme } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
+
+export interface FormRowTheme {
+    gap: number;
+}
 
 export interface FormRowProps {
-    /**
-     * Horizontal gap between fields. Defaults to `spacing.small`.
-     */
-    gap?: number;
-
+    theme?: DeepPartial<FormRowTheme>;
     style?: StyleProp<ViewStyle>;
 
     children?: ReactNode;
 }
 
-export const FormRow: FC<FormRowProps> = ({ gap, style, children }) => {
-    const {
-        theme: { spacing },
-    } = useTheme();
+export const FormRow: FC<FormRowProps> = ({
+    theme: themeOverrides,
+    style,
+    children,
+}) => {
+    const { styles } = useComponent("formRow", {
+        themeOverrides,
+        createStyles,
+    });
 
     const items = Children.toArray(children);
 
     return (
-        <View style={[styles.container, { gap: gap ?? spacing.small }, style]}>
+        <View style={[styles.container, style]}>
             {items.map((child) => (
                 <View
                     key={isValidElement(child) ? child.key : String(child)}
@@ -35,16 +41,17 @@ export const FormRow: FC<FormRowProps> = ({ gap, style, children }) => {
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = defineStyles((theme: FormRowTheme) => ({
     container: {
         alignSelf: "stretch",
         minWidth: 0,
         flexDirection: "row",
         alignItems: "flex-start",
+        gap: theme.gap,
     },
     cell: {
         flexGrow: 1,
         flexBasis: 0,
         minWidth: 0,
     },
-});
+}));

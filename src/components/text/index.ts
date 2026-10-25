@@ -1,6 +1,6 @@
 export {
     HighlightedText,
     type HighlightedTextProps,
-    type HighlightedTextStyles,
+    type HighlightedTextTheme,
 } from "./HighlightedText";
-export { Text, type TextProps, type TextStyles } from "./Text";
+export { Text, type TextProps, type TextTheme } from "./Text";

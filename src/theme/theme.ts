@@ -1,56 +1,82 @@
-import { Platform } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
-import merge from "lodash.merge";
 
-import { lightPalette } from "./palette";
+import type { ActionTheme } from "../components/action/Action";
+import type { ActionBaseTheme } from "../components/action/ActionBase";
+import type { IconActionTheme } from "../components/action/IconAction";
+import type { IconActionBaseTheme } from "../components/action/IconActionBase";
+import type { StateTintTheme } from "../components/action/StateTint";
+import type { AlertIndicatorTheme } from "../components/alert/AlertIndicator";
+import type { AvatarTheme } from "../components/avatar/Avatar";
+import type { ButtonTheme } from "../components/button/Button";
+import type { ButtonBaseTheme } from "../components/button/ButtonBase";
+import type { IconButtonTheme } from "../components/button/IconButton";
+import type { IconButtonBaseTheme } from "../components/button/IconButtonBase";
+import type { AnchoredContainerTheme } from "../components/container/anchoredContainer/AnchoredContainer";
+import type { FormContainerTheme } from "../components/container/FormContainer";
+import type { FormRowTheme } from "../components/container/FormRow";
+import type { IconTheme } from "../components/icon/Icon";
+import type { IconBaseTheme } from "../components/icon/IconBase";
+import type { DropdownInputTheme } from "../components/input/dropdownInput/DropdownInput";
+import type { InputActionTheme } from "../components/input/InputAction";
+import type { InputBaseTheme } from "../components/input/InputBase";
+import type { InputRowContainerTheme } from "../components/input/InputRowContainer";
+import type { InputScaffoldTheme } from "../components/input/InputScaffold";
+import type { RatingInputTheme } from "../components/input/RatingInput";
+import type { SelectionInputTheme } from "../components/input/SelectionInput";
+import type { TimeInputTheme } from "../components/input/TimeInput";
+import type { ToggleInputTheme } from "../components/input/ToggleInput";
+import type { ListItemTheme } from "../components/listItem/ListItem";
+import type { MenuTheme } from "../components/menu/Menu";
+import type { MenuItemTheme } from "../components/menu/MenuItem";
+import type { RatingTheme } from "../components/rating/Rating";
+import type { StateLayerTheme } from "../components/surface/StateLayer";
+import type { SwipeActionTheme } from "../components/swipe/SwipeAction";
+import type { TagTheme } from "../components/tag/Tag";
+import type { TagIconTheme } from "../components/tag/TagIcon";
+import type { HighlightedTextTheme } from "../components/text/HighlightedText";
+import type { TextTheme } from "../components/text/Text";
+import type { ToastTheme } from "../components/toast/Toast";
+import type { ThemeFactoryFor } from "./resolveThemeGraph";
 
-export type Theme = typeof DefaultTheme;
+export interface Theme {
+    text: TextTheme;
+    highlightedText: HighlightedTextTheme;
+    iconBase: IconBaseTheme;
+    icon: IconTheme;
+    actionBase: ActionBaseTheme;
+    action: ActionTheme;
+    iconActionBase: IconActionBaseTheme;
+    iconAction: IconActionTheme;
+    stateTint: StateTintTheme;
+    stateLayer: StateLayerTheme;
+    buttonBase: ButtonBaseTheme;
+    button: ButtonTheme;
+    iconButtonBase: IconButtonBaseTheme;
+    iconButton: IconButtonTheme;
+    inputBase: InputBaseTheme;
+    inputScaffold: InputScaffoldTheme;
+    inputAction: InputActionTheme;
+    inputRowContainer: InputRowContainerTheme;
+    timeInput: TimeInputTheme;
+    selectionInput: SelectionInputTheme;
+    toggleInput: ToggleInputTheme;
+    dropdownInput: DropdownInputTheme;
+    rating: RatingTheme;
+    ratingInput: RatingInputTheme;
+    alertIndicator: AlertIndicatorTheme;
+    tag: TagTheme;
+    tagIcon: TagIconTheme;
+    listItem: ListItemTheme;
+    menu: MenuTheme;
+    menuItem: MenuItemTheme;
+    avatar: AvatarTheme;
+    toast: ToastTheme;
+    swipeAction: SwipeActionTheme;
+    anchoredContainer: AnchoredContainerTheme;
+    formContainer: FormContainerTheme;
+    formRow: FormRowTheme;
+}
 
 export type ThemeOverrides = DeepPartial<Theme>;
 
-export const DefaultTheme = {
-    font: {
-        family: {
-            sans: Platform.select({
-                ios: "System",
-                android: "sans-serif",
-                default: "system-ui",
-            }),
-            mono: Platform.select({
-                ios: "Menlo",
-                android: "monospace",
-                default: "monospace",
-            }),
-        },
-        size: {
-            tiny: 10,
-            small: 12,
-            regular: 14,
-            large: 16,
-            xLarge: 20,
-            xxLarge: 28,
-        },
-    },
-    color: lightPalette,
-    spacing: {
-        large: 24,
-        medium: 16,
-        small: 8,
-        tiny: 4,
-    },
-    border: {
-        radius: {
-            tight: 4,
-            regular: 8,
-            loose: 16,
-        },
-        width: {
-            thick: 4,
-            regular: 2,
-            thin: 1,
-        },
-    },
-};
-
-export const MergeTheme = (overrides?: ThemeOverrides): Theme =>
-    merge({}, DefaultTheme, overrides ?? {}) as Theme;
+export type ThemeFactory<K extends keyof Theme> = ThemeFactoryFor<Theme, K>;

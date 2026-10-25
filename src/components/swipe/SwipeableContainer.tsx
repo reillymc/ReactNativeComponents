@@ -15,7 +15,7 @@ export interface SwipeableContainerProps {
      * - `SwipeAction`
      */
     rightActions?: Array<ReactNode>;
-    containerStyle?: ViewStyle;
+    style?: ViewStyle;
     children?: ReactNode;
 }
 
@@ -23,7 +23,7 @@ const EMPTY_ACTIONS: Array<ReactNode> = [];
 
 export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     rightActions = EMPTY_ACTIONS,
-    containerStyle,
+    style,
     children,
 }) => {
     const swipeableRef = useRef<SwipeableMethods>(null);
@@ -41,7 +41,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     );
 
     if (rightActions.length === 0) {
-        return <View style={containerStyle}>{children}</View>;
+        return <View style={style}>{children}</View>;
     }
 
     return (
@@ -52,7 +52,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
             enableTrackpadTwoFingerGesture
             friction={1.5}
             overshootRight={false}
-            containerStyle={containerStyle}
+            containerStyle={style}
         >
             {children}
         </Swipeable>

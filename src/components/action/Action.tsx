@@ -2,48 +2,47 @@ import type { FC } from "react";
 import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useStyles } from "../../hooks";
+import { useComponent } from "../shared";
 import { Text } from "../text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
 import { StateTint } from "./StateTint";
 
 export type ActionVariant = "primary" | "secondary" | "destructive";
 
-export type ActionStyles = {
+export type ActionTheme = {
     label: {
         color: Record<ActionVariant, ColorValue>;
     };
 };
 
 export interface ActionProps
-    extends Pick<ActionBaseProps, "containerStyle" | "disabled" | "onPress"> {
+    extends Pick<
+        ActionBaseProps,
+        "style" | "disabled" | "highlighted" | "onPress"
+    > {
     label: string;
     variant?: ActionVariant;
-    style?: DeepPartial<ActionStyles>;
+    theme?: DeepPartial<ActionTheme>;
 }
 
 export const Action: FC<ActionProps> = ({
     label,
     variant = "secondary",
     disabled: disabledProp,
-    style,
-    containerStyle,
+    theme: themeOverrides,
     onPress,
+    ...baseProps
 }) => {
     const disabled = disabledProp || !onPress;
-    const { action } = useStyles({ action: style });
+    const { theme } = useComponent("action", { themeOverrides });
 
     return (
-        <ActionBase
-            disabled={disabled}
-            onPress={onPress}
-            containerStyle={containerStyle}
-        >
+        <ActionBase disabled={disabled} onPress={onPress} {...baseProps}>
             {(state) => (
                 <StateTint {...state}>
                     <Text
                         numberOfLines={1}
-                        style={{ color: action.label.color[variant] }}
+                        style={{ color: theme.label.color[variant] }}
                     >
                         {label}
                     </Text>

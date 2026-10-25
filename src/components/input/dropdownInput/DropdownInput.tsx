@@ -4,6 +4,10 @@ import {
     type DropdownInputBaseProps,
 } from "./DropdownInputBase";
 
+export interface DropdownInputTheme {
+    panelGap: number;
+}
+
 export type DropdownInputProps<T = string> = Pick<
     DropdownInputBaseProps<T>,
     | "autoCapitalize"
@@ -29,7 +33,6 @@ export type DropdownInputProps<T = string> = Pick<
     | "filterItems"
     | "minimumSearchLength"
     | "maxSuggestionCount"
-    | "maxContainerHeight"
     | "containerPosition"
     | "ref"
 > &

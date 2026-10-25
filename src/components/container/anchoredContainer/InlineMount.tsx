@@ -5,17 +5,18 @@ import type { MountProps } from "./AnchoredContainer";
 import { getContainerPlacement } from "./helpers";
 
 export type InlineMountProps = MountProps & {
-    style: StyleProp<ViewStyle>;
+    containerStyle: StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>;
 };
 
 export const InlineMount: FC<InlineMountProps> = ({
     geometry,
-    style,
-    onLayout,
     containerStyle,
+    onLayout,
+    style,
     children,
 }) => (
-    <View onLayout={onLayout} style={[style, containerStyle]}>
+    <View onLayout={onLayout} style={[containerStyle, style]}>
         {typeof children === "function"
             ? children(getContainerPlacement(geometry))
             : children}

@@ -2,7 +2,7 @@ export {
     Rating,
     type RatingIcons,
     type RatingProps,
-    type RatingStyles,
+    type RatingTheme,
 } from "./Rating";
 export {
     getRatingIcons,

@@ -1,22 +1,22 @@
-export { Action, type ActionProps, type ActionStyles } from "./Action";
+export { Action, type ActionProps, type ActionTheme } from "./Action";
 export {
     ActionBase,
     type ActionBaseProps,
-    type ActionBaseStyles,
+    type ActionBaseTheme,
     type ActionState,
 } from "./ActionBase";
 export {
     IconAction,
     type IconActionProps,
-    type IconActionStyles,
+    type IconActionTheme,
 } from "./IconAction";
 export {
     IconActionBase,
     type IconActionBaseProps,
-    type IconActionBaseStyles,
+    type IconActionBaseTheme,
 } from "./IconActionBase";
 export {
     StateTint,
     type StateTintProps,
-    type StateTintStyles,
+    type StateTintTheme,
 } from "./StateTint";

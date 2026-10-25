@@ -1,4 +1,4 @@
-import type { ValueItem } from "../../../common";
+import type { ValueItem } from "../valueItem";
 
 export type DropdownValue<T> = T extends string | number ? T : string;
 

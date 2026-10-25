@@ -1,12 +1,12 @@
-import type { FC, RefObject } from "react";
+import { type FC, type RefObject, useMemo } from "react";
 import {
     type TextInput as DefaultTextInput,
     StyleSheet,
     View,
 } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
+import { useComponent } from "../shared";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputRowContainer } from "./InputRowContainer";
@@ -129,9 +129,8 @@ export const NumberInput: FC<NumberInputProps> = ({
     const getPlaceholder = (key: keyof NumberInputPlaceholders) =>
         placeholder?.[key] ?? placeholder?.value;
 
-    const [styles, { icons }] = useThemedStyles("numberInput", createStyles, {
-        props: { value },
-    });
+    const styles = useMemo(() => createStyles(value), [value]);
+    const { icons } = useComponent("numberInput");
 
     const icon = icons[value.representation];
 
@@ -211,7 +210,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                             ? "number-pad"
                             : keyboardType
                     }
-                    inputStyle={styles.input}
+                    style={styles.input}
                     onChangeText={handlePrimaryInputChangeText}
                     onSubmitEditing={
                         value.representation === "number"
@@ -228,7 +227,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                         maxLength={maxLength}
                         clearButtonMode={clearButtonMode}
                         keyboardType="number-pad"
-                        inputStyle={styles.input}
+                        style={styles.input}
                         onChangeText={(text) =>
                             onChange?.({
                                 representation: value.representation,
@@ -271,7 +270,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                                     ? "number-pad"
                                     : keyboardType
                             }
-                            inputStyle={styles.input}
+                            style={styles.input}
                             onChangeText={(text) => {
                                 if (value.representation === "fraction") {
                                     onChange?.({
@@ -298,10 +297,7 @@ export const NumberInput: FC<NumberInputProps> = ({
     );
 };
 
-const createStyles = (
-    _: ThemedStyles,
-    { value }: Required<Pick<NumberInputProps, "value">>,
-) =>
+const createStyles = (value: NumberInputValue) =>
     StyleSheet.create({
         input: {
             flexGrow: 1,

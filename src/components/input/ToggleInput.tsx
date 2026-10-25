@@ -1,10 +1,10 @@
-import { type ColorValue, StyleSheet, View } from "react-native";
+import { type ColorValue, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { ActionBase, StateTint } from "../action";
 import { IconBase, type IconComponentProps } from "../icon";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { Text } from "../text";
 import type { InputBaseProps, InputVariant } from "./InputBase";
 import type { InputScaffoldFieldProps } from "./InputScaffold";
@@ -13,7 +13,7 @@ type ToggleVariant = "primary" | "secondary";
 
 export type ToggleInputIcons = ComponentIconAssets<"outline">;
 
-export type ToggleInputStyles = {
+export type ToggleInputTheme = {
     indicator: {
         size: { [Size in InputVariant]: number };
         color: {
@@ -27,6 +27,8 @@ export type ToggleInputStyles = {
     label: {
         gap: number;
     };
+    disabledLabelColor: ColorValue;
+    helpTextGap: number;
 };
 
 export interface ToggleInputProps
@@ -37,7 +39,7 @@ export interface ToggleInputProps
         Pick<InputBaseProps, "variant" | "disabled"> {
     value?: boolean;
     toggleVariant?: ToggleVariant;
-    style?: DeepPartial<ToggleInputStyles>;
+    theme?: DeepPartial<ToggleInputTheme>;
     onChange: (value: boolean) => void;
 }
 
@@ -49,28 +51,28 @@ export const ToggleInput = <G extends string>({
     containerStyle,
     variant = "regular",
     disabled: disabledProp,
-    style: styleOverrides,
+    theme: themeOverrides,
     onChange,
     ...iconProps
 }: ToggleInputProps & IconComponentProps<G>) => {
     const disabled = disabledProp || !onChange;
 
-    const [styles, { style: toggleInput, icons }] = useThemedStyles(
-        "toggleInput",
+    const { styles, theme, icons } = useComponent("toggleInput", {
+        themeOverrides,
+        props: { variant },
         createStyles,
-        { styles: { toggleInput: styleOverrides }, props: { variant } },
-    );
+    });
 
     const deselectedColor = disabled
-        ? toggleInput.indicator.color.deselected.disabled
-        : toggleInput.indicator.color.deselected.enabled;
+        ? theme.indicator.color.deselected.disabled
+        : theme.indicator.color.deselected.enabled;
 
     return (
         <View style={containerStyle}>
             <ActionBase
                 disabled={disabled}
                 hitSlop={20}
-                containerStyle={styles.container}
+                style={styles.container}
                 onPress={() => onChange(!value)}
             >
                 {(state) => (
@@ -79,11 +81,12 @@ export const ToggleInput = <G extends string>({
                             <View style={styles.iconContainer}>
                                 <IconBase
                                     {...icons.outline}
-                                    size={toggleInput.indicator.size[variant]}
+                                    size={theme.indicator.size[variant]}
                                     color={
                                         value
-                                            ? toggleInput.indicator.color
-                                                  .selected[toggleVariant]
+                                            ? theme.indicator.color.selected[
+                                                  toggleVariant
+                                              ]
                                             : deselectedColor
                                     }
                                 />
@@ -91,14 +94,11 @@ export const ToggleInput = <G extends string>({
                                     {!!value && (
                                         <IconBase
                                             {...iconProps}
-                                            size={
-                                                toggleInput.indicator.size[
-                                                    variant
-                                                ]
-                                            }
+                                            size={theme.indicator.size[variant]}
                                             color={
-                                                toggleInput.indicator.color
-                                                    .selected[toggleVariant]
+                                                theme.indicator.color.selected[
+                                                    toggleVariant
+                                                ]
                                             }
                                         />
                                     )}
@@ -133,35 +133,33 @@ export const ToggleInput = <G extends string>({
     );
 };
 
-const createStyles = (
-    { styles: { toggleInput, inputScaffold, inputBase } }: ThemedStyles,
-    { variant }: Required<Pick<ToggleInputProps, "variant">>,
-) => {
-    const styles = StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: ToggleInputTheme,
+        props: PropFilter<ToggleInputProps, "variant">,
+    ) => ({
         container: {
             justifyContent: "center",
         },
         disabledLabel: {
-            color: inputBase.text.color.disabled,
+            color: theme.disabledLabelColor,
         },
         labelIconContainer: {
             flexDirection: "row",
             alignItems: "center",
-            gap: toggleInput.label.gap,
+            gap: theme.label.gap,
         },
         iconContainer: {
-            width: toggleInput.indicator.size[variant],
-            height: toggleInput.indicator.size[variant],
+            width: theme.indicator.size[props.variant],
+            height: theme.indicator.size[props.variant],
         },
         icon: {
             position: "absolute",
             alignSelf: "center",
         },
         helpText: {
-            marginStart:
-                toggleInput.indicator.size[variant] + toggleInput.label.gap,
-            marginTop: inputScaffold.gap,
+            marginStart: theme.indicator.size[props.variant] + theme.label.gap,
+            marginTop: theme.helpTextGap,
         },
-    });
-    return styles;
-};
+    }),
+);

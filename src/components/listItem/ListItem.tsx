@@ -1,20 +1,26 @@
 import type { FC, ReactNode } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
-import { Undefined } from "@reillymc/es-utils";
+import {
+    type ColorValue,
+    type StyleProp,
+    View,
+    type ViewStyle,
+} from "react-native";
+import { type DeepPartial, Undefined } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { ActionBase } from "../action";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { SwipeableContainer, type SwipeableContainerProps } from "../swipe";
 import { Text } from "../text";
 
 type ListItemVariant = "default" | "compact";
 
-export interface ListItemStyles {
+export interface ListItemTheme {
     spacingMargin: number;
     internalSpacing: number;
     borderRadius: number;
-    contentItemTopMargin: number;
     contentItemSpacing: number;
+    backgroundColor: ColorValue;
+    surfaceColor: ColorValue;
 }
 
 export interface ListItemProps {
@@ -44,6 +50,7 @@ export interface ListItemProps {
 
     swipeActions?: SwipeableContainerProps["rightActions"];
     style?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<ListItemTheme>;
     contentContainerStyle?: StyleProp<ViewStyle>;
     onPress?: () => void;
 }
@@ -60,6 +67,7 @@ export const ListItem: FC<ListItemProps> = ({
     contentRows = EMPTY_CONTENT_ROWS,
     swipeActions,
     style,
+    theme: themeOverrides,
     contentContainerStyle,
     onPress,
 }) => {
@@ -67,8 +75,10 @@ export const ListItem: FC<ListItemProps> = ({
 
     const filteredActions = swipeActions?.filter(Undefined);
 
-    const [styles] = useThemedStyles("listItem", createStyles, {
+    const { styles } = useComponent("listItem", {
+        themeOverrides,
         props: { variant },
+        createStyles,
     });
 
     const content = (
@@ -100,7 +110,7 @@ export const ListItem: FC<ListItemProps> = ({
         <ActionBase
             hitSlop={0}
             onPress={onPress}
-            containerStyle={[styles.pressableContainer, style]}
+            style={[styles.pressableContainer, style]}
         >
             {content}
         </ActionBase>
@@ -121,24 +131,21 @@ export const ListItem: FC<ListItemProps> = ({
     );
 };
 
-const createStyles = (
-    { styles: { listItem }, theme }: ThemedStyles,
-    { variant }: Required<Pick<ListItemProps, "variant">>,
-) =>
-    StyleSheet.create({
+const createStyles = defineStyles(
+    (theme: ListItemTheme, props: PropFilter<ListItemProps, "variant">) => ({
         container: {
-            backgroundColor: theme.color.background,
+            backgroundColor: theme.backgroundColor,
             borderRadius:
-                variant === "compact" ? undefined : listItem.borderRadius,
+                props.variant === "compact" ? undefined : theme.borderRadius,
             overflow: "hidden",
             width: "100%",
         },
         pressableContainer: {
             display: "flex",
             flexDirection: "column",
-            backgroundColor: theme.color.surface,
+            backgroundColor: theme.surfaceColor,
             borderRadius:
-                variant === "compact" ? undefined : listItem.borderRadius,
+                props.variant === "compact" ? undefined : theme.borderRadius,
         },
         bodyContainer: {
             flexDirection: "row",
@@ -154,6 +161,7 @@ const createStyles = (
             alignItems: "flex-start",
             justifyContent: "center",
             width: "100%",
-            padding: listItem.internalSpacing,
+            padding: theme.internalSpacing,
         },
-    });
+    }),
+);

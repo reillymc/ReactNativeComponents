@@ -6,21 +6,18 @@ import {
 } from "react-native";
 import Animated, { useAnimatedRef } from "react-native-reanimated";
 
-import type { ValueItem } from "../../../common";
-import {
-    type ThemedStyles,
-    useForwardedRef,
-    useThemedStyles,
-} from "../../../hooks";
 import {
     AnchoredContainer,
     type AnchoredContainerProps,
 } from "../../container";
 import { Menu, MenuItem } from "../../menu";
+import { useComponent } from "../../shared";
 import { InputBase, type InputBaseProps } from "../InputBase";
+import type { ValueItem } from "../valueItem";
 import { DropdownBlurGuard } from "./DropdownBlurGuard";
 import { type DropdownValue, getItemKey } from "./helpers";
 import { useDropdownController } from "./useDropdownController";
+import { useForwardedRef } from "./useForwardedRef";
 
 export type { DropdownValue } from "./helpers";
 
@@ -48,7 +45,7 @@ export type DropdownInputBaseProps<T = string> = Pick<
     | "autoFocus"
     | "disabled"
     | "variant"
-    | "inputStyle"
+    | "style"
 > & {
     items?: Array<ValueItem<T>>;
 
@@ -108,12 +105,6 @@ export type DropdownInputBaseProps<T = string> = Pick<
     /** Optional cap on the number of rendered items. */
     maxSuggestionCount?: number;
 
-    /**
-     * Maximum height of the dropdown container. When items overflow the
-     * container becomes scrollable. Defaults to the themed `menu.maxHeight`.
-     */
-    maxContainerHeight?: number;
-
     containerPosition?: AnchoredContainerProps["position"];
 
     ref?: RefObject<DefaultTextInput | null>;
@@ -135,7 +126,6 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
         filterItems,
         minimumSearchLength = 1,
         maxSuggestionCount,
-        maxContainerHeight,
         containerPosition,
         disabled: disabledProp,
         onBlur,
@@ -153,18 +143,7 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
     const anchorRef = useAnimatedRef<View>();
     const [isMenuInverted, setIsMenuInverted] = useState(false);
 
-    const [{ containerGap }] = useThemedStyles(
-        "dropdownInput",
-        ({ styles: { dropdownInput } }: ThemedStyles) => ({
-            containerGap: dropdownInput.panelGap,
-        }),
-    );
-    const [{ menuMaxHeight }] = useThemedStyles(
-        "menu",
-        ({ styles: { menu } }: ThemedStyles) => ({
-            menuMaxHeight: menu.maxHeight,
-        }),
-    );
+    const { theme } = useComponent("dropdownInput");
 
     const {
         displayText,
@@ -241,25 +220,21 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
                 anchorRef={anchorRef}
                 show={showContainer}
                 position={containerPosition}
-                gap={containerGap}
+                theme={{ parentMargin: theme.panelGap }}
                 onInvertedChange={setIsMenuInverted}
             >
-                {({ inverted, maxHeight }) => (
+                {({ inverted }) => (
                     <DropdownBlurGuard>
                         <Menu
                             data={filteredItems}
                             reverse={inverted}
-                            maxHeight={Math.min(
-                                maxContainerHeight ?? menuMaxHeight,
-                                maxHeight,
-                            )}
                             keyExtractor={(item) => String(getItemKey(item))}
                             renderItem={({ item, index }) => (
                                 <MenuItem
                                     label={item.label}
                                     description={item.description}
                                     searchValue={query}
-                                    active={index === activeIndex}
+                                    highlighted={index === activeIndex}
                                     onPress={() => selectItem(item)}
                                 />
                             )}

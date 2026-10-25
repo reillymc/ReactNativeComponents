@@ -1,8 +1,8 @@
 import type { FC } from "react";
 import { StyleSheet } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
+import { useComponent } from "../shared";
 import { InputAction } from "./InputAction";
 import { InputRowContainer } from "./InputRowContainer";
 import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
@@ -13,7 +13,12 @@ export type CounterInputIcons = ComponentIconAssets<"decrease" | "increase">;
 export interface CounterInputProps
     extends Omit<
             NumberInputBaseProps,
-            "value" | "onChange" | "onChangeText" | "style" | "inputStyle"
+            | "value"
+            | "onChange"
+            | "onChangeText"
+            | "style"
+            | "theme"
+            | "readOnly"
         >,
         InputScaffoldFieldProps {
     value?: string;
@@ -36,7 +41,7 @@ export const CounterInput: FC<CounterInputProps> = ({
     interval = 1,
     ...props
 }) => {
-    const [styles, { icons }] = useThemedStyles("counterInput", createStyles);
+    const { icons } = useComponent("counterInput");
     const disabled = disabledProp || !onChange;
 
     const numericValue = Number.parseFloat(value ?? "0") || 0;
@@ -83,8 +88,9 @@ export const CounterInput: FC<CounterInputProps> = ({
                             ).toString(),
                         );
                     }}
-                    disabled={disabled || disableKeyboardInput}
-                    inputStyle={styles.input}
+                    disabled={disabled}
+                    readOnly={disableKeyboardInput}
+                    style={styles.input}
                 />
                 <InputAction
                     {...icons.increase}
@@ -104,13 +110,10 @@ export const CounterInput: FC<CounterInputProps> = ({
     );
 };
 
-const createStyles = ({ styles: { inputBase } }: ThemedStyles) =>
-    StyleSheet.create({
-        input: {
-            flexGrow: 1,
-            flexBasis: 0,
-            textAlign: "center",
-            // Override disabled style. TODO: indicate keyboard enabled/disabled visually
-            backgroundColor: inputBase.container.backgroundColor.enabled,
-        },
-    });
+const styles = StyleSheet.create({
+    input: {
+        flexGrow: 1,
+        flexBasis: 0,
+        textAlign: "center",
+    },
+});

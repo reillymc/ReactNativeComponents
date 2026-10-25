@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
+    Keyboard,
     type LayoutChangeEvent,
     Platform,
     StyleSheet,
@@ -7,40 +8,31 @@ import {
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import {
-    type ThemedStyles,
-    usePersistentKeyboardHeight,
-    useThemedStyles,
-} from "../../../hooks";
+import { useComponent } from "../../shared";
 import type {
     AnchoredContainerProps,
+    AnchoredContainerTheme,
     ContainerGeometry,
 } from "./AnchoredContainer";
 
 type AnchoredContainerPositionOptions = Pick<
     AnchoredContainerProps,
-    "parentRef" | "show" | "position" | "gap" | "onInvertedChange"
+    "parentRef" | "show" | "position" | "theme" | "onInvertedChange"
 >;
 
 export const useAnchoredContainerPosition = ({
     parentRef,
     show,
+    theme: themeOverrides,
     position = "auto",
-    gap,
     onInvertedChange,
 }: AnchoredContainerPositionOptions) => {
     const [geometry, setGeometry] = useState<ContainerGeometry>();
-    const [styles] = useThemedStyles("anchoredContainer", createStyles, {
-        props: { geometry, gap },
+    const { styles, theme } = useComponent("anchoredContainer", {
+        themeOverrides,
+        props: { geometry },
+        createStyles,
     });
-    const [{ parentMargin }] = useThemedStyles(
-        "anchoredContainer",
-        ({ styles: { anchoredContainer } }: ThemedStyles) => ({
-            parentMargin: anchoredContainer.parentMargin,
-        }),
-    );
-
-    const margin = gap ?? parentMargin;
 
     const { height: screenHeight } = useWindowDimensions();
     const { top, bottom } = useSafeAreaInsets();
@@ -66,7 +58,7 @@ export const useAnchoredContainerPosition = ({
 
                     const inverted =
                         position === "above" ||
-                        (availableBelow < contentHeight + margin &&
+                        (availableBelow < contentHeight + theme.parentMargin &&
                             availableAbove > availableBelow);
 
                     setGeometry({
@@ -79,13 +71,21 @@ export const useAnchoredContainerPosition = ({
                         maxHeight: Math.max(
                             0,
                             (inverted ? availableAbove : availableBelow) -
-                                margin,
+                                theme.parentMargin,
                         ),
                     });
                 },
             );
         });
-    }, [parentRef, position, screenHeight, keyboardInset, top, bottom, margin]);
+    }, [
+        parentRef,
+        position,
+        screenHeight,
+        keyboardInset,
+        top,
+        bottom,
+        theme.parentMargin,
+    ]);
 
     const onLayout = (e: LayoutChangeEvent) => {
         contentHeightRef.current = e.nativeEvent.layout.height;
@@ -113,21 +113,16 @@ export const useAnchoredContainerPosition = ({
     return {
         geometry,
         inlineStyle: styles.container,
-        margin,
+        parentMargin: theme.parentMargin,
         onLayout,
     };
 };
 
 const createStyles = (
-    { styles: { anchoredContainer } }: ThemedStyles,
-    {
-        geometry,
-        gap,
-    }: { geometry: ContainerGeometry | undefined; gap: number | undefined },
-) => {
-    const margin = gap ?? anchoredContainer.parentMargin;
-
-    return StyleSheet.create({
+    theme: AnchoredContainerTheme,
+    { geometry }: { geometry: ContainerGeometry | undefined },
+) =>
+    StyleSheet.create({
         container: geometry
             ? {
                   position: "absolute",
@@ -136,8 +131,12 @@ const createStyles = (
                   left: 0,
                   right: 0,
                   top: geometry.inverted
-                      ? geometry.offsetY - geometry.contentHeight - margin
-                      : geometry.offsetY + geometry.parentHeight + margin,
+                      ? geometry.offsetY -
+                        geometry.contentHeight -
+                        theme.parentMargin
+                      : geometry.offsetY +
+                        geometry.parentHeight +
+                        theme.parentMargin,
               }
             : {
                   position: "absolute",
@@ -145,4 +144,30 @@ const createStyles = (
                   pointerEvents: "none",
               },
     });
+
+const isIos = Platform.OS === "ios";
+const keyboardShowEvent = isIos ? "keyboardWillShow" : "keyboardDidShow";
+const keyboardHideEvent = "keyboardDidHide";
+
+const usePersistentKeyboardHeight = () => {
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+
+    useEffect(() => {
+        const showListener = Keyboard.addListener(
+            keyboardShowEvent,
+            (event) => {
+                setKeyboardHeight(event.endCoordinates.height);
+            },
+        );
+        const hideListener = Keyboard.addListener(keyboardHideEvent, () => {
+            setKeyboardHeight(0);
+        });
+
+        return () => {
+            showListener.remove();
+            hideListener.remove();
+        };
+    }, []);
+
+    return { keyboardHeight };
 };

@@ -9,11 +9,12 @@ import Animated, {
     useAnimatedStyle,
     withTiming,
 } from "react-native-reanimated";
+import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useTheme } from "../../hooks";
 import type { ActionState } from "../action";
+import { useComponent } from "../shared";
 
-export type StateLayerStyles = {
+export type StateLayerTheme = {
     color: ColorValue;
     hoverOpacity: number;
     pressedOpacity: number;
@@ -21,19 +22,22 @@ export type StateLayerStyles = {
 
 export interface StateLayerProps extends ActionState {
     style?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<StateLayerTheme>;
 }
 
 export const StateLayer: FC<StateLayerProps> = ({
     pressed,
     hovered,
     style,
+    theme: themeOverrides,
 }) => {
-    const {
-        styles: { stateLayer },
-    } = useTheme();
+    const { theme } = useComponent("stateLayer", { themeOverrides });
 
-    const { color, hoverOpacity, pressedOpacity } = stateLayer;
-    const target = pressed ? pressedOpacity : hovered ? hoverOpacity : 0;
+    const target = pressed
+        ? theme.pressedOpacity
+        : hovered
+          ? theme.hoverOpacity
+          : 0;
     const duration = pressed ? 50 : 100;
 
     const animatedStyle = useAnimatedStyle(
@@ -46,7 +50,7 @@ export const StateLayer: FC<StateLayerProps> = ({
             pointerEvents="none"
             style={[
                 StyleSheet.absoluteFill,
-                { backgroundColor: color },
+                { backgroundColor: theme.color },
                 animatedStyle,
                 style,
             ]}

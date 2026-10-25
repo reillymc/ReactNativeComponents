@@ -1,6 +1,6 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: generic selection payloads need a permissive shared type */
 import { createContext, useContext } from "react";
-import type { ValueItem } from "@reillymc/react-native-components/common";
+import type { ValueItem } from "@reillymc/react-native-components/components";
 
 export type SelectionRequest<T = any> = {
     key: string;

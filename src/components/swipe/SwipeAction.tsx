@@ -1,10 +1,8 @@
-import { StyleSheet } from "react-native";
-
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { IconButton, type IconButtonProps } from "../button";
 import type { IconComponentProps } from "../icon";
+import { defineStyles, useComponent } from "../shared";
 
-export type SwipeActionStyles = {
+export type SwipeActionTheme = {
     width: number;
 };
 
@@ -14,23 +12,22 @@ export interface SwipeActionProps
 export const SwipeAction = <G extends string>(
     props: SwipeActionProps & IconComponentProps<G>,
 ) => {
-    const [styles] = useThemedStyles("swipeAction", createStyles);
+    const { styles } = useComponent("swipeAction", { createStyles });
     return (
         <IconButton
             {...props}
             appearance="prominent"
-            containerStyle={styles.actionButton}
+            style={styles.actionButton}
         />
     );
 };
 
-const createStyles = ({ styles: { swipeAction } }: ThemedStyles) =>
-    StyleSheet.create({
-        actionButton: {
-            height: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            borderRadius: 0,
-            width: swipeAction.width,
-        },
-    });
+const createStyles = defineStyles((theme: SwipeActionTheme) => ({
+    actionButton: {
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 0,
+        width: theme.width,
+    },
+}));

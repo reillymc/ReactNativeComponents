@@ -1,22 +1,22 @@
 export {
     Button,
     type ButtonAppearance,
-    type ButtonAppearanceStyles,
+    type ButtonAppearanceTheme,
     type ButtonProps,
-    type ButtonStyles,
+    type ButtonTheme,
 } from "./Button";
 export {
     ButtonBase,
     type ButtonBaseProps,
-    type ButtonBaseStyles,
+    type ButtonBaseTheme,
 } from "./ButtonBase";
 export {
     IconButton,
     type IconButtonProps,
-    type IconButtonStyles,
+    type IconButtonTheme,
 } from "./IconButton";
 export {
     IconButtonBase,
     type IconButtonBaseProps,
-    type IconButtonBaseStyles,
+    type IconButtonBaseTheme,
 } from "./IconButtonBase";

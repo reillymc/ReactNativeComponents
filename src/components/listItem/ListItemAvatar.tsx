@@ -1,23 +1,23 @@
 import type { FC, ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, useComponent } from "../shared";
+import type { ListItemTheme } from "./ListItem";
 
 export interface ListItemAvatarProps {
     children?: ReactNode;
 }
 
 export const ListItemAvatar: FC<ListItemAvatarProps> = ({ children }) => {
-    const [styles] = useThemedStyles("listItem", createStyles);
+    const { styles } = useComponent("listItem", { createStyles });
 
     return <View style={styles.avatar}>{children}</View>;
 };
 
-const createStyles = ({ styles: { listItem } }: ThemedStyles) =>
-    StyleSheet.create({
-        avatar: {
-            alignItems: "center",
-            justifyContent: "center",
-            marginStart: listItem.internalSpacing,
-        },
-    });
+const createStyles = defineStyles((theme: ListItemTheme) => ({
+    avatar: {
+        alignItems: "center",
+        justifyContent: "center",
+        marginStart: theme.internalSpacing,
+    },
+}));

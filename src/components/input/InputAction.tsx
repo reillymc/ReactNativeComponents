@@ -1,60 +1,53 @@
-import { type ColorValue, StyleSheet } from "react-native";
+import type { ColorValue } from "react-native";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { IconActionBase, type IconActionBaseProps } from "../action";
 import type { IconComponentProps } from "../icon";
-import type { InputBaseProps } from "./InputBase";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
+import type { InputBaseProps, InputState, InputVariant } from "./InputBase";
 
-export interface InputActionStyles {
+export interface InputActionTheme {
     color: ColorValue;
+    height: Record<InputVariant, number>;
+    backgroundColor: Record<InputState, ColorValue>;
 }
 
 export interface InputActionProps
-    extends Pick<
-            IconActionBaseProps,
-            "onPress" | "disabled" | "containerStyle"
-        >,
+    extends Pick<IconActionBaseProps, "onPress" | "disabled" | "style">,
         Pick<InputBaseProps, "variant"> {}
 
 export const InputAction = <G extends string>({
     disabled = false,
-    containerStyle,
+    style,
     variant = "regular",
     ...props
 }: InputActionProps & IconComponentProps<G>) => {
-    const [styles, { style }] = useThemedStyles("inputAction", createStyles, {
+    const { styles, theme } = useComponent("inputAction", {
         props: { disabled, variant },
+        createStyles,
     });
 
     return (
         <IconActionBase
             {...props}
             disabled={disabled}
-            containerStyle={[styles.container, containerStyle]}
-            style={{ color: style.color }}
+            style={[styles.container, style]}
+            theme={{ color: theme.color }}
         />
     );
 };
 
-const createStyles = (
-    { styles: { inputBase } }: ThemedStyles,
-    {
-        disabled,
-        variant,
-    }: Required<Pick<InputActionProps, "disabled" | "variant">>,
-) => {
-    const { height } = inputBase.container;
-
-    return StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: InputActionTheme,
+        props: PropFilter<InputActionProps, "disabled" | "variant">,
+    ) => ({
         container: {
-            minHeight: height[variant],
-            width: height[variant],
+            minHeight: theme.height[props.variant],
+            width: theme.height[props.variant],
             backgroundColor:
-                inputBase.container.backgroundColor[
-                    disabled ? "disabled" : "enabled"
-                ],
+                theme.backgroundColor[props.disabled ? "disabled" : "enabled"],
             alignItems: "center",
             justifyContent: "center",
         },
-    });
-};
+    }),
+);

@@ -1,16 +1,11 @@
 import type { FC } from "react";
-import {
-    type ColorValue,
-    type DimensionValue,
-    StyleSheet,
-    View,
-} from "react-native";
+import { type ColorValue, type DimensionValue, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { InteractionSurface, type InteractionSurfaceProps } from "../surface";
 
-export type ButtonBaseStyles = {
+export type ButtonBaseTheme = {
     height: DimensionValue;
     width: {
         medium: DimensionValue;
@@ -24,58 +19,57 @@ export type ButtonBaseStyles = {
 export interface ButtonBaseProps
     extends Pick<
         InteractionSurfaceProps,
-        "children" | "disabled" | "onPress" | "containerStyle"
+        "children" | "disabled" | "highlighted" | "onPress" | "style"
     > {
     width?: "auto" | "medium";
-    style?: DeepPartial<ButtonBaseStyles>;
+    theme?: DeepPartial<ButtonBaseTheme>;
 }
 
 export const ButtonBase: FC<ButtonBaseProps> = ({
-    containerStyle,
+    style,
     disabled: disabledProp,
+    highlighted,
     width = "auto",
-    style: styleOverrides,
+    theme: themeOverrides,
     children,
     onPress,
 }) => {
     const disabled = disabledProp || !onPress;
 
-    const [styles] = useThemedStyles("buttonBase", createStyles, {
-        styles: { buttonBase: styleOverrides },
+    const { styles } = useComponent("buttonBase", {
+        themeOverrides,
         props: { width },
+        createStyles,
     });
 
     return (
         <InteractionSurface
             onPress={onPress}
             disabled={disabled}
-            containerStyle={[styles.buttonBase, containerStyle]}
+            highlighted={highlighted}
+            style={[styles.buttonBase, style]}
         >
             <View style={styles.innerContainer}>{children}</View>
         </InteractionSurface>
     );
 };
 
-const createStyles = (
-    { styles: { buttonBase } }: ThemedStyles,
-    { width }: Required<Pick<ButtonBaseProps, "width">>,
-) => {
-    const styles = StyleSheet.create({
+const createStyles = defineStyles(
+    (theme: ButtonBaseTheme, props: PropFilter<ButtonBaseProps, "width">) => ({
         buttonBase: {
             flexDirection: "row",
             justifyContent: "center",
-            borderRadius: buttonBase.borderRadius,
-            minHeight: buttonBase.height,
-            minWidth: width === "medium" ? buttonBase.width.medium : undefined,
-            backgroundColor: buttonBase.backgroundColor,
+            borderRadius: theme.borderRadius,
+            minHeight: theme.height,
+            minWidth: props.width === "medium" ? theme.width.medium : undefined,
+            backgroundColor: theme.backgroundColor,
         },
         innerContainer: {
-            flex: width === "auto" ? 1 : undefined,
+            flex: props.width === "auto" ? 1 : undefined,
             justifyContent: "center",
             alignItems: "center",
-            paddingHorizontal: buttonBase.paddingHorizontal,
-            paddingVertical: buttonBase.paddingVertical,
+            paddingHorizontal: theme.paddingHorizontal,
+            paddingVertical: theme.paddingVertical,
         },
-    });
-    return styles;
-};
+    }),
+);

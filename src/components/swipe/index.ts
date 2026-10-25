@@ -1,7 +1,7 @@
 export {
     SwipeAction,
     type SwipeActionProps,
-    type SwipeActionStyles,
+    type SwipeActionTheme,
 } from "./SwipeAction";
 export {
     SwipeableContainer,

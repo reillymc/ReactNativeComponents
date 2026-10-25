@@ -1,5 +1,5 @@
 import { type FC, useCallback } from "react";
-import { StyleSheet, View } from "react-native";
+import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
     type AnimatedRef,
     measure,
@@ -15,6 +15,7 @@ import { getContainerPlacement } from "./helpers";
 export type OverlayMountProps = MountProps & {
     anchorRef: AnimatedRef<View>;
     margin: number;
+    style?: StyleProp<ViewStyle>;
 };
 
 export const OverlayMount: FC<OverlayMountProps> = ({
@@ -22,7 +23,7 @@ export const OverlayMount: FC<OverlayMountProps> = ({
     geometry,
     margin,
     onLayout,
-    containerStyle,
+    style,
     children,
 }) => {
     const anchorX = useSharedValue(0);
@@ -66,11 +67,7 @@ export const OverlayMount: FC<OverlayMountProps> = ({
                 <Animated.View
                     onLayout={onLayout}
                     pointerEvents="auto"
-                    style={[
-                        overlayStyles.container,
-                        overlayStyle,
-                        containerStyle,
-                    ]}
+                    style={[overlayStyles.container, overlayStyle, style]}
                 >
                     {typeof children === "function"
                         ? children(getContainerPlacement(geometry))

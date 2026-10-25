@@ -1,6 +1,6 @@
 export {
     AlertIndicator,
     type AlertIndicatorProps,
-    type AlertIndicatorStyles,
+    type AlertIndicatorTheme,
     type AlertVariant,
 } from "./AlertIndicator";

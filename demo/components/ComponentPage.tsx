@@ -1,9 +1,9 @@
 import type { FunctionComponent, ReactNode } from "react";
 import { View } from "react-native";
 import { Stack } from "expo-router";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+import { usePalette } from "@reillymc/react-native-components/theme";
 
-import { createThemedStyles, useTheme } from "../theme";
+import { defineStyles, useStyles } from "../theme";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -18,9 +18,8 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
     propsPanel,
     fullscreen,
 }) => {
-    const { theme } = useTheme();
-
-    const styles = useThemedStyles(createStyles);
+    const palette = usePalette();
+    const styles = useStyles(createStyles);
 
     return (
         <>
@@ -30,15 +29,15 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.family.sans,
+                        fontFamily: palette.font.family.sans,
                         fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.family.sans,
-                        fontSize: theme.font.size.regular,
+                        fontFamily: palette.font.family.sans,
+                        fontSize: palette.font.size.regular,
                     },
                     headerLargeStyle: {
-                        backgroundColor: theme.color.background,
+                        backgroundColor: palette.color.background,
                     },
                 }}
             />
@@ -57,7 +56,7 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
 
 ComponentPage.displayName = "ComponentPage";
 
-const createStyles = createThemedStyles(({ theme: { color, border } }) => ({
+const createStyles = defineStyles(({ palette: { color, border } }) => ({
     componentContainer: {
         flexGrow: 1,
         flexBasis: 1,

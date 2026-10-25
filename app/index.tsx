@@ -30,9 +30,9 @@ import {
     TimeInput,
     ToggleInput,
 } from "@reillymc/react-native-components/components";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+import { usePalette } from "@reillymc/react-native-components/theme";
 
-import { createThemedStyles, useTheme } from "../demo/theme";
+import { defineStyles, useStyles } from "../demo/theme";
 
 interface ComponentScreen {
     name: string;
@@ -201,9 +201,8 @@ const ComponentScreens: Array<ComponentScreenSection> = [
 
 const ComponentListScreen: FC = () => {
     const router = useRouter();
-    const { theme } = useTheme();
-
-    const styles = useThemedStyles(createStyles);
+    const palette = usePalette();
+    const styles = useStyles(createStyles);
 
     const [collapsed, setCollapsed] = useState(true);
     const [variant, setVariant] = useState<"primary" | "destructive">();
@@ -216,15 +215,15 @@ const ComponentListScreen: FC = () => {
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.family.sans,
+                        fontFamily: palette.font.family.sans,
                         fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.family.sans,
-                        fontSize: theme.font.size.regular,
+                        fontFamily: palette.font.family.sans,
+                        fontSize: palette.font.size.regular,
                     },
                     headerLargeStyle: {
-                        backgroundColor: theme.color.background,
+                        backgroundColor: palette.color.background,
                     },
                 }}
             />
@@ -315,38 +314,36 @@ const ComponentListScreen: FC = () => {
     );
 };
 
-const createStyles = createThemedStyles(
-    ({ styles: { page }, theme: { spacing, color } }) => ({
-        content: {
-            backgroundColor: color.background,
-            paddingHorizontal: page.horizontal,
-            paddingTop: page.top,
-            paddingBottom: page.bottom,
-        },
-        listHeader: {
-            alignItems: "flex-end",
-        },
-        schemeRow: {
-            flexDirection: "row",
-            gap: spacing.small,
-            alignSelf: "flex-start",
-        },
-        propsContainer: {
-            height: 120,
-            marginTop: 20,
-            width: "100%",
-        },
-        sectionHeading: {
-            marginTop: spacing.small,
-            marginBottom: spacing.small,
-            marginLeft: spacing.medium,
-        },
-        listItemDisplay: {
-            width: 150,
-            alignItems: "flex-end",
-            paddingVertical: 8,
-        },
-    }),
-);
+const createStyles = defineStyles(({ palette, appTheme }) => ({
+    content: {
+        backgroundColor: appTheme.page.backgroundColor,
+        paddingHorizontal: appTheme.page.horizontal,
+        paddingTop: appTheme.page.top,
+        paddingBottom: appTheme.page.bottom,
+    },
+    listHeader: {
+        alignItems: "flex-end",
+    },
+    schemeRow: {
+        flexDirection: "row",
+        gap: palette.spacing.small,
+        alignSelf: "flex-start",
+    },
+    propsContainer: {
+        height: 120,
+        marginTop: 20,
+        width: "100%",
+    },
+    sectionHeading: {
+        marginTop: palette.spacing.small,
+        marginBottom: palette.spacing.small,
+        marginLeft: palette.spacing.medium,
+    },
+    listItemDisplay: {
+        width: 150,
+        alignItems: "flex-end",
+        paddingVertical: 8,
+    },
+}));
 
 export default ComponentListScreen;

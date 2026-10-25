@@ -1,56 +1,57 @@
-import { type ColorValue, StyleSheet } from "react-native";
+import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { type ThemedStyles, useThemedStyles } from "../../hooks";
 import { IconBase, type IconComponentProps } from "../icon";
+import { defineStyles, type PropFilter, useComponent } from "../shared";
 import { Text } from "../text";
-import type { ActionBaseProps } from "./ActionBase";
-import { ActionBase } from "./ActionBase";
+import { ActionBase, type ActionBaseProps } from "./ActionBase";
 import { StateTint } from "./StateTint";
 
-export type IconActionBaseStyles = {
+export type IconActionBaseTheme = {
     gap: number;
     color: ColorValue;
 };
 
 export interface IconActionBaseProps
-    extends Pick<ActionBaseProps, "onPress" | "disabled" | "containerStyle"> {
+    extends Pick<
+        ActionBaseProps,
+        "onPress" | "disabled" | "highlighted" | "style"
+    > {
     label?: string;
     iconPosition?: "start" | "end";
-    style?: DeepPartial<IconActionBaseStyles>;
+    theme?: DeepPartial<IconActionBaseTheme>;
 }
 
 export const IconActionBase = <G extends string>({
     label,
     iconPosition = "start",
     disabled: disabledProp,
-    containerStyle,
-    style: styleOverrides,
+    highlighted,
+    style,
+    theme: themeOverrides,
     onPress,
     ...iconProps
 }: IconActionBaseProps & IconComponentProps<G>) => {
     const disabled = disabledProp || !onPress;
 
-    const [styles, { style }] = useThemedStyles(
-        "iconActionBase",
+    const { styles, theme } = useComponent("iconActionBase", {
+        themeOverrides,
+        props: { iconPosition },
         createStyles,
-        {
-            styles: { iconActionBase: styleOverrides },
-            props: { iconPosition },
-        },
-    );
+    });
 
     return (
         <ActionBase
             disabled={disabled}
+            highlighted={highlighted}
             onPress={onPress}
-            containerStyle={containerStyle}
+            style={style}
         >
             {(state) => (
                 <StateTint {...state} style={styles.container}>
-                    <IconBase {...iconProps} color={style.color} />
+                    <IconBase {...iconProps} color={theme.color} />
                     {!!label && (
-                        <Text numberOfLines={1} style={{ color: style.color }}>
+                        <Text numberOfLines={1} style={{ color: theme.color }}>
                             {label}
                         </Text>
                     )}
@@ -60,17 +61,17 @@ export const IconActionBase = <G extends string>({
     );
 };
 
-const createStyles = (
-    { styles: { iconActionBase } }: ThemedStyles,
-    {
-        iconPosition = "start",
-    }: Required<Pick<IconActionBaseProps, "iconPosition">>,
-) =>
-    StyleSheet.create({
+const createStyles = defineStyles(
+    (
+        theme: IconActionBaseTheme,
+        props: PropFilter<IconActionBaseProps, "iconPosition">,
+    ) => ({
         container: {
             display: "flex",
-            flexDirection: iconPosition === "start" ? "row" : "row-reverse",
+            flexDirection:
+                props.iconPosition === "start" ? "row" : "row-reverse",
             alignItems: "center",
-            gap: iconActionBase.gap,
+            gap: theme.gap,
         },
-    });
+    }),
+);
