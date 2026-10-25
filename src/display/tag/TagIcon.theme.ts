@@ -5,5 +5,8 @@ export const defaultTagIconTheme: ThemeFactory<"tagIcon"> = ({
     theme,
 }) => ({
     size: theme.text.font.body.size,
-    color: palette.color.foreground,
+    color: {
+        dark: palette.color.foreground,
+        light: palette.color.surfaceForeground,
+    },
 });

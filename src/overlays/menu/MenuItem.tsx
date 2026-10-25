@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import type { ColorValue } from "react-native";
 
 import { InteractionSurface } from "../../actions/surface";
 import { defineStyles, useComponent } from "../../internal";
@@ -8,6 +9,7 @@ export type MenuItemTheme = {
     paddingHorizontal: number;
     paddingVertical: number;
     borderRadius: number;
+    textColor: ColorValue;
 };
 
 export interface MenuItemProps {
@@ -25,7 +27,7 @@ export const MenuItem: FC<MenuItemProps> = ({
     highlighted,
     onPress,
 }) => {
-    const { styles } = useComponent("menuItem", { createStyles });
+    const { styles, theme } = useComponent("menuItem", { createStyles });
 
     return (
         <InteractionSurface
@@ -34,12 +36,17 @@ export const MenuItem: FC<MenuItemProps> = ({
             onPress={onPress}
             style={styles.menuItem}
         >
-            <HighlightedText text={label} highlight={searchValue} />
+            <HighlightedText
+                text={label}
+                highlight={searchValue}
+                theme={{ color: theme.textColor }}
+            />
             {!!description && (
                 <HighlightedText
                     variant="caption"
                     text={description}
                     highlight={searchValue}
+                    theme={{ color: theme.textColor }}
                 />
             )}
         </InteractionSurface>

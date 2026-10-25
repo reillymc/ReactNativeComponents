@@ -6,4 +6,5 @@ export const defaultMenuTheme: ThemeFactory<"menu"> = ({ palette }) => ({
     gap: palette.spacing.tiny,
     padding: palette.spacing.tiny,
     maxHeight: 240,
+    textColor: palette.color.elevatedForeground,
 });

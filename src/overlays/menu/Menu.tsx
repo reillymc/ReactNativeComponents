@@ -15,6 +15,7 @@ export type MenuTheme = {
     padding: number;
     gap: number;
     maxHeight: number;
+    textColor: ColorValue;
 };
 
 export type MenuProps<T = unknown> = {

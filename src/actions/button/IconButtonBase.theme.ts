@@ -12,6 +12,6 @@ export const defaultIconButtonBaseTheme: ThemeFactory<"iconButtonBase"> = ({
     },
     icon: {
         size: theme.iconBase.size,
-        color: theme.iconBase.color,
+        color: palette.color.insetForeground,
     },
 });

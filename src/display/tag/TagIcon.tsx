@@ -4,17 +4,24 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { IconBase } from "../../icons/IconBase";
 import type { IconComponentProps } from "../../icons/IconComponentProps";
 import { useComponent } from "../../internal";
+import type { TagTone } from "./Tag";
 
 export interface TagIconTheme {
     size: number;
-    color: ColorValue;
+    color: Record<TagTone, ColorValue>;
 }
 
 export const TagIcon = <G extends string>({
+    tone = "dark",
     theme: themeOverrides,
     ...iconProps
-}: IconComponentProps<G> & { theme?: DeepPartial<TagIconTheme> }) => {
+}: IconComponentProps<G> & {
+    tone?: TagTone;
+    theme?: DeepPartial<TagIconTheme>;
+}) => {
     const { theme } = useComponent("tagIcon", { themeOverrides });
 
-    return <IconBase {...iconProps} color={theme.color} size={theme.size} />;
+    return (
+        <IconBase {...iconProps} color={theme.color[tone]} size={theme.size} />
+    );
 };

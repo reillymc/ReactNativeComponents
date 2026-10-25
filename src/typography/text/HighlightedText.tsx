@@ -1,5 +1,5 @@
 import type { FunctionComponent } from "react";
-import { StyleSheet, type TextStyle } from "react-native";
+import { type ColorValue, StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent } from "../../internal";
@@ -42,6 +42,7 @@ const splitHighlight = (
 };
 
 export interface HighlightedTextTheme {
+    color: ColorValue;
     highlightedWeight: Record<TextVariant, TextStyle["fontWeight"]>;
 }
 export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
@@ -70,11 +71,12 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
                     {...props}
                     variant={variant}
                     key={part.offset}
-                    style={
+                    style={[
+                        { color: theme.color },
                         part.highlighted && {
                             fontWeight: theme.highlightedWeight[variant],
-                        }
-                    }
+                        },
+                    ]}
                 >
                     {part.text}
                 </Text>

@@ -101,11 +101,12 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
                                     <Tag
                                         label={item.label}
                                         style={styles.tag}
-                                        variant="light"
+                                        tone="light"
                                         icon={
                                             <TagIcon
                                                 iconSet={Octicons}
                                                 iconName="x-circle"
+                                                tone="light"
                                             />
                                         }
                                         onPress={() => handleItemPress(item)}

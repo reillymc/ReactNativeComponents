@@ -10,5 +10,8 @@ export const defaultTagTheme: ThemeFactory<"tag"> = ({
         dark: color.background,
         light: color.surface,
     },
-    textColor: color.foreground,
+    textColor: {
+        dark: color.foreground,
+        light: color.surfaceForeground,
+    },
 });

@@ -11,14 +11,14 @@ import { ActionBase } from "../../actions/action";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import { Text } from "../../typography/text";
 
-export type TagVariant = "light" | "dark";
+export type TagTone = "light" | "dark";
 
 export interface TagTheme {
     internalSpacing: number;
     borderRadius: number;
     padding: number;
-    backgroundColor: Record<TagVariant, ColorValue>;
-    textColor: ColorValue;
+    backgroundColor: Record<TagTone, ColorValue>;
+    textColor: Record<TagTone, ColorValue>;
 }
 
 export interface TagProps {
@@ -27,7 +27,7 @@ export interface TagProps {
      * [TagIcon](./TagIcon.tsx)
      */
     icon?: ReactElement;
-    variant?: TagVariant;
+    tone?: TagTone;
     style?: StyleProp<ViewStyle>;
     theme?: DeepPartial<TagTheme>;
     onPress?: () => void;
@@ -37,13 +37,13 @@ export const Tag: FC<TagProps> = ({
     label,
     onPress,
     icon,
-    variant = "dark",
+    tone = "dark",
     style,
     theme: themeOverrides,
 }) => {
     const { styles } = useComponent("tag", {
         themeOverrides,
-        props: { variant },
+        props: { tone },
         createStyles,
     });
 
@@ -66,19 +66,19 @@ export const Tag: FC<TagProps> = ({
 };
 
 const createStyles = defineStyles(
-    (theme: TagTheme, props: PropFilter<TagProps, "variant">) => ({
+    (theme: TagTheme, props: PropFilter<TagProps, "tone">) => ({
         container: {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
             borderRadius: theme.borderRadius,
             padding: theme.padding,
-            backgroundColor: theme.backgroundColor[props.variant],
+            backgroundColor: theme.backgroundColor[props.tone],
             width: "auto",
             gap: theme.internalSpacing,
         },
         text: {
-            color: theme.textColor,
+            color: theme.textColor[props.tone],
         },
     }),
 );
