@@ -10,29 +10,29 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import { Text } from "../../typography/text";
 
-export type AlertVariant = "primary" | "secondary";
+export type BadgeVariant = "primary" | "secondary";
 
-export type AlertIndicatorTheme = {
+export type BadgeTheme = {
     size: number;
     borderRadius: number;
-    color: Record<AlertVariant, ColorValue>;
-    backgroundColor: Record<AlertVariant, ColorValue>;
+    color: Record<BadgeVariant, ColorValue>;
+    backgroundColor: Record<BadgeVariant, ColorValue>;
 };
 
-export interface AlertIndicatorProps {
+export interface BadgeProps {
     label?: string;
-    variant?: AlertVariant;
-    theme?: DeepPartial<AlertIndicatorTheme>;
+    variant?: BadgeVariant;
+    theme?: DeepPartial<BadgeTheme>;
     style?: StyleProp<ViewStyle>;
 }
 
-export const AlertIndicator: FC<AlertIndicatorProps> = ({
+export const Badge: FC<BadgeProps> = ({
     label = "",
     variant = "primary",
     theme: themeOverrides,
     style,
 }) => {
-    const { styles } = useComponent("alertIndicator", {
+    const { styles } = useComponent("badge", {
         themeOverrides,
         props: { variant },
         createStyles,
@@ -47,13 +47,10 @@ export const AlertIndicator: FC<AlertIndicatorProps> = ({
     );
 };
 
-AlertIndicator.displayName = "AlertIndicator";
+Badge.displayName = "Badge";
 
 const createStyles = defineStyles(
-    (
-        theme: AlertIndicatorTheme,
-        props: PropFilter<AlertIndicatorProps, "variant">,
-    ) => ({
+    (theme: BadgeTheme, props: PropFilter<BadgeProps, "variant">) => ({
         container: {
             display: "flex",
             alignItems: "center",

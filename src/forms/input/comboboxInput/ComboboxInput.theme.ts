@@ -1,6 +1,6 @@
 import type { ThemeFactory } from "../../../theme/theme";
 
-export const defaultDropdownInputTheme: ThemeFactory<"dropdownInput"> = ({
+export const defaultComboboxInputTheme: ThemeFactory<"comboboxInput"> = ({
     palette,
 }) => ({
     panelGap: palette.spacing.tiny,

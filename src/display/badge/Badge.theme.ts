@@ -1,6 +1,6 @@
 import type { ThemeFactory } from "../../theme/theme";
 
-export const defaultAlertIndicatorTheme: ThemeFactory<"alertIndicator"> = ({
+export const defaultBadgeTheme: ThemeFactory<"badge"> = ({
     palette: { color },
 }) => ({
     size: 28,

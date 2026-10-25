@@ -15,13 +15,14 @@ import {
 } from "@reillymc/react-native-components/actions";
 import {
     Avatar,
+    Badge,
     ListItem,
     Rating,
     Tag,
 } from "@reillymc/react-native-components/display";
 import {
+    ComboboxInput,
     CounterInput,
-    DropdownInput,
     NumberInput,
     RatingInput,
     SelectionInput,
@@ -30,7 +31,7 @@ import {
     ToggleInput,
 } from "@reillymc/react-native-components/forms";
 import { Icon } from "@reillymc/react-native-components/icons";
-import { Panel } from "@reillymc/react-native-components/layout";
+import { CollapsiblePanel } from "@reillymc/react-native-components/layout";
 import { usePalette } from "@reillymc/react-native-components/theme";
 import {
     HighlightedText,
@@ -101,14 +102,16 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/RatingPage",
                 component: <Rating value={3} max={5} />,
             },
+            {
+                name: "Badge",
+                href: "/BadgePage",
+                component: <Badge label="8" />,
+            },
         ],
     },
     {
         sectionName: "Feedback",
-        data: [
-            { name: "Alert Indicator", href: "/AlertIndicatorPage" },
-            { name: "Toast", href: "/ToastPage" },
-        ],
+        data: [{ name: "Toast", href: "/ToastPage" }],
     },
     {
         sectionName: "Forms",
@@ -148,9 +151,9 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 ),
             },
             {
-                name: "Dropdown Input",
-                href: "/DropdownInputPage",
-                component: <DropdownInput placeholder="Dropdown Input" />,
+                name: "Combobox Input",
+                href: "/ComboboxInputPage",
+                component: <ComboboxInput placeholder="Combobox Input" />,
             },
             {
                 name: "Rating Input",
@@ -176,7 +179,10 @@ const ComponentScreens: Array<ComponentScreenSection> = [
     {
         sectionName: "Layout",
         data: [
-            { name: "Panel", href: "/PanelPage" },
+            {
+                name: "Collapsible Panel",
+                href: "/CollapsiblePanelPage",
+            },
             { name: "Swipeable Container", href: "/SwipeableContainerPage" },
         ],
     },
@@ -283,11 +289,11 @@ const ComponentListScreen: FC = () => {
                             iconPosition="end"
                             onPress={() => setCollapsed((prev) => !prev)}
                         />
-                        <Panel
+                        <CollapsiblePanel
                             collapsed={collapsed}
                             style={styles.propsContainer}
                         >
-                            <DropdownInput
+                            <ComboboxInput
                                 placeholder="Variant"
                                 value={variant}
                                 onChange={(item) => setVariant(item?.value)}
@@ -299,7 +305,7 @@ const ComponentListScreen: FC = () => {
                                     },
                                 ]}
                             />
-                        </Panel>
+                        </CollapsiblePanel>
                     </View>
                 }
                 renderSectionHeader={({ section }) => (

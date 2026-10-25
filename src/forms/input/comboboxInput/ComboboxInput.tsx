@@ -1,15 +1,15 @@
 import { InputScaffold, type InputScaffoldFieldProps } from "../InputScaffold";
 import {
-    DropdownInputBase,
-    type DropdownInputBaseProps,
-} from "./DropdownInputBase";
+    ComboboxInputBase,
+    type ComboboxInputBaseProps,
+} from "./ComboboxInputBase";
 
-export interface DropdownInputTheme {
+export interface ComboboxInputTheme {
     panelGap: number;
 }
 
-export type DropdownInputProps<T = string> = Pick<
-    DropdownInputBaseProps<T>,
+export type ComboboxInputProps<T = string> = Pick<
+    ComboboxInputBaseProps<T>,
     | "autoCapitalize"
     | "returnKeyType"
     | "returnKeyLabel"
@@ -37,14 +37,14 @@ export type DropdownInputProps<T = string> = Pick<
     | "ref"
 > &
     InputScaffoldFieldProps;
-export const DropdownInput = <T,>({
+export const ComboboxInput = <T,>({
     label,
     helpText,
     hasError,
     mandatory,
     containerStyle,
     ...props
-}: DropdownInputProps<T>) => (
+}: ComboboxInputProps<T>) => (
     <InputScaffold
         label={label}
         helpText={helpText}
@@ -52,6 +52,6 @@ export const DropdownInput = <T,>({
         hasError={hasError}
         containerStyle={containerStyle}
     >
-        <DropdownInputBase {...props} />
+        <ComboboxInputBase {...props} />
     </InputScaffold>
 );

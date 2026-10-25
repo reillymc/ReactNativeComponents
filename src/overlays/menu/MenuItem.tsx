@@ -32,7 +32,7 @@ export const MenuItem: FC<MenuItemProps> = ({
             hitSlop={0}
             highlighted={highlighted}
             onPress={onPress}
-            style={styles.dropdownItem}
+            style={styles.menuItem}
         >
             <HighlightedText text={label} highlight={searchValue} />
             {!!description && (
@@ -49,7 +49,7 @@ export const MenuItem: FC<MenuItemProps> = ({
 MenuItem.displayName = "MenuItem";
 
 const createStyles = defineStyles((theme: MenuItemTheme) => ({
-    dropdownItem: {
+    menuItem: {
         paddingHorizontal: theme.paddingHorizontal,
         paddingVertical: theme.paddingVertical,
         borderRadius: theme.borderRadius,

@@ -1,24 +1,24 @@
 import type { ValueItem } from "../valueItem";
 
-export type DropdownValue<T> = T extends string | number ? T : string;
+export type ComboboxValue<T> = T extends string | number ? T : string;
 
-export const getItemKey = <T>(item: ValueItem<T>): DropdownValue<T> =>
-    ("id" in item ? item.id : item.value) as DropdownValue<T>;
+export const getItemKey = <T>(item: ValueItem<T>): ComboboxValue<T> =>
+    ("id" in item ? item.id : item.value) as ComboboxValue<T>;
 
-export type DropdownFilterOptions<T> = {
+export type ComboboxFilterOptions<T> = {
     filterItems?: (item: ValueItem<T>, query: string) => boolean;
     maxSuggestionCount?: number;
     minimumSearchLength?: number;
 };
 
-export const filterDropdownItems = <T>(
+export const filterComboboxItems = <T>(
     items: Array<ValueItem<T>>,
     query: string,
     {
         filterItems,
         maxSuggestionCount,
         minimumSearchLength = 1,
-    }: DropdownFilterOptions<T>,
+    }: ComboboxFilterOptions<T>,
 ) => {
     const search = query.toLowerCase();
     const filteredItems: Array<ValueItem<T>> = [];

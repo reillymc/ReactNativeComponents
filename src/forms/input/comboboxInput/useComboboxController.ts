@@ -8,18 +8,18 @@ import type {
 
 import type { InputBaseProps } from "../InputBase";
 import type { ValueItem } from "../valueItem";
-import { type DropdownValue, filterDropdownItems, getItemKey } from "./helpers";
+import { type ComboboxValue, filterComboboxItems, getItemKey } from "./helpers";
 
 type EditState<T> = {
     text: string;
     /** The selection key at the time the user last edited. */
-    key: DropdownValue<T> | undefined;
+    key: ComboboxValue<T> | undefined;
 };
 
-export type DropdownControllerOptions<T> = {
+export type ComboboxControllerOptions<T> = {
     items: Array<ValueItem<T>>;
-    value: DropdownValue<T> | undefined;
-    defaultValue: DropdownValue<T> | undefined;
+    value: ComboboxValue<T> | undefined;
+    defaultValue: ComboboxValue<T> | undefined;
     isValueControlled: boolean;
     onChange?: (item: ValueItem<T> | undefined, inputValue: string) => void;
     onChangeText?: (text: string) => void;
@@ -37,7 +37,7 @@ export type DropdownControllerOptions<T> = {
     isMenuInverted?: boolean;
 };
 
-export const useDropdownController = <T>({
+export const useComboboxController = <T>({
     items,
     value,
     defaultValue,
@@ -56,8 +56,8 @@ export const useDropdownController = <T>({
     maxSuggestionCount,
     inputRef,
     isMenuInverted,
-}: DropdownControllerOptions<T>) => {
-    const [selectedKey, setSelectedKey] = useControlledState<DropdownValue<T>>(
+}: ComboboxControllerOptions<T>) => {
+    const [selectedKey, setSelectedKey] = useControlledState<ComboboxValue<T>>(
         isValueControlled,
         value,
         defaultValue,
@@ -78,7 +78,7 @@ export const useDropdownController = <T>({
         ? activeEdit.text
         : (selectedItem?.label ?? "");
 
-    const { filteredItems, meetsMinimum } = filterDropdownItems(items, query, {
+    const { filteredItems, meetsMinimum } = filterComboboxItems(items, query, {
         filterItems,
         maxSuggestionCount,
         minimumSearchLength,

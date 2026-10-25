@@ -1,8 +1,8 @@
 import { type FunctionComponent, useState } from "react";
 import {
-    AlertIndicator,
-    type AlertIndicatorProps,
-} from "@reillymc/react-native-components/feedback";
+    Badge,
+    type BadgeProps,
+} from "@reillymc/react-native-components/display";
 
 import {
     ComponentPage,
@@ -10,12 +10,12 @@ import {
     PropsPanel,
 } from "../demo/components";
 
-const defaultProps: AlertIndicatorProps = {
+const defaultProps: BadgeProps = {
     label: "8",
     variant: "primary",
 };
 
-const propDefinitions: PropDefinitions<AlertIndicatorProps> = {
+const propDefinitions: PropDefinitions<BadgeProps> = {
     label: {
         type: "string",
         label: "Label",
@@ -31,13 +31,13 @@ const propDefinitions: PropDefinitions<AlertIndicatorProps> = {
     },
 };
 
-const AlertIndicatorPage: FunctionComponent = () => {
-    const [props, setProps] = useState<AlertIndicatorProps>(defaultProps);
+const BadgePage: FunctionComponent = () => {
+    const [props, setProps] = useState<BadgeProps>(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Alert Indicator"
-            component={<AlertIndicator {...props} />}
+            componentName="Badge"
+            component={<Badge {...props} />}
             propsPanel={
                 <PropsPanel
                     propValues={props}
@@ -51,4 +51,4 @@ const AlertIndicatorPage: FunctionComponent = () => {
     );
 };
 
-export default AlertIndicatorPage;
+export default BadgePage;

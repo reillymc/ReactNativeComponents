@@ -5,11 +5,11 @@ import {
     SwipeAction,
 } from "@reillymc/react-native-components/actions";
 import {
+    Badge,
     ContentRow,
     ListItem,
     type ListItemProps,
 } from "@reillymc/react-native-components/display";
-import { AlertIndicator } from "@reillymc/react-native-components/feedback";
 import { Text } from "@reillymc/react-native-components/typography";
 
 import {
@@ -28,7 +28,7 @@ const defaultProps: ListItemProps = {
             variant="primary"
         />
     ),
-    alert: <AlertIndicator variant="primary" label="8" />,
+    alert: <Badge variant="primary" label="8" />,
     content: (
         <ContentRow>
             <Text>Description</Text>
@@ -151,7 +151,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 id: "Alert",
                 label: "Alert",
                 value: (
-                    <AlertIndicator
+                    <Badge
                         style={{ marginRight: 20 }}
                         variant="primary"
                         label="3"

@@ -3,8 +3,8 @@ export { FormContainer } from "./formContainer";
 export type { FormRowProps } from "./formRow";
 export { FormRow } from "./formRow";
 export type {
+    ComboboxInputProps,
     CounterInputProps,
-    DropdownInputProps,
     FractionValue,
     InputBaseProps,
     InputScaffoldProps,
@@ -25,8 +25,8 @@ export type {
     ValueItemSimple,
 } from "./input";
 export {
+    ComboboxInput,
     CounterInput,
-    DropdownInput,
     InputBase,
     InputScaffold,
     NumberInput,

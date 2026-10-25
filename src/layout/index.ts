@@ -1,4 +1,7 @@
-export { Panel, type PanelProps } from "./panel";
+export {
+    CollapsiblePanel,
+    type CollapsiblePanelProps,
+} from "./collapsiblePanel";
 export {
     SwipeableContainer,
     type SwipeableContainerProps,

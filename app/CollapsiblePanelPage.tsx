@@ -1,8 +1,8 @@
 import { type FunctionComponent, useState } from "react";
 import { Button } from "@reillymc/react-native-components/actions";
 import {
-    Panel,
-    type PanelProps,
+    CollapsiblePanel,
+    type CollapsiblePanelProps,
 } from "@reillymc/react-native-components/layout";
 
 import {
@@ -11,13 +11,13 @@ import {
     PropsPanel,
 } from "../demo/components";
 
-const defaultProps: PanelProps = {
+const defaultProps: CollapsiblePanelProps = {
     collapsed: false,
-    header: <Button label="Panel header" />,
-    children: <Button label="Panel children" />,
+    header: <Button label="Collapsible panel header" />,
+    children: <Button label="Collapsible panel children" />,
 };
 
-const propDefinitions: PropDefinitions<PanelProps> = {
+const propDefinitions: PropDefinitions<CollapsiblePanelProps> = {
     collapsed: {
         type: "boolean",
         label: "Collapsed",
@@ -30,7 +30,7 @@ const propDefinitions: PropDefinitions<PanelProps> = {
             { label: "None", value: undefined, id: "none" },
             {
                 label: "Button",
-                value: <Button label="Panel header" />,
+                value: <Button label="Collapsible panel header" />,
                 id: "button",
             },
         ],
@@ -43,21 +43,21 @@ const propDefinitions: PropDefinitions<PanelProps> = {
             { label: "None", value: undefined, id: "none" },
             {
                 label: "Button",
-                value: <Button label="Panel children" />,
+                value: <Button label="Collapsible panel children" />,
                 id: "button",
             },
         ],
     },
 };
 
-const PanelPage: FunctionComponent = () => {
-    const [props, setProps] = useState<PanelProps>(defaultProps);
+const CollapsiblePanelPage: FunctionComponent = () => {
+    const [props, setProps] = useState<CollapsiblePanelProps>(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Panel"
+            componentName="Collapsible Panel"
             component={
-                <Panel
+                <CollapsiblePanel
                     {...props}
                     style={{ backgroundColor: "white", marginHorizontal: 16 }}
                 />
@@ -75,4 +75,4 @@ const PanelPage: FunctionComponent = () => {
     );
 };
 
-export default PanelPage;
+export default CollapsiblePanelPage;

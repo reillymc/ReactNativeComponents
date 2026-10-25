@@ -1,7 +1,7 @@
 import { type FunctionComponent, useState } from "react";
 import {
-    DropdownInput,
-    type DropdownInputProps,
+    ComboboxInput,
+    type ComboboxInputProps,
 } from "@reillymc/react-native-components/forms";
 
 import {
@@ -11,7 +11,7 @@ import {
 } from "../demo/components";
 import { CommonInputProps } from "../demo/helpers";
 
-const propDefinitions: PropDefinitions<DropdownInputProps> = {
+const propDefinitions: PropDefinitions<ComboboxInputProps> = {
     ...CommonInputProps,
     onChange: {
         type: "function",
@@ -31,8 +31,8 @@ const propDefinitions: PropDefinitions<DropdownInputProps> = {
     },
 };
 
-const defaultProps: DropdownInputProps = {
-    placeholder: "Dropdown Input",
+const defaultProps: ComboboxInputProps = {
+    placeholder: "Combobox Input",
     items: [
         { value: "1", label: "Item 1" },
         {
@@ -53,14 +53,14 @@ const defaultProps: DropdownInputProps = {
     blurOnSelect: true,
 };
 
-const DropdownInputPage: FunctionComponent = () => {
+const ComboboxInputPage: FunctionComponent = () => {
     const [props, setProps] = useState(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Dropdown Input"
+            componentName="Combobox Input"
             component={
-                <DropdownInput
+                <ComboboxInput
                     {...props}
                     onChange={(item) =>
                         setProps((prev) => ({
@@ -83,4 +83,4 @@ const DropdownInputPage: FunctionComponent = () => {
     );
 };
 
-export default DropdownInputPage;
+export default ComboboxInputPage;

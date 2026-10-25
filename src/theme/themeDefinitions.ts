@@ -10,16 +10,16 @@ import { defaultIconButtonBaseTheme } from "../actions/button/IconButtonBase.the
 import { defaultStateLayerTheme } from "../actions/surface/StateLayer.theme";
 import { defaultSwipeActionTheme } from "../actions/swipeAction/SwipeAction.theme";
 import { defaultAvatarTheme } from "../display/avatar/Avatar.theme";
+import { defaultBadgeTheme } from "../display/badge/Badge.theme";
 import { defaultContentRowTheme } from "../display/contentRow/ContentRow.theme";
 import { defaultListItemTheme } from "../display/listItem/ListItem.theme";
 import { defaultRatingTheme } from "../display/rating/Rating.theme";
 import { defaultTagTheme } from "../display/tag/Tag.theme";
 import { defaultTagIconTheme } from "../display/tag/TagIcon.theme";
-import { defaultAlertIndicatorTheme } from "../feedback/alert/AlertIndicator.theme";
 import { defaultToastTheme } from "../feedback/toast/Toast.theme";
 import { defaultFormContainerTheme } from "../forms/formContainer/FormContainer.theme";
 import { defaultFormRowTheme } from "../forms/formRow/FormRow.theme";
-import { defaultDropdownInputTheme } from "../forms/input/dropdownInput/DropdownInput.theme";
+import { defaultComboboxInputTheme } from "../forms/input/comboboxInput/ComboboxInput.theme";
 import { defaultInputActionTheme } from "../forms/input/InputAction.theme";
 import { defaultInputBaseTheme } from "../forms/input/InputBase.theme";
 import { defaultInputRowContainerTheme } from "../forms/input/InputRowContainer.theme";
@@ -63,10 +63,10 @@ export const definitions: ThemeDefinitions = {
     timeInput: defaultTimeInputTheme,
     selectionInput: defaultSelectionInputTheme,
     toggleInput: defaultToggleInputTheme,
-    dropdownInput: defaultDropdownInputTheme,
+    comboboxInput: defaultComboboxInputTheme,
     rating: defaultRatingTheme,
     ratingInput: defaultRatingInputTheme,
-    alertIndicator: defaultAlertIndicatorTheme,
+    badge: defaultBadgeTheme,
     tag: defaultTagTheme,
     tagIcon: defaultTagIconTheme,
     contentRow: defaultContentRowTheme,

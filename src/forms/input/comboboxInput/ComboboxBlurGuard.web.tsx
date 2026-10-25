@@ -10,11 +10,11 @@ const preventBlur = {
 };
 
 /**
- * Prevents the input from losing focus when interacting with the dropdown.
+ * Prevents the input from losing focus when interacting with the combobox.
  * Cancels the default `mousedown` behaviour (which would blur the input and
- * unmount the dropdown before the click lands) so a click on a menu item can
+ * unmount the combobox before the click lands) so a click on a menu item can
  * complete.
  */
-export const DropdownBlurGuard = ({ children }: PropsWithChildren) => (
+export const ComboboxBlurGuard = ({ children }: PropsWithChildren) => (
     <View {...preventBlur}>{children}</View>
 );

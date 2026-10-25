@@ -1,11 +1,11 @@
 export type { CounterInputIcons, CounterInputProps } from "./CounterInput";
 export { CounterInput } from "./CounterInput";
-export type { DropdownInputProps } from "./dropdownInput";
+export type { ComboboxInputProps } from "./comboboxInput";
 export {
-    DropdownInput,
-    DropdownInputBase,
-    type DropdownInputBaseProps,
-} from "./dropdownInput";
+    ComboboxInput,
+    ComboboxInputBase,
+    type ComboboxInputBaseProps,
+} from "./comboboxInput";
 export type { InputActionProps, InputActionTheme } from "./InputAction";
 export { InputAction } from "./InputAction";
 export type { InputBaseProps, InputBaseTheme } from "./InputBase";

@@ -14,14 +14,14 @@ import {
 import { Menu, MenuItem } from "../../../overlays/menu";
 import { InputBase, type InputBaseProps } from "../InputBase";
 import type { ValueItem } from "../valueItem";
-import { DropdownBlurGuard } from "./DropdownBlurGuard";
-import { type DropdownValue, getItemKey } from "./helpers";
-import { useDropdownController } from "./useDropdownController";
+import { ComboboxBlurGuard } from "./ComboboxBlurGuard";
+import { type ComboboxValue, getItemKey } from "./helpers";
+import { useComboboxController } from "./useComboboxController";
 import { useForwardedRef } from "./useForwardedRef";
 
-export type { DropdownValue } from "./helpers";
+export type { ComboboxValue } from "./helpers";
 
-export interface DropdownInputHandle {
+export interface ComboboxInputHandle {
     setInputValue: (text: string) => void;
     clear: () => void;
     open: () => void;
@@ -30,7 +30,7 @@ export interface DropdownInputHandle {
     blur: () => void;
 }
 
-export type DropdownInputBaseProps<T = string> = Pick<
+export type ComboboxInputBaseProps<T = string> = Pick<
     InputBaseProps,
     | "autoCapitalize"
     | "returnKeyType"
@@ -53,10 +53,10 @@ export type DropdownInputBaseProps<T = string> = Pick<
      * The selected item's key. Controlled when supplied; otherwise the
      * component manages selection internally (seed it with `defaultValue`).
      */
-    value?: DropdownValue<T>;
+    value?: ComboboxValue<T>;
 
     /** Initial selection for uncontrolled usage. */
-    defaultValue?: DropdownValue<T>;
+    defaultValue?: ComboboxValue<T>;
 
     /**
      * Called when the selection changes. The item is `undefined` for a custom
@@ -72,7 +72,7 @@ export type DropdownInputBaseProps<T = string> = Pick<
     onChangeText?: (text: string) => void;
 
     /** Imperative controls (set text, clear, open/close, focus/blur). */
-    controllerRef?: RefObject<DropdownInputHandle | null>;
+    controllerRef?: RefObject<ComboboxInputHandle | null>;
 
     /**
      * Whether focusing the input opens the list of all options.
@@ -112,7 +112,7 @@ export type DropdownInputBaseProps<T = string> = Pick<
 
 const EMPTY_ITEMS: never[] = [];
 
-export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
+export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     const {
         items = EMPTY_ITEMS,
         value,
@@ -143,7 +143,7 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
     const anchorRef = useAnimatedRef<View>();
     const [isMenuInverted, setIsMenuInverted] = useState(false);
 
-    const { theme } = useComponent("dropdownInput");
+    const { theme } = useComponent("comboboxInput");
 
     const {
         displayText,
@@ -161,7 +161,7 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
         clear,
         open,
         close,
-    } = useDropdownController({
+    } = useComboboxController({
         items,
         value,
         defaultValue,
@@ -224,7 +224,7 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
                 onInvertedChange={setIsMenuInverted}
             >
                 {({ inverted }) => (
-                    <DropdownBlurGuard>
+                    <ComboboxBlurGuard>
                         <Menu
                             data={filteredItems}
                             reverse={inverted}
@@ -239,7 +239,7 @@ export const DropdownInputBase = <T,>(props: DropdownInputBaseProps<T>) => {
                                 />
                             )}
                         />
-                    </DropdownBlurGuard>
+                    </ComboboxBlurGuard>
                 )}
             </AnchoredContainer>
         </Animated.View>
