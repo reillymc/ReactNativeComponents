@@ -3,7 +3,7 @@ import {
     SelectionInput,
     type SelectionInputProps,
     type ValueItem,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 
 import {
     ComponentPage,

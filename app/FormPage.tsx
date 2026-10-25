@@ -2,13 +2,13 @@ import { type FC, useState } from "react";
 import { ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
+import { Button } from "@reillymc/react-native-components/actions";
 import {
-    Button,
     FormContainer,
     FormRow,
     TextInput,
     ToggleInput,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 import { usePalette } from "@reillymc/react-native-components/theme";
 
 import { defineStyles, useStyles } from "../demo/theme";

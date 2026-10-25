@@ -9,27 +9,33 @@ import { type Href, Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     Action,
-    Avatar,
     Button,
-    CounterInput,
-    DropdownInput,
-    HighlightedText,
-    Icon,
     IconAction,
     IconButton,
+} from "@reillymc/react-native-components/actions";
+import {
+    Avatar,
     ListItem,
-    NumberInput,
-    Panel,
     Rating,
+    Tag,
+} from "@reillymc/react-native-components/display";
+import {
+    CounterInput,
+    DropdownInput,
+    NumberInput,
     RatingInput,
     SelectionInput,
-    Tag,
-    Text,
     TextInput,
     TimeInput,
     ToggleInput,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
+import { Icon } from "@reillymc/react-native-components/icons";
+import { Panel } from "@reillymc/react-native-components/layout";
 import { usePalette } from "@reillymc/react-native-components/theme";
+import {
+    HighlightedText,
+    Text,
+} from "@reillymc/react-native-components/typography";
 
 import { defineStyles, useStyles } from "../demo/theme";
 
@@ -46,37 +52,6 @@ type ComponentScreenSection = SectionListData<
  * Map of all components to their respective screen
  */
 const ComponentScreens: Array<ComponentScreenSection> = [
-    {
-        sectionName: "Text",
-        data: [
-            {
-                name: "Text",
-                href: "/TextPage",
-                component: <Text variant="body">Text</Text>,
-            },
-            {
-                name: "Highlighted Text",
-                href: "/HighlightedTextPage",
-                component: (
-                    <HighlightedText
-                        variant="body"
-                        text="Highlighted Text"
-                        highlight="Highlight"
-                    />
-                ),
-            },
-        ],
-    },
-    {
-        sectionName: "Icon",
-        data: [
-            {
-                name: "Icon",
-                href: "/IconPage",
-                component: <Icon iconSet={Octicons} iconName="star" />,
-            },
-        ],
-    },
     {
         sectionName: "Actions",
         data: [
@@ -96,11 +71,6 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                     />
                 ),
             },
-        ],
-    },
-    {
-        sectionName: "Buttons",
-        data: [
             {
                 name: "Button",
                 href: "/ButtonPage",
@@ -114,7 +84,28 @@ const ComponentScreens: Array<ComponentScreenSection> = [
         ],
     },
     {
-        sectionName: "Inputs",
+        sectionName: "Display",
+        data: [
+            { name: "List Item", href: "/ListItemPage" },
+            {
+                name: "Avatar",
+                href: "/AvatarPage",
+                component: <Avatar firstName="First" lastName="Last" />,
+            },
+            { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
+            {
+                name: "Rating",
+                href: "/RatingPage",
+                component: <Rating value={3} max={5} />,
+            },
+        ],
+    },
+    {
+        sectionName: "Feedback",
+        data: [],
+    },
+    {
+        sectionName: "Forms",
         data: [
             {
                 name: "Text Input",
@@ -172,27 +163,45 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                     />
                 ),
             },
+            { name: "Form Layout", href: "/FormPage" },
         ],
     },
     {
-        sectionName: "Layouts",
-        data: [{ name: "Form Layout", href: "/FormPage" }],
+        sectionName: "Layout",
+        data: [{ name: "Panel", href: "/PanelPage" }],
     },
     {
-        sectionName: "Other",
+        sectionName: "Overlays",
+        data: [],
+    },
+    {
+        sectionName: "Typography",
         data: [
-            { name: "List Item", href: "/ListItemPage" },
             {
-                name: "Avatar",
-                href: "/AvatarPage",
-                component: <Avatar firstName="First" lastName="Last" />,
+                name: "Text",
+                href: "/TextPage",
+                component: <Text variant="body">Text</Text>,
             },
-            { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
-            { name: "Panel", href: "/PanelPage" },
             {
-                name: "Rating",
-                href: "/RatingPage",
-                component: <Rating value={3} max={5} />,
+                name: "Highlighted Text",
+                href: "/HighlightedTextPage",
+                component: (
+                    <HighlightedText
+                        variant="body"
+                        text="Highlighted Text"
+                        highlight="Highlight"
+                    />
+                ),
+            },
+        ],
+    },
+    {
+        sectionName: "Icons",
+        data: [
+            {
+                name: "Icon",
+                href: "/IconPage",
+                component: <Icon iconSet={Octicons} iconName="star" />,
             },
         ],
     },

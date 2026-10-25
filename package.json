@@ -5,9 +5,33 @@
     "type": "module",
     "sideEffects": false,
     "exports": {
-        "./components": {
-            "types": "./lib/types/components/index.d.ts",
-            "default": "./lib/components/index.js"
+        "./actions": {
+            "types": "./lib/types/actions/index.d.ts",
+            "default": "./lib/actions/index.js"
+        },
+        "./display": {
+            "types": "./lib/types/display/index.d.ts",
+            "default": "./lib/display/index.js"
+        },
+        "./feedback": {
+            "types": "./lib/types/feedback/index.d.ts",
+            "default": "./lib/feedback/index.js"
+        },
+        "./forms": {
+            "types": "./lib/types/forms/index.d.ts",
+            "default": "./lib/forms/index.js"
+        },
+        "./layout": {
+            "types": "./lib/types/layout/index.d.ts",
+            "default": "./lib/layout/index.js"
+        },
+        "./overlays": {
+            "types": "./lib/types/overlays/index.d.ts",
+            "default": "./lib/overlays/index.js"
+        },
+        "./typography": {
+            "types": "./lib/types/typography/index.d.ts",
+            "default": "./lib/typography/index.js"
         },
         "./icons": {
             "types": "./lib/types/icons/index.d.ts",

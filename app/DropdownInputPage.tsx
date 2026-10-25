@@ -2,7 +2,7 @@ import { type FunctionComponent, useState } from "react";
 import {
     DropdownInput,
     type DropdownInputProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 
 import {
     ComponentPage,

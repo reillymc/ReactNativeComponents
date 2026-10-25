@@ -1,9 +1,9 @@
 import { type FunctionComponent, useState } from "react";
+import { Button } from "@reillymc/react-native-components/actions";
 import {
-    Button,
     Panel,
     type PanelProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/layout";
 
 import {
     ComponentPage,

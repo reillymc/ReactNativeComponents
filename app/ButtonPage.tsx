@@ -2,7 +2,7 @@ import { type FunctionComponent, useState } from "react";
 import {
     Button,
     type ButtonProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/actions";
 
 import {
     ComponentPage,

@@ -1,14 +1,16 @@
 import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
-    AlertIndicator,
-    ContentRow,
     IconAction,
+    SwipeAction,
+} from "@reillymc/react-native-components/actions";
+import {
+    ContentRow,
     ListItem,
     type ListItemProps,
-    SwipeAction,
-    Text,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/display";
+import { AlertIndicator } from "@reillymc/react-native-components/feedback";
+import { Text } from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,

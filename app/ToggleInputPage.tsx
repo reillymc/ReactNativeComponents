@@ -4,10 +4,10 @@ import {
     type OcticonsIconName,
 } from "@react-native-vector-icons/octicons";
 import {
-    type IconComponentProps,
     ToggleInput,
     type ToggleInputProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
+import type { IconComponentProps } from "@reillymc/react-native-components/icons";
 
 import {
     ComponentPage,

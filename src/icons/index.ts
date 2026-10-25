@@ -1,8 +1,4 @@
-export type {
-    AnyIconSet,
-    IconSet,
-    IconSetGlyphMap,
-    IconSetItemProps,
-} from "./base";
-export type { ComponentIconAssets } from "./componentIconAssets";
+export type { IconSet, IconSetGlyphMap, IconSetItemProps } from "./base";
+export { Icon, type IconProps } from "./Icon";
+export type { IconComponentProps } from "./IconComponentProps";
 export { type UiIconName, UiIcons } from "./ui";

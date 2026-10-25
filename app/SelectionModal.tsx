@@ -2,14 +2,11 @@ import { type FC, useState } from "react";
 import { FlatList, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
-import {
-    Action,
-    MenuItem,
-    Tag,
-    TagIcon,
-    Text,
-    type ValueItem,
-} from "@reillymc/react-native-components/components";
+import { Action } from "@reillymc/react-native-components/actions";
+import { Tag, TagIcon } from "@reillymc/react-native-components/display";
+import type { ValueItem } from "@reillymc/react-native-components/forms";
+import { MenuItem } from "@reillymc/react-native-components/overlays";
+import { Text } from "@reillymc/react-native-components/typography";
 
 import {
     type SelectionRequest,

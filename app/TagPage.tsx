@@ -4,7 +4,7 @@ import {
     Tag,
     TagIcon,
     type TagProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/display";
 
 import {
     ComponentPage,

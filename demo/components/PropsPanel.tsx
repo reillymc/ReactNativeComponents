@@ -8,7 +8,7 @@ import {
     TextInput,
     ToggleInput,
     type ValueItem,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 
 import { defineStyles, useStyles } from "../theme";
 import { useSelectionModal } from "./useSelectionModal";

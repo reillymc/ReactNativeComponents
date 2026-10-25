@@ -6,8 +6,8 @@ import {
 import {
     IconButton,
     type IconButtonProps,
-    type IconComponentProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/actions";
+import type { IconComponentProps } from "@reillymc/react-native-components/icons";
 
 import {
     ComponentPage,

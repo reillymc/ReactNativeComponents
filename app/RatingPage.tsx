@@ -2,7 +2,7 @@ import { type FC, useState } from "react";
 import {
     Rating,
     type RatingProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/display";
 
 import {
     ComponentPage,

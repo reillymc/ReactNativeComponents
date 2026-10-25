@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useRouter } from "expo-router";
-import type { ValueItem } from "@reillymc/react-native-components/components";
+import type { ValueItem } from "@reillymc/react-native-components/forms";
 
 import { useSelectionModalController } from "./SelectionModalContext";
 

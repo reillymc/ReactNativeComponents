@@ -22,7 +22,7 @@ Create an app theme once, then use the generated provider and style helper:
 
 ```tsx
 import { View } from "react-native";
-import { Text } from "@reillymc/react-native-components/components";
+import { Text } from "@reillymc/react-native-components/typography";
 import {
     type AppThemeFactory,
     createAppTheme,
@@ -100,9 +100,15 @@ Keep provider objects stable (module scope or memoized) so the theme is not rebu
 
 ## Public entry points
 
-- `@reillymc/react-native-components/components`
-- `@reillymc/react-native-components/theme`
+- `@reillymc/react-native-components/actions`
+- `@reillymc/react-native-components/display`
+- `@reillymc/react-native-components/feedback`
+- `@reillymc/react-native-components/forms`
+- `@reillymc/react-native-components/layout`
+- `@reillymc/react-native-components/overlays`
+- `@reillymc/react-native-components/typography`
 - `@reillymc/react-native-components/icons`
+- `@reillymc/react-native-components/theme`
 
 ## License
 

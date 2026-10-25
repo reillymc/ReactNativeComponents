@@ -1,15 +1,13 @@
 import type { FC } from "react";
 
-import type {
-    CounterInputIcons,
-    InputScaffoldIcons,
-    NumberInputIcons,
-    RatingIcons,
-    RatingInputIcons,
-    SelectionInputIcons,
-    TimeInputIcons,
-    ToggleInputIcons,
-} from "../components";
+import type { RatingIcons } from "../display/rating/Rating";
+import type { CounterInputIcons } from "../forms/input/CounterInput";
+import type { InputScaffoldIcons } from "../forms/input/InputScaffold";
+import type { NumberInputIcons } from "../forms/input/NumberInput";
+import type { RatingInputIcons } from "../forms/input/RatingInput";
+import type { SelectionInputIcons } from "../forms/input/SelectionInput";
+import type { TimeInputIcons } from "../forms/input/TimeInput";
+import type { ToggleInputIcons } from "../forms/input/ToggleInput";
 import type { AnyIconSet, IconSet } from "../icons/base";
 import { UiIcons } from "../icons/ui";
 
