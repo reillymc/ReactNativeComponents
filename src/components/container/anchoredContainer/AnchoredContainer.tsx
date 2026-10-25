@@ -7,6 +7,7 @@ import type {
     ViewStyle,
 } from "react-native";
 import type { AnimatedRef } from "react-native-reanimated";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import { InlineMount } from "./InlineMount";
 import { useAnchoredContainerPosition } from "./useAnchoredContainerPosition";
@@ -60,7 +61,7 @@ export interface AnchoredContainerProps {
     position?: "auto" | "above";
     onInvertedChange?: (inverted: boolean) => void;
     children?: AnchoredContainerChildren;
-    theme?: AnchoredContainerTheme;
+    theme?: DeepPartial<AnchoredContainerTheme>;
     style?: StyleProp<ViewStyle>;
 }
 

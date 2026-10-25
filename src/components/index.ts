@@ -83,7 +83,6 @@ export type {
     SelectionInputProps,
     SelectionInputTheme,
     TextInputProps,
-    TextInputTheme,
     TimeInputIcons,
     TimeInputProps,
     TimeInputTheme,

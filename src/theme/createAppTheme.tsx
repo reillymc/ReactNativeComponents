@@ -28,7 +28,7 @@ type AppThemedStylesFactory<
     T extends StyleSheet.NamedStyles<T>,
 > = (context: AppThemedStylesContext<AppTheme>, props: Props) => T;
 
-export const createAppTheme = <AppTheme,>(
+export const createAppTheme = <AppTheme extends object>(
     createValues: AppThemeFactory<AppTheme>,
 ) => {
     const AppThemeContext = createContext<AppTheme | undefined>(undefined);
@@ -36,7 +36,7 @@ export const createAppTheme = <AppTheme,>(
     const useAppTheme = (): AppTheme => {
         const appTheme = use(AppThemeContext);
 
-        if (!appTheme) {
+        if (appTheme === undefined) {
             throw new Error("useAppTheme must be used within AppThemeProvider");
         }
 

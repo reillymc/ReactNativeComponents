@@ -82,10 +82,11 @@ export function useComponent<K extends ComponentKey, T, Props>(
             return undefined as ComponentTheme<K>;
         }
 
-        return mergeTheme(
-            context.theme[key as keyof Theme],
-            themeOverrides,
-        ) as ComponentTheme<K>;
+        const resolved = context.theme[key as keyof Theme];
+
+        return themeOverrides === undefined
+            ? (resolved as ComponentTheme<K>)
+            : (mergeTheme(resolved, themeOverrides) as ComponentTheme<K>);
     }, [context.theme, key, themeOverrides]);
     const icons = (
         Object.hasOwn(context.icons, key)

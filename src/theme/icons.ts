@@ -115,7 +115,8 @@ export const mergeIcons = (overrides?: IconOverrides): Icons => {
 
     for (const [category, slots] of Object.entries(overrides)) {
         if (!slots) continue;
-        merged[category] = { ...merged[category], ...slots };
+        if (!Object.hasOwn(defaultIcons, category)) continue;
+        merged[category] = { ...(merged[category] ?? {}), ...slots };
     }
 
     return merged as Icons;

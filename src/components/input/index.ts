@@ -43,7 +43,7 @@ export type {
     SelectionInputTheme,
 } from "./SelectionInput";
 export { SelectionInput } from "./SelectionInput";
-export type { TextInputProps, TextInputTheme } from "./TextInput";
+export type { TextInputProps } from "./TextInput";
 export { TextInput } from "./TextInput";
 export type {
     TimeInputIcons,
