@@ -20,8 +20,9 @@ export const IconBase = <G extends string>({
     iconName,
     size,
     color,
+    theme: themeOverrides,
 }: IconBaseProps<G>) => {
-    const { theme } = useComponent("iconBase");
+    const { theme } = useComponent("iconBase", { themeOverrides });
 
     return (
         <IconSet

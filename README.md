@@ -1,6 +1,6 @@
 # @reillymc/react-native-components
 
-A collection of React Native components with a palette -> component theme system.
+A collection of React Native components with a typed palette and component theme system.
 
 ## Installation
 
@@ -16,163 +16,93 @@ npm install react-native-gesture-handler react-native-reanimated \
   react-native-worklets
 ```
 
-## Usage
+## Quick start
+
+Create an app theme once, then use the generated provider and style helper:
 
 ```tsx
-import { Button } from "@reillymc/react-native-components/components";
-import { ThemeProvider } from "@reillymc/react-native-components/providers";
+import { View } from "react-native";
+import { Text } from "@reillymc/react-native-components/components";
+import {
+    type AppThemeFactory,
+    createAppTheme,
+} from "@reillymc/react-native-components/theme";
+
+type AppTheme = {
+    screen: {
+        padding: number;
+    };
+};
+
+const createAppThemeValues: AppThemeFactory<AppTheme> = ({ palette }) => ({
+    screen: {
+        padding: palette.spacing.medium,
+    },
+});
+
+export const { AppThemeProvider, defineStyles, useStyles } =
+    createAppTheme<AppTheme>(createAppThemeValues);
+
+const createStyles = defineStyles(({ appTheme }) => ({
+    screen: {
+        flex: 1,
+        padding: appTheme.screen.padding,
+    },
+}));
+
+const Screen = () => {
+    const styles = useStyles(createStyles);
+
+    return (
+        <View style={styles.screen}>
+            <Text>Hello</Text>
+        </View>
+    );
+};
 
 export const App = () => (
-    <ThemeProvider>
-        <Button label="Save" />
-    </ThemeProvider>
+    <AppThemeProvider>
+        <Screen />
+    </AppThemeProvider>
 );
 ```
 
-Components have working defaults and can be used outside a provider, but wrapping the app in `ThemeProvider` is recommended so palette/theme overrides are consistent.
+Components have working defaults and can render without the provider, but use `AppThemeProvider` so palette, component theme, and icon overrides are consistent.
 
-## Theming model
+## Overrides
 
-There are three layers:
-
-```text
-Palette
-  base tokens: color, font, spacing, border
-        |
-Theme
-  component tokens: iconBase, icon, buttonBase, button, inputBase, ...
-        |
-Component `theme` prop
-  per-instance component token overrides
-```
-
-Native React Native styles are passed through `style` (and wrapper-specific native props such as `containerStyle` where a component has multiple surfaces).
-
-### Base palette
+`AppThemeProvider` accepts `palette`, `theme`, and `icons` overrides:
 
 ```tsx
-import { ThemeProvider } from "@reillymc/react-native-components/providers";
 import { darkColorScheme } from "@reillymc/react-native-components/theme";
 
-<ThemeProvider
-    palette={{
-        color: darkColorScheme,
-        spacing: { medium: 20 },
-    }}
+const palette = { color: darkColorScheme };
+
+<AppThemeProvider
+    palette={palette}
+    theme={{ iconBase: { size: 24 } }}
 >
     <App />
-</ThemeProvider>;
+</AppThemeProvider>;
 ```
 
-`usePalette()` reads the resolved base tokens.
-
-### Component theme
+Component theme overrides cascade into derived component themes. For one-off overrides, pass `theme` to the component; native styles still go through `style`:
 
 ```tsx
 <Button
+    label="Save"
     theme={{ container: { borderRadius: 12 } }}
     style={{ marginTop: 8 }}
 />
 ```
 
-`theme` overrides component tokens. `style` remains a React Native style.
-
-Use `useTheme()` to read the resolved component theme:
-
-```tsx
-const { iconBase } = useTheme();
-```
-
-### Cascade
-
-Base component theme overrides cascade into derived component themes:
-
-```tsx
-<ThemeProvider theme={{ iconBase: { size: 24 } }}>
-    <App />
-</ThemeProvider>
-```
-
-This updates the resolved `icon`, `iconButton`, `iconButtonBase`, `toggleInput`, and other derived themes that depend on `iconBase`.
-
-The same pattern is available to app components:
-
-```tsx
-import { useComponentTheme } from "@reillymc/react-native-components/hooks";
-import { IconBase } from "@reillymc/react-native-components/components";
-
-export const AppFeatureIcon = (props) => {
-    const iconBase = useComponentTheme("iconBase");
-
-    return (
-        <IconBase
-            {...props}
-            size={iconBase.size * 1.5}
-            color={iconBase.color}
-        />
-    );
-};
-```
-
-### App-owned styles
-
-App-specific styles stay in the app. Build them from the palette and component theme:
-
-```tsx
-import { StyleSheet } from "react-native";
-import { usePalette, useThemedStyles } from "@reillymc/react-native-components/hooks";
-
-const styles = useThemedStyles(({ palette, theme }) =>
-    StyleSheet.create({
-        page: {
-            backgroundColor: palette.color.background,
-            padding: palette.spacing.medium,
-        },
-        featureIcon: {
-            color: theme.iconBase.color,
-        },
-    }),
-);
-```
-
-No app tokens need to be merged into the library palette or theme.
-
-### Icons
-
-```tsx
-import { useIcons } from "@reillymc/react-native-components/hooks";
-
-const icons = useIcons();
-```
-
-Override icon assets through the provider:
-
-```tsx
-<ThemeProvider icons={{ inputScaffold: { error: { iconSet: MyIcons, iconName: "alert" } } }}>
-    <App />
-</ThemeProvider>
-```
+Keep provider objects stable (module scope or memoized) so the theme is not rebuilt on every render.
 
 ## Public entry points
 
 - `@reillymc/react-native-components/components`
-- `@reillymc/react-native-components/hooks`
-- `@reillymc/react-native-components/providers`
 - `@reillymc/react-native-components/theme`
 - `@reillymc/react-native-components/icons`
-- `@reillymc/react-native-components/common`
-
-## Contributing
-
-See the contributing guide referenced by the repository (if present) for the development workflow.
-
-## Publishing
-
-This package is published to npm. New versions are published from `latest/*` branches through the GitHub workflow in `.github/workflows/publish.yml`.
-
-## Running locally
-
-To generate the Expo Go QR code which correctly links to the Metro server, set `REACT_NATIVE_PACKAGER_HOSTNAME` in the dev container `.env` file. See `.devcontainer/.env.example`.
 
 ## License
 
