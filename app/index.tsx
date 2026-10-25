@@ -81,12 +81,15 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconButtonPage",
                 component: <IconButton iconSet={Octicons} iconName="star" />,
             },
+            { name: "Action Bases", href: "/ActionBasesPage" },
+            { name: "Swipe Action", href: "/SwipeActionPage" },
         ],
     },
     {
         sectionName: "Display",
         data: [
             { name: "List Item", href: "/ListItemPage" },
+            { name: "Content Row", href: "/ContentRowPage" },
             {
                 name: "Avatar",
                 href: "/AvatarPage",
@@ -102,7 +105,10 @@ const ComponentScreens: Array<ComponentScreenSection> = [
     },
     {
         sectionName: "Feedback",
-        data: [],
+        data: [
+            { name: "Alert Indicator", href: "/AlertIndicatorPage" },
+            { name: "Toast", href: "/ToastPage" },
+        ],
     },
     {
         sectionName: "Forms",
@@ -164,15 +170,19 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 ),
             },
             { name: "Form Layout", href: "/FormPage" },
+            { name: "Input Primitives", href: "/InputPrimitivesPage" },
         ],
     },
     {
         sectionName: "Layout",
-        data: [{ name: "Panel", href: "/PanelPage" }],
+        data: [
+            { name: "Panel", href: "/PanelPage" },
+            { name: "Swipeable Container", href: "/SwipeableContainerPage" },
+        ],
     },
     {
         sectionName: "Overlays",
-        data: [],
+        data: [{ name: "Menu", href: "/MenuPage" }],
     },
     {
         sectionName: "Typography",
@@ -203,6 +213,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconPage",
                 component: <Icon iconSet={Octicons} iconName="star" />,
             },
+            { name: "Built-in Icons", href: "/UiIconsPage" },
         ],
     },
 ];
