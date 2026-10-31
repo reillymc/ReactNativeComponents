@@ -19,7 +19,10 @@ module.exports = (api) => {
         ],
         plugins: [
             // React Compiler must run first.
-            [require.resolve("babel-plugin-react-compiler"), { target: "19" }],
+            [
+                require.resolve("babel-plugin-react-compiler"),
+                { target: "19", panicThreshold: "all_errors" },
+            ],
         ],
     };
 };

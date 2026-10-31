@@ -9,10 +9,30 @@ import {
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps } from "../demo/helpers";
+import {
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<CounterInputProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    placeholder: FieldTextInputPropDefinitions.placeholder,
+    keyboardType: {
+        type: "enum",
+        label: "Keyboard Type",
+        default: "Number Pad",
+        values: [
+            { label: "Number", value: "number-pad" },
+            { label: "Decimal", value: "decimal-pad" },
+        ],
+    },
     min: {
         type: "number",
         label: "Min Value",

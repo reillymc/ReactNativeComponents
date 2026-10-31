@@ -9,10 +9,21 @@ import {
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps } from "../demo/helpers";
+import {
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TextInputProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    placeholder: FieldTextInputPropDefinitions.placeholder,
     clearButtonMode: {
         type: "enum",
         label: "Clear button mode",
@@ -23,10 +34,6 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
             { label: "Unless editing", value: "unless-editing" },
             { label: "Always", value: "always" },
         ],
-    },
-    hasError: {
-        type: "boolean",
-        label: "Has error",
     },
 };
 

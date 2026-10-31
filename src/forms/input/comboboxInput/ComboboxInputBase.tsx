@@ -1,23 +1,22 @@
-import { type RefObject, useImperativeHandle, useState } from "react";
-import {
-    type TextInput as DefaultTextInput,
-    StyleSheet,
-    type View,
-} from "react-native";
-import Animated, { useAnimatedRef } from "react-native-reanimated";
+import { type Ref, useImperativeHandle, useState } from "react";
+import type { TextInput as DefaultTextInput, View } from "react-native";
+import type { AnimatedRef } from "react-native-reanimated";
 
-import { useComponent } from "../../../internal";
+import { useComponent, useForwardedRef } from "../../../internal";
 import {
     AnchoredContainer,
     type AnchoredContainerProps,
 } from "../../../overlays/anchoredContainer";
 import { Menu, MenuItem } from "../../../overlays/menu";
-import { InputBase, type InputBaseProps } from "../InputBase";
+import {
+    FieldTextInput,
+    type FieldTextInputProps,
+    useFieldControlState,
+} from "../../field";
 import type { ValueItem } from "../valueItem";
 import { ComboboxBlurGuard } from "./ComboboxBlurGuard";
 import { type ComboboxValue, getItemKey } from "./helpers";
 import { useComboboxController } from "./useComboboxController";
-import { useForwardedRef } from "./useForwardedRef";
 
 export type { ComboboxValue } from "./helpers";
 
@@ -31,7 +30,7 @@ export interface ComboboxInputHandle {
 }
 
 export type ComboboxInputBaseProps<T = string> = Pick<
-    InputBaseProps,
+    FieldTextInputProps,
     | "autoCapitalize"
     | "returnKeyType"
     | "returnKeyLabel"
@@ -43,8 +42,6 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     | "maxLength"
     | "onSubmitEditing"
     | "autoFocus"
-    | "disabled"
-    | "variant"
     | "style"
 > & {
     items?: Array<ValueItem<T>>;
@@ -72,7 +69,7 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     onChangeText?: (text: string) => void;
 
     /** Imperative controls (set text, clear, open/close, focus/blur). */
-    controllerRef?: RefObject<ComboboxInputHandle | null>;
+    controllerRef?: Ref<ComboboxInputHandle>;
 
     /**
      * Whether focusing the input opens the list of all options.
@@ -107,7 +104,13 @@ export type ComboboxInputBaseProps<T = string> = Pick<
 
     containerPosition?: AnchoredContainerProps["position"];
 
-    ref?: RefObject<DefaultTextInput | null>;
+    /**
+     * Anchor for the iOS overlay. When omitted, iOS falls back to the inline
+     * mount, which can clip inside scrollable or clipped parents.
+     */
+    anchorRef?: AnimatedRef<View>;
+
+    ref?: Ref<DefaultTextInput>;
 };
 
 const EMPTY_ITEMS: never[] = [];
@@ -127,7 +130,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         minimumSearchLength = 1,
         maxSuggestionCount,
         containerPosition,
-        disabled: disabledProp,
+        anchorRef,
         onBlur,
         onFocus,
         onKeyPress,
@@ -137,10 +140,9 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     } = props;
 
     const isValueControlled = "value" in props;
-    const disabled = disabledProp || !onChange;
+    const { interactive } = useFieldControlState();
 
     const inputRef = useForwardedRef(ref);
-    const anchorRef = useAnimatedRef<View>();
     const [isMenuInverted, setIsMenuInverted] = useState(false);
 
     const { theme } = useComponent("comboboxInput");
@@ -153,11 +155,10 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         activeIndex,
         handleFocus,
         handleBlur,
-        handleChangeText,
         handleKeyPress,
         handleSubmitEditing,
         selectItem,
-        setInputValue,
+        updateInputText,
         clear,
         open,
         close,
@@ -166,6 +167,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         value,
         defaultValue,
         isValueControlled,
+        interactive,
         onChange,
         onChangeText,
         onFocus,
@@ -185,33 +187,29 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     useImperativeHandle(
         controllerRef,
         () => ({
-            setInputValue,
+            setInputValue: updateInputText,
             clear,
             open,
             close,
-            focus: () => inputRef.current?.focus(),
+            focus: () => interactive && inputRef.current?.focus(),
+
             blur: () => inputRef.current?.blur(),
         }),
-        [setInputValue, clear, open, close, inputRef],
+        [updateInputText, clear, open, close, interactive, inputRef],
     );
 
     return (
-        <Animated.View
-            ref={anchorRef}
-            collapsable={false}
-            style={styles.anchor}
-        >
-            <InputBase
+        <>
+            <FieldTextInput
                 {...inputProps}
                 ref={inputRef}
-                disabled={disabled}
                 value={displayText}
                 submitBehavior="submit"
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onKeyPress={handleKeyPress}
                 onSubmitEditing={handleSubmitEditing}
-                onChangeText={handleChangeText}
+                onChangeText={updateInputText}
                 autoCorrect={false}
                 spellCheck={false}
             />
@@ -227,6 +225,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                     <ComboboxBlurGuard>
                         <Menu
                             data={filteredItems}
+                            activeIndex={activeIndex}
                             reverse={inverted}
                             keyExtractor={(item) => String(getItemKey(item))}
                             renderItem={({ item, index }) => (
@@ -242,12 +241,6 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                     </ComboboxBlurGuard>
                 )}
             </AnchoredContainer>
-        </Animated.View>
+        </>
     );
 };
-
-const styles = StyleSheet.create({
-    anchor: {
-        alignSelf: "stretch",
-    },
-});

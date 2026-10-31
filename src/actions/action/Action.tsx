@@ -28,21 +28,18 @@ export interface ActionProps
 export const Action: FC<ActionProps> = ({
     label,
     variant = "secondary",
-    disabled: disabledProp,
     theme: themeOverrides,
-    onPress,
     ...baseProps
 }) => {
-    const disabled = disabledProp || !onPress;
     const { theme } = useComponent("action", { themeOverrides });
 
     return (
-        <ActionBase disabled={disabled} onPress={onPress} {...baseProps}>
+        <ActionBase {...baseProps}>
             {(state) => (
                 <StateTint {...state}>
                     <Text
                         numberOfLines={1}
-                        style={{ color: theme.label.color[variant] }}
+                        theme={{ color: theme.label.color[variant] }}
                     >
                         {label}
                     </Text>

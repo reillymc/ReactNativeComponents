@@ -1,4 +1,4 @@
-import { type FC, useCallback } from "react";
+import type { FC } from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import Animated, {
     type AnimatedRef,
@@ -31,17 +31,17 @@ export const OverlayMount: FC<OverlayMountProps> = ({
     const anchorWidth = useSharedValue(0);
     const anchorHeight = useSharedValue(0);
 
-    const trackAnchor = useCallback(() => {
+    const trackAnchor = () => {
         "worklet";
 
         const measured = measure(anchorRef);
         if (!measured) return;
 
-        anchorX.value = measured.pageX;
-        anchorY.value = measured.pageY;
-        anchorWidth.value = measured.width;
-        anchorHeight.value = measured.height;
-    }, [anchorRef, anchorX, anchorY, anchorWidth, anchorHeight]);
+        anchorX.set(measured.pageX);
+        anchorY.set(measured.pageY);
+        anchorWidth.set(measured.width);
+        anchorHeight.set(measured.height);
+    };
 
     useFrameCallback(trackAnchor, true);
 
@@ -63,10 +63,9 @@ export const OverlayMount: FC<OverlayMountProps> = ({
 
     return (
         <FullWindowOverlay>
-            <View style={StyleSheet.absoluteFill} pointerEvents="box-none">
+            <View style={overlayStyles.backdrop}>
                 <Animated.View
                     onLayout={onLayout}
-                    pointerEvents="auto"
                     style={[overlayStyles.container, overlayStyle, style]}
                 >
                     {typeof children === "function"
@@ -79,9 +78,14 @@ export const OverlayMount: FC<OverlayMountProps> = ({
 };
 
 const overlayStyles = StyleSheet.create({
+    backdrop: {
+        ...StyleSheet.absoluteFill,
+        pointerEvents: "box-none",
+    },
     container: {
         position: "absolute",
         left: 0,
         top: 0,
+        pointerEvents: "auto",
     },
 });

@@ -5,14 +5,10 @@ import {
     View,
     type ViewStyle,
 } from "react-native";
-import Animated, {
-    LinearTransition,
-    SlideInDown,
-    SlideOutDown,
-} from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, useComponent } from "../../internal";
+import { useSystems } from "../../theme/useSystems";
 
 export interface ToastTheme {
     container: {
@@ -32,10 +28,6 @@ export interface ToastProps {
     children?: ReactNode;
 }
 
-const TOAST_ENTERING = SlideInDown.springify().mass(0.5);
-const TOAST_EXITING = SlideOutDown.springify().mass(0.5);
-const TOAST_LAYOUT = LinearTransition.springify().mass(0.5);
-
 export const Toast: FunctionComponent<ToastProps> = ({
     action,
     theme: themeOverrides,
@@ -46,27 +38,13 @@ export const Toast: FunctionComponent<ToastProps> = ({
         themeOverrides,
         createStyles,
     });
+    const { shadowStyle } = useSystems();
 
     return (
-        <Animated.View
-            style={[styles.container, style]}
-            entering={TOAST_ENTERING}
-            exiting={TOAST_EXITING}
-            layout={TOAST_LAYOUT}
-        >
-            <View style={styles.innerContainer}>
-                <View style={styles.contentContainer}>{children}</View>
-                {action && (
-                    <View style={styles.actionContainer}>
-                        <Animated.View
-                            layout={TOAST_LAYOUT}
-                            style={styles.separator}
-                        />
-                        {action}
-                    </View>
-                )}
-            </View>
-        </Animated.View>
+        <View style={[styles.container, shadowStyle, style, styles.row]}>
+            <View style={styles.content}>{children}</View>
+            {action && <View style={styles.action}>{action}</View>}
+        </View>
     );
 };
 
@@ -78,23 +56,19 @@ const createStyles = defineStyles((theme: ToastTheme) => ({
         borderWidth: theme.borderWidth,
         borderColor: theme.borderColor,
     },
-    innerContainer: {
+    row: {
         flexDirection: "row",
-        justifyContent: "space-between",
     },
-    contentContainer: {
+    content: {
         flex: 1,
     },
-    actionContainer: {
-        flex: 0,
+    action: {
         alignItems: "center",
-        flexDirection: "row",
-        height: "100%",
-    },
-    separator: {
-        borderStartWidth: theme.borderWidth,
+        alignSelf: "stretch",
         borderStartColor: theme.separatorColor,
-        height: "100%",
-        marginHorizontal: theme.separatorMarginHorizontal,
+        borderStartWidth: theme.borderWidth,
+        flexDirection: "row",
+        marginStart: theme.separatorMarginHorizontal,
+        paddingStart: theme.separatorMarginHorizontal,
     },
 }));

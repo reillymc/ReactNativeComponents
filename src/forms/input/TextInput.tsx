@@ -1,27 +1,44 @@
 import type { FC } from "react";
 
-import { InputBase, type InputBaseProps } from "./InputBase";
-import { InputScaffold, type InputScaffoldFieldProps } from "./InputScaffold";
+import {
+    Field,
+    type FieldComponentProps,
+    FieldSurface,
+    FieldTextInput,
+    type FieldTextInputProps,
+} from "../field";
 
-export interface TextInputProps
-    extends Omit<InputBaseProps, "readOnly">,
-        InputScaffoldFieldProps {}
+export type TextInputProps = FieldComponentProps &
+    Omit<FieldTextInputProps, "style">;
 
+/**
+ * Single-line text field.
+ */
 export const TextInput: FC<TextInputProps> = ({
     label,
-    helpText,
-    mandatory,
-    hasError,
-    containerStyle,
-    ...props
+    hideLabel,
+    help,
+    error,
+    required,
+    disabled,
+    readOnly,
+    variant,
+    style,
+    ...inputProps
 }) => (
-    <InputScaffold
+    <Field
         label={label}
-        helpText={helpText}
-        mandatory={mandatory}
-        hasError={hasError}
-        containerStyle={containerStyle}
+        hideLabel={hideLabel}
+        help={help}
+        error={error}
+        required={required}
+        disabled={disabled}
+        readOnly={readOnly}
+        variant={variant}
+        style={style}
     >
-        <InputBase {...props} />
-    </InputScaffold>
+        <FieldSurface>
+            <FieldTextInput {...inputProps} />
+        </FieldSurface>
+    </Field>
 );

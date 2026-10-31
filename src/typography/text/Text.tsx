@@ -7,12 +7,8 @@ import {
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import {
-    defineStyles,
-    MAX_FONT_SIZE_MULTIPLIER,
-    type PropFilter,
-    useComponent,
-} from "../../internal";
+import { defineStyles, type PropFilter, useComponent } from "../../internal";
+import { useSystems } from "../../theme/useSystems";
 
 export type TextVariant =
     | "display"
@@ -46,6 +42,7 @@ export const Text: FC<TextProps> = ({
     children,
     ...props
 }) => {
+    const { maxFontSizeMultiplier } = useSystems();
     const { styles } = useComponent("text", {
         themeOverrides,
         props: { variant },
@@ -54,7 +51,7 @@ export const Text: FC<TextProps> = ({
 
     return (
         <RnText
-            maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
+            maxFontSizeMultiplier={maxFontSizeMultiplier}
             {...props}
             style={[styles.text, style]}
         >

@@ -4,9 +4,7 @@ import GlyphMap from "@react-native-vector-icons/octicons/glyphmaps/Octicons.jso
 };
 import type { ValueItem } from "@reillymc/react-native-components/forms";
 
-export const glyphMapValueItems: ValueItem<OcticonsIconName>[] = Object.keys(
-    GlyphMap,
-).map((name) => ({
+export const glyphMapValueItems = Object.keys(GlyphMap).map((name) => ({
     label: name,
-    value: name as never,
-}));
+    value: name,
+})) as ValueItem<OcticonsIconName>[];

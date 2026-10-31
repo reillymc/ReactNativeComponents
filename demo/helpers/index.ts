@@ -1,6 +1,5 @@
 export { glyphMapValueItems } from "./glyphMapValueItems";
 export {
-    CommonInputProps,
-    InputBasePropDefinitions,
-    InputScaffoldPropDefinitions,
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
 } from "./propControls";

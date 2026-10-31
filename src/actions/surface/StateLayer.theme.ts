@@ -1,9 +1,7 @@
 import type { ThemeFactory } from "../../theme/theme";
 
 export const defaultStateLayerTheme: ThemeFactory<"stateLayer"> = ({
-    palette: { color },
+    palette,
 }) => ({
-    color: color.foreground,
-    hoverOpacity: 0.08,
-    pressedOpacity: 0.2,
+    color: palette.color.foreground,
 });

@@ -75,7 +75,7 @@ const FormPage: FC = () => {
                         label="Notes"
                         placeholder="Tell us about yourself"
                         multiline
-                        helpText="This multiline field grows with its content."
+                        help="This multiline field grows with its content."
                     />
                     <FormRow>
                         <TextInput label="City" placeholder="London" />

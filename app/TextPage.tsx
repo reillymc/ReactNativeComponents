@@ -13,7 +13,6 @@ import {
 const defaultProps: TextProps = {
     children: "Text",
     variant: "body",
-    onPress: () => null,
 };
 
 const propDefinitions: PropDefinitions<TextProps> = {

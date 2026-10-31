@@ -11,13 +11,12 @@ import Animated, {
 } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { useComponent } from "../../internal";
+import { defineStyles, useComponent } from "../../internal";
+import { useSystems } from "../../theme/useSystems";
 import type { ActionState } from "../action";
 
 export type StateLayerTheme = {
     color: ColorValue;
-    hoverOpacity: number;
-    pressedOpacity: number;
 };
 
 export interface StateLayerProps extends ActionState {
@@ -31,29 +30,31 @@ export const StateLayer: FC<StateLayerProps> = ({
     style,
     theme: themeOverrides,
 }) => {
-    const { theme } = useComponent("stateLayer", { themeOverrides });
+    const { styles } = useComponent("stateLayer", {
+        themeOverrides,
+        createStyles,
+    });
+    const { state } = useSystems();
 
     const target = pressed
-        ? theme.pressedOpacity
+        ? state.pressedOpacity
         : hovered
-          ? theme.hoverOpacity
+          ? state.hoverOpacity
           : 0;
-    const duration = pressed ? 50 : 100;
+    const duration = pressed ? state.pressDuration : state.hoverDuration;
 
     const animatedStyle = useAnimatedStyle(
         () => ({ opacity: withTiming(target, { duration }) }),
         [target, duration],
     );
 
-    return (
-        <Animated.View
-            pointerEvents="none"
-            style={[
-                StyleSheet.absoluteFill,
-                { backgroundColor: theme.color },
-                animatedStyle,
-                style,
-            ]}
-        />
-    );
+    return <Animated.View style={[styles.layer, animatedStyle, style]} />;
 };
+
+const createStyles = defineStyles((theme: StateLayerTheme) => ({
+    layer: {
+        ...StyleSheet.absoluteFill,
+        backgroundColor: theme.color,
+        pointerEvents: "none",
+    },
+}));

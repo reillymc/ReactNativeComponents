@@ -23,6 +23,7 @@ export interface ListItemTheme {
     borderRadius: number;
     backgroundColor: ColorValue;
     surfaceColor: ColorValue;
+    textColor: ColorValue;
 }
 
 export interface ListItemProps {
@@ -74,7 +75,7 @@ export const ListItem: FC<ListItemProps> = ({
 }) => {
     const filteredActions = swipeActions?.filter(Undefined);
 
-    const { styles } = useComponent("listItem", {
+    const { styles, theme } = useComponent("listItem", {
         themeOverrides,
         props: { variant },
         createStyles,
@@ -90,7 +91,11 @@ export const ListItem: FC<ListItemProps> = ({
                         style={[styles.contentContainer, contentContainerStyle]}
                     >
                         {!!heading && typeof heading === "string" ? (
-                            <Text variant="heading" numberOfLines={2}>
+                            <Text
+                                variant="heading"
+                                numberOfLines={2}
+                                theme={{ color: theme.textColor }}
+                            >
                                 {heading}
                             </Text>
                         ) : (
@@ -134,8 +139,7 @@ const createStyles = defineStyles(
     (theme: ListItemTheme, props: PropFilter<ListItemProps, "variant">) => ({
         container: {
             backgroundColor: theme.backgroundColor,
-            borderRadius:
-                props.variant === "compact" ? undefined : theme.borderRadius,
+            borderRadius: props.variant === "compact" ? 0 : theme.borderRadius,
             overflow: "hidden",
             width: "100%",
         },
@@ -143,8 +147,7 @@ const createStyles = defineStyles(
             display: "flex",
             flexDirection: "column",
             backgroundColor: theme.surfaceColor,
-            borderRadius:
-                props.variant === "compact" ? undefined : theme.borderRadius,
+            borderRadius: props.variant === "compact" ? 0 : theme.borderRadius,
         },
         bodyContainer: {
             flexDirection: "row",

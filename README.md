@@ -67,11 +67,11 @@ export const App = () => (
 );
 ```
 
-Components have working defaults and can render without the provider, but use `AppThemeProvider` so palette, component theme, and icon overrides are consistent.
+Components have working defaults and can render without the provider, but use `AppThemeProvider` so palette, component theme, shared system defaults, and icon overrides are consistent.
 
 ## Overrides
 
-`AppThemeProvider` accepts `palette`, `theme`, and `icons` overrides:
+`AppThemeProvider` accepts `palette`, `theme`, `systems`, and `icons` overrides:
 
 ```tsx
 import { darkColorScheme } from "@reillymc/react-native-components/theme";
@@ -81,6 +81,10 @@ const palette = { color: darkColorScheme };
 <AppThemeProvider
     palette={palette}
     theme={{ iconBase: { size: 24 } }}
+    systems={{
+        interaction: { disabled: { opacity: 0.4 } },
+        accessibility: { maxFontSizeMultiplier: 1.4 },
+    }}
 >
     <App />
 </AppThemeProvider>;

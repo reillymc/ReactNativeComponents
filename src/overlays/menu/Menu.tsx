@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import {
     type ColorValue,
     FlatList,
@@ -8,6 +9,9 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, useComponent } from "../../internal";
+import { useSystems } from "../../theme/useSystems";
+
+const VIEW_POSITION = 0.33;
 
 export type MenuTheme = {
     backgroundColor: ColorValue;
@@ -22,6 +26,7 @@ export type MenuProps<T = unknown> = {
     data: ReadonlyArray<T>;
     renderItem: ListRenderItem<T>;
     keyExtractor: (item: T, index: number) => string;
+    activeIndex?: number;
     reverse?: boolean;
     onScroll?: FlatListProps<T>["onScroll"];
     showsScrollIndicator?: boolean;
@@ -48,6 +53,7 @@ export const Menu = <T,>({
     data,
     renderItem,
     keyExtractor,
+    activeIndex,
     reverse,
     onScroll,
     showsScrollIndicator,
@@ -58,21 +64,56 @@ export const Menu = <T,>({
         themeOverrides,
         createStyles,
     });
+    const { shadowStyle } = useSystems();
+    const listRef = useRef<FlatList<T>>(null);
+    const [isReady, setIsReady] = useState(
+        activeIndex === undefined || activeIndex <= 0,
+    );
+
+    useEffect(() => {
+        if (activeIndex === undefined || activeIndex < 0) return;
+
+        listRef.current?.scrollToIndex({
+            index: activeIndex,
+            animated: true,
+            viewPosition: VIEW_POSITION,
+        });
+    }, [activeIndex]);
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.shadow, shadowStyle, !isReady && styles.hidden]}>
             <FlatList
                 {...listProps}
+                ref={listRef}
                 data={data}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 inverted={reverse}
                 onScroll={onScroll}
+                onContentSizeChange={() => {
+                    if (activeIndex !== undefined && activeIndex >= 0) {
+                        listRef.current?.scrollToIndex({
+                            index: activeIndex,
+                            animated: false,
+                            viewPosition: VIEW_POSITION,
+                        });
+                    }
+
+                    if (!isReady) {
+                        requestAnimationFrame(() => setIsReady(true));
+                    }
+                }}
+                onScrollToIndexFailed={({ index, averageItemLength }) => {
+                    listRef.current?.scrollToOffset({
+                        offset: averageItemLength * index,
+                        animated: true,
+                    });
+                }}
                 scrollEventThrottle={16}
                 keyboardShouldPersistTaps="handled"
                 keyboardDismissMode="none"
                 showsVerticalScrollIndicator={showsScrollIndicator}
-                style={styles.scroll}
+                style={styles.container}
                 contentContainerStyle={styles.content}
             />
         </View>
@@ -80,15 +121,24 @@ export const Menu = <T,>({
 };
 
 const createStyles = defineStyles((theme: MenuTheme) => ({
-    container: {
+    shadow: {
         backgroundColor: theme.backgroundColor,
         borderRadius: theme.borderRadius,
     },
-    scroll: {
+    container: {
+        backgroundColor: theme.backgroundColor,
+        borderRadius: theme.borderRadius,
+        overflow: "hidden",
+        pointerEvents: "auto",
         maxHeight: theme.maxHeight,
     },
+
     content: {
         padding: theme.padding,
         gap: theme.gap,
+    },
+    hidden: {
+        opacity: 0,
+        pointerEvents: "none",
     },
 }));

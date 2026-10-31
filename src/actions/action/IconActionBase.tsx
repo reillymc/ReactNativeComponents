@@ -16,25 +16,31 @@ export type IconActionBaseTheme = {
 export interface IconActionBaseProps
     extends Pick<
         ActionBaseProps,
-        "onPress" | "disabled" | "highlighted" | "style"
+        | "onPress"
+        | "disabled"
+        | "highlighted"
+        | "style"
+        | "tabIndex"
+        | "hitSlop"
+        | "accessibilityLabel"
+        | "onFocus"
+        | "onBlur"
     > {
     label?: string;
     iconPosition?: "start" | "end";
+    iconSize?: number;
     theme?: DeepPartial<IconActionBaseTheme>;
 }
 
 export const IconActionBase = <G extends string>({
     label,
     iconPosition = "start",
-    disabled: disabledProp,
-    highlighted,
-    style,
+    iconSize,
     theme: themeOverrides,
-    onPress,
-    ...iconProps
+    iconName,
+    iconSet,
+    ...actionProps
 }: IconActionBaseProps & IconComponentProps<G>) => {
-    const disabled = disabledProp || !onPress;
-
     const { styles, theme } = useComponent("iconActionBase", {
         themeOverrides,
         props: { iconPosition },
@@ -42,17 +48,17 @@ export const IconActionBase = <G extends string>({
     });
 
     return (
-        <ActionBase
-            disabled={disabled}
-            highlighted={highlighted}
-            onPress={onPress}
-            style={style}
-        >
+        <ActionBase {...actionProps}>
             {(state) => (
                 <StateTint {...state} style={styles.container}>
-                    <IconBase {...iconProps} color={theme.color} />
+                    <IconBase
+                        iconSet={iconSet}
+                        iconName={iconName}
+                        size={iconSize}
+                        color={theme.color}
+                    />
                     {!!label && (
-                        <Text numberOfLines={1} style={{ color: theme.color }}>
+                        <Text numberOfLines={1} theme={{ color: theme.color }}>
                             {label}
                         </Text>
                     )}

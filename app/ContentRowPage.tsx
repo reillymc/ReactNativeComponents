@@ -11,20 +11,16 @@ import {
     PropsPanel,
 } from "../demo/components";
 
-const TWO_ITEMS = (
-    <>
-        <Text>Description</Text>
-        <Text>Description 2</Text>
-    </>
-);
+const TWO_ITEMS = [
+    <Text key="description-1">Description</Text>,
+    <Text key="description-2">Description 2</Text>,
+];
 
-const THREE_ITEMS = (
-    <>
-        <Text>One</Text>
-        <Text>Two</Text>
-        <Text>Three</Text>
-    </>
-);
+const THREE_ITEMS = [
+    <Text key="one">One</Text>,
+    <Text key="two">Two</Text>,
+    <Text key="three">Three</Text>,
+];
 
 const defaultProps: ContentRowProps = {
     children: TWO_ITEMS,

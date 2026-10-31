@@ -18,6 +18,7 @@ const iconNames: Array<UiIconName> = [
     "chevron-down",
     "clock",
     "circle",
+    "circle-filled",
     "star-empty",
     "star-half",
     "star-full",

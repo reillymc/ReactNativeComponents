@@ -164,13 +164,14 @@ const createStyles = defineStyles(({ palette, theme, appTheme }) => ({
         overflow: "hidden",
     },
     previewTagContainer: {
-        paddingLeft: theme.inputBase.container.padding,
+        paddingLeft: theme.field.surface.padding,
         paddingVertical: palette.spacing.tiny,
-        height: 48,
+        height: theme.field.surface.minHeight.regular,
+        gap: palette.spacing.small,
     },
     previewPlaceholder: {
         alignSelf: "center",
-        paddingLeft: theme.inputBase.container.padding,
+        paddingLeft: theme.field.surface.padding,
     },
     clearButton: {
         paddingHorizontal: palette.spacing.medium,

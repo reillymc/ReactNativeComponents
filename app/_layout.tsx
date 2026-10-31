@@ -41,14 +41,11 @@ const Layout: FC = () => {
         color: colorScheme === "dark" ? darkColorScheme : undefined,
     };
 
-    if (Platform.OS === "web") {
-        // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime
-        const [loaded] = useFonts({
-            comfortaa: require("../assets/fonts/Comfortaa.ttf"),
-        });
+    const [loaded] = useFonts({
+        comfortaa: require("../assets/fonts/Comfortaa.ttf"),
+    });
 
-        if (!loaded) return null;
-    }
+    if (Platform.OS === "web" && !loaded) return null;
 
     return (
         <StrictMode>

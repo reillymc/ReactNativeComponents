@@ -11,30 +11,46 @@ export type Palette = {
             mono: string;
         };
         size: {
+            /** @default 10 */
             tiny: number;
+            /** @default 12 */
             small: number;
+            /** @default 14 */
             regular: number;
+            /** @default 16 */
             large: number;
+            /** @default 20 */
             xLarge: number;
+            /** @default 28 */
             xxLarge: number;
         };
     };
     color: ColorScheme;
     spacing: {
+        /** @default 24 */
         large: number;
+        /** @default 16 */
         medium: number;
+        /** @default 8 */
         small: number;
+        /** @default 4 */
         tiny: number;
     };
     border: {
         radius: {
+            /** @default 4 */
             tight: number;
+            /** @default 8 */
             regular: number;
+            /** @default 16 */
             loose: number;
         };
         width: {
+            /** @default 2 */
             thick: number;
+            /** @default 1 */
             regular: number;
+            /** @default StyleSheet.hairlineWidth */
             thin: number;
         };
     };

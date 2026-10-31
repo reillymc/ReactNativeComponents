@@ -74,11 +74,17 @@ export const Avatar: FC<AvatarProps> = ({
     theme: themeOverrides,
     style,
 }) => {
-    const { styles } = useComponent("avatar", {
+    const { styles, theme } = useComponent("avatar", {
         themeOverrides,
         props: { size, firstName, lastName },
         createStyles,
     });
+
+    const { foreground } = getBackgroundColor(
+        theme.colors,
+        firstName,
+        lastName,
+    );
 
     const initials =
         `${firstName.charAt(0)}${lastName.charAt(0)}`.toUpperCase();
@@ -89,9 +95,33 @@ export const Avatar: FC<AvatarProps> = ({
                 <Image source={{ uri: imageUri }} style={styles.image} />
             ) : (
                 <>
-                    <Text style={styles.initials}>{initials}</Text>
+                    <Text
+                        theme={{
+                            color: foreground,
+                            font: {
+                                body: {
+                                    weight: theme.initials.fontWeight,
+                                    size: theme.initials.fontSize[size],
+                                },
+                            },
+                        }}
+                    >
+                        {initials}
+                    </Text>
                     {size === "large" && (
-                        <Text numberOfLines={3} style={[styles.label]}>
+                        <Text
+                            numberOfLines={3}
+                            style={styles.label}
+                            theme={{
+                                color: foreground,
+                                font: {
+                                    body: {
+                                        weight: theme.label.fontWeight,
+                                        size: theme.label.fontSize,
+                                    },
+                                },
+                            }}
+                        >
                             {`${firstName} ${lastName}`}
                         </Text>
                     )}
@@ -111,7 +141,7 @@ const createStyles = defineStyles(
         theme: AvatarTheme,
         props: PropFilter<AvatarProps, "size" | "firstName" | "lastName">,
     ) => {
-        const { background, foreground } = getBackgroundColor(
+        const { background } = getBackgroundColor(
             theme.colors,
             props.firstName,
             props.lastName,
@@ -132,17 +162,9 @@ const createStyles = defineStyles(
                 width: theme.size[props.size],
                 borderRadius: theme.size[props.size] / 2,
             },
-            initials: {
-                fontWeight: theme.initials.fontWeight,
-                fontSize: theme.initials.fontSize[props.size],
-                color: foreground,
-            },
             label: {
-                fontSize: theme.label.fontSize,
-                fontWeight: theme.label.fontWeight,
                 paddingHorizontal: theme.label.paddingHorizontal,
                 textAlign: "center",
-                color: foreground,
             },
             action: {
                 position: "absolute",

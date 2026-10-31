@@ -1,17 +1,15 @@
-import { type FC, type ReactNode, useRef, useState } from "react";
+import type { FC, ReactNode } from "react";
 import {
-    Pressable,
     type PressableProps,
     type StyleProp,
+    View,
     type ViewStyle,
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import {
-    createFocusRingStyle,
-    type FocusRingTheme,
-    useComponent,
-} from "../../internal";
+import { defineStyles, useComponent, useFocusVisible } from "../../internal";
+import { useSystems } from "../../theme/useSystems";
+import { PressableBase } from "./PressableBase";
 
 export type ActionState = {
     pressed: boolean;
@@ -19,15 +17,27 @@ export type ActionState = {
 };
 
 export type ActionBaseTheme = {
-    disabledOpacity: number;
-    focusRing: Required<FocusRingTheme>;
+    borderRadius: number;
 };
 
-export interface ActionBaseProps extends Pick<PressableProps, "hitSlop"> {
+export interface ActionBaseProps
+    extends Pick<
+        PressableProps,
+        | "hitSlop"
+        | "tabIndex"
+        | "onFocus"
+        | "onBlur"
+        | "accessibilityLabel"
+        | "role"
+        | "accessibilityRole"
+        | "accessibilityState"
+        | "accessibilityValue"
+        | "aria-checked"
+        | "onPress"
+    > {
     style?: StyleProp<ViewStyle>;
     disabled?: boolean;
     highlighted?: boolean;
-    onPress?: () => void;
     theme?: DeepPartial<ActionBaseTheme>;
     children?: ReactNode | ((state: ActionState) => ReactNode);
 }
@@ -36,54 +46,56 @@ export const ActionBase: FC<ActionBaseProps> = ({
     disabled,
     highlighted,
     style,
-    hitSlop = 16,
+    hitSlop: hitSlopOverride,
+    onFocus,
+    onBlur,
+    theme: themeOverrides,
     children,
     onPress,
-    theme: themeOverrides,
+    ...pressableProps
 }) => {
-    const { theme } = useComponent("actionBase", { themeOverrides });
-    const [hovered, setHovered] = useState(false);
-    const [focusVisible, setFocusVisible] = useState(false);
-    const pointerDownRef = useRef(false);
-    const isDisabled = disabled || !onPress;
+    const focus = useFocusVisible();
+    const { styles } = useComponent("actionBase", {
+        themeOverrides,
+        createStyles,
+    });
+    const { getFocusRingStyle, getDisabledStyle, hitSlop } = useSystems();
+    const resolvedHitSlop = hitSlopOverride ?? hitSlop.default;
+    const renderChildren = (state: ActionState) =>
+        typeof children === "function" ? children(state) : children;
 
-    const handleBlur = () => {
-        pointerDownRef.current = false;
-        setFocusVisible(false);
-    };
-
-    const handleFocus = () => {
-        setFocusVisible(!pointerDownRef.current);
-    };
-
-    const handlePointerDown = () => {
-        pointerDownRef.current = true;
-        setFocusVisible(false);
-    };
-
-    const handlePointerUp = () => {
-        pointerDownRef.current = false;
-    };
+    if (!onPress) {
+        return (
+            <View
+                {...pressableProps}
+                style={[getDisabledStyle(!!disabled), styles.pressable, style]}
+            >
+                {renderChildren({ pressed: false, hovered: false })}
+            </View>
+        );
+    }
 
     return (
-        <Pressable
-            hitSlop={hitSlop}
-            disabled={isDisabled}
-            onBlur={handleBlur}
-            onFocus={handleFocus}
-            onHoverIn={() => setHovered(true)}
-            onHoverOut={() => setHovered(false)}
-            onPointerCancel={handlePointerUp}
-            onPointerDown={handlePointerDown}
-            onPointerUp={handlePointerUp}
+        <PressableBase
+            {...pressableProps}
+            hitSlop={resolvedHitSlop}
+            disabled={disabled}
+            onBlur={(event) => {
+                focus.onBlur();
+                onBlur?.(event);
+            }}
+            onFocus={(event) => {
+                focus.onFocus();
+                onFocus?.(event);
+            }}
+            onPointerCancel={focus.onPointerCancel}
+            onPointerDown={focus.onPointerDown}
+            onPointerUp={focus.onPointerUp}
             onPress={onPress}
             style={[
-                createFocusRingStyle(
-                    theme.focusRing,
-                    !isDisabled && focusVisible,
-                ),
-                disabled && { opacity: theme.disabledOpacity },
-                { overflow: "hidden" },
+                getFocusRingStyle(!disabled && focus.focusVisible),
+                getDisabledStyle(!!disabled),
+                styles.pressable,
                 style,
             ]}
         >
@@ -91,10 +103,17 @@ export const ActionBase: FC<ActionBaseProps> = ({
                 typeof children === "function"
                     ? children({
                           ...state,
-                          hovered: !isDisabled && (hovered || highlighted),
+                          hovered: !disabled && (state.hovered || highlighted),
                       })
                     : children
             }
-        </Pressable>
+        </PressableBase>
     );
 };
+
+const createStyles = defineStyles((theme: ActionBaseTheme) => ({
+    pressable: {
+        borderRadius: theme.borderRadius,
+        overflow: "hidden",
+    },
+}));
