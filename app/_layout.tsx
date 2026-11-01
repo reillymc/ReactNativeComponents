@@ -1,5 +1,5 @@
 import { type FC, StrictMode, useEffect } from "react";
-import { Platform, useColorScheme } from "react-native";
+import { LogBox, Platform, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
@@ -27,6 +27,13 @@ export const unstable_settings = {
     initialRouteName: "index",
 };
 
+// Reanimated and Gesture Handler use deprecated RN APIs under StrictMode.
+// Upstream issues: software-mansion/react-native-reanimated#6997, #3573
+LogBox.ignoreLogs([
+    "findHostInstance_DEPRECATED is deprecated in StrictMode",
+    "findNodeHandle is deprecated in StrictMode",
+]);
+
 SplashScreen.preventAutoHideAsync();
 
 const Layout: FC = () => {
@@ -41,14 +48,11 @@ const Layout: FC = () => {
         color: colorScheme === "dark" ? darkColorScheme : undefined,
     };
 
-    if (Platform.OS === "web") {
-        // biome-ignore lint/correctness/useHookAtTopLevel: this condition won't change during runtime
-        const [loaded] = useFonts({
-            comfortaa: require("../assets/fonts/Comfortaa.ttf"),
-        });
+    const [loaded] = useFonts({
+        comfortaa: require("../assets/fonts/Comfortaa.ttf"),
+    });
 
-        if (!loaded) return null;
-    }
+    if (Platform.OS === "web" && !loaded) return null;
 
     return (
         <StrictMode>
