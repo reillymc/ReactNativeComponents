@@ -14,6 +14,7 @@ module.exports = (api) => {
                     // Inline Babel helpers instead of emitting `@babel/runtime`
                     // requires, which is not a declared dependency.
                     enableBabelRuntime: false,
+                    dev: false,
                 },
             ],
         ],
