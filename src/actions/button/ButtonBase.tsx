@@ -19,7 +19,16 @@ export type ButtonBaseTheme = {
 export interface ButtonBaseProps
     extends Pick<
         InteractionSurfaceProps,
-        "children" | "disabled" | "highlighted" | "onPress" | "style"
+        | "children"
+        | "disabled"
+        | "highlighted"
+        | "onPress"
+        | "style"
+        | "hitSlop"
+        | "tabIndex"
+        | "accessibilityLabel"
+        | "onFocus"
+        | "onBlur"
     > {
     width?: "auto" | "medium";
     theme?: DeepPartial<ButtonBaseTheme>;
@@ -27,15 +36,11 @@ export interface ButtonBaseProps
 
 export const ButtonBase: FC<ButtonBaseProps> = ({
     style,
-    disabled: disabledProp,
-    highlighted,
     width = "auto",
     theme: themeOverrides,
     children,
-    onPress,
+    ...props
 }) => {
-    const disabled = disabledProp || !onPress;
-
     const { styles } = useComponent("buttonBase", {
         themeOverrides,
         props: { width },
@@ -43,12 +48,7 @@ export const ButtonBase: FC<ButtonBaseProps> = ({
     });
 
     return (
-        <InteractionSurface
-            onPress={onPress}
-            disabled={disabled}
-            highlighted={highlighted}
-            style={[styles.buttonBase, style]}
-        >
+        <InteractionSurface {...props} style={[styles.buttonBase, style]}>
             <View style={styles.innerContainer}>{children}</View>
         </InteractionSurface>
     );

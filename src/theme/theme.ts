@@ -4,7 +4,6 @@ import type { ActionTheme } from "../actions/action/Action";
 import type { ActionBaseTheme } from "../actions/action/ActionBase";
 import type { IconActionTheme } from "../actions/action/IconAction";
 import type { IconActionBaseTheme } from "../actions/action/IconActionBase";
-import type { StateTintTheme } from "../actions/action/StateTint";
 import type { ButtonTheme } from "../actions/button/Button";
 import type { ButtonBaseTheme } from "../actions/button/ButtonBase";
 import type { IconButtonTheme } from "../actions/button/IconButton";
@@ -48,7 +47,6 @@ export interface Theme {
     action: ActionTheme;
     iconActionBase: IconActionBaseTheme;
     iconAction: IconActionTheme;
-    stateTint: StateTintTheme;
     stateLayer: StateLayerTheme;
     buttonBase: ButtonBaseTheme;
     button: ButtonTheme;

@@ -46,13 +46,9 @@ export const Button: FC<ButtonProps> = ({
     label,
     variant = "primary",
     appearance = "subtle",
-    disabled: disabledProp,
     theme: themeOverrides,
-    onPress,
-    ...props
+    ...buttonProps
 }) => {
-    const disabled = disabledProp || !onPress;
-
     const { theme } = useComponent("button", { themeOverrides });
 
     const content = theme.appearance[appearance].content[variant];
@@ -63,15 +59,13 @@ export const Button: FC<ButtonProps> = ({
 
     return (
         <ButtonBase
-            {...props}
+            {...buttonProps}
             theme={{
                 borderRadius: theme.container.borderRadius,
                 backgroundColor: container,
             }}
-            onPress={onPress}
-            disabled={disabled}
         >
-            <Text numberOfLines={1} style={{ color: content }}>
+            <Text numberOfLines={1} theme={{ color: content }}>
                 {label}
             </Text>
         </ButtonBase>

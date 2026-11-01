@@ -23,36 +23,37 @@ export type IconButtonBaseTheme = {
 export interface IconButtonBaseProps
     extends Pick<
         ButtonBaseProps,
-        "onPress" | "disabled" | "highlighted" | "style"
+        | "onPress"
+        | "disabled"
+        | "highlighted"
+        | "style"
+        | "hitSlop"
+        | "tabIndex"
+        | "accessibilityLabel"
+        | "onFocus"
+        | "onBlur"
     > {
     theme?: DeepPartial<IconButtonBaseTheme>;
     onPress?: () => void;
 }
 
 export const IconButtonBase = <G extends string>({
-    disabled: disabledProp,
-    highlighted,
     theme: themeOverrides,
     style,
-    onPress,
-    ...iconProps
+    iconName,
+    iconSet,
+    ...props
 }: IconButtonBaseProps & IconComponentProps<G>) => {
-    const disabled = disabledProp || !onPress;
-
     const { styles, theme } = useComponent("iconButtonBase", {
         themeOverrides,
         createStyles,
     });
 
     return (
-        <InteractionSurface
-            disabled={disabled}
-            highlighted={highlighted}
-            onPress={onPress}
-            style={[styles.iconButtonBase, style]}
-        >
+        <InteractionSurface {...props} style={[styles.iconButtonBase, style]}>
             <IconBase
-                {...iconProps}
+                iconSet={iconSet}
+                iconName={iconName}
                 size={theme.icon.size}
                 color={theme.icon.color}
             />

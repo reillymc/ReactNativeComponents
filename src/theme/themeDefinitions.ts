@@ -2,7 +2,6 @@ import { defaultActionTheme } from "../actions/action/Action.theme";
 import { defaultActionBaseTheme } from "../actions/action/ActionBase.theme";
 import { defaultIconActionTheme } from "../actions/action/IconAction.theme";
 import { defaultIconActionBaseTheme } from "../actions/action/IconActionBase.theme";
-import { defaultStateTintTheme } from "../actions/action/StateTint.theme";
 import { defaultButtonTheme } from "../actions/button/Button.theme";
 import { defaultButtonBaseTheme } from "../actions/button/ButtonBase.theme";
 import { defaultIconButtonTheme } from "../actions/button/IconButton.theme";
@@ -50,7 +49,6 @@ export const definitions: ThemeDefinitions = {
     action: defaultActionTheme,
     iconActionBase: defaultIconActionBaseTheme,
     iconAction: defaultIconActionTheme,
-    stateTint: defaultStateTintTheme,
     stateLayer: defaultStateLayerTheme,
     buttonBase: defaultButtonBaseTheme,
     button: defaultButtonTheme,

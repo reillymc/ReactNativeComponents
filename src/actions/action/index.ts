@@ -16,7 +16,11 @@ export {
     type IconActionBaseTheme,
 } from "./IconActionBase";
 export {
+    PressableBase,
+    type PressableBaseProps,
+    type PressableBaseState,
+} from "./PressableBase";
+export {
     StateTint,
     type StateTintProps,
-    type StateTintTheme,
 } from "./StateTint";
