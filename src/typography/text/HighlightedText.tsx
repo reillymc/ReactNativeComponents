@@ -71,12 +71,16 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
                     {...props}
                     variant={variant}
                     key={part.offset}
-                    style={[
-                        { color: theme.color },
-                        part.highlighted && {
-                            fontWeight: theme.highlightedWeight[variant],
+                    theme={{
+                        color: theme.color,
+                        font: {
+                            [variant]: {
+                                weight: part.highlighted
+                                    ? theme.highlightedWeight[variant]
+                                    : undefined,
+                            },
                         },
-                    ]}
+                    }}
                 >
                     {part.text}
                 </Text>
