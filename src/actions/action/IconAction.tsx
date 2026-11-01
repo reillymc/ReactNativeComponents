@@ -5,7 +5,7 @@ import type { IconComponentProps } from "../../icons/IconComponentProps";
 import { useComponent } from "../../internal";
 import { IconActionBase, type IconActionBaseProps } from "./IconActionBase";
 
-export type IconActionVariant = "primary" | "secondary" | "destructive";
+type IconActionVariant = "primary" | "secondary" | "destructive";
 
 export type IconActionTheme = {
     color: Record<IconActionVariant, ColorValue>;

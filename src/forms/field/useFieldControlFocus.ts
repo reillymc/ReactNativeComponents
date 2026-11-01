@@ -12,9 +12,9 @@ type FieldFocusHandlerInput = Pick<
     "onFocus" | "onBlur" | "onPressIn" | "onPressOut"
 >;
 
-export type FieldFocusProps = ViewProps & TextInputProps;
+type FieldFocusProps = ViewProps & TextInputProps;
 
-export type UseFieldControlFocusOptions = {
+type UseFieldControlFocusOptions = {
     focusable?: boolean;
     pressEvents?: boolean;
     focus?: () => void;

@@ -1,5 +1,1 @@
-export {
-    ContentRow,
-    type ContentRowProps,
-    type ContentRowTheme,
-} from "./ContentRow";
+export { ContentRow, type ContentRowProps } from "./ContentRow";

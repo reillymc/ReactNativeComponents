@@ -4,12 +4,12 @@ import type { TextInput } from "react-native";
 import { focusPreservingFocusVisible } from "../../../internal";
 import type { FieldNumberInputProps } from "../../field";
 
-export type SegmentedInputSegment<K extends string = string> = {
+type SegmentedInputSegment<K extends string = string> = {
     key: K;
     value: string;
 };
 
-export type SegmentedInputProps = Omit<
+type SegmentedInputProps = Omit<
     FieldNumberInputProps,
     "ref" | "onKeyPress" | "onSelectionChange" | "value"
 >;

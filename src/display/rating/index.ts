@@ -1,11 +1,5 @@
+export { Rating, type RatingProps } from "./Rating";
 export {
-    Rating,
-    type RatingIcons,
-    type RatingProps,
-    type RatingTheme,
-} from "./Rating";
-export {
-    getRatingIcons,
     type RatingIconVariant,
     ratingToValue,
     valueToRating,

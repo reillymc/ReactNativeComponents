@@ -1,5 +1,1 @@
-export {
-    ListItem,
-    type ListItemProps,
-    type ListItemTheme,
-} from "./ListItem";
+export { ListItem, type ListItemProps } from "./ListItem";

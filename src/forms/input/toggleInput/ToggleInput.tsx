@@ -6,8 +6,6 @@ import { Field, type FieldComponentProps } from "../../field";
 import { ToggleControl } from "./ToggleControl";
 import type { ToggleAppearance, ToggleInputTheme } from "./ToggleInput.theme";
 
-export type { ToggleAppearance } from "./ToggleInput.theme";
-
 export type ToggleInputIcons = ComponentIconAssets<
     "outline" | "fill" | "check"
 >;

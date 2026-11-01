@@ -7,7 +7,7 @@ import { Text } from "../../typography/text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
 import { StateTint } from "./StateTint";
 
-export type ActionVariant = "primary" | "secondary" | "destructive";
+type ActionVariant = "primary" | "secondary" | "destructive";
 
 export type ActionTheme = {
     label: {

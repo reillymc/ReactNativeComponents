@@ -1,1 +1,1 @@
-export { Toast, type ToastProps, type ToastTheme } from "./Toast";
+export { Toast, type ToastProps } from "./Toast";

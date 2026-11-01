@@ -3,7 +3,7 @@ import type {
     ContainerPlacement,
 } from "./AnchoredContainer";
 
-export const EMPTY_PLACEMENT: ContainerPlacement = {
+const EMPTY_PLACEMENT: ContainerPlacement = {
     inverted: false,
     maxHeight: Number.POSITIVE_INFINITY,
 };

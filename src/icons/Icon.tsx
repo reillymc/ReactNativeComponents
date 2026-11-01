@@ -4,7 +4,7 @@ import { useComponent } from "../internal";
 import { IconBase, type IconBaseTheme } from "./IconBase";
 import type { IconComponentProps } from "./IconComponentProps";
 
-export type IconSize = "small" | "medium" | "large";
+type IconSize = "small" | "medium" | "large";
 
 export interface IconTheme {
     color: IconBaseTheme["color"];

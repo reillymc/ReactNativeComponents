@@ -9,7 +9,7 @@ import type {
 } from "./Button";
 import { IconButtonBase, type IconButtonBaseProps } from "./IconButtonBase";
 
-export type IconButtonVariant = ButtonVariant;
+type IconButtonVariant = ButtonVariant;
 
 export type IconButtonTheme = {
     container: {

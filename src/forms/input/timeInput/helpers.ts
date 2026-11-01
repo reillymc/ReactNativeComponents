@@ -1,7 +1,7 @@
 import type { SegmentedInputDisplaySegment } from "../shared/useSegmentedInputNavigation";
 import type { TimeInputPlaceholders, TimeInputValue } from "./TimeInput";
 
-export type TimeInputSegmentKey = "hours" | "minutes";
+type TimeInputSegmentKey = "hours" | "minutes";
 
 export type TimeInputSegment =
     SegmentedInputDisplaySegment<TimeInputSegmentKey>;

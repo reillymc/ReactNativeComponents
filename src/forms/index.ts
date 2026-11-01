@@ -1,19 +1,13 @@
 export type {
     FieldActionProps,
-    FieldBaseProps,
     FieldComponentProps,
-    FieldFocusProps,
     FieldIconProps,
-    FieldLabelProps,
     FieldNumberInputProps,
     FieldProps,
     FieldRowProps,
     FieldSurfaceProps,
     FieldTextInputProps,
-    FieldTextInputTheme,
-    FieldTheme,
     InputVariant,
-    UseFieldControlFocusOptions,
 } from "./field";
 export {
     Field,
@@ -23,9 +17,6 @@ export {
     FieldRow,
     FieldSurface,
     FieldTextInput,
-    fieldAria,
-    useFieldControlFocus,
-    useFieldControlState,
 } from "./field";
 export type { FormContainerProps } from "./formContainer";
 export { FormContainer } from "./formContainer";

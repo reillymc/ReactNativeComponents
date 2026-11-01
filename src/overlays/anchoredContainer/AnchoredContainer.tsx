@@ -36,7 +36,7 @@ export type ContainerPlacement = {
     maxHeight: number;
 };
 
-export type AnchoredContainerChildren =
+type AnchoredContainerChildren =
     | ReactNode
     | ((placement: ContainerPlacement) => ReactNode);
 

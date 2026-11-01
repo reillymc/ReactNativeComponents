@@ -5,7 +5,7 @@ import type {
     Representations,
 } from "./NumberInput";
 
-export type NumberInputSegmentKey = "primary" | "secondary" | "tertiary";
+type NumberInputSegmentKey = "primary" | "secondary" | "tertiary";
 
 export type NumberInputSegment =
     SegmentedInputDisplaySegment<NumberInputSegmentKey>;

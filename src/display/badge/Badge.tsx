@@ -11,7 +11,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import { Text } from "../../typography/text";
 
-export type BadgeVariant = "primary" | "secondary";
+type BadgeVariant = "primary" | "secondary";
 
 export type BadgeTheme = {
     size: number;

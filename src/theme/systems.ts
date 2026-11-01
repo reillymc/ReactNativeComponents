@@ -84,7 +84,7 @@ const resolveFocusRingColor = (color: ColorValue): string => {
     return "transparent";
 };
 
-export const createDefaultFocusRing = ({
+const createDefaultFocusRing = ({
     border,
     color,
 }: Palette): FocusRingTheme => ({

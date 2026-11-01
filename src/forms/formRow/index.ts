@@ -1,1 +1,1 @@
-export { FormRow, type FormRowProps, type FormRowTheme } from "./FormRow";
+export { FormRow, type FormRowProps } from "./FormRow";

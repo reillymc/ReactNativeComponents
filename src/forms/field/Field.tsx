@@ -26,7 +26,7 @@ const getDescribedBy = (helpId?: string, errorId?: string) => {
 
 export type FieldIcons = ComponentIconAssets<"error">;
 
-export type FieldBaseProps = {
+type FieldBaseProps = {
     /** Help text rendered below the control. */
     help?: string;
     /**
@@ -42,7 +42,7 @@ export type FieldBaseProps = {
     style?: StyleProp<ViewStyle>;
 };
 
-export type FieldLabelProps = {
+type FieldLabelProps = {
     /** Label text. Also used as the accessible name when hidden. */
     label?: string;
     /** Hide the label visually while keeping it as the accessible name. */

@@ -1,6 +1,5 @@
 export type {
     ActionBaseProps,
-    ActionBaseTheme,
     ActionProps,
     IconActionBaseProps,
     IconActionProps,

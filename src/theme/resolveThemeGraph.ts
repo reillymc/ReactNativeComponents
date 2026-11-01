@@ -3,7 +3,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { mergeTheme } from "./mergeTheme";
 import type { Palette } from "./palette";
 
-export type ThemeFactoryContext<
+type ThemeFactoryContext<
     ThemeShape,
     K extends keyof ThemeShape,
     FactoryContext extends object = object,

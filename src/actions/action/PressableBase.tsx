@@ -6,7 +6,7 @@ import {
 } from "react";
 import { Pressable } from "react-native";
 
-export type PressableBaseState = {
+type PressableBaseState = {
     pressed: boolean;
     hovered: boolean;
 };

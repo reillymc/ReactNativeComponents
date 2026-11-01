@@ -9,7 +9,7 @@ import type { FieldTheme } from "./Field.theme";
 import { useFieldControlState } from "./FieldContext";
 import { useFieldControlFocus } from "./useFieldControlFocus";
 
-export type FieldTextInputTheme = DeepPartial<
+type FieldTextInputTheme = DeepPartial<
     Pick<FieldTheme, "text"> & {
         surface: Pick<FieldTheme["surface"], "padding">;
     }

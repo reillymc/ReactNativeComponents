@@ -1,5 +1,1 @@
-export {
-    FormContainer,
-    type FormContainerProps,
-    type FormContainerTheme,
-} from "./FormContainer";
+export { FormContainer, type FormContainerProps } from "./FormContainer";
