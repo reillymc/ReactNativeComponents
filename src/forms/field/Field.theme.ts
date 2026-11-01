@@ -1,8 +1,9 @@
 import type { ColorValue } from "react-native";
 
+import type { SizeVariant } from "../../theme/size";
 import type { ThemeFactory } from "../../theme/theme";
 
-export type InputVariant = "regular" | "compact";
+export type InputVariant = SizeVariant;
 
 export type FieldTheme = {
     surface: {

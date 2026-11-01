@@ -1,6 +1,10 @@
+import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 import type { FieldTextInputProps } from "@reillymc/react-native-components/forms";
+import type { IconComponentProps } from "@reillymc/react-native-components/icons";
+import type { SizeVariant } from "@reillymc/react-native-components/theme";
 
 import type { PropDefinitions } from "../components";
+import { glyphMapValueItems } from "./glyphMapValueItems";
 
 type DemoFieldProps = {
     label?: string;
@@ -10,7 +14,13 @@ type DemoFieldProps = {
     required?: boolean;
     disabled?: boolean;
     readOnly?: boolean;
-    variant?: "regular" | "compact";
+    variant?: SizeVariant;
+};
+
+type DemoIconProps = IconComponentProps<OcticonsIconName>;
+
+type DemoSizeVariantProps = {
+    variant: SizeVariant;
 };
 
 export const FieldTextInputPropDefinitions = {
@@ -31,6 +41,29 @@ export const FieldTextInputPropDefinitions = {
     },
 } as const satisfies PropDefinitions<FieldTextInputProps>;
 
+export const SizeVariantPropDefinitions = {
+    variant: {
+        type: "enum",
+        label: "Size",
+        default: "Regular",
+        values: [
+            { label: "Regular", value: "regular" },
+            { label: "Compact", value: "compact" },
+        ],
+    },
+} as const satisfies PropDefinitions<DemoSizeVariantProps>;
+
+export const IconPropDefinitions = {
+    iconName: {
+        type: "enum",
+        label: "Icon Name",
+        values: glyphMapValueItems,
+    },
+    iconSet: {
+        type: "hidden",
+    },
+} as const satisfies PropDefinitions<DemoIconProps>;
+
 export const FieldPropDefinitions = {
     disabled: {
         type: "boolean",
@@ -41,12 +74,8 @@ export const FieldPropDefinitions = {
         label: "Read only",
     },
     variant: {
-        type: "enum",
+        ...SizeVariantPropDefinitions.variant,
         label: "Variant",
-        values: [
-            { label: "Regular", value: "regular" },
-            { label: "Compact", value: "compact" },
-        ],
     },
     required: {
         type: "boolean",

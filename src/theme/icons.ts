@@ -1,13 +1,13 @@
 import type { FC } from "react";
 
 import type { RatingIcons } from "../display/rating/Rating";
+import type { ToggleIndicatorIcons } from "../display/toggleIndicator/ToggleIndicator";
 import type { FieldIcons } from "../forms/field/Field";
 import type { CounterInputIcons } from "../forms/input/counterInput";
 import type { NumberInputIcons } from "../forms/input/numberInput";
 import type { RatingInputIcons } from "../forms/input/ratingInput";
 import type { SelectionInputIcons } from "../forms/input/selectionInput";
 import type { TimeInputIcons } from "../forms/input/timeInput";
-import type { ToggleInputIcons } from "../forms/input/toggleInput";
 import type { AnyIconSet, IconSet } from "../icons/base";
 import { UiIcons } from "../icons/ui";
 
@@ -19,7 +19,7 @@ type ComponentIcons = {
     ratingInput: RatingInputIcons;
     selectionInput: SelectionInputIcons;
     timeInput: TimeInputIcons;
-    toggleInput: ToggleInputIcons;
+    toggleIndicator: ToggleIndicatorIcons;
 };
 
 export type Icons = {
@@ -88,7 +88,7 @@ export const defaultIcons = createIcons({
     timeInput: {
         time: { iconSet: UiIcons, iconName: "clock" },
     },
-    toggleInput: {
+    toggleIndicator: {
         outline: { iconSet: UiIcons, iconName: "circle" },
         fill: { iconSet: UiIcons, iconName: "circle-filled" },
         check: { iconSet: UiIcons, iconName: "check" },

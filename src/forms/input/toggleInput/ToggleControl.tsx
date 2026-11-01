@@ -1,23 +1,23 @@
-import { StyleSheet, View } from "react-native";
+import { View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { ActionBase, StateTint } from "../../../actions/action";
-import { IconBase } from "../../../icons/IconBase";
+import {
+    ToggleIndicator,
+    type ToggleIndicatorProps,
+} from "../../../display/toggleIndicator";
 import type { IconComponentProps } from "../../../icons/IconComponentProps";
 import { defineStyles, useComponent } from "../../../internal";
 import { Text } from "../../../typography/text";
-import {
-    fieldAria,
-    type InputVariant,
-    useFieldControlState,
-} from "../../field";
-import type { ToggleAppearance, ToggleInputTheme } from "./ToggleInput.theme";
+import { fieldAria, useFieldControlState } from "../../field";
+import type { ToggleInputTheme } from "./ToggleInput.theme";
 
-type ToggleControlProps<G extends string> = {
+type ToggleControlProps<G extends string> = Pick<
+    ToggleIndicatorProps<G>,
+    "appearance" | "value"
+> & {
     label?: string;
-    value: boolean;
     onChange?: (value: boolean) => void;
-    appearance: ToggleAppearance;
     themeOverrides?: DeepPartial<ToggleInputTheme>;
 } & Partial<IconComponentProps<G>>;
 
@@ -31,19 +31,12 @@ export const ToggleControl = <G extends string>({
     iconName,
 }: ToggleControlProps<G>) => {
     const { field, disabled, interactive, variant } = useFieldControlState();
-    const { styles, theme, icons } = useComponent("toggleInput", {
+    const { styles, theme } = useComponent("toggleInput", {
         themeOverrides,
-        props: { variant },
         createStyles,
     });
 
     const canToggle = interactive && !!onChange;
-    const indicatorSize = theme.indicator.surfaceSize[variant];
-    const selectedFillColor = theme.indicator.color.selected[appearance];
-    const selectedIconColor = theme.indicator.color.icon[appearance];
-    const customIconSize = theme.indicator.iconSize[variant];
-    const selectedIcon =
-        iconSet && iconName ? { iconSet, iconName } : icons.check;
 
     return (
         <ActionBase
@@ -55,26 +48,14 @@ export const ToggleControl = <G extends string>({
         >
             {(state) => (
                 <StateTint {...state} style={styles.row}>
-                    <View style={styles.iconContainer}>
-                        <IconBase
-                            {...(value ? icons.fill : icons.outline)}
-                            size={indicatorSize}
-                            color={
-                                value
-                                    ? selectedFillColor
-                                    : theme.indicator.color.deselected
-                            }
-                        />
-                        {!!value && (
-                            <View style={styles.icon}>
-                                <IconBase
-                                    {...selectedIcon}
-                                    size={customIconSize}
-                                    color={selectedIconColor}
-                                />
-                            </View>
-                        )}
-                    </View>
+                    <ToggleIndicator
+                        value={value}
+                        appearance={appearance}
+                        variant={variant}
+                        theme={theme.indicator}
+                        iconSet={iconSet}
+                        iconName={iconName}
+                    />
                     {label !== undefined && (
                         <View
                             accessible={false}
@@ -90,26 +71,13 @@ export const ToggleControl = <G extends string>({
     );
 };
 
-const createStyles = defineStyles(
-    (theme: ToggleInputTheme, props: { variant: InputVariant }) => ({
-        control: {
-            justifyContent: "center",
-        },
-        row: {
-            flexDirection: "row",
-            alignItems: "center",
-            gap: theme.label.gap,
-        },
-        iconContainer: {
-            width: theme.indicator.surfaceSize[props.variant],
-            height: theme.indicator.surfaceSize[props.variant],
-            alignItems: "center",
-            justifyContent: "center",
-        },
-        icon: {
-            ...StyleSheet.absoluteFill,
-            alignItems: "center",
-            justifyContent: "center",
-        },
-    }),
-);
+const createStyles = defineStyles((theme: ToggleInputTheme) => ({
+    control: {
+        justifyContent: "center",
+    },
+    row: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: theme.label.gap,
+    },
+}));

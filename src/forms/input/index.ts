@@ -29,7 +29,10 @@ export type {
     TimeInputValue,
 } from "./timeInput";
 export { TimeInput } from "./timeInput";
-export type { ToggleInputProps } from "./toggleInput";
+export type {
+    ToggleInputProps,
+    ToggleInputTheme,
+} from "./toggleInput";
 export { ToggleInput } from "./toggleInput";
 export type {
     ValueItem,

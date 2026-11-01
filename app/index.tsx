@@ -19,6 +19,7 @@ import {
     ListItem,
     Rating,
     Tag,
+    ToggleIndicator,
 } from "@reillymc/react-native-components/display";
 import {
     ComboboxInput,
@@ -100,6 +101,11 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 name: "Rating",
                 href: "/RatingPage",
                 component: <Rating value={3} max={5} />,
+            },
+            {
+                name: "Toggle Indicator",
+                href: "/ToggleIndicatorPage",
+                component: <ToggleIndicator value={true} />,
             },
             {
                 name: "Badge",

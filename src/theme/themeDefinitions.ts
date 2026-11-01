@@ -15,6 +15,7 @@ import { defaultListItemTheme } from "../display/listItem/ListItem.theme";
 import { defaultRatingTheme } from "../display/rating/Rating.theme";
 import { defaultTagTheme } from "../display/tag/Tag.theme";
 import { defaultTagIconTheme } from "../display/tag/TagIcon.theme";
+import { defaultToggleIndicatorTheme } from "../display/toggleIndicator/ToggleIndicator.theme";
 import { defaultToastTheme } from "../feedback/toast/Toast.theme";
 import { defaultFieldTheme } from "../forms/field/Field.theme";
 import { defaultFormContainerTheme } from "../forms/formContainer/FormContainer.theme";
@@ -53,6 +54,7 @@ export const definitions: ThemeDefinitions = {
     field: defaultFieldTheme,
     selectionInput: defaultSelectionInputTheme,
     toggleInput: defaultToggleInputTheme,
+    toggleIndicator: defaultToggleIndicatorTheme,
     comboboxInput: defaultComboboxInputTheme,
     rating: defaultRatingTheme,
     ratingInput: defaultRatingInputTheme,

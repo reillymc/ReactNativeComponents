@@ -42,6 +42,7 @@ export type {
     TimeInputProps,
     TimeInputValue,
     ToggleInputProps,
+    ToggleInputTheme,
     ValueItem,
     ValueItemComplex,
     ValueItemSimple,

@@ -1,14 +1,10 @@
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import type { ComponentIconAssets } from "../../../icons/componentIconAssets";
+import type { ToggleAppearance } from "../../../display/toggleIndicator";
 import type { IconComponentProps } from "../../../icons/IconComponentProps";
 import { Field, type FieldComponentProps } from "../../field";
 import { ToggleControl } from "./ToggleControl";
-import type { ToggleAppearance, ToggleInputTheme } from "./ToggleInput.theme";
-
-export type ToggleInputIcons = ComponentIconAssets<
-    "outline" | "fill" | "check"
->;
+import type { ToggleInputTheme } from "./ToggleInput.theme";
 
 export type ToggleInputProps<G extends string> = Omit<
     FieldComponentProps,

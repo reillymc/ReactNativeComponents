@@ -14,7 +14,7 @@ import {
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { FieldPropDefinitions, glyphMapValueItems } from "../demo/helpers";
+import { FieldPropDefinitions, IconPropDefinitions } from "../demo/helpers";
 
 type Props = ToggleInputProps<OcticonsIconName> &
     Required<Pick<IconComponentProps<OcticonsIconName>, "iconSet">>;
@@ -34,17 +34,11 @@ const propDefinitions: PropDefinitions<Props> = {
             { label: "Secondary", value: "secondary" },
         ],
     },
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        values: glyphMapValueItems,
-    },
+    iconName: IconPropDefinitions.iconName,
     onChange: {
         type: "hidden",
     },
-    iconSet: {
-        type: "hidden",
-    },
+    iconSet: IconPropDefinitions.iconSet,
 };
 
 const defaultProps: Props = {

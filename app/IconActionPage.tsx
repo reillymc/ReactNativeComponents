@@ -14,7 +14,7 @@ import {
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { glyphMapValueItems } from "../demo/helpers";
+import { IconPropDefinitions } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconActionProps;
 
@@ -31,11 +31,7 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "string",
         label: "Label",
     },
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        values: glyphMapValueItems,
-    },
+    iconName: IconPropDefinitions.iconName,
     variant: {
         type: "enum",
         label: "Style variant",
@@ -62,9 +58,7 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "function",
         label: "Press action",
     },
-    iconSet: {
-        type: "hidden",
-    },
+    iconSet: IconPropDefinitions.iconSet,
 };
 
 const IconActionPage: FunctionComponent = () => {
