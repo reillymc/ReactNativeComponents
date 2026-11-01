@@ -1,8 +1,9 @@
-import { createContext, type ReactNode, use, useMemo } from "react";
+import { createContext, type ReactNode, use } from "react";
 import { StyleSheet } from "react-native";
 
 import type { IconOverrides } from "./icons";
 import type { PaletteOverrides } from "./palette";
+import type { SystemsOverrides } from "./systems";
 import { ThemeContext, type ThemeContextValue } from "./ThemeContext";
 import { ThemeProvider } from "./ThemeProvider";
 import type { ThemeOverrides } from "./theme";
@@ -14,6 +15,7 @@ export type AppThemeFactory<AppTheme> = (
 type AppThemeProviderProps = {
     palette?: PaletteOverrides;
     theme?: ThemeOverrides;
+    systems?: SystemsOverrides;
     icons?: IconOverrides;
     children?: ReactNode;
 };
@@ -63,23 +65,13 @@ export const createAppTheme = <AppTheme extends object>(
     ): T {
         const baseContext = use(ThemeContext);
         const appTheme = useAppTheme();
-        const context = useMemo(
-            () => ({ ...baseContext, appTheme }),
-            [baseContext, appTheme],
-        );
 
-        return useMemo(
-            () => factory(context, props as Props),
-            [factory, context, props],
-        );
+        return factory({ ...baseContext, appTheme }, props as Props);
     }
 
     const AppThemeLayer = ({ children }: { children?: ReactNode }) => {
         const baseContext = use(ThemeContext);
-        const appTheme = useMemo(
-            () => createValues(baseContext),
-            [baseContext],
-        );
+        const appTheme = createValues(baseContext);
 
         return (
             <AppThemeContext.Provider value={appTheme}>
@@ -89,12 +81,10 @@ export const createAppTheme = <AppTheme extends object>(
     };
 
     const AppThemeProvider = ({
-        palette,
-        theme,
-        icons,
         children,
+        ...themProviderProps
     }: AppThemeProviderProps) => (
-        <ThemeProvider palette={palette} theme={theme} icons={icons}>
+        <ThemeProvider {...themProviderProps}>
             <AppThemeLayer>{children}</AppThemeLayer>
         </ThemeProvider>
     );

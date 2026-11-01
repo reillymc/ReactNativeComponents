@@ -50,9 +50,7 @@ export const resolveThemeGraph = <
 }): ThemeShape => {
     validateOverrides?.(overrides);
 
-    const keys = Object.keys(definitions) as unknown as ReadonlyArray<
-        keyof ThemeShape
-    >;
+    const keys = Object.keys(definitions) as Array<keyof ThemeShape & string>;
     const cache = new Map<keyof ThemeShape, unknown>();
     const stack: Array<keyof ThemeShape> = [];
 
