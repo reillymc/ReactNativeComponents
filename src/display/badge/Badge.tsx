@@ -2,6 +2,7 @@ import type { FC } from "react";
 import {
     type ColorValue,
     type StyleProp,
+    type TextStyle,
     View,
     type ViewStyle,
 } from "react-native";
@@ -16,6 +17,7 @@ export type BadgeTheme = {
     size: number;
     borderRadius: number;
     color: Record<BadgeVariant, ColorValue>;
+    fontWeight: TextStyle["fontWeight"];
     backgroundColor: Record<BadgeVariant, ColorValue>;
 };
 
@@ -32,7 +34,7 @@ export const Badge: FC<BadgeProps> = ({
     theme: themeOverrides,
     style,
 }) => {
-    const { styles } = useComponent("badge", {
+    const { styles, theme } = useComponent("badge", {
         themeOverrides,
         props: { variant },
         createStyles,
@@ -40,7 +42,13 @@ export const Badge: FC<BadgeProps> = ({
 
     return (
         <View style={[styles.container, style]}>
-            <Text numberOfLines={1} style={styles.text}>
+            <Text
+                numberOfLines={1}
+                theme={{
+                    color: theme.color[variant],
+                    font: { body: { weight: theme.fontWeight } },
+                }}
+            >
                 {label}
             </Text>
         </View>
@@ -59,10 +67,6 @@ const createStyles = defineStyles(
             width: theme.size,
             borderRadius: theme.borderRadius,
             backgroundColor: theme.backgroundColor[props.variant],
-        },
-        text: {
-            color: theme.color[props.variant],
-            fontWeight: "600",
         },
     }),
 );

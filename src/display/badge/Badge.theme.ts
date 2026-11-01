@@ -13,4 +13,5 @@ export const defaultBadgeTheme: ThemeFactory<"badge"> = ({
         primary: color.primaryForeground,
         secondary: color.secondaryForeground,
     },
+    fontWeight: "600",
 });

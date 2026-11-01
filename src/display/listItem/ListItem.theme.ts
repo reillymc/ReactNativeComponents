@@ -8,4 +8,5 @@ export const defaultListItemTheme: ThemeFactory<"listItem"> = ({
     borderRadius: border.radius.loose,
     backgroundColor: color.background,
     surfaceColor: color.surface,
+    textColor: color.surfaceForeground,
 });

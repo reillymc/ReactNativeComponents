@@ -83,12 +83,8 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     }, [position, theme.parentMargin, top, bottom, windowHeight]);
 
     const updateAnchor = useCallback(() => {
-        const node = parentRef.current as unknown as {
-            getBoundingClientRect?: () => DOMRect;
-        } | null;
-
-        if (node?.getBoundingClientRect) {
-            const rect = node.getBoundingClientRect();
+        if (parentRef.current?.getBoundingClientRect) {
+            const rect = parentRef.current.getBoundingClientRect();
             anchorRef.current = {
                 x: rect.left,
                 y: rect.top,
@@ -114,9 +110,9 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
         window.addEventListener("scroll", schedule, true);
         window.addEventListener("resize", schedule);
 
-        const node = parentRef.current as unknown as HTMLElement | null;
+        const node = parentRef.current;
         let observer: ResizeObserver | undefined;
-        if (node && typeof ResizeObserver !== "undefined") {
+        if (node instanceof Element && typeof ResizeObserver !== "undefined") {
             observer = new ResizeObserver(schedule);
             observer.observe(node);
         }

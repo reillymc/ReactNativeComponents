@@ -41,7 +41,7 @@ export const Tag: FC<TagProps> = ({
     style,
     theme: themeOverrides,
 }) => {
-    const { styles } = useComponent("tag", {
+    const { styles, theme } = useComponent("tag", {
         themeOverrides,
         props: { tone },
         createStyles,
@@ -50,7 +50,7 @@ export const Tag: FC<TagProps> = ({
     const content = (
         <>
             {icon}
-            <Text style={styles.text}>{label}</Text>
+            <Text theme={{ color: theme.textColor[tone] }}>{label}</Text>
         </>
     );
 
@@ -76,9 +76,6 @@ const createStyles = defineStyles(
             backgroundColor: theme.backgroundColor[props.tone],
             width: "auto",
             gap: theme.internalSpacing,
-        },
-        text: {
-            color: theme.textColor[props.tone],
         },
     }),
 );
