@@ -1,18 +1,44 @@
-import type {
-    InputBaseProps,
-    InputScaffoldProps,
-} from "@reillymc/react-native-components/forms";
+import type { FieldTextInputProps } from "@reillymc/react-native-components/forms";
 
 import type { PropDefinitions } from "../components";
 
-export const InputBasePropDefinitions = {
+type DemoFieldProps = {
+    label?: string;
+    hideLabel?: boolean;
+    help?: string;
+    error?: string;
+    required?: boolean;
+    disabled?: boolean;
+    readOnly?: boolean;
+    variant?: "regular" | "compact";
+};
+
+export const FieldTextInputPropDefinitions = {
     placeholder: {
         type: "string",
         label: "Placeholder text",
     },
+    clearButtonMode: {
+        type: "enum",
+        label: "Clear button mode",
+        default: "Never",
+        values: [
+            { label: "Never", value: "never" },
+            { label: "While editing", value: "while-editing" },
+            { label: "Unless editing", value: "unless-editing" },
+            { label: "Always", value: "always" },
+        ],
+    },
+} as const satisfies PropDefinitions<FieldTextInputProps>;
+
+export const FieldPropDefinitions = {
     disabled: {
         type: "boolean",
         label: "Disabled",
+    },
+    readOnly: {
+        type: "boolean",
+        label: "Read only",
     },
     variant: {
         type: "enum",
@@ -22,34 +48,29 @@ export const InputBasePropDefinitions = {
             { label: "Compact", value: "compact" },
         ],
     },
-} as const satisfies PropDefinitions<InputBaseProps>;
-
-export const InputScaffoldPropDefinitions = {
-    mandatory: {
+    required: {
         type: "boolean",
-        label: "Mandatory",
+        label: "Required",
     },
     label: {
         type: "enum",
         label: "Label",
         default: "None",
         values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: "Example label" },
-            {
-                id: "Component",
-                label: "Component (unavailable)",
-                value: undefined,
-            },
+            { id: "none", label: "None", value: undefined },
+            { label: "Text", value: "Example label" },
         ],
     },
-    helpText: {
+    hideLabel: {
+        type: "boolean",
+        label: "Hide label",
+    },
+    help: {
         type: "string",
         label: "Help text",
     },
-} as const satisfies PropDefinitions<Omit<InputScaffoldProps, "children">>;
-
-export const CommonInputProps = {
-    ...InputBasePropDefinitions,
-    ...InputScaffoldPropDefinitions,
-};
+    error: {
+        type: "string",
+        label: "Error text",
+    },
+} as const satisfies PropDefinitions<DemoFieldProps>;

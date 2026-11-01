@@ -14,13 +14,18 @@ import {
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps, glyphMapValueItems } from "../demo/helpers";
+import { FieldPropDefinitions, glyphMapValueItems } from "../demo/helpers";
 
-type Props = IconComponentProps<OcticonsIconName> & ToggleInputProps;
+type Props = ToggleInputProps<OcticonsIconName> &
+    Required<Pick<IconComponentProps<OcticonsIconName>, "iconSet">>;
 
 const propDefinitions: PropDefinitions<Props> = {
-    ...CommonInputProps,
-    toggleVariant: {
+    label: FieldPropDefinitions.label,
+    help: FieldPropDefinitions.help,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    appearance: {
         type: "enum",
         label: "Style variant",
         default: "Primary",
@@ -35,8 +40,7 @@ const propDefinitions: PropDefinitions<Props> = {
         values: glyphMapValueItems,
     },
     onChange: {
-        type: "function",
-        label: "Change action",
+        type: "hidden",
     },
     iconSet: {
         type: "hidden",
@@ -47,14 +51,13 @@ const defaultProps: Props = {
     iconSet: Octicons,
     disabled: false,
     onChange: () => null,
-    toggleVariant: "primary",
+    appearance: "primary",
     label: "Toggle input label",
     iconName: "check",
 };
 
 const ToggleInputPage: FunctionComponent = () => {
     const [props, setProps] = useState<Props>(defaultProps);
-
     const [toggled, setToggled] = useState(false);
 
     return (

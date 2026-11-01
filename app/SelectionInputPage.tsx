@@ -9,19 +9,65 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useSelectionModal,
 } from "../demo/components";
-import { CommonInputProps } from "../demo/helpers";
+import {
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
+} from "../demo/helpers";
+
+type SelectionMode = "single" | "multi";
 
 type SelectionInputDemoProps = Pick<
     SelectionInputProps,
     Exclude<keyof SelectionInputProps, "selection" | "selectionMode">
 > & {
-    selectionMode: "single" | "multi";
+    selectionMode: SelectionMode;
     selection?: ValueItem | Array<ValueItem>;
 };
 
+const DEMO_ITEMS: ValueItem[] = [
+    { label: "Item 1", value: "item1" },
+    { label: "Item 2", value: "item2" },
+    {
+        label: "Item 3",
+        value: "item3",
+        description: "An item with a description",
+    },
+    { label: "Item 4", value: "item4" },
+    { label: "Item 5", value: "item5" },
+    { label: "Item 6", value: "item6" },
+    { label: "Item 7", value: "item7" },
+    { label: "Item 8", value: "item8" },
+    { label: "Item 9", value: "item9" },
+];
+
+const DEFAULT_SELECTION = DEMO_ITEMS[0] as ValueItem;
+
+const getItemKey = (item: ValueItem) => ("id" in item ? item.id : item.value);
+
+const normalizeSelection = (
+    selectionMode: SelectionMode,
+    selection: SelectionInputProps["selection"],
+) => {
+    if (selectionMode === "multi") {
+        if (Array.isArray(selection)) return selection;
+        return selection ? [selection] : [];
+    }
+
+    return Array.isArray(selection) ? selection[0] : selection;
+};
+
 const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    placeholder: FieldTextInputPropDefinitions.placeholder,
     selectionMode: {
         type: "enum",
         label: "Selection mode",
@@ -31,35 +77,100 @@ const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
         ],
     },
     onRemoveItem: {
-        label: "Press action",
-        type: "function",
+        type: "hidden",
     },
 };
 
 const defaultProps: SelectionInputProps = {
     label: "Selection Input",
     disabled: false,
-    items: [
-        { label: "Item", value: "item1" },
-        { label: "Item 2", value: "item2" },
-        { label: "Item 3", value: "item3" },
-        { label: "Item 4", value: "item4" },
-        { label: "Item 5", value: "item5" },
-        { label: "Item 6", value: "item6" },
-        { label: "Item 7", value: "item7" },
-        { label: "Item 8", value: "item8" },
-        { label: "Item 9", value: "item9" },
-        { label: "Item 10", value: "item10" },
-        { label: "Item 11", value: "item11" },
-    ],
     placeholder: "Select an item",
     selectionMode: "single",
-    selection: { label: "Item", value: "item1" },
-    onRemoveItem: () => null,
+    selection: DEFAULT_SELECTION,
 };
 
 const SelectionInputPage: FunctionComponent = () => {
     const [props, setProps] = useState<SelectionInputProps>(defaultProps);
+    const { openSelectionModal } = useSelectionModal();
+
+    const handleAdd = () => {
+        const currentSelection = Array.isArray(props.selection)
+            ? props.selection
+            : props.selection
+              ? [props.selection]
+              : [];
+
+        openSelectionModal({
+            key: "selection-input",
+            items: DEMO_ITEMS,
+            selectionMode: props.selectionMode,
+            label:
+                typeof props.label === "string"
+                    ? props.label
+                    : "Selection Input",
+            placeholder: props.placeholder,
+            selection: currentSelection,
+            onSelect: (items) => {
+                setProps(
+                    (prev) =>
+                        ({
+                            ...prev,
+                            selection:
+                                prev.selectionMode === "single"
+                                    ? items[0]
+                                    : items,
+                        }) as SelectionInputProps,
+                );
+            },
+        });
+    };
+
+    const handleRemoveItem = (item: ValueItem | undefined) => {
+        if (!item) return;
+
+        setProps(
+            (prev) =>
+                ({
+                    ...prev,
+                    selection:
+                        prev.selectionMode === "single"
+                            ? undefined
+                            : Array.isArray(prev.selection)
+                              ? prev.selection.filter(
+                                    (selected) =>
+                                        getItemKey(selected) !==
+                                        getItemKey(item),
+                                )
+                              : undefined,
+                }) as SelectionInputProps,
+        );
+    };
+
+    const handlePropChange = (
+        propId: keyof SelectionInputDemoProps,
+        value: unknown,
+    ) => {
+        if (propId === "selectionMode") {
+            const selectionMode = value as SelectionMode;
+
+            setProps(
+                (prev) =>
+                    ({
+                        ...prev,
+                        selectionMode,
+                        selection: normalizeSelection(
+                            selectionMode,
+                            prev.selection,
+                        ),
+                    }) as SelectionInputProps,
+            );
+            return;
+        }
+
+        setProps(
+            (prev) => ({ ...prev, [propId]: value }) as SelectionInputProps,
+        );
+    };
 
     return (
         <ComponentPage
@@ -67,35 +178,15 @@ const SelectionInputPage: FunctionComponent = () => {
             component={
                 <SelectionInput
                     {...props}
-                    onRemoveItem={(e: ValueItem | undefined) =>
-                        setProps(
-                            (prev) =>
-                                ({
-                                    ...prev,
-                                    selection: Array.isArray(prev.selection)
-                                        ? prev.selection.filter(
-                                              (item) => item !== e,
-                                          )
-                                        : undefined,
-                                }) as SelectionInputProps,
-                        )
-                    }
-                    onAdd={() => null}
+                    onRemoveItem={handleRemoveItem}
+                    onAdd={handleAdd}
                 />
             }
             propsPanel={
                 <PropsPanel<SelectionInputDemoProps>
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => {
-                        if (propId === "selectionMode") {
-                            setProps((prev) => ({
-                                ...prev,
-                                selection: undefined,
-                            }));
-                        }
-                        setProps((prev) => ({ ...prev, [propId]: value }));
-                    }}
+                    onChange={handlePropChange}
                 />
             }
         />

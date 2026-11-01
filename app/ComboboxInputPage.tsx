@@ -9,10 +9,22 @@ import {
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps } from "../demo/helpers";
+import {
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<ComboboxInputProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    placeholder: FieldTextInputPropDefinitions.placeholder,
+    clearButtonMode: FieldTextInputPropDefinitions.clearButtonMode,
     onChange: {
         type: "function",
         label: "onChange",

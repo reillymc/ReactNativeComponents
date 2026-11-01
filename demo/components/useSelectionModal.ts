@@ -1,4 +1,3 @@
-import { useCallback } from "react";
 import { useRouter } from "expo-router";
 import type { ValueItem } from "@reillymc/react-native-components/forms";
 
@@ -18,29 +17,26 @@ export const useSelectionModal = () => {
     const router = useRouter();
     const { open } = useSelectionModalController();
 
-    const openSelectionModal = useCallback(
-        <T>({
+    const openSelectionModal = <T>({
+        key,
+        items,
+        selectionMode,
+        label,
+        placeholder,
+        selection,
+        onSelect,
+    }: OpenSelectionModalParams<T>) => {
+        open({
             key,
             items,
             selectionMode,
             label,
             placeholder,
-            selection,
-            onSelect,
-        }: OpenSelectionModalParams<T>) => {
-            open({
-                key,
-                items,
-                selectionMode,
-                label,
-                placeholder,
-                selection: selection ?? [],
-                resolve: (value) => onSelect?.(value as ValueItem<T>[]),
-            });
-            router.push("/SelectionModal");
-        },
-        [open, router],
-    );
+            selection: selection ?? [],
+            resolve: (value) => onSelect?.(value as ValueItem<T>[]),
+        });
+        router.push("/SelectionModal");
+    };
 
     return { openSelectionModal };
 };

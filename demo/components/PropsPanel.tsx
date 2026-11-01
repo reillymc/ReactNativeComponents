@@ -66,11 +66,9 @@ export type PropDefinitions<T> = {
 export interface PropsPanelProps<T> {
     propValues: T;
     propDefinitions: PropDefinitions<T>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     onChange: (propName: keyof T, value: any) => void;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const PropsPanel = <T extends Record<string, any>>({
     propDefinitions,
     propValues,
@@ -104,7 +102,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                             >
                                 <TextInput
                                     label={definition.label ?? propId}
-                                    value={currentValue}
+                                    value={currentValue ?? ""}
                                     onChangeText={(value) =>
                                         onChange(propId, value)
                                     }
@@ -119,14 +117,23 @@ export const PropsPanel = <T extends Record<string, any>>({
                             >
                                 <CounterInput
                                     label={definition.label ?? propId}
-                                    value={currentValue?.toString()}
-                                    onChange={(value) =>
+                                    value={
+                                        Number.isFinite(currentValue)
+                                            ? currentValue.toString()
+                                            : ""
+                                    }
+                                    onChange={(value) => {
+                                        const parsed = Number.parseInt(
+                                            value,
+                                            10,
+                                        );
                                         onChange(
                                             propId,
-                                            Number.parseInt(value, 10),
-                                        )
-                                    }
-                                    autoCapitalize="none"
+                                            Number.isFinite(parsed)
+                                                ? parsed
+                                                : undefined,
+                                        );
+                                    }}
                                 />
                             </View>
                         );
@@ -155,10 +162,6 @@ export const PropsPanel = <T extends Record<string, any>>({
                             >
                                 <SelectionInput
                                     label={definition.label}
-                                    items={definition.values.map((value) => ({
-                                        value,
-                                        label: value,
-                                    }))}
                                     selectionMode="single"
                                     onRemoveItem={(value) =>
                                         onChange(
@@ -226,7 +229,6 @@ export const PropsPanel = <T extends Record<string, any>>({
                             >
                                 <SelectionInput
                                     label={definition.label}
-                                    items={definition.values}
                                     selectionMode="single"
                                     onRemoveItem={(value) => {
                                         onChange(

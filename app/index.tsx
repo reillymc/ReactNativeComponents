@@ -82,7 +82,6 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconButtonPage",
                 component: <IconButton iconSet={Octicons} iconName="star" />,
             },
-            { name: "Action Bases", href: "/ActionBasesPage" },
             { name: "Swipe Action", href: "/SwipeActionPage" },
         ],
     },
@@ -173,7 +172,6 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 ),
             },
             { name: "Form Layout", href: "/FormPage" },
-            { name: "Input Primitives", href: "/InputPrimitivesPage" },
         ],
     },
     {
