@@ -1,25 +1,25 @@
 import type { FC } from "react";
 
 import type { RatingIcons } from "../display/rating/Rating";
-import type { CounterInputIcons } from "../forms/input/CounterInput";
-import type { InputScaffoldIcons } from "../forms/input/InputScaffold";
-import type { NumberInputIcons } from "../forms/input/NumberInput";
-import type { RatingInputIcons } from "../forms/input/RatingInput";
-import type { SelectionInputIcons } from "../forms/input/SelectionInput";
-import type { TimeInputIcons } from "../forms/input/TimeInput";
-import type { ToggleInputIcons } from "../forms/input/ToggleInput";
+import type { FieldIcons } from "../forms/field/Field";
+import type { CounterInputIcons } from "../forms/input/counterInput";
+import type { NumberInputIcons } from "../forms/input/numberInput";
+import type { RatingInputIcons } from "../forms/input/ratingInput";
+import type { SelectionInputIcons } from "../forms/input/selectionInput";
+import type { TimeInputIcons } from "../forms/input/timeInput";
+import type { ToggleInputIcons } from "../forms/input/toggleInput";
 import type { AnyIconSet, IconSet } from "../icons/base";
 import { UiIcons } from "../icons/ui";
 
 type ComponentIcons = {
-    inputScaffold: InputScaffoldIcons;
     counterInput: CounterInputIcons;
+    field: FieldIcons;
     numberInput: NumberInputIcons;
+    rating: RatingIcons;
+    ratingInput: RatingInputIcons;
     selectionInput: SelectionInputIcons;
     timeInput: TimeInputIcons;
     toggleInput: ToggleInputIcons;
-    rating: RatingIcons;
-    ratingInput: RatingInputIcons;
 };
 
 export type Icons = {
@@ -70,7 +70,7 @@ const createIcons = <C extends ComponentIconsConfig>(
 ): C => config;
 
 export const defaultIcons = createIcons({
-    inputScaffold: {
+    field: {
         error: { iconSet: UiIcons, iconName: "exclamation" },
     },
     counterInput: {
@@ -90,6 +90,8 @@ export const defaultIcons = createIcons({
     },
     toggleInput: {
         outline: { iconSet: UiIcons, iconName: "circle" },
+        fill: { iconSet: UiIcons, iconName: "circle-filled" },
+        check: { iconSet: UiIcons, iconName: "check" },
     },
     rating: {
         empty: { iconSet: UiIcons, iconName: "star-empty" },

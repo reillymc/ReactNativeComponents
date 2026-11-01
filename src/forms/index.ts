@@ -1,13 +1,43 @@
+export type {
+    FieldActionProps,
+    FieldBaseProps,
+    FieldComponentProps,
+    FieldFocusProps,
+    FieldIconProps,
+    FieldLabelProps,
+    FieldNumberInputProps,
+    FieldProps,
+    FieldRowProps,
+    FieldSurfaceProps,
+    FieldTextInputProps,
+    FieldTextInputTheme,
+    FieldTheme,
+    InputVariant,
+    UseFieldControlFocusOptions,
+} from "./field";
+export {
+    Field,
+    FieldAction,
+    FieldIcon,
+    FieldNumberInput,
+    FieldRow,
+    FieldSurface,
+    FieldTextInput,
+    fieldAria,
+    useFieldControlFocus,
+    useFieldControlState,
+} from "./field";
 export type { FormContainerProps } from "./formContainer";
 export { FormContainer } from "./formContainer";
 export type { FormRowProps } from "./formRow";
 export { FormRow } from "./formRow";
 export type {
+    ComboboxInputHandle,
     ComboboxInputProps,
+    ComboboxValue,
     CounterInputProps,
     FractionValue,
-    InputBaseProps,
-    InputScaffoldProps,
+    NumberInputHandle,
     NumberInputPlaceholders,
     NumberInputProps,
     NumberInputValue,
@@ -16,6 +46,7 @@ export type {
     RatingInputProps,
     SelectionInputProps,
     TextInputProps,
+    TimeInputHandle,
     TimeInputPlaceholders,
     TimeInputProps,
     TimeInputValue,
@@ -27,8 +58,6 @@ export type {
 export {
     ComboboxInput,
     CounterInput,
-    InputBase,
-    InputScaffold,
     NumberInput,
     RatingInput,
     SelectionInput,

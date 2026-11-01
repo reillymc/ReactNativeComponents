@@ -3,8 +3,10 @@
 
 import type { IconSet, IconSetGlyphMap } from "../base";
 import { ArrowBoth } from "./ArrowBoth";
+import { Check } from "./Check";
 import { ChevronDown } from "./ChevronDown";
 import { Circle } from "./Circle";
+import { CircleFilled } from "./CircleFilled";
 import { Clock } from "./Clock";
 import { Dash } from "./Dash";
 import { Exclamation } from "./Exclamation";
@@ -25,6 +27,8 @@ export type UiIconName =
     | "chevron-down"
     | "clock"
     | "circle"
+    | "circle-filled"
+    | "check"
     | "star-empty"
     | "star-half"
     | "star-full";
@@ -39,6 +43,8 @@ const glyphMap: IconSetGlyphMap<UiIconName> = {
     "chevron-down": ChevronDown,
     clock: Clock,
     circle: Circle,
+    "circle-filled": CircleFilled,
+    check: Check,
     "star-empty": StarBorder,
     "star-half": StarHalf,
     "star-full": StarFull,

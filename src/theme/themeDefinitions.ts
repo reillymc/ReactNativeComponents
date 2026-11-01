@@ -16,17 +16,13 @@ import { defaultRatingTheme } from "../display/rating/Rating.theme";
 import { defaultTagTheme } from "../display/tag/Tag.theme";
 import { defaultTagIconTheme } from "../display/tag/TagIcon.theme";
 import { defaultToastTheme } from "../feedback/toast/Toast.theme";
+import { defaultFieldTheme } from "../forms/field/Field.theme";
 import { defaultFormContainerTheme } from "../forms/formContainer/FormContainer.theme";
 import { defaultFormRowTheme } from "../forms/formRow/FormRow.theme";
 import { defaultComboboxInputTheme } from "../forms/input/comboboxInput/ComboboxInput.theme";
-import { defaultInputActionTheme } from "../forms/input/InputAction.theme";
-import { defaultInputBaseTheme } from "../forms/input/InputBase.theme";
-import { defaultInputRowContainerTheme } from "../forms/input/InputRowContainer.theme";
-import { defaultInputScaffoldTheme } from "../forms/input/InputScaffold.theme";
-import { defaultRatingInputTheme } from "../forms/input/RatingInput.theme";
-import { defaultSelectionInputTheme } from "../forms/input/SelectionInput.theme";
-import { defaultTimeInputTheme } from "../forms/input/TimeInput.theme";
-import { defaultToggleInputTheme } from "../forms/input/ToggleInput.theme";
+import { defaultRatingInputTheme } from "../forms/input/ratingInput/RatingInput.theme";
+import { defaultSelectionInputTheme } from "../forms/input/selectionInput/SelectionInput.theme";
+import { defaultToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
 import { defaultIconTheme } from "../icons/Icon.theme";
 import { defaultIconBaseTheme } from "../icons/IconBase.theme";
 import { defaultAnchoredContainerTheme } from "../overlays/anchoredContainer/AnchoredContainer.theme";
@@ -45,20 +41,16 @@ export const definitions: ThemeDefinitions = {
     highlightedText: defaultHighlightedTextTheme,
     iconBase: defaultIconBaseTheme,
     icon: defaultIconTheme,
-    actionBase: defaultActionBaseTheme,
     action: defaultActionTheme,
+    actionBase: defaultActionBaseTheme,
     iconActionBase: defaultIconActionBaseTheme,
     iconAction: defaultIconActionTheme,
-    stateLayer: defaultStateLayerTheme,
     buttonBase: defaultButtonBaseTheme,
     button: defaultButtonTheme,
     iconButtonBase: defaultIconButtonBaseTheme,
     iconButton: defaultIconButtonTheme,
-    inputBase: defaultInputBaseTheme,
-    inputScaffold: defaultInputScaffoldTheme,
-    inputAction: defaultInputActionTheme,
-    inputRowContainer: defaultInputRowContainerTheme,
-    timeInput: defaultTimeInputTheme,
+    stateLayer: defaultStateLayerTheme,
+    field: defaultFieldTheme,
     selectionInput: defaultSelectionInputTheme,
     toggleInput: defaultToggleInputTheme,
     comboboxInput: defaultComboboxInputTheme,

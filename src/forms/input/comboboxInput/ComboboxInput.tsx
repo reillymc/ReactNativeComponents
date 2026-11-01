@@ -1,4 +1,7 @@
-import { InputScaffold, type InputScaffoldFieldProps } from "../InputScaffold";
+import type { View } from "react-native";
+import { useAnimatedRef } from "react-native-reanimated";
+
+import { Field, type FieldComponentProps, FieldSurface } from "../../field";
 import {
     ComboboxInputBase,
     type ComboboxInputBaseProps,
@@ -21,8 +24,6 @@ export type ComboboxInputProps<T = string> = Pick<
     | "maxLength"
     | "onSubmitEditing"
     | "autoFocus"
-    | "disabled"
-    | "variant"
     | "items"
     | "value"
     | "defaultValue"
@@ -36,22 +37,42 @@ export type ComboboxInputProps<T = string> = Pick<
     | "containerPosition"
     | "ref"
 > &
-    InputScaffoldFieldProps;
+    FieldComponentProps;
+
 export const ComboboxInput = <T,>({
     label,
-    helpText,
-    hasError,
-    mandatory,
-    containerStyle,
+    hideLabel,
+    help,
+    error,
+    required,
+    disabled,
+    readOnly,
+    variant,
+    style,
+    onChange,
     ...props
-}: ComboboxInputProps<T>) => (
-    <InputScaffold
-        label={label}
-        helpText={helpText}
-        mandatory={mandatory}
-        hasError={hasError}
-        containerStyle={containerStyle}
-    >
-        <ComboboxInputBase {...props} />
-    </InputScaffold>
-);
+}: ComboboxInputProps<T>) => {
+    const surfaceAnchorRef = useAnimatedRef<View>();
+
+    return (
+        <Field
+            label={label}
+            hideLabel={hideLabel}
+            help={help}
+            error={error}
+            required={required}
+            disabled={disabled}
+            readOnly={readOnly}
+            variant={variant}
+            style={style}
+        >
+            <FieldSurface ref={surfaceAnchorRef}>
+                <ComboboxInputBase
+                    anchorRef={surfaceAnchorRef}
+                    onChange={onChange}
+                    {...props}
+                />
+            </FieldSurface>
+        </Field>
+    );
+};

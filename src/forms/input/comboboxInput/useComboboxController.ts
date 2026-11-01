@@ -1,4 +1,4 @@
-import { type RefObject, useRef, useState } from "react";
+import { type RefObject, useEffect, useRef, useState } from "react";
 import type {
     BlurEvent,
     TextInput as DefaultTextInput,
@@ -6,7 +6,7 @@ import type {
     TextInputKeyPressEvent,
 } from "react-native";
 
-import type { InputBaseProps } from "../InputBase";
+import type { FieldTextInputProps } from "../../field";
 import type { ValueItem } from "../valueItem";
 import { type ComboboxValue, filterComboboxItems, getItemKey } from "./helpers";
 
@@ -21,12 +21,13 @@ export type ComboboxControllerOptions<T> = {
     value: ComboboxValue<T> | undefined;
     defaultValue: ComboboxValue<T> | undefined;
     isValueControlled: boolean;
+    interactive: boolean;
     onChange?: (item: ValueItem<T> | undefined, inputValue: string) => void;
     onChangeText?: (text: string) => void;
-    onFocus?: InputBaseProps["onFocus"];
-    onBlur?: InputBaseProps["onBlur"];
-    onKeyPress?: InputBaseProps["onKeyPress"];
-    onSubmitEditing?: InputBaseProps["onSubmitEditing"];
+    onFocus?: FieldTextInputProps["onFocus"];
+    onBlur?: FieldTextInputProps["onBlur"];
+    onKeyPress?: FieldTextInputProps["onKeyPress"];
+    onSubmitEditing?: FieldTextInputProps["onSubmitEditing"];
     openOnFocus: boolean;
     allowsCustomValue: boolean;
     blurOnSelect: boolean;
@@ -42,6 +43,7 @@ export const useComboboxController = <T>({
     value,
     defaultValue,
     isValueControlled,
+    interactive,
     onChange,
     onChangeText,
     onFocus,
@@ -66,6 +68,13 @@ export const useComboboxController = <T>({
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
 
+    useEffect(() => {
+        if (!interactive) {
+            setIsOpen(false);
+            setActiveIndex(-1);
+        }
+    }, [interactive]);
+
     const skipBlurRef = useRef(false);
 
     const selectedItem = items.find((item) => getItemKey(item) === selectedKey);
@@ -73,6 +82,7 @@ export const useComboboxController = <T>({
     // Editing is only active while the selection hasn't changed underneath it.
     const activeEdit =
         edit !== undefined && edit.key === selectedKey ? edit : undefined;
+    const isInputCleared = edit?.text === "";
     const query = activeEdit?.text ?? "";
     const displayText = activeEdit
         ? activeEdit.text
@@ -85,6 +95,33 @@ export const useComboboxController = <T>({
     });
 
     const showContainer = isOpen && meetsMinimum && filteredItems.length > 0;
+    const selectedIndex =
+        selectedKey === undefined
+            ? -1
+            : filteredItems.findIndex(
+                  (item) => getItemKey(item) === selectedKey,
+              );
+    const initialActiveIndex = selectedIndex >= 0 ? selectedIndex : 0;
+
+    useEffect(() => {
+        if (!showContainer || filteredItems.length === 0) {
+            if (activeIndex !== -1) {
+                setActiveIndex(-1);
+            }
+            return;
+        }
+
+        if (activeIndex < 0) {
+            if (!isInputCleared) {
+                setActiveIndex(0);
+            }
+            return;
+        }
+
+        if (activeIndex >= filteredItems.length) {
+            setActiveIndex(filteredItems.length - 1);
+        }
+    }, [activeIndex, filteredItems.length, isInputCleared, showContainer]);
 
     const revertText = () => {
         setEdit(undefined);
@@ -101,6 +138,8 @@ export const useComboboxController = <T>({
     };
 
     const selectItem = (item: ValueItem<T>) => {
+        if (!interactive) return;
+
         setSelectedKey(getItemKey(item));
         onChange?.(item, item.label);
         setEdit(undefined);
@@ -114,6 +153,8 @@ export const useComboboxController = <T>({
     };
 
     const commitCustomValue = (typed: string) => {
+        if (!interactive) return;
+
         setSelectedKey(undefined);
         onChange?.(undefined, typed);
         setEdit({ text: typed, key: undefined });
@@ -121,19 +162,26 @@ export const useComboboxController = <T>({
         setIsOpen(false);
     };
 
-    const handleFocus: NonNullable<InputBaseProps["onFocus"]> = (
+    const handleFocus: NonNullable<FieldTextInputProps["onFocus"]> = (
         e: FocusEvent,
     ) => {
         skipBlurRef.current = false;
-        setIsOpen(openOnFocus);
+        const shouldOpen = interactive && openOnFocus;
+        setIsOpen(shouldOpen);
+        setActiveIndex(shouldOpen ? initialActiveIndex : -1);
         onFocus?.(e);
     };
 
-    const handleBlur: NonNullable<InputBaseProps["onBlur"]> = (
+    const handleBlur: NonNullable<FieldTextInputProps["onBlur"]> = (
         e: BlurEvent,
     ) => {
         setIsOpen(false);
         setActiveIndex(-1);
+
+        if (!interactive) {
+            onBlur?.(e);
+            return;
+        }
 
         if (skipBlurRef.current) {
             skipBlurRef.current = false;
@@ -145,33 +193,38 @@ export const useComboboxController = <T>({
         onBlur?.(e);
     };
 
-    const handleChangeText = (next: string) => {
+    const updateInputText = (next: string) => {
+        if (!interactive) return;
+
         skipBlurRef.current = false;
         setIsOpen(true);
-        setActiveIndex(-1);
         onChangeText?.(next);
 
-        // Clear the selection as soon as the text diverges from the selected
-        // label, so `value` never references an item that isn't displayed.
-        const diverged =
-            selectedKey !== undefined && next !== selectedItem?.label;
+        if (next === "") {
+            if (selectedKey !== undefined) {
+                setSelectedKey(undefined);
+                onChange?.(undefined, "");
+            }
 
-        if (diverged) {
-            setSelectedKey(undefined);
-            onChange?.(undefined, next);
+            setEdit({ text: "", key: undefined });
+            setActiveIndex(-1);
+            return;
         }
 
-        setEdit({ text: next, key: diverged ? undefined : selectedKey });
+        setActiveIndex(0);
+        setEdit({ text: next, key: selectedKey });
     };
 
     const handleArrowDown = (e: TextInputKeyPressEvent) => {
+        if (!interactive) return;
+
         e.preventDefault?.();
         const itemCount = filteredItems.length;
 
         if (!showContainer) {
             if (itemCount > 0 && meetsMinimum) {
                 setIsOpen(true);
-                setActiveIndex(0);
+                setActiveIndex(initialActiveIndex);
             }
             return;
         }
@@ -185,6 +238,8 @@ export const useComboboxController = <T>({
     };
 
     const handleArrowUp = (e: TextInputKeyPressEvent) => {
+        if (!interactive) return;
+
         e.preventDefault?.();
 
         if (!showContainer) return;
@@ -196,7 +251,14 @@ export const useComboboxController = <T>({
         );
     };
 
-    const handleKeyPress: NonNullable<InputBaseProps["onKeyPress"]> = (e) => {
+    const handleKeyPress: NonNullable<FieldTextInputProps["onKeyPress"]> = (
+        e,
+    ) => {
+        if (!interactive) {
+            onKeyPress?.(e);
+            return;
+        }
+
         switch (e.nativeEvent.key) {
             case "ArrowDown":
                 handleArrowDown(e);
@@ -220,8 +282,13 @@ export const useComboboxController = <T>({
     };
 
     const handleSubmitEditing: NonNullable<
-        InputBaseProps["onSubmitEditing"]
+        FieldTextInputProps["onSubmitEditing"]
     > = (e) => {
+        if (!interactive) {
+            onSubmitEditing?.(e);
+            return;
+        }
+
         const item =
             showContainer && activeIndex >= 0
                 ? filteredItems[activeIndex]
@@ -246,15 +313,9 @@ export const useComboboxController = <T>({
         inputRef.current?.blur();
     };
 
-    const setInputValue = (next: string) => {
-        skipBlurRef.current = false;
-        setEdit({ text: next, key: selectedKey });
-        setIsOpen(true);
-        setActiveIndex(-1);
-        onChangeText?.(next);
-    };
-
     const clear = () => {
+        if (!interactive) return;
+
         setEdit(undefined);
         setIsOpen(false);
         setActiveIndex(-1);
@@ -271,13 +332,17 @@ export const useComboboxController = <T>({
         activeIndex,
         handleFocus,
         handleBlur,
-        handleChangeText,
         handleKeyPress,
         handleSubmitEditing,
         selectItem,
-        setInputValue,
+        updateInputText,
         clear,
-        open: () => setIsOpen(true),
+        open: () => {
+            if (interactive) {
+                setIsOpen(true);
+                setActiveIndex(initialActiveIndex);
+            }
+        },
         close: () => {
             setIsOpen(false);
             setActiveIndex(-1);
