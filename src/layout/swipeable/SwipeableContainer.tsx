@@ -46,7 +46,6 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
 
     return (
         <Swipeable
-            hitSlop={{ left: -20, right: -20 }}
             ref={swipeableRef}
             renderRightActions={renderRightActions}
             enableTrackpadTwoFingerGesture
@@ -63,5 +62,7 @@ const styles = StyleSheet.create({
     actionsContainer: {
         display: "flex",
         flexDirection: "row-reverse",
+        gap: 8,
+        marginLeft: 8,
     },
 });

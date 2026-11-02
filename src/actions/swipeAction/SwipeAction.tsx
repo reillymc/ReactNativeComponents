@@ -4,6 +4,7 @@ import { IconButton, type IconButtonProps } from "../button";
 
 export type SwipeActionTheme = {
     width: number;
+    borderRadius: number;
 };
 
 export interface SwipeActionProps
@@ -27,7 +28,7 @@ const createStyles = defineStyles((theme: SwipeActionTheme) => ({
         height: "100%",
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 0,
+        borderRadius: theme.borderRadius,
         width: theme.width,
     },
 }));
