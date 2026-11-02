@@ -123,7 +123,7 @@ export const Menu = <T,>({
                             });
                         }}
                         scrollEventThrottle={16}
-                        keyboardShouldPersistTaps="handled"
+                        keyboardShouldPersistTaps="always"
                         keyboardDismissMode="none"
                         showsVerticalScrollIndicator={showsScrollIndicator}
                         style={styles.container}
