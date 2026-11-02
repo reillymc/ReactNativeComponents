@@ -18,8 +18,20 @@ import {
     PropsPanel,
 } from "../demo/components";
 
+const headerContent = <Text variant="caption">Header text</Text>;
+
+const footerText = <Text variant="caption">Footer text</Text>;
+
+const footerContentRow = (
+    <ContentRow>
+        <Text variant="caption">Footer text</Text>
+        <Text variant="caption">Footer text 2</Text>
+    </ContentRow>
+);
+
 const defaultProps: ListItemProps = {
     heading: "Heading text",
+    footer: footerContentRow,
     avatar: (
         <IconAction
             iconSet={Octicons}
@@ -58,6 +70,29 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
     heading: {
         type: "string",
         label: "Heading text",
+    },
+    header: {
+        type: "enum",
+        label: "Header",
+        default: "None",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: headerContent },
+        ],
+    },
+    footer: {
+        type: "enum",
+        label: "Footer",
+        default: "Content row",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: footerText },
+            {
+                id: "ContentRow",
+                label: "Content row",
+                value: footerContentRow,
+            },
+        ],
     },
     avatar: {
         type: "enum",
@@ -150,13 +185,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             {
                 id: "Alert",
                 label: "Alert",
-                value: (
-                    <Badge
-                        style={{ marginRight: 20 }}
-                        variant="primary"
-                        label="3"
-                    />
-                ),
+                value: <Badge variant="primary" label="3" />,
             },
         ],
     },

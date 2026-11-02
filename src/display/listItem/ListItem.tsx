@@ -18,11 +18,15 @@ import { Text } from "../../typography/text";
 type ListItemVariant = "default" | "compact";
 
 export interface ListItemTheme {
-    spacingMargin: number;
-    internalSpacing: number;
-    borderRadius: number;
-    backgroundColor: ColorValue;
-    surfaceColor: ColorValue;
+    surface: {
+        backgroundColor: ColorValue;
+        borderRadius: number;
+        paddingTop: number;
+        paddingBottom: number;
+        paddingStart: number;
+        paddingEnd: number;
+    };
+    internalGap: number;
     textColor: ColorValue;
 }
 
@@ -106,7 +110,7 @@ export const ListItem: FC<ListItemProps> = ({
                 </View>
                 {!!alert && <View style={styles.alert}>{alert}</View>}
             </View>
-            {!!footer && <View style={styles.footer}>{footer}</View>}
+            {footer}
         </>
     );
 
@@ -138,29 +142,34 @@ export const ListItem: FC<ListItemProps> = ({
 const createStyles = defineStyles(
     (theme: ListItemTheme, props: PropFilter<ListItemProps, "variant">) => ({
         container: {
-            backgroundColor: theme.backgroundColor,
-            borderRadius: props.variant === "compact" ? 0 : theme.borderRadius,
             overflow: "hidden",
             width: "100%",
         },
         pressableContainer: {
             display: "flex",
             flexDirection: "column",
-            backgroundColor: theme.surfaceColor,
-            borderRadius: props.variant === "compact" ? 0 : theme.borderRadius,
+            backgroundColor: theme.surface.backgroundColor,
+            borderRadius:
+                props.variant === "compact" ? 0 : theme.surface.borderRadius,
+            paddingTop: theme.surface.paddingTop,
+            paddingBottom: theme.surface.paddingBottom,
+            paddingStart: theme.surface.paddingStart,
+            paddingEnd: theme.surface.paddingEnd,
+            gap: theme.internalGap,
         },
         bodyContainer: {
             flexDirection: "row",
             justifyContent: "space-between",
+            gap: theme.internalGap,
         },
         innerContainer: {
             flexDirection: "row",
             flexShrink: 1,
+            gap: theme.internalGap,
         },
         avatar: {
             alignItems: "center",
             justifyContent: "center",
-            marginStart: theme.internalSpacing,
         },
         contentContainer: {
             flexShrink: 1,
@@ -168,18 +177,10 @@ const createStyles = defineStyles(
             alignItems: "flex-start",
             justifyContent: "center",
             width: "100%",
-            padding: theme.internalSpacing,
         },
         alert: {
             alignItems: "center",
             justifyContent: "center",
-            marginStart: theme.spacingMargin,
-            marginEnd: theme.internalSpacing,
-        },
-        footer: {
-            marginBottom: theme.internalSpacing,
-            marginStart: theme.internalSpacing,
-            marginEnd: theme.internalSpacing,
         },
     }),
 );

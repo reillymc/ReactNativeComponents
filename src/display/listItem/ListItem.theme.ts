@@ -1,12 +1,16 @@
 import type { ThemeFactory } from "../../theme/theme";
 
 export const defaultListItemTheme: ThemeFactory<"listItem"> = ({
-    palette: { border, color },
+    palette: { border, color, spacing },
 }) => ({
-    spacingMargin: 12,
-    internalSpacing: 16,
-    borderRadius: border.radius.loose,
-    backgroundColor: color.background,
-    surfaceColor: color.surface,
+    surface: {
+        backgroundColor: color.surface,
+        borderRadius: border.radius.loose,
+        paddingTop: spacing.medium,
+        paddingBottom: spacing.medium,
+        paddingStart: spacing.medium,
+        paddingEnd: spacing.medium,
+    },
+    internalGap: spacing.medium,
     textColor: color.surfaceForeground,
 });

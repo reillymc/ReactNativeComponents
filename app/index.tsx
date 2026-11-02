@@ -347,6 +347,7 @@ const createStyles = defineStyles(({ palette, appTheme }) => ({
         paddingHorizontal: appTheme.page.horizontal,
         paddingTop: appTheme.page.top,
         paddingBottom: appTheme.page.bottom,
+        gap: palette.spacing.tiny,
     },
     listHeader: {
         alignItems: "flex-end",
