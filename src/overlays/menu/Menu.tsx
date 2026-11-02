@@ -10,6 +10,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, useComponent } from "../../internal";
 import { useSystems } from "../../theme/useSystems";
+import { ScrollViewContextResetter } from "./ScrollViewContextResetter";
 import { VirtualizedListContextResetter } from "./VirtualizedListContextResetter";
 
 const VIEW_POSITION = 0.33;
@@ -83,44 +84,53 @@ export const Menu = <T,>({
 
     return (
         <VirtualizedListContextResetter>
-            <View
-                style={[styles.shadow, shadowStyle, !isReady && styles.hidden]}
-            >
-                <FlatList
-                    {...listProps}
-                    ref={listRef}
-                    data={data}
-                    renderItem={renderItem}
-                    keyExtractor={keyExtractor}
-                    inverted={reverse}
-                    onScroll={onScroll}
-                    onContentSizeChange={() => {
-                        if (activeIndex !== undefined && activeIndex >= 0) {
-                            listRef.current?.scrollToIndex({
-                                index: activeIndex,
-                                animated: false,
-                                viewPosition: VIEW_POSITION,
-                            });
-                        }
+            <ScrollViewContextResetter>
+                <View
+                    style={[
+                        styles.shadow,
+                        shadowStyle,
+                        !isReady && styles.hidden,
+                    ]}
+                >
+                    <FlatList
+                        {...listProps}
+                        ref={listRef}
+                        data={data}
+                        renderItem={renderItem}
+                        keyExtractor={keyExtractor}
+                        inverted={reverse}
+                        onScroll={onScroll}
+                        onContentSizeChange={() => {
+                            if (activeIndex !== undefined && activeIndex >= 0) {
+                                listRef.current?.scrollToIndex({
+                                    index: activeIndex,
+                                    animated: false,
+                                    viewPosition: VIEW_POSITION,
+                                });
+                            }
 
-                        if (!isReady) {
-                            requestAnimationFrame(() => setIsReady(true));
-                        }
-                    }}
-                    onScrollToIndexFailed={({ index, averageItemLength }) => {
-                        listRef.current?.scrollToOffset({
-                            offset: averageItemLength * index,
-                            animated: true,
-                        });
-                    }}
-                    scrollEventThrottle={16}
-                    keyboardShouldPersistTaps="handled"
-                    keyboardDismissMode="none"
-                    showsVerticalScrollIndicator={showsScrollIndicator}
-                    style={styles.container}
-                    contentContainerStyle={styles.content}
-                />
-            </View>
+                            if (!isReady) {
+                                requestAnimationFrame(() => setIsReady(true));
+                            }
+                        }}
+                        onScrollToIndexFailed={({
+                            index,
+                            averageItemLength,
+                        }) => {
+                            listRef.current?.scrollToOffset({
+                                offset: averageItemLength * index,
+                                animated: true,
+                            });
+                        }}
+                        scrollEventThrottle={16}
+                        keyboardShouldPersistTaps="handled"
+                        keyboardDismissMode="none"
+                        showsVerticalScrollIndicator={showsScrollIndicator}
+                        style={styles.container}
+                        contentContainerStyle={styles.content}
+                    />
+                </View>
+            </ScrollViewContextResetter>
         </VirtualizedListContextResetter>
     );
 };
