@@ -3,6 +3,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { RatingIconVariant, RatingProps } from "../../../display/rating";
 import type { ComponentIconAssets } from "../../../icons/componentIconAssets";
+import { useComponent } from "../../../internal";
 import { Field, type FieldComponentProps, FieldSurface } from "../../field";
 import { RatingControl } from "./RatingControl";
 import type { RatingInputTheme } from "./RatingInput.theme";
@@ -23,9 +24,11 @@ export const RatingInput: FC<RatingInputProps> = ({
     theme: themeOverrides,
     ...fieldProps
 }) => {
+    const { theme } = useComponent("ratingInput", { themeOverrides });
+
     return (
         <Field {...fieldProps}>
-            <FieldSurface>
+            <FieldSurface theme={theme.surface}>
                 <RatingControl
                     max={max}
                     onChange={onChange}

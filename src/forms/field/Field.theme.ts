@@ -1,4 +1,4 @@
-import type { ColorValue } from "react-native";
+import type { ColorValue, TextStyle } from "react-native";
 
 import type { SizeVariant } from "../../theme/size";
 import type { ThemeFactory } from "../../theme/theme";
@@ -16,8 +16,9 @@ export type FieldTheme = {
         errorBorderColor: ColorValue;
     };
     text: {
-        fontSize: number;
-        fontFamily: string;
+        fontSize: TextStyle["fontSize"];
+        fontFamily: TextStyle["fontFamily"];
+        fontWeight: TextStyle["fontWeight"];
         color: ColorValue;
         placeholderColor: ColorValue;
     };
@@ -28,13 +29,11 @@ export type FieldTheme = {
     label: {
         gap: number;
     };
-    row: {
-        gap: number;
-    };
     help: {
         gap: number;
         color: ColorValue;
         errorColor: ColorValue;
+        inset: number;
     };
     required: {
         color: ColorValue;
@@ -60,6 +59,7 @@ export const defaultFieldTheme: ThemeFactory<"field"> = ({ palette }) => {
         text: {
             fontSize: font.size.regular,
             fontFamily: font.family.sans,
+            fontWeight: "400",
             color: color.insetForeground,
             placeholderColor: color.mutedForeground,
         },
@@ -70,13 +70,11 @@ export const defaultFieldTheme: ThemeFactory<"field"> = ({ palette }) => {
         label: {
             gap: spacing.tiny,
         },
-        row: {
-            gap: 0,
-        },
         help: {
             gap: spacing.tiny,
             color: color.mutedForeground,
             errorColor: color.destructive,
+            inset: spacing.small,
         },
         required: {
             color: color.primary,

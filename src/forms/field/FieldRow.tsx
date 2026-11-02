@@ -3,7 +3,6 @@ import { type StyleProp, View, type ViewStyle } from "react-native";
 
 import { defineStyles, useComponent } from "../../internal";
 import { fieldLabelA11y } from "./a11y";
-import type { FieldTheme } from "./Field.theme";
 import { useFieldContext } from "./FieldContext";
 
 export type FieldRowProps = {
@@ -34,11 +33,10 @@ export const FieldRow: FC<FieldRowProps> = ({ style, children }) => {
     );
 };
 
-const createStyles = defineStyles((theme: FieldTheme) => ({
+const createStyles = defineStyles(() => ({
     row: {
         flexDirection: "row",
         flexGrow: 1,
         minWidth: 0,
-        gap: theme.row.gap,
     },
 }));

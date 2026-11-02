@@ -13,6 +13,9 @@ export type { FieldRowProps } from "./FieldRow";
 export { FieldRow } from "./FieldRow";
 export type { FieldSurfaceProps } from "./FieldSurface";
 export { FieldSurface } from "./FieldSurface";
-export type { FieldTextInputProps } from "./FieldTextInput";
+export type {
+    FieldTextInputProps,
+    FieldTextInputTheme,
+} from "./FieldTextInput";
 export { FieldTextInput } from "./FieldTextInput";
 export { useFieldControlFocus } from "./useFieldControlFocus";

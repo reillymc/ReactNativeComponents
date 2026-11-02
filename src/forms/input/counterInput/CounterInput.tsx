@@ -1,4 +1,5 @@
 import type { FC } from "react";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ComponentIconAssets } from "../../../icons/componentIconAssets";
 import {
@@ -7,6 +8,7 @@ import {
     type FieldNumberInputProps,
 } from "../../field";
 import { CounterControl } from "./CounterControl";
+import type { CounterInputTheme } from "./CounterInput.theme";
 
 export type CounterInputIcons = ComponentIconAssets<"decrease" | "increase">;
 
@@ -21,6 +23,7 @@ export type CounterInputProps = FieldComponentProps &
         interval?: number;
         min?: number;
         max?: number;
+        theme?: DeepPartial<CounterInputTheme>;
     };
 
 /**
@@ -41,6 +44,7 @@ export const CounterInput: FC<CounterInputProps> = ({
     disabled,
     readOnly,
     onSubmitEditing,
+    theme: themeOverrides,
     ...fieldProps
 }) => (
     <Field disabled={disabled} readOnly={readOnly} {...fieldProps}>
@@ -55,6 +59,7 @@ export const CounterInput: FC<CounterInputProps> = ({
             placeholder={placeholder}
             maxLength={maxLength}
             onSubmitEditing={onSubmitEditing}
+            theme={themeOverrides}
         />
     </Field>
 );

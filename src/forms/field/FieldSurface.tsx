@@ -6,6 +6,7 @@ import {
     View,
     type ViewStyle,
 } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, useComponent } from "../../internal";
 import { useSystems } from "../../theme/useSystems";
@@ -18,6 +19,7 @@ export type FieldSurfaceProps = {
     onPress?: () => void;
     children?: ReactNode;
     style?: StyleProp<ViewStyle>;
+    theme?: DeepPartial<FieldTheme["surface"]>;
     ref?: Ref<View>;
 };
 
@@ -32,10 +34,12 @@ export const FieldSurface: FC<FieldSurfaceProps> = ({
     children,
     ref,
     style,
+    theme: themeOverrides,
 }) => {
     const { interactive, disabled, invalid, variant } = useFieldControlState();
     const { getFocusRingStyle, getDisabledStyle } = useSystems();
     const { styles } = useComponent("field", {
+        themeOverrides: { surface: themeOverrides },
         props: { invalid, variant },
         createStyles,
     });
@@ -119,6 +123,7 @@ const createStyles = defineStyles(
                 flexGrow: 1,
                 minWidth: 0,
                 minHeight: surface.minHeight[props.variant],
+                padding: surface.padding,
             },
             pointerEventsAuto: {
                 pointerEvents: "auto",

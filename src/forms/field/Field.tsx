@@ -1,5 +1,6 @@
 import { type FC, type ReactNode, useId } from "react";
 import { Pressable, type StyleProp, View, type ViewStyle } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Icon } from "../../icons/Icon";
@@ -49,9 +50,13 @@ type FieldLabelProps = {
     hideLabel?: boolean;
 };
 
-export type FieldProps = FieldBaseProps & FieldLabelProps;
+export type FieldProps = FieldBaseProps &
+    FieldLabelProps & {
+        /** Overrides Field scaffold styles. Field primitives resolve their own theme. */
+        theme?: DeepPartial<FieldTheme>;
+    };
 
-export type FieldComponentProps = Omit<FieldProps, "children">;
+export type FieldComponentProps = Omit<FieldProps, "children" | "theme">;
 
 /**
  * Standard field scaffold: label, control, help/error copy, and required marker.
@@ -69,11 +74,15 @@ export const Field: FC<FieldProps> = ({
     disabled = false,
     readOnly = false,
     variant = "regular",
+    theme: themeOverrides,
     children,
     style,
 }) => {
     const ids = useFieldIds();
-    const { styles, theme, icons } = useComponent("field", { createStyles });
+    const { styles, theme, icons } = useComponent("field", {
+        themeOverrides,
+        createStyles,
+    });
     const { registerControl, focusFirstControl } =
         useFieldControlRegistry(disabled);
 
@@ -183,7 +192,7 @@ const createStyles = defineStyles((theme: FieldTheme) => ({
         flexDirection: "row",
         flexWrap: "wrap",
         gap: theme.help.gap,
-        marginStart: theme.surface.padding,
+        marginStart: theme.help.inset,
         alignItems: "center",
     },
 }));

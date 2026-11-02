@@ -21,8 +21,12 @@ import { defaultFieldTheme } from "../forms/field/Field.theme";
 import { defaultFormContainerTheme } from "../forms/formContainer/FormContainer.theme";
 import { defaultFormRowTheme } from "../forms/formRow/FormRow.theme";
 import { defaultComboboxInputTheme } from "../forms/input/comboboxInput/ComboboxInput.theme";
+import { defaultCounterInputTheme } from "../forms/input/counterInput/CounterInput.theme";
+import { defaultNumberInputTheme } from "../forms/input/numberInput/NumberInput.theme";
 import { defaultRatingInputTheme } from "../forms/input/ratingInput/RatingInput.theme";
 import { defaultSelectionInputTheme } from "../forms/input/selectionInput/SelectionInput.theme";
+import { defaultTextInputTheme } from "../forms/input/TextInput.theme";
+import { defaultTimeInputTheme } from "../forms/input/timeInput/TimeInput.theme";
 import { defaultToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
 import { defaultIconTheme } from "../icons/Icon.theme";
 import { defaultIconBaseTheme } from "../icons/IconBase.theme";
@@ -52,6 +56,10 @@ export const definitions: ThemeDefinitions = {
     iconButton: defaultIconButtonTheme,
     stateLayer: defaultStateLayerTheme,
     field: defaultFieldTheme,
+    textInput: defaultTextInputTheme,
+    numberInput: defaultNumberInputTheme,
+    counterInput: defaultCounterInputTheme,
+    timeInput: defaultTimeInputTheme,
     selectionInput: defaultSelectionInputTheme,
     toggleInput: defaultToggleInputTheme,
     toggleIndicator: defaultToggleIndicatorTheme,

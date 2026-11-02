@@ -1,5 +1,6 @@
-import { type FC, Fragment, type Ref, useImperativeHandle } from "react";
+import { type FC, type Ref, useImperativeHandle } from "react";
 import { StyleSheet, View } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ComponentIconAssets } from "../../../icons/componentIconAssets";
 import { useComponent } from "../../../internal";
@@ -13,6 +14,7 @@ import {
     FieldRow,
     FieldSurface,
 } from "../../field";
+import { SegmentedInputSegments } from "../shared/SegmentedInputSegments";
 import {
     type SegmentedInputHandle,
     useSegmentedInputNavigation,
@@ -25,6 +27,7 @@ import {
     getNumberInputSegments,
     updateNumberInputSegment,
 } from "./helpers";
+import type { NumberInputTheme } from "./NumberInput.theme";
 
 export type NumberInputHandle = SegmentedInputHandle & {
     clear: () => void;
@@ -66,6 +69,7 @@ export type NumberInputProps = FieldComponentProps &
         value?: NumberInputValue;
         placeholder?: NumberInputPlaceholders;
         ref?: Ref<NumberInputHandle>;
+        theme?: DeepPartial<NumberInputTheme>;
         onChange?: (e: NumberInputValue) => void;
     };
 
@@ -101,9 +105,10 @@ export const NumberInput: FC<NumberInputProps> = ({
     ref,
     disabled,
     readOnly,
+    theme: themeOverrides,
     ...fieldProps
 }) => {
-    const { icons } = useComponent("numberInput");
+    const { icons, theme } = useComponent("numberInput", { themeOverrides });
 
     const getPlaceholder = (key: keyof NumberInputPlaceholders) =>
         placeholder?.[key] ?? placeholder?.value;
@@ -163,7 +168,7 @@ export const NumberInput: FC<NumberInputProps> = ({
 
     return (
         <Field disabled={disabled} readOnly={readOnly} {...fieldProps}>
-            <FieldSurface>
+            <FieldSurface theme={theme.surface}>
                 <FieldRow>
                     <FieldAction
                         {...icon}
@@ -174,51 +179,56 @@ export const NumberInput: FC<NumberInputProps> = ({
                                 : undefined
                         }
                     />
-                    {segments.map((segment, index) => (
-                        <Fragment
-                            key={`${value.representation}-${segment.key}`}
-                        >
-                            {segment.separator && (
-                                <View style={styles.separator}>
-                                    <Text variant="title">
-                                        {segment.separator}
-                                    </Text>
-                                </View>
-                            )}
-                            <FieldNumberInput
-                                {...segment.inputProps}
-                                {...getSegmentInputProps(segment.key)}
-                                value={segment.value}
-                                maxLength={maxLength}
-                                style={[
-                                    styles.input,
-                                    value.representation !== "number" &&
-                                        styles.centered,
-                                ]}
-                                onStep={
-                                    onChange
-                                        ? (direction) =>
-                                              onChange(
-                                                  getNumberInputSegmentStepValue(
-                                                      value,
-                                                      index,
-                                                      direction,
-                                                  ),
-                                              )
-                                        : undefined
-                                }
-                                onChangeText={(text) =>
-                                    onChange?.(
-                                        updateNumberInputSegment(
-                                            value,
-                                            index,
-                                            text,
-                                        ),
-                                    )
-                                }
-                            />
-                        </Fragment>
-                    ))}
+                    <SegmentedInputSegments
+                        segments={segments}
+                        keyExtractor={(segment) =>
+                            `${value.representation}-${segment.key}`
+                        }
+                        renderSegment={(segment, index) => (
+                            <>
+                                {segment.separator && (
+                                    <View style={styles.separator}>
+                                        <Text variant="title">
+                                            {segment.separator}
+                                        </Text>
+                                    </View>
+                                )}
+                                <FieldNumberInput
+                                    {...segment.inputProps}
+                                    {...getSegmentInputProps(segment.key)}
+                                    theme={theme.textInput}
+                                    value={segment.value}
+                                    maxLength={maxLength}
+                                    style={[
+                                        styles.input,
+                                        value.representation !== "number" &&
+                                            styles.centered,
+                                    ]}
+                                    onStep={
+                                        onChange
+                                            ? (direction) =>
+                                                  onChange(
+                                                      getNumberInputSegmentStepValue(
+                                                          value,
+                                                          index,
+                                                          direction,
+                                                      ),
+                                                  )
+                                            : undefined
+                                    }
+                                    onChangeText={(text) =>
+                                        onChange?.(
+                                            updateNumberInputSegment(
+                                                value,
+                                                index,
+                                                text,
+                                            ),
+                                        )
+                                    }
+                                />
+                            </>
+                        )}
+                    />
                 </FieldRow>
             </FieldSurface>
         </Field>

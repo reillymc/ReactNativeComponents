@@ -1,43 +1,44 @@
 import type { View } from "react-native";
 import { useAnimatedRef } from "react-native-reanimated";
+import type { DeepPartial } from "@reillymc/es-utils";
 
+import { useComponent } from "../../../internal";
 import { Field, type FieldComponentProps, FieldSurface } from "../../field";
+import type { ComboboxInputTheme } from "./ComboboxInput.theme";
 import {
     ComboboxInputBase,
     type ComboboxInputBaseProps,
 } from "./ComboboxInputBase";
 
-export interface ComboboxInputTheme {
-    panelGap: number;
-}
-
-export type ComboboxInputProps<T = string> = Pick<
-    ComboboxInputBaseProps<T>,
-    | "autoCapitalize"
-    | "returnKeyType"
-    | "returnKeyLabel"
-    | "onBlur"
-    | "placeholder"
-    | "onChangeText"
-    | "controllerRef"
-    | "clearButtonMode"
-    | "maxLength"
-    | "onSubmitEditing"
-    | "autoFocus"
-    | "items"
-    | "value"
-    | "defaultValue"
-    | "onChange"
-    | "openOnFocus"
-    | "allowsCustomValue"
-    | "blurOnSelect"
-    | "filterItems"
-    | "minimumSearchLength"
-    | "maxSuggestionCount"
-    | "containerPosition"
-    | "ref"
-> &
-    FieldComponentProps;
+export type ComboboxInputProps<T = string> = FieldComponentProps &
+    Pick<
+        ComboboxInputBaseProps<T>,
+        | "autoCapitalize"
+        | "returnKeyType"
+        | "returnKeyLabel"
+        | "onBlur"
+        | "placeholder"
+        | "onChangeText"
+        | "controllerRef"
+        | "clearButtonMode"
+        | "maxLength"
+        | "onSubmitEditing"
+        | "autoFocus"
+        | "items"
+        | "value"
+        | "defaultValue"
+        | "onChange"
+        | "openOnFocus"
+        | "allowsCustomValue"
+        | "blurOnSelect"
+        | "filterItems"
+        | "minimumSearchLength"
+        | "maxSuggestionCount"
+        | "containerPosition"
+        | "ref"
+    > & {
+        theme?: DeepPartial<ComboboxInputTheme>;
+    };
 
 export const ComboboxInput = <T,>({
     label,
@@ -49,9 +50,11 @@ export const ComboboxInput = <T,>({
     readOnly,
     variant,
     style,
+    theme: themeOverrides,
     onChange,
     ...props
 }: ComboboxInputProps<T>) => {
+    const { theme } = useComponent("comboboxInput", { themeOverrides });
     const surfaceAnchorRef = useAnimatedRef<View>();
 
     return (
@@ -66,9 +69,10 @@ export const ComboboxInput = <T,>({
             variant={variant}
             style={style}
         >
-            <FieldSurface ref={surfaceAnchorRef}>
+            <FieldSurface ref={surfaceAnchorRef} theme={theme.surface}>
                 <ComboboxInputBase
                     anchorRef={surfaceAnchorRef}
+                    theme={theme}
                     onChange={onChange}
                     {...props}
                 />

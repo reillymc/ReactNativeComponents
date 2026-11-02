@@ -1,6 +1,7 @@
 import { type Ref, useImperativeHandle, useState } from "react";
 import type { TextInput as DefaultTextInput, View } from "react-native";
 import type { AnimatedRef } from "react-native-reanimated";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent, useForwardedRef } from "../../../internal";
 import {
@@ -15,6 +16,7 @@ import {
 } from "../../field";
 import type { ValueItem } from "../valueItem";
 import { ComboboxBlurGuard } from "./ComboboxBlurGuard";
+import type { ComboboxInputTheme } from "./ComboboxInput.theme";
 import { type ComboboxValue, getItemKey } from "./helpers";
 import { useComboboxController } from "./useComboboxController";
 
@@ -110,6 +112,8 @@ export type ComboboxInputBaseProps<T = string> = Pick<
      */
     anchorRef?: AnimatedRef<View>;
 
+    theme?: DeepPartial<ComboboxInputTheme>;
+
     ref?: Ref<DefaultTextInput>;
 };
 
@@ -131,6 +135,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         maxSuggestionCount,
         containerPosition,
         anchorRef,
+        theme: themeOverrides,
         onBlur,
         onFocus,
         onKeyPress,
@@ -144,8 +149,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
 
     const inputRef = useForwardedRef(ref);
     const [isMenuInverted, setIsMenuInverted] = useState(false);
-
-    const { theme } = useComponent("comboboxInput");
+    const { theme } = useComponent("comboboxInput", { themeOverrides });
 
     const {
         displayText,
@@ -203,6 +207,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
             <FieldTextInput
                 {...inputProps}
                 ref={inputRef}
+                theme={theme.textInput}
                 value={displayText}
                 submitBehavior="submit"
                 onFocus={handleFocus}

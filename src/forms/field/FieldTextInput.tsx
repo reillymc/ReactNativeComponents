@@ -9,11 +9,7 @@ import type { FieldTheme } from "./Field.theme";
 import { useFieldControlState } from "./FieldContext";
 import { useFieldControlFocus } from "./useFieldControlFocus";
 
-type FieldTextInputTheme = DeepPartial<
-    Pick<FieldTheme, "text"> & {
-        surface: Pick<FieldTheme["surface"], "padding">;
-    }
->;
+export type FieldTextInputTheme = FieldTheme["text"];
 
 export type FieldTextInputProps = Omit<TextInputProps, "editable"> & {
     /**
@@ -21,7 +17,7 @@ export type FieldTextInputProps = Omit<TextInputProps, "editable"> & {
      * disabling the field. Field disabled/read-only state comes from context.
      */
     readOnly?: boolean;
-    theme?: FieldTextInputTheme;
+    theme?: DeepPartial<FieldTextInputTheme>;
     ref?: Ref<TextInput>;
 };
 
@@ -58,8 +54,7 @@ export const FieldTextInput: FC<FieldTextInputProps> = ({
     } = useFieldControlState();
     const { getDisabledStyle, maxFontSizeMultiplier } = useSystems();
     const { styles, theme } = useComponent("field", {
-        themeOverrides,
-        props: { variant: field?.variant ?? "regular" },
+        themeOverrides: { text: themeOverrides },
         createStyles,
     });
 
@@ -107,17 +102,14 @@ export const FieldTextInput: FC<FieldTextInputProps> = ({
     );
 };
 
-const createStyles = defineStyles(
-    (theme: FieldTheme, props: { variant: "regular" | "compact" }) => ({
-        input: {
-            alignSelf: "stretch",
-            flex: 1,
-            minWidth: 0,
-            minHeight: theme.surface.minHeight[props.variant],
-            padding: theme.surface.padding,
-            fontSize: theme.text.fontSize,
-            fontFamily: theme.text.fontFamily,
-            color: theme.text.color,
-        },
-    }),
-);
+const createStyles = defineStyles((theme: FieldTheme) => ({
+    input: {
+        alignSelf: "stretch",
+        flex: 1,
+        minWidth: 0,
+        fontSize: theme.text.fontSize,
+        fontFamily: theme.text.fontFamily,
+        fontWeight: theme.text.fontWeight,
+        color: theme.text.color,
+    },
+}));

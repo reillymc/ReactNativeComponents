@@ -1,5 +1,6 @@
 import type { FC } from "react";
 import { StyleSheet } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent } from "../../../internal";
 import {
@@ -11,6 +12,7 @@ import {
     useFieldControlState,
 } from "../../field";
 import type { CounterInputProps } from "./CounterInput";
+import type { CounterInputTheme } from "./CounterInput.theme";
 
 export type CounterControlProps = {
     value?: string;
@@ -23,6 +25,7 @@ export type CounterControlProps = {
     placeholder?: string;
     maxLength?: number;
     onSubmitEditing?: FieldNumberInputProps["onSubmitEditing"];
+    theme?: DeepPartial<CounterInputTheme>;
 };
 
 export const CounterControl: FC<CounterControlProps> = ({
@@ -36,8 +39,9 @@ export const CounterControl: FC<CounterControlProps> = ({
     placeholder,
     maxLength,
     onSubmitEditing,
+    theme: themeOverrides,
 }) => {
-    const { icons } = useComponent("counterInput");
+    const { icons, theme } = useComponent("counterInput", { themeOverrides });
     const { interactive } = useFieldControlState();
     const canChange = interactive && !!onChange;
 
@@ -64,7 +68,7 @@ export const CounterControl: FC<CounterControlProps> = ({
     };
 
     return (
-        <FieldSurface>
+        <FieldSurface theme={theme.surface}>
             <FieldRow>
                 <FieldAction
                     {...icons.decrease}
@@ -76,6 +80,7 @@ export const CounterControl: FC<CounterControlProps> = ({
                     maxLength={maxLength}
                     placeholder={placeholder}
                     keyboardType={keyboardType}
+                    theme={theme.textInput}
                     value={value ?? ""}
                     onSubmitEditing={onSubmitEditing}
                     onChangeText={canChange ? onChange : undefined}

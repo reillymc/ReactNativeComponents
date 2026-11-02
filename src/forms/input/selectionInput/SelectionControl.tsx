@@ -31,7 +31,7 @@ export const SelectionControl = <T,>({
     onRemoveItem,
 }: SelectionControlProps<T>) => {
     const { interactive } = useFieldControlState();
-    const { icons, styles } = useComponent("selectionInput", {
+    const { icons, styles, theme } = useComponent("selectionInput", {
         themeOverrides,
         createStyles,
     });
@@ -43,7 +43,10 @@ export const SelectionControl = <T,>({
         : !!selection;
 
     return (
-        <FieldSurface onPress={canAdd ? onAdd : undefined}>
+        <FieldSurface
+            onPress={canAdd ? onAdd : undefined}
+            theme={theme.surface}
+        >
             <FieldRow style={styles.boxNone}>
                 <View
                     style={[

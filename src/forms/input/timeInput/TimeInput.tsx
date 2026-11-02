@@ -1,8 +1,9 @@
-import { type FC, Fragment, type Ref, useImperativeHandle } from "react";
-import { Pressable, StyleSheet } from "react-native";
+import { type FC, type Ref, useImperativeHandle } from "react";
+import { Pressable } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ComponentIconAssets } from "../../../icons/componentIconAssets";
-import { useComponent } from "../../../internal";
+import { defineStyles, useComponent } from "../../../internal";
 import { Text } from "../../../typography/text";
 import {
     Field,
@@ -13,6 +14,7 @@ import {
     FieldRow,
     FieldSurface,
 } from "../../field";
+import { SegmentedInputSegments } from "../shared/SegmentedInputSegments";
 import {
     type SegmentedInputHandle,
     useSegmentedInputNavigation,
@@ -22,6 +24,7 @@ import {
     getTimeInputSegments,
     TIME_SEGMENT_MAX_LENGTH,
 } from "./helpers";
+import type { TimeInputTheme } from "./TimeInput.theme";
 
 export type TimeInputValue = { hours: string; minutes: string };
 
@@ -44,6 +47,7 @@ export type TimeInputProps = FieldComponentProps &
         value?: TimeInputValue;
         placeholder?: TimeInputPlaceholders;
         ref?: Ref<TimeInputHandle>;
+        theme?: DeepPartial<TimeInputTheme>;
         onChange?: (e: TimeInputValue) => void;
     };
 
@@ -65,9 +69,13 @@ export const TimeInput: FC<TimeInputProps> = ({
     disabled,
     readOnly,
     ref,
+    theme: themeOverrides,
     ...fieldProps
 }) => {
-    const { icons } = useComponent("timeInput");
+    const { icons, styles, theme } = useComponent("timeInput", {
+        themeOverrides,
+        createStyles,
+    });
     const { theme: fieldTheme } = useComponent("field");
     const segments = getTimeInputSegments({
         value,
@@ -103,7 +111,7 @@ export const TimeInput: FC<TimeInputProps> = ({
 
     return (
         <Field disabled={disabled} readOnly={readOnly} {...fieldProps}>
-            <FieldSurface>
+            <FieldSurface theme={theme.surface}>
                 <FieldRow>
                     <Pressable
                         accessible={false}
@@ -115,51 +123,53 @@ export const TimeInput: FC<TimeInputProps> = ({
                     >
                         <FieldIcon {...icons.time} />
                     </Pressable>
-                    {segments.map((segment) => (
-                        <Fragment key={segment.key}>
-                            <FieldNumberInput
-                                {...segment.inputProps}
-                                {...getSegmentInputProps(segment.key)}
-                                value={segment.value}
-                                style={styles.input}
-                                keyboardType="number-pad"
-                                maxLength={TIME_SEGMENT_MAX_LENGTH}
-                            />
-                            {segment.separator && (
-                                <Pressable
-                                    accessible={false}
-                                    focusable={false}
-                                    disabled={disabled}
-                                    onPress={() => focusSegment(segment.key)}
-                                    style={[
-                                        styles.timeLabel,
-                                        segment.key === "minutes" && {
-                                            paddingEnd:
-                                                fieldTheme.surface.padding,
-                                        },
-                                    ]}
-                                    tabIndex={-1}
-                                >
-                                    <Text variant="body">
-                                        {segment.separator}
-                                    </Text>
-                                </Pressable>
-                            )}
-                        </Fragment>
-                    ))}
+                    <SegmentedInputSegments
+                        segments={segments}
+                        style={{ paddingRight: fieldTheme.surface.padding }}
+                        renderSegment={(segment) => (
+                            <>
+                                <FieldNumberInput
+                                    {...segment.inputProps}
+                                    {...getSegmentInputProps(segment.key)}
+                                    theme={theme.textInput}
+                                    value={segment.value}
+                                    style={styles.input}
+                                    keyboardType="number-pad"
+                                    maxLength={TIME_SEGMENT_MAX_LENGTH}
+                                />
+                                {segment.separator && (
+                                    <Pressable
+                                        accessible={false}
+                                        focusable={false}
+                                        disabled={disabled}
+                                        onPress={() =>
+                                            focusSegment(segment.key)
+                                        }
+                                        style={styles.unitLabel}
+                                        tabIndex={-1}
+                                    >
+                                        <Text variant="body">
+                                            {segment.separator}
+                                        </Text>
+                                    </Pressable>
+                                )}
+                            </>
+                        )}
+                    />
                 </FieldRow>
             </FieldSurface>
         </Field>
     );
 };
 
-const styles = StyleSheet.create({
+const createStyles = defineStyles((theme: TimeInputTheme) => ({
     input: {
         flexGrow: 1,
         flexBasis: 0,
         textAlign: "right",
     },
-    timeLabel: {
+    unitLabel: {
         justifyContent: "center",
+        paddingStart: theme.unitLabel.paddingStart,
     },
-});
+}));

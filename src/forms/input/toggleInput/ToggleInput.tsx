@@ -2,6 +2,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { ToggleAppearance } from "../../../display/toggleIndicator";
 import type { IconComponentProps } from "../../../icons/IconComponentProps";
+import { useComponent } from "../../../internal";
 import { Field, type FieldComponentProps } from "../../field";
 import { ToggleControl } from "./ToggleControl";
 import type { ToggleInputTheme } from "./ToggleInput.theme";
@@ -26,13 +27,26 @@ export const ToggleInput = <G extends string>({
     value = false,
     onChange,
     appearance = "primary",
+    variant = "regular",
     theme: themeOverrides,
     iconSet,
     iconName,
     ...fieldProps
 }: ToggleInputProps<G>) => {
+    const { theme } = useComponent("toggleInput", { themeOverrides });
+    const helpInset =
+        label === undefined
+            ? 0
+            : theme.indicator.surfaceSize[variant] + theme.label.gap;
+
     return (
-        <Field {...fieldProps} label={label} hideLabel>
+        <Field
+            {...fieldProps}
+            label={label}
+            variant={variant}
+            hideLabel
+            theme={{ help: { inset: helpInset } }}
+        >
             <ToggleControl
                 label={label}
                 value={value}
