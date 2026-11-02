@@ -296,10 +296,6 @@ export const useComboboxController = <T>({
 
         if (item) {
             selectItem(item);
-
-            if (!blurOnSelect) {
-                blurInput();
-            }
             return;
         }
 

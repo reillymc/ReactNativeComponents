@@ -210,6 +210,8 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                 theme={theme.textInput}
                 value={displayText}
                 submitBehavior="submit"
+                // Required to support web selecting with enter but not blurring
+                blurOnSubmit={false}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
                 onKeyPress={handleKeyPress}
