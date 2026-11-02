@@ -6,4 +6,4 @@ export type { SizeVariant } from "./size";
 export type { Systems, SystemsOverrides } from "./systems";
 export type { Theme, ThemeOverrides } from "./theme";
 export { type UseSystemsResult, useSystems } from "./useSystems";
-export { usePalette } from "./useTheme";
+export { useComponentThemes, usePalette } from "./useTheme";
