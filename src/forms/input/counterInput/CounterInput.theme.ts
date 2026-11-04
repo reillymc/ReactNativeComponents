@@ -3,12 +3,12 @@ import type { FieldTextInputTheme, FieldTheme } from "../../field";
 
 export type CounterInputTheme = {
     surface: FieldTheme["surface"];
-    textInput: FieldTextInputTheme;
+    input: FieldTextInputTheme;
 };
 
 export const defaultCounterInputTheme: ThemeFactory<"counterInput"> = ({
     theme,
 }) => ({
     surface: { ...theme.field.surface, padding: 0 },
-    textInput: theme.field.text,
+    input: theme.field.text,
 });

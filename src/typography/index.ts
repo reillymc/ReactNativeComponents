@@ -1,2 +1,7 @@
-export type { HighlightedTextProps, TextProps } from "./text";
+export type {
+    HighlightedTextProps,
+    HighlightedTextTheme,
+    TextProps,
+    TextTheme,
+} from "./text";
 export { HighlightedText, Text } from "./text";

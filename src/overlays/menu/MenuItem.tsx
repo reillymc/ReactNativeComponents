@@ -1,15 +1,19 @@
 import type { FC } from "react";
-import type { ColorValue } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
 
 import { InteractionSurface } from "../../actions/surface";
 import { defineStyles, useComponent } from "../../internal";
-import { HighlightedText } from "../../typography/text";
+import {
+    HighlightedText,
+    type HighlightedTextTheme,
+} from "../../typography/text";
 
 export type MenuItemTheme = {
     paddingHorizontal: number;
     paddingVertical: number;
     borderRadius: number;
-    textColor: ColorValue;
+    label: HighlightedTextTheme;
+    description: HighlightedTextTheme;
 };
 
 export interface MenuItemProps {
@@ -18,6 +22,7 @@ export interface MenuItemProps {
     searchValue?: string;
     highlighted?: boolean;
     onPress: () => void;
+    theme?: DeepPartial<MenuItemTheme>;
 }
 
 export const MenuItem: FC<MenuItemProps> = ({
@@ -26,8 +31,12 @@ export const MenuItem: FC<MenuItemProps> = ({
     searchValue,
     highlighted,
     onPress,
+    theme: themeOverrides,
 }) => {
-    const { styles, theme } = useComponent("menuItem", { createStyles });
+    const { styles, theme } = useComponent("menuItem", {
+        themeOverrides,
+        createStyles,
+    });
 
     return (
         <InteractionSurface
@@ -39,14 +48,14 @@ export const MenuItem: FC<MenuItemProps> = ({
             <HighlightedText
                 text={label}
                 highlight={searchValue}
-                theme={{ color: theme.textColor }}
+                theme={theme.label}
             />
             {!!description && (
                 <HighlightedText
                     variant="caption"
                     text={description}
                     highlight={searchValue}
-                    theme={{ color: theme.textColor }}
+                    theme={theme.description}
                 />
             )}
         </InteractionSurface>

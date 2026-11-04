@@ -1,20 +1,23 @@
+import type { AnchoredContainerTheme } from "../../../overlays/anchoredContainer/AnchoredContainer";
 import type { MenuTheme } from "../../../overlays/menu/Menu";
+import type { MenuItemTheme } from "../../../overlays/menu/MenuItem";
 import type { ThemeFactory } from "../../../theme/theme";
 import type { FieldTextInputTheme, FieldTheme } from "../../field";
 
 export interface ComboboxInputTheme {
-    panelGap: number;
+    panel: AnchoredContainerTheme;
     surface: FieldTheme["surface"];
-    textInput: FieldTextInputTheme;
+    input: FieldTextInputTheme;
     menu: MenuTheme;
+    option: MenuItemTheme;
 }
 
 export const defaultComboboxInputTheme: ThemeFactory<"comboboxInput"> = ({
-    palette,
     theme,
 }) => ({
-    panelGap: palette.spacing.tiny,
+    panel: theme.anchoredContainer,
     surface: theme.field.surface,
-    textInput: theme.field.text,
+    input: theme.field.text,
     menu: theme.menu,
+    option: theme.menuItem,
 });

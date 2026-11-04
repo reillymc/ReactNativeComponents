@@ -267,7 +267,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                 {...inputProps}
                 {...pressHandlers}
                 ref={inputRef}
-                theme={theme.textInput}
+                theme={theme.input}
                 value={displayText}
                 submitBehavior="submit"
                 // Required to support web selecting with enter but not blurring
@@ -285,7 +285,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                 anchorRef={anchorRef}
                 show={showContainer}
                 position={containerPosition}
-                theme={{ parentMargin: theme.panelGap }}
+                theme={theme.panel}
                 onInvertedChange={setIsMenuInverted}
             >
                 {({ inverted }) => (
@@ -303,6 +303,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                                     searchValue={query}
                                     highlighted={index === activeIndex}
                                     onPress={() => selectItem(item)}
+                                    theme={theme.option}
                                 />
                             )}
                         />

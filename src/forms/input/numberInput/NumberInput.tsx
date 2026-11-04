@@ -196,7 +196,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                                 <FieldNumberInput
                                     {...segment.inputProps}
                                     {...getSegmentInputProps(segment.key)}
-                                    theme={theme.textInput}
+                                    theme={theme.input}
                                     value={segment.value}
                                     maxLength={maxLength}
                                     style={[

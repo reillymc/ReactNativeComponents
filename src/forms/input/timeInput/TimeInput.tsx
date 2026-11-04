@@ -131,7 +131,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                                 <FieldNumberInput
                                     {...segment.inputProps}
                                     {...getSegmentInputProps(segment.key)}
-                                    theme={theme.textInput}
+                                    theme={theme.input}
                                     value={segment.value}
                                     style={styles.input}
                                     keyboardType="number-pad"

@@ -1,1 +1,5 @@
-export { SwipeAction, type SwipeActionProps } from "./SwipeAction";
+export {
+    SwipeAction,
+    type SwipeActionProps,
+    type SwipeActionTheme,
+} from "./SwipeAction";

@@ -11,6 +11,11 @@ export type {
     ButtonProps,
     IconButtonBaseProps,
     IconButtonProps,
+    IconButtonTheme,
 } from "./button";
 export { Button, ButtonBase, IconButton, IconButtonBase } from "./button";
-export { SwipeAction, type SwipeActionProps } from "./swipeAction";
+export {
+    SwipeAction,
+    type SwipeActionProps,
+    type SwipeActionTheme,
+} from "./swipeAction";

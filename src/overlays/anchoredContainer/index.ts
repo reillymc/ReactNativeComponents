@@ -1,2 +1,5 @@
-export type { AnchoredContainerProps } from "./AnchoredContainer";
+export type {
+    AnchoredContainerProps,
+    AnchoredContainerTheme,
+} from "./AnchoredContainer";
 export { AnchoredContainer } from "./AnchoredContainer";

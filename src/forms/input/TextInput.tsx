@@ -47,7 +47,7 @@ export const TextInput: FC<TextInputProps> = ({
             style={style}
         >
             <FieldSurface theme={theme.surface}>
-                <FieldTextInput theme={theme.textInput} {...inputProps} />
+                <FieldTextInput theme={theme.input} {...inputProps} />
             </FieldSurface>
         </Field>
     );

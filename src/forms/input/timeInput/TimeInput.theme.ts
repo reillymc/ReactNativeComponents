@@ -6,7 +6,7 @@ export type TimeInputTheme = {
         paddingStart: number;
     };
     surface: FieldTheme["surface"];
-    textInput: FieldTextInputTheme;
+    input: FieldTextInputTheme;
 };
 
 export const defaultTimeInputTheme: ThemeFactory<"timeInput"> = ({
@@ -17,5 +17,5 @@ export const defaultTimeInputTheme: ThemeFactory<"timeInput"> = ({
         paddingStart: palette.spacing.tiny,
     },
     surface: { ...theme.field.surface, padding: 0 },
-    textInput: theme.field.text,
+    input: theme.field.text,
 });
