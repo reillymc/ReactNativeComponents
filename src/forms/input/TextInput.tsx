@@ -46,7 +46,7 @@ export const TextInput: FC<TextInputProps> = ({
             variant={variant}
             style={style}
         >
-            <FieldSurface>
+            <FieldSurface theme={theme.surface}>
                 <FieldTextInput theme={theme.textInput} {...inputProps} />
             </FieldSurface>
         </Field>
