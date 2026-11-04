@@ -28,7 +28,7 @@ export type ComboboxControllerOptions<T> = {
     onBlur?: FieldTextInputProps["onBlur"];
     onKeyPress?: FieldTextInputProps["onKeyPress"];
     onSubmitEditing?: FieldTextInputProps["onSubmitEditing"];
-    openOnFocus: boolean;
+    disableOpenOnFocus: boolean;
     allowsCustomValue: boolean;
     blurOnSelect: boolean;
     filterItems?: (item: ValueItem<T>, query: string) => boolean;
@@ -50,7 +50,7 @@ export const useComboboxController = <T>({
     onBlur,
     onKeyPress,
     onSubmitEditing,
-    openOnFocus,
+    disableOpenOnFocus,
     allowsCustomValue,
     blurOnSelect,
     filterItems,
@@ -166,7 +166,7 @@ export const useComboboxController = <T>({
         e: FocusEvent,
     ) => {
         skipBlurRef.current = false;
-        const shouldOpen = interactive && openOnFocus;
+        const shouldOpen = interactive && !disableOpenOnFocus;
         setIsOpen(shouldOpen);
         setActiveIndex(shouldOpen ? initialActiveIndex : -1);
         onFocus?.(e);

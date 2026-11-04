@@ -29,9 +29,9 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
         type: "function",
         label: "onChange",
     },
-    openOnFocus: {
+    disableOpenOnFocus: {
         type: "boolean",
-        label: "Open on focus",
+        label: "Disable open on focus",
     },
     allowsCustomValue: {
         type: "boolean",
@@ -60,7 +60,7 @@ const defaultProps: ComboboxInputProps = {
         { value: "s2", label: "Something Else 2" },
         { value: "s3", label: "Something Else 3" },
     ],
-    openOnFocus: true,
+    disableOpenOnFocus: false,
     allowsCustomValue: false,
     blurOnSelect: true,
 };

@@ -28,7 +28,7 @@ export type ComboboxInputProps<T = string> = FieldComponentProps &
         | "value"
         | "defaultValue"
         | "onChange"
-        | "openOnFocus"
+        | "disableOpenOnFocus"
         | "allowsCustomValue"
         | "blurOnSelect"
         | "filterItems"

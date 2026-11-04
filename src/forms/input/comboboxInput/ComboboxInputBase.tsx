@@ -74,10 +74,10 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     controllerRef?: Ref<ComboboxInputHandle>;
 
     /**
-     * Whether focusing the input opens the list of all options.
-     * @default true
+     * Whether focusing the input should not open the list of all options.
+     * @default false
      */
-    openOnFocus?: boolean;
+    disableOpenOnFocus?: boolean;
 
     /**
      * Whether free-typed values that don't match an item are kept and reported
@@ -127,7 +127,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         onChange,
         onChangeText,
         controllerRef,
-        openOnFocus = true,
+        disableOpenOnFocus = false,
         allowsCustomValue = false,
         blurOnSelect = true,
         filterItems,
@@ -178,7 +178,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         onBlur,
         onKeyPress,
         onSubmitEditing,
-        openOnFocus,
+        disableOpenOnFocus,
         allowsCustomValue,
         blurOnSelect,
         filterItems,
@@ -231,6 +231,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                 {({ inverted }) => (
                     <ComboboxBlurGuard>
                         <Menu
+                            theme={theme.menu}
                             data={filteredItems}
                             activeIndex={activeIndex}
                             reverse={inverted}
