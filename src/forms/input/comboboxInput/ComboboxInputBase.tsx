@@ -1,5 +1,9 @@
 import { type Ref, useImperativeHandle, useState } from "react";
-import type { TextInput as DefaultTextInput, View } from "react-native";
+import {
+    type TextInput as DefaultTextInput,
+    Platform,
+    type View,
+} from "react-native";
 import type { AnimatedRef } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -154,6 +158,10 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     ref?: Ref<DefaultTextInput>;
 };
 
+type WebPressHandlers = {
+    onMouseDown: () => void;
+};
+
 const EMPTY_ITEMS: never[] = [];
 
 export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
@@ -206,6 +214,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         updateInputText,
         open,
         close,
+        handlePress,
     } = useComboboxController({
         items,
         value,
@@ -232,6 +241,15 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         isMenuInverted,
     });
 
+    const pressHandlers =
+        Platform.OS === "web"
+            ? ({
+                  onMouseDown: handlePress,
+              } as WebPressHandlers as FieldTextInputProps)
+            : {
+                  onPressIn: handlePress,
+              };
+
     useImperativeHandle(
         controllerRef,
         () => ({
@@ -247,6 +265,7 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         <>
             <FieldTextInput
                 {...inputProps}
+                {...pressHandlers}
                 ref={inputRef}
                 theme={theme.textInput}
                 value={displayText}

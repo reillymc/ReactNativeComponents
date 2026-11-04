@@ -150,6 +150,7 @@ export const useComboboxController = <T>({
     const [inputText, setInputText] = useState<string | undefined>(
         defaultInputValue,
     );
+    const [isFocused, setIsFocused] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
 
@@ -316,6 +317,7 @@ export const useComboboxController = <T>({
     const handleFocus: NonNullable<FieldTextInputProps["onFocus"]> = (
         e: FocusEvent,
     ) => {
+        setIsFocused(true);
         skipBlurRef.current = false;
         const shouldOpen = interactive && !disableOpenOnFocus;
         setIsOpen(shouldOpen);
@@ -326,6 +328,7 @@ export const useComboboxController = <T>({
     const handleBlur: NonNullable<FieldTextInputProps["onBlur"]> = (
         e: BlurEvent,
     ) => {
+        setIsFocused(false);
         setIsOpen(false);
         setActiveIndex(-1);
 
@@ -478,6 +481,35 @@ export const useComboboxController = <T>({
         blurInput();
     };
 
+    const openMenu = () => {
+        if (interactive) {
+            setIsOpen(true);
+            setActiveIndex(initialActiveIndex);
+        }
+    };
+
+    const closeMenu = () => {
+        setIsOpen(false);
+        setActiveIndex(-1);
+    };
+
+    const toggleMenu = () => {
+        if (!interactive) return;
+
+        if (isOpen) {
+            closeMenu();
+            return;
+        }
+
+        openMenu();
+    };
+
+    const handlePress = () => {
+        if (isFocused) {
+            toggleMenu();
+        }
+    };
+
     const handleSubmitEditing: NonNullable<
         FieldTextInputProps["onSubmitEditing"]
     > = () => {
@@ -517,16 +549,9 @@ export const useComboboxController = <T>({
         handleSubmitEditing,
         selectItem,
         updateInputText,
-        open: () => {
-            if (interactive) {
-                setIsOpen(true);
-                setActiveIndex(initialActiveIndex);
-            }
-        },
-        close: () => {
-            setIsOpen(false);
-            setActiveIndex(-1);
-        },
+        open: openMenu,
+        close: closeMenu,
+        handlePress,
     };
 };
 
