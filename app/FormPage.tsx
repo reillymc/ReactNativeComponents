@@ -1,22 +1,21 @@
-import type React from "react";
-import { useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { type FC, useState } from "react";
+import { ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
+import { Button } from "@reillymc/react-native-components/actions";
 import {
-    Button,
     FormContainer,
     FormRow,
     TextInput,
-    type ThemedStyles,
     ToggleInput,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/forms";
+import { usePalette } from "@reillymc/react-native-components/theme";
 
-const FormPage: React.FC = () => {
-    const { theme } = useTheme();
-    const styles = useThemedStyles(createStyles);
+import { defineStyles, useStyles } from "../demo/theme";
+
+const FormPage: FC = () => {
+    const palette = usePalette();
+    const styles = useStyles(createStyles);
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -31,22 +30,22 @@ const FormPage: React.FC = () => {
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.family.sans,
+                        fontFamily: palette.font.family.sans,
                         fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.family.sans,
-                        fontSize: theme.font.size.regular,
+                        fontFamily: palette.font.family.sans,
+                        fontSize: palette.font.size.regular,
                     },
                     headerLargeStyle: {
-                        backgroundColor: theme.color.background,
+                        backgroundColor: palette.color.background,
                     },
                 }}
             />
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.page}
+                contentContainerStyle={styles.content}
             >
                 <FormContainer>
                     <TextInput label="Full name" placeholder="Ada Lovelace" />
@@ -76,9 +75,9 @@ const FormPage: React.FC = () => {
                         label="Notes"
                         placeholder="Tell us about yourself"
                         multiline
-                        helpText="This multiline field grows with its content."
+                        help="This multiline field grows with its content."
                     />
-                    <FormRow ratios={[1, 2]}>
+                    <FormRow>
                         <TextInput label="City" placeholder="London" />
                         <TextInput
                             label="Address"
@@ -99,14 +98,13 @@ const FormPage: React.FC = () => {
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
-    StyleSheet.create({
-        page: {
-            backgroundColor: color.background,
-            paddingHorizontal: spacing.pageHorizontal,
-            paddingTop: spacing.pageTop,
-            paddingBottom: spacing.pageBottom,
-        },
-    });
+const createStyles = defineStyles(({ appTheme }) => ({
+    content: {
+        backgroundColor: appTheme.page.backgroundColor,
+        paddingHorizontal: appTheme.page.horizontal,
+        paddingTop: appTheme.page.top,
+        paddingBottom: appTheme.page.bottom,
+    },
+}));
 
 export default FormPage;

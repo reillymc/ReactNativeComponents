@@ -1,43 +1,39 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     TimeInput,
     type TimeInputProps,
     type TimeInputValue,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/forms";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
 import {
-    InputBasePropDefinitions,
-    InputScaffoldPropDefinitions,
-} from "../helpers";
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { FieldPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
-    label: InputScaffoldPropDefinitions.label,
-    helpText: InputScaffoldPropDefinitions.helpText,
-    variant: InputBasePropDefinitions.variant,
-    mandatory: InputScaffoldPropDefinitions.mandatory,
-    disabled: InputBasePropDefinitions.disabled,
-    hoursPlaceholder: {
-        type: "string",
-        label: "Hours placeholder text",
-    },
-    minutesPlaceholder: {
-        type: "string",
-        label: "Minutes placeholder 2 text",
-    },
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
 };
 
 const defaultProps: TimeInputProps = {
-    hoursPlaceholder: "0",
-    minutesPlaceholder: "0",
+    placeholder: {
+        hours: "0",
+        minutes: "0",
+    },
     disabled: false,
 };
 
-const TimeInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TimeInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<TimeInputValue>();
-
-    console.debug(inputValue);
+const TimeInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TimeInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<TimeInputValue>();
 
     return (
         <ComponentPage

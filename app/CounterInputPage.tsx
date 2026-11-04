@@ -1,14 +1,38 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     CounterInput,
     type CounterInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/forms";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import {
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<CounterInputProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    placeholder: FieldTextInputPropDefinitions.placeholder,
+    keyboardType: {
+        type: "enum",
+        label: "Keyboard Type",
+        default: "Number Pad",
+        values: [
+            { label: "Number", value: "number-pad" },
+            { label: "Decimal", value: "decimal-pad" },
+        ],
+    },
     min: {
         type: "number",
         label: "Min Value",
@@ -29,11 +53,9 @@ const defaultProps: CounterInputProps = {
     label: "Counter Input",
 };
 
-const CounterInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<CounterInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<string | undefined>(
-        undefined,
-    );
+const CounterInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<CounterInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<string | undefined>(undefined);
 
     return (
         <ComponentPage
@@ -42,7 +64,7 @@ const CounterInputPage: React.FunctionComponent = () => {
                 <CounterInput
                     {...props}
                     value={inputValue}
-                    onChangeText={setInputValue}
+                    onChange={setInputValue}
                 />
             }
             propsPanel={

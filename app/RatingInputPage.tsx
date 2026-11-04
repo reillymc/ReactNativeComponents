@@ -1,11 +1,15 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     RatingInput,
     type RatingInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/forms";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { FieldPropDefinitions } from "../demo/helpers";
 
 const defaultProps: RatingInputProps = {
     disabled: false,
@@ -13,7 +17,14 @@ const defaultProps: RatingInputProps = {
 };
 
 const propDefinitions: PropDefinitions<RatingInputProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
     max: {
         type: "number",
         label: "Max Value",
@@ -24,9 +35,9 @@ const propDefinitions: PropDefinitions<RatingInputProps> = {
     },
 };
 
-const RatingInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<RatingInputProps>(defaultProps);
-    const [value, setValue] = React.useState<number | undefined>(undefined);
+const RatingInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<RatingInputProps>(defaultProps);
+    const [value, setValue] = useState<number | undefined>(undefined);
 
     return (
         <ComponentPage

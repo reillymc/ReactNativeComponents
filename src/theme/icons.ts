@@ -1,36 +1,39 @@
 import type { FC } from "react";
 
-import type {
-    CounterInputIcons,
-    InputScaffoldIcons,
-    NumberInputIcons,
-    RatingIcons,
-    RatingInputIcons,
-    SelectionInputIcons,
-    TimeInputIcons,
-    ToggleInputIcons,
-} from "../components";
-import { type IconSet, Octicons, Stars } from "../icons";
-
-export type ComponentIconAssets<K extends string> = K;
+import type { RatingIcons } from "../display/rating/Rating";
+import type { ToggleIndicatorIcons } from "../display/toggleIndicator/ToggleIndicator";
+import type { FieldIcons } from "../forms/field/Field";
+import type { CounterInputIcons } from "../forms/input/counterInput";
+import type { NumberInputIcons } from "../forms/input/numberInput";
+import type { RatingInputIcons } from "../forms/input/ratingInput";
+import type { SelectionInputIcons } from "../forms/input/selectionInput";
+import type { TimeInputIcons } from "../forms/input/timeInput";
+import type { AnyIconSet, IconSet } from "../icons/base";
+import { UiIcons } from "../icons/ui";
 
 type ComponentIcons = {
-    inputScaffold: InputScaffoldIcons;
     counterInput: CounterInputIcons;
+    field: FieldIcons;
     numberInput: NumberInputIcons;
-    selectionInput: SelectionInputIcons;
-    timeInput: TimeInputIcons;
-    toggleInput: ToggleInputIcons;
     rating: RatingIcons;
     ratingInput: RatingInputIcons;
+    selectionInput: SelectionInputIcons;
+    timeInput: TimeInputIcons;
+    toggleIndicator: ToggleIndicatorIcons;
 };
 
 export type Icons = {
     [K in keyof ComponentIcons]: {
         [I in ComponentIcons[K]]: {
-            iconSet: IconSet<any>;
+            iconSet: AnyIconSet;
             iconName: string;
         };
+    };
+};
+
+export type IconOverrides = {
+    [Category in keyof Icons]?: {
+        [Slot in keyof Icons[Category]]?: Icons[Category][Slot];
     };
 };
 
@@ -44,7 +47,7 @@ type InferGlyph<T> =
 export type ComponentIconsConfig = {
     [Category in keyof ComponentIcons]: {
         [SubKey in ComponentIcons[Category]]: {
-            iconSet: IconSet<any>;
+            iconSet: AnyIconSet;
             iconName: string;
         };
     };
@@ -62,40 +65,59 @@ type ValidateConfig<C> = {
     };
 };
 
-export const createIcons = <C extends ComponentIconsConfig>(
+const createIcons = <C extends ComponentIconsConfig>(
     config: C & ValidateConfig<C>,
 ): C => config;
 
-export const DefaultIcons = createIcons({
-    inputScaffold: {
-        error: { iconSet: Octicons, iconName: "exclamation" },
+export const defaultIcons = createIcons({
+    field: {
+        error: { iconSet: UiIcons, iconName: "exclamation" },
     },
     counterInput: {
-        decrease: { iconSet: Octicons, iconName: "dash" },
-        increase: { iconSet: Octicons, iconName: "plus" },
+        decrease: { iconSet: UiIcons, iconName: "dash" },
+        increase: { iconSet: UiIcons, iconName: "plus" },
     },
     numberInput: {
-        number: { iconSet: Octicons, iconName: "infinity" },
-        fraction: { iconSet: Octicons, iconName: "number" },
-        range: { iconSet: Octicons, iconName: "arrow-both" },
+        number: { iconSet: UiIcons, iconName: "infinity" },
+        fraction: { iconSet: UiIcons, iconName: "number" },
+        range: { iconSet: UiIcons, iconName: "arrow-both" },
     },
     selectionInput: {
-        showOptions: { iconSet: Octicons, iconName: "chevron-down" },
+        showOptions: { iconSet: UiIcons, iconName: "chevron-down" },
     },
     timeInput: {
-        time: { iconSet: Octicons, iconName: "clock" },
+        time: { iconSet: UiIcons, iconName: "clock" },
     },
-    toggleInput: {
-        outline: { iconSet: Octicons, iconName: "circle" },
+    toggleIndicator: {
+        outline: { iconSet: UiIcons, iconName: "circle" },
+        fill: { iconSet: UiIcons, iconName: "circle-filled" },
+        check: { iconSet: UiIcons, iconName: "check" },
     },
     rating: {
-        empty: { iconSet: Stars, iconName: "empty" },
-        full: { iconSet: Stars, iconName: "full" },
-        half: { iconSet: Stars, iconName: "half" },
+        empty: { iconSet: UiIcons, iconName: "star-empty" },
+        full: { iconSet: UiIcons, iconName: "star-full" },
+        half: { iconSet: UiIcons, iconName: "star-half" },
     },
     ratingInput: {
-        empty: { iconSet: Stars, iconName: "empty" },
-        full: { iconSet: Stars, iconName: "full" },
-        half: { iconSet: Stars, iconName: "half" },
+        empty: { iconSet: UiIcons, iconName: "star-empty" },
+        full: { iconSet: UiIcons, iconName: "star-full" },
+        half: { iconSet: UiIcons, iconName: "star-half" },
     },
 });
+
+export const mergeIcons = (overrides?: IconOverrides): Icons => {
+    if (!overrides) return defaultIcons;
+
+    const merged = { ...defaultIcons } as Record<
+        string,
+        Record<string, unknown> | undefined
+    >;
+
+    for (const [category, slots] of Object.entries(overrides)) {
+        if (!slots) continue;
+        if (!Object.hasOwn(defaultIcons, category)) continue;
+        merged[category] = { ...(merged[category] ?? {}), ...slots };
+    }
+
+    return merged as Icons;
+};

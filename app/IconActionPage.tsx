@@ -1,4 +1,4 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     Octicons,
     type OcticonsIconName,
@@ -6,11 +6,15 @@ import {
 import {
     IconAction,
     type IconActionProps,
-    type IconComponentProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/actions";
+import type { IconComponentProps } from "@reillymc/react-native-components/icons";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { IconPropDefinitions } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconActionProps;
 
@@ -27,11 +31,7 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "string",
         label: "Label",
     },
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        values: glyphMapValueItems,
-    },
+    iconName: IconPropDefinitions.iconName,
     variant: {
         type: "enum",
         label: "Style variant",
@@ -44,10 +44,10 @@ const propDefinitions: PropDefinitions<Props> = {
     iconPosition: {
         type: "enum",
         label: "Icon position",
-        default: "left",
+        default: "start",
         values: [
-            { label: "Left", value: "left" },
-            { label: "Right", value: "right" },
+            { label: "Start", value: "start" },
+            { label: "End", value: "end" },
         ],
     },
     disabled: {
@@ -58,13 +58,11 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "function",
         label: "Press action",
     },
-    iconSet: {
-        type: "hidden",
-    },
+    iconSet: IconPropDefinitions.iconSet,
 };
 
-const IconActionPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<Props>(defaultProps);
+const IconActionPage: FunctionComponent = () => {
+    const [props, setProps] = useState<Props>(defaultProps);
 
     return (
         <ComponentPage

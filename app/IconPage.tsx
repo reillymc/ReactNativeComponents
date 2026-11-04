@@ -8,10 +8,14 @@ import {
     Icon,
     type IconComponentProps,
     type IconProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/icons";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { IconPropDefinitions } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconProps;
 
@@ -21,14 +25,8 @@ const defaultProps: Props = {
 };
 
 const propDefinitions: PropDefinitions<Props> = {
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        values: glyphMapValueItems,
-    },
-    iconSet: {
-        type: "hidden",
-    },
+    iconName: IconPropDefinitions.iconName,
+    iconSet: IconPropDefinitions.iconSet,
 };
 
 const IconPage: FunctionComponent = () => {

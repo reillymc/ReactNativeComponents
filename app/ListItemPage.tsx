@@ -1,45 +1,52 @@
 import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
-    AlertIndicator,
     IconAction,
-    ListItem,
-    ListItemAlert,
-    ListItemAvatar,
-    type ListItemProps,
-    ListItemRow,
     SwipeAction,
-    Text,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/actions";
+import {
+    Badge,
+    ContentRow,
+    ListItem,
+    type ListItemProps,
+} from "@reillymc/react-native-components/display";
+import { Text } from "@reillymc/react-native-components/typography";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+
+const headerContent = <Text variant="caption">Header text</Text>;
+
+const footerText = <Text variant="caption">Footer text</Text>;
+
+const footerContentRow = (
+    <ContentRow>
+        <Text variant="caption">Footer text</Text>
+        <Text variant="caption">Footer text 2</Text>
+    </ContentRow>
+);
 
 const defaultProps: ListItemProps = {
     heading: "Heading text",
+    footer: footerContentRow,
     avatar: (
-        <ListItemAvatar>
-            <IconAction
-                iconSet={Octicons}
-                onPress={() => null}
-                iconName="apps"
-                variant="primary"
-            />
-        </ListItemAvatar>
+        <IconAction
+            iconSet={Octicons}
+            onPress={() => null}
+            iconName="apps"
+            variant="primary"
+        />
     ),
-    alert: (
-        <ListItemAlert>
-            <AlertIndicator variant="primary" label="8" />
-        </ListItemAlert>
+    alert: <Badge variant="primary" label="8" />,
+    content: (
+        <ContentRow>
+            <Text>Description</Text>
+            <Text>Description 2</Text>
+        </ContentRow>
     ),
-    contentRows: [
-        <ListItemRow
-            key={1}
-            contentItems={[
-                <Text key={1}>Description</Text>,
-                <Text key={2}>Description 2</Text>,
-            ]}
-        />,
-    ],
     swipeActions: [
         <SwipeAction
             key="1"
@@ -52,7 +59,7 @@ const defaultProps: ListItemProps = {
             key="2"
             iconSet={Octicons}
             iconName="pencil"
-            variant="secondary"
+            variant="primary"
             onPress={() => null}
         />,
     ],
@@ -64,6 +71,29 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
         type: "string",
         label: "Heading text",
     },
+    header: {
+        type: "enum",
+        label: "Header",
+        default: "None",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: headerContent },
+        ],
+    },
+    footer: {
+        type: "enum",
+        label: "Footer",
+        default: "Content row",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: footerText },
+            {
+                id: "ContentRow",
+                label: "Content row",
+                value: footerContentRow,
+            },
+        ],
+    },
     avatar: {
         type: "enum",
         label: "Avatar",
@@ -73,56 +103,47 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             { id: "Icon", label: "Icon", value: defaultProps.avatar },
         ],
     },
-    contentRows: {
+    content: {
         type: "enum",
-        label: "Content rows",
+        label: "Content",
         default: "One",
         values: [
             { id: "None", label: "None", value: undefined },
-            { id: "One", label: "One", value: defaultProps.contentRows },
+            { id: "One", label: "One", value: defaultProps.content },
             {
                 id: "Two",
                 label: "Two",
-                value: [
-                    <ListItemRow
-                        key={1}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                    <ListItemRow
-                        key={2}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                ],
+                value: (
+                    <>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                    </>
+                ),
             },
             {
                 id: "Three",
                 label: "Three",
-                value: [
-                    <ListItemRow
-                        key={1}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                    <ListItemRow
-                        key={2}
-                        contentItems={[<Text key={1}>Description</Text>]}
-                    />,
-                    <ListItemRow
-                        key={3}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                ],
+                value: (
+                    <>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                    </>
+                ),
             },
         ],
     },
@@ -148,7 +169,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                         key="2"
                         iconSet={Octicons}
                         iconName="pencil"
-                        variant="secondary"
+                        variant="primary"
                         onPress={() => null}
                     />,
                 ],
@@ -164,15 +185,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             {
                 id: "Alert",
                 label: "Alert",
-                value: (
-                    <ListItemAlert>
-                        <AlertIndicator
-                            style={{ marginRight: 20 }}
-                            variant="primary"
-                            label="3"
-                        />
-                    </ListItemAlert>
-                ),
+                value: <Badge variant="primary" label="3" />,
             },
         ],
     },

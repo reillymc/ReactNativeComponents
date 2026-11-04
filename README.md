@@ -1,6 +1,6 @@
 # @reillymc/react-native-components
 
-@reillymc/react-native-components
+A collection of React Native components with a typed palette and component theme system.
 
 ## Installation
 
@@ -8,30 +8,112 @@
 npm install @reillymc/react-native-components
 ```
 
-## Usage
+Install the peer dependencies required by the components you use:
 
-```js
-import { Button } from "@reillymc/react-native-components";
+```sh
+npm install react-native-gesture-handler react-native-reanimated \
+  react-native-safe-area-context react-native-screens react-native-svg \
+  react-native-worklets
 ```
 
-## Contributing
+## Quick start
 
-See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+Create an app theme once, then use the generated provider and style helper:
 
-## Publishing
+```tsx
+import { View } from "react-native";
+import { Text } from "@reillymc/react-native-components/typography";
+import {
+    type AppThemeFactory,
+    createAppTheme,
+} from "@reillymc/react-native-components/theme";
 
-This package is published to github npm packages and requires [authentication](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#authenticating-to-github-packages).
+type AppTheme = {
+    screen: {
+        padding: number;
+    };
+};
 
-New package versions are published automatically via the [publish](.github/workflows/publish.yml) GitHub workflow. A [pre-commit hook](.git/hooks/pre-commit) increments the patch version each commit automatically, while minor/major branches are created manually.
+const createAppThemeValues: AppThemeFactory<AppTheme> = ({ palette }) => ({
+    screen: {
+        padding: palette.spacing.medium,
+    },
+});
 
-### Running Locally
+export const { AppThemeProvider, defineStyles, useStyles } =
+    createAppTheme<AppTheme>(createAppThemeValues);
 
-To generate the Expo Go QR code which correctly links to the Metro server, the `REACT_NATIVE_PACKAGER_HOSTNAME` variable in the dev container [.env](.devcontainer/.env) file must be set. An example is provided.
+const createStyles = defineStyles(({ appTheme }) => ({
+    screen: {
+        flex: 1,
+        padding: appTheme.screen.padding,
+    },
+}));
+
+const Screen = () => {
+    const styles = useStyles(createStyles);
+
+    return (
+        <View style={styles.screen}>
+            <Text>Hello</Text>
+        </View>
+    );
+};
+
+export const App = () => (
+    <AppThemeProvider>
+        <Screen />
+    </AppThemeProvider>
+);
+```
+
+Components have working defaults and can render without the provider, but use `AppThemeProvider` so palette, component theme, shared system defaults, and icon overrides are consistent.
+
+## Overrides
+
+`AppThemeProvider` accepts `palette`, `theme`, `systems`, and `icons` overrides:
+
+```tsx
+import { darkColorScheme } from "@reillymc/react-native-components/theme";
+
+const palette = { color: darkColorScheme };
+
+<AppThemeProvider
+    palette={palette}
+    theme={{ iconBase: { size: 24 } }}
+    systems={{
+        interaction: { disabled: { opacity: 0.4 } },
+        accessibility: { maxFontSizeMultiplier: 1.4 },
+    }}
+>
+    <App />
+</AppThemeProvider>;
+```
+
+Component theme overrides cascade into derived component themes. For one-off overrides, pass `theme` to the component; native styles still go through `style`:
+
+```tsx
+<Button
+    label="Save"
+    theme={{ container: { borderRadius: 12 } }}
+    style={{ marginTop: 8 }}
+/>
+```
+
+Keep provider objects stable (module scope or memoized) so the theme is not rebuilt on every render.
+
+## Public entry points
+
+- `@reillymc/react-native-components/actions`
+- `@reillymc/react-native-components/display`
+- `@reillymc/react-native-components/feedback`
+- `@reillymc/react-native-components/forms`
+- `@reillymc/react-native-components/layout`
+- `@reillymc/react-native-components/overlays`
+- `@reillymc/react-native-components/typography`
+- `@reillymc/react-native-components/icons`
+- `@reillymc/react-native-components/theme`
 
 ## License
 
 MIT
-
----
-
-Made with [create-react-native-library](https://github.com/callstack/react-native-builder-bob)

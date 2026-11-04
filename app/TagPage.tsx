@@ -1,12 +1,20 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
-import { Tag, TagIcon, type TagProps } from "@reillymc/react-native-components";
+import {
+    Tag,
+    TagIcon,
+    type TagProps,
+} from "@reillymc/react-native-components/display";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: TagProps = {
     label: "Example Tag",
-    variant: "dark",
+    tone: "dark",
     icon: <TagIcon iconSet={Octicons} iconName="x-circle" />,
 };
 
@@ -31,9 +39,9 @@ const propDefinitions: PropDefinitions<TagProps> = {
             },
         ],
     },
-    variant: {
+    tone: {
         type: "enum",
-        label: "Variant",
+        label: "Tone",
         default: "dark",
         values: [
             { label: "Dark", value: "dark" },
@@ -42,8 +50,8 @@ const propDefinitions: PropDefinitions<TagProps> = {
     },
 };
 
-const TagPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TagProps>(defaultProps);
+const TagPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TagProps>(defaultProps);
 
     return (
         <ComponentPage

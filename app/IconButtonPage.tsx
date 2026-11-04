@@ -6,11 +6,15 @@ import {
 import {
     IconButton,
     type IconButtonProps,
-    type IconComponentProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/actions";
+import type { IconComponentProps } from "@reillymc/react-native-components/icons";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { glyphMapValueItems } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { IconPropDefinitions } from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconButtonProps;
 
@@ -18,24 +22,27 @@ const defaultProps: Props = {
     iconSet: Octicons,
     iconName: "arrow-both",
     variant: "primary",
+    appearance: "subtle",
     onPress: () => null,
 };
 
 const propDefinitions: PropDefinitions<Props> = {
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        default: defaultProps.iconName,
-        values: glyphMapValueItems,
-    },
+    iconName: IconPropDefinitions.iconName,
     variant: {
         type: "enum",
         label: "Style variant",
         default: defaultProps.variant,
         values: [
             { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
             { label: "Destructive", value: "destructive" },
+        ],
+    },
+    appearance: {
+        type: "enum",
+        label: "Appearance",
+        values: [
+            { label: "Prominent", value: "prominent" },
+            { label: "Subtle", value: "subtle" },
         ],
     },
     disabled: {
@@ -46,9 +53,7 @@ const propDefinitions: PropDefinitions<Props> = {
         type: "function",
         label: "Press action",
     },
-    iconSet: {
-        type: "hidden",
-    },
+    iconSet: IconPropDefinitions.iconSet,
 };
 
 const IconButtonPage: FunctionComponent = () => {

@@ -1,0 +1,34 @@
+import type { IconComponentProps } from "../../icons/IconComponentProps";
+import { defineStyles, useComponent } from "../../internal";
+import { IconButton, type IconButtonProps } from "../button";
+
+export type SwipeActionTheme = {
+    width: number;
+    borderRadius: number;
+};
+
+export interface SwipeActionProps
+    extends Pick<IconButtonProps, "onPress" | "variant"> {}
+
+export const SwipeAction = <G extends string>(
+    props: SwipeActionProps & IconComponentProps<G>,
+) => {
+    const { styles } = useComponent("swipeAction", { createStyles });
+    return (
+        <IconButton
+            {...props}
+            appearance="prominent"
+            style={styles.actionButton}
+        />
+    );
+};
+
+const createStyles = defineStyles((theme: SwipeActionTheme) => ({
+    actionButton: {
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: theme.borderRadius,
+        width: theme.width,
+    },
+}));

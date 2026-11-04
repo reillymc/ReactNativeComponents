@@ -1,19 +1,26 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     NumberInput,
     type NumberInputProps,
     type NumberInputValue,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/forms";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { FieldPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
-    ...CommonInputProps,
-    placeholder2: {
-        type: "string",
-        label: "Placeholder 2 text",
-    },
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
     enabledRepresentations: {
         type: "enum",
         label: "Enabled Modes",
@@ -52,16 +59,20 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
 };
 
 const defaultProps: NumberInputProps = {
-    placeholder: "0",
-    placeholder2: "0",
+    placeholder: {
+        value: "0",
+        start: "0",
+        end: "0",
+        whole: "0",
+        numerator: "0",
+        denominator: "0",
+    },
     disabled: false,
 };
 
-const NumberInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<NumberInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<NumberInputValue>();
-
-    console.debug(inputValue);
+const NumberInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<NumberInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<NumberInputValue>();
 
     return (
         <ComponentPage

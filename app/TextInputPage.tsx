@@ -1,29 +1,30 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     TextInput,
     type TextInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/forms";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import {
+    FieldPropDefinitions,
+    FieldTextInputPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TextInputProps> = {
-    ...CommonInputProps,
-    clearButtonMode: {
-        type: "enum",
-        label: "Clear button mode",
-        default: "Never",
-        values: [
-            { label: "Never", value: "never" },
-            { label: "While editing", value: "while-editing" },
-            { label: "Unless editing", value: "unless-editing" },
-            { label: "Always", value: "always" },
-        ],
-    },
-    hasError: {
-        type: "boolean",
-        label: "Has error",
-    },
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    placeholder: FieldTextInputPropDefinitions.placeholder,
+    clearButtonMode: FieldTextInputPropDefinitions.clearButtonMode,
 };
 
 const defaultProps: TextInputProps = {
@@ -31,8 +32,8 @@ const defaultProps: TextInputProps = {
     disabled: false,
 };
 
-const TextInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<TextInputProps>(defaultProps);
+const TextInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<TextInputProps>(defaultProps);
 
     return (
         <ComponentPage
