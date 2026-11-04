@@ -29,6 +29,20 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
         type: "function",
         label: "onChange",
     },
+    submitOnEnter: {
+        type: "boolean",
+        label: "Always submit on enter",
+    },
+    selectBehavior: {
+        type: "enum",
+        label: "Select behavior",
+        default: "Blur and close",
+        values: [
+            { label: "Blur and close", value: "blurAndClose" },
+            { label: "Close", value: "close" },
+            { label: "Keep open", value: "keepOpen" },
+        ],
+    },
     disableOpenOnFocus: {
         type: "boolean",
         label: "Disable open on focus",
@@ -36,10 +50,6 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
     allowsCustomValue: {
         type: "boolean",
         label: "Allow custom value",
-    },
-    blurOnSelect: {
-        type: "boolean",
-        label: "Blur on select",
     },
 };
 
@@ -60,9 +70,10 @@ const defaultProps: ComboboxInputProps = {
         { value: "s2", label: "Something Else 2" },
         { value: "s3", label: "Something Else 3" },
     ],
+    submitOnEnter: false,
+    selectBehavior: "blurAndClose",
     disableOpenOnFocus: false,
     allowsCustomValue: false,
-    blurOnSelect: true,
 };
 
 const ComboboxInputPage: FunctionComponent = () => {
@@ -74,10 +85,10 @@ const ComboboxInputPage: FunctionComponent = () => {
             component={
                 <ComboboxInput
                     {...props}
-                    onChange={(item) =>
+                    onChange={({ value }) =>
                         setProps((prev) => ({
                             ...prev,
-                            value: item?.value,
+                            value,
                         }))
                     }
                 />

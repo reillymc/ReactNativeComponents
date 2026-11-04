@@ -300,7 +300,7 @@ const ComponentListScreen: FC = () => {
                             <ComboboxInput
                                 placeholder="Variant"
                                 value={variant}
-                                onChange={(item) => setVariant(item?.value)}
+                                onChange={({ value }) => setVariant(value)}
                                 items={[
                                     { label: "Primary", value: "primary" },
                                     {

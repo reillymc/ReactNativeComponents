@@ -18,19 +18,22 @@ export type ComboboxInputProps<T = string> = FieldComponentProps &
         | "returnKeyLabel"
         | "onBlur"
         | "placeholder"
-        | "onChangeText"
         | "controllerRef"
         | "clearButtonMode"
         | "maxLength"
-        | "onSubmitEditing"
         | "autoFocus"
         | "items"
         | "value"
         | "defaultValue"
         | "onChange"
+        | "inputValue"
+        | "defaultInputValue"
+        | "onInputChange"
+        | "onSubmit"
+        | "submitOnEnter"
+        | "selectBehavior"
         | "disableOpenOnFocus"
         | "allowsCustomValue"
-        | "blurOnSelect"
         | "filterItems"
         | "minimumSearchLength"
         | "maxSuggestionCount"
@@ -51,7 +54,6 @@ export const ComboboxInput = <T,>({
     variant,
     style,
     theme: themeOverrides,
-    onChange,
     ...props
 }: ComboboxInputProps<T>) => {
     const { theme } = useComponent("comboboxInput", { themeOverrides });
@@ -73,7 +75,6 @@ export const ComboboxInput = <T,>({
                 <ComboboxInputBase
                     anchorRef={surfaceAnchorRef}
                     theme={theme}
-                    onChange={onChange}
                     {...props}
                 />
             </FieldSurface>

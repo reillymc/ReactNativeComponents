@@ -10,10 +10,85 @@ import type { FieldTextInputProps } from "../../field";
 import type { ValueItem } from "../valueItem";
 import { type ComboboxValue, filterComboboxItems, getItemKey } from "./helpers";
 
-type EditState<T> = {
-    text: string;
-    /** The selection key at the time the user last edited. */
-    key: ComboboxValue<T> | undefined;
+type ComboboxValueChangeReason = "select" | "deselect";
+
+type ComboboxInputChangeReason =
+    | "input"
+    | "select"
+    | "commit"
+    | "revert"
+    | "clear";
+
+type ComboboxSubmitReason = "select" | "custom" | "empty";
+
+export type ComboboxSelectBehavior = "blurAndClose" | "close" | "keepOpen";
+
+export interface ComboboxValueChangeDetails<T> {
+    /** The selected item key, or `undefined` when the selection is cleared. */
+    value: ComboboxValue<T> | undefined;
+    /** The selected item, or `undefined` when the selection is cleared. */
+    item: ValueItem<T> | undefined;
+    reason: ComboboxValueChangeReason;
+}
+
+export interface ComboboxInputChangeDetails {
+    inputValue: string;
+    reason: ComboboxInputChangeReason;
+}
+
+export interface ComboboxSubmitDetails<T> {
+    /** The resolved key of the submitted item, or `undefined` for custom/empty. */
+    value: ComboboxValue<T> | undefined;
+    /** The resolved item, or `undefined` for custom/empty submissions. */
+    item: ValueItem<T> | undefined;
+    inputValue: string;
+    reason: ComboboxSubmitReason;
+}
+
+type ExpectedValueChange<T> = {
+    value: ComboboxValue<T> | undefined;
+};
+
+type SubmitResolution<T> =
+    | { type: "item"; item: ValueItem<T> }
+    | { type: "custom"; customValue: string }
+    | { type: "selected"; item: ValueItem<T> | undefined };
+
+const resolveSubmit = <T>({
+    showContainer,
+    activeIndex,
+    filteredItems,
+    query,
+    selectedItem,
+    allowsCustomValue,
+}: {
+    showContainer: boolean;
+    activeIndex: number;
+    filteredItems: Array<ValueItem<T>>;
+    query: string;
+    selectedItem: ValueItem<T> | undefined;
+    allowsCustomValue: boolean;
+}): SubmitResolution<T> => {
+    const highlightedItem =
+        showContainer && activeIndex >= 0
+            ? filteredItems[activeIndex]
+            : undefined;
+
+    if (highlightedItem) {
+        return { type: "item", item: highlightedItem };
+    }
+
+    const customValue = query.trim();
+
+    if (
+        allowsCustomValue &&
+        customValue &&
+        customValue !== selectedItem?.label.trim()
+    ) {
+        return { type: "custom", customValue };
+    }
+
+    return { type: "selected", item: selectedItem };
 };
 
 export type ComboboxControllerOptions<T> = {
@@ -21,16 +96,20 @@ export type ComboboxControllerOptions<T> = {
     value: ComboboxValue<T> | undefined;
     defaultValue: ComboboxValue<T> | undefined;
     isValueControlled: boolean;
+    inputValue: string | undefined;
+    defaultInputValue: string | undefined;
+    isInputControlled: boolean;
     interactive: boolean;
-    onChange?: (item: ValueItem<T> | undefined, inputValue: string) => void;
-    onChangeText?: (text: string) => void;
+    onChange?: (details: ComboboxValueChangeDetails<T>) => void;
+    onInputChange?: (details: ComboboxInputChangeDetails) => void;
+    onSubmit?: (details: ComboboxSubmitDetails<T>) => void;
     onFocus?: FieldTextInputProps["onFocus"];
     onBlur?: FieldTextInputProps["onBlur"];
     onKeyPress?: FieldTextInputProps["onKeyPress"];
-    onSubmitEditing?: FieldTextInputProps["onSubmitEditing"];
+    selectBehavior: ComboboxSelectBehavior;
     disableOpenOnFocus: boolean;
     allowsCustomValue: boolean;
-    blurOnSelect: boolean;
+    submitOnEnter: boolean;
     filterItems?: (item: ValueItem<T>, query: string) => boolean;
     minimumSearchLength: number;
     maxSuggestionCount?: number;
@@ -43,16 +122,20 @@ export const useComboboxController = <T>({
     value,
     defaultValue,
     isValueControlled,
+    inputValue,
+    defaultInputValue,
+    isInputControlled,
     interactive,
     onChange,
-    onChangeText,
+    onInputChange,
+    onSubmit,
     onFocus,
     onBlur,
     onKeyPress,
-    onSubmitEditing,
+    selectBehavior,
     disableOpenOnFocus,
     allowsCustomValue,
-    blurOnSelect,
+    submitOnEnter,
     filterItems,
     minimumSearchLength,
     maxSuggestionCount,
@@ -64,9 +147,35 @@ export const useComboboxController = <T>({
         value,
         defaultValue,
     );
-    const [edit, setEdit] = useState<EditState<T>>();
+    const [inputText, setInputText] = useState<string | undefined>(
+        defaultInputValue,
+    );
     const [isOpen, setIsOpen] = useState(false);
     const [activeIndex, setActiveIndex] = useState(-1);
+
+    const skipBlurRef = useRef(false);
+    const previousValueRef = useRef(value);
+    const expectedValueChangeRef = useRef<ExpectedValueChange<T> | undefined>(
+        undefined,
+    );
+
+    useEffect(() => {
+        const previousValue = previousValueRef.current;
+        if (previousValue === value) return;
+
+        previousValueRef.current = value;
+
+        const expectedChange = expectedValueChangeRef.current;
+        expectedValueChangeRef.current = undefined;
+
+        if (expectedChange && expectedChange.value === value) {
+            return;
+        }
+
+        if (!isInputControlled) {
+            setInputText(undefined);
+        }
+    }, [isInputControlled, value]);
 
     useEffect(() => {
         if (!interactive) {
@@ -75,18 +184,15 @@ export const useComboboxController = <T>({
         }
     }, [interactive]);
 
-    const skipBlurRef = useRef(false);
-
     const selectedItem = items.find((item) => getItemKey(item) === selectedKey);
 
-    // Editing is only active while the selection hasn't changed underneath it.
-    const activeEdit =
-        edit !== undefined && edit.key === selectedKey ? edit : undefined;
-    const isInputCleared = edit?.text === "";
-    const query = activeEdit?.text ?? "";
-    const displayText = activeEdit
-        ? activeEdit.text
-        : (selectedItem?.label ?? "");
+    const isInputCleared = isInputControlled
+        ? (inputValue ?? "") === ""
+        : inputText === "";
+    const query = isInputControlled ? (inputValue ?? "") : (inputText ?? "");
+    const displayText = isInputControlled
+        ? (inputValue ?? "")
+        : (inputText ?? selectedItem?.label ?? "");
 
     const { filteredItems, meetsMinimum } = filterComboboxItems(items, query, {
         filterItems,
@@ -124,13 +230,26 @@ export const useComboboxController = <T>({
     }, [activeIndex, filteredItems.length, isInputCleared, showContainer]);
 
     const revertText = () => {
-        setEdit(undefined);
-        onChangeText?.(selectedItem?.label ?? "");
+        const fallback = selectedItem?.label ?? "";
+
+        if (!isInputControlled) {
+            setInputText(undefined);
+        }
+
+        if (displayText !== fallback) {
+            onInputChange?.({ inputValue: fallback, reason: "revert" });
+        }
     };
 
     const settleText = () => {
-        if (allowsCustomValue && query && query !== selectedItem?.label) {
-            commitCustomValue(query);
+        const customValue = query.trim();
+
+        if (
+            allowsCustomValue &&
+            customValue &&
+            customValue !== selectedItem?.label.trim()
+        ) {
+            commitCustomValue(customValue, true);
             return;
         }
 
@@ -140,24 +259,56 @@ export const useComboboxController = <T>({
     const selectItem = (item: ValueItem<T>) => {
         if (!interactive) return;
 
-        setSelectedKey(getItemKey(item));
-        onChange?.(item, item.label);
-        setEdit(undefined);
-        skipBlurRef.current = blurOnSelect;
-        setActiveIndex(-1);
-        setIsOpen(false);
+        const nextKey = getItemKey(item);
 
-        if (blurOnSelect) {
+        setSelectedKey(nextKey);
+        expectedValueChangeRef.current = { value: nextKey };
+        onChange?.({ value: nextKey, item, reason: "select" });
+
+        if (!isInputControlled) {
+            setInputText(undefined);
+        }
+
+        onInputChange?.({ inputValue: item.label, reason: "select" });
+        setActiveIndex(-1);
+
+        const shouldBlur = selectBehavior === "blurAndClose";
+        const shouldClose = selectBehavior !== "keepOpen";
+
+        if (shouldClose) {
+            setIsOpen(false);
+        }
+
+        if (shouldBlur) {
+            skipBlurRef.current = true;
             inputRef.current?.blur();
         }
     };
 
-    const commitCustomValue = (typed: string) => {
+    const commitCustomValue = (
+        customValue: string,
+        notifyInputChange: boolean,
+    ) => {
         if (!interactive) return;
 
-        setSelectedKey(undefined);
-        onChange?.(undefined, typed);
-        setEdit({ text: typed, key: undefined });
+        if (selectedKey !== undefined) {
+            setSelectedKey(undefined);
+            expectedValueChangeRef.current = { value: undefined };
+            onChange?.({
+                value: undefined,
+                item: undefined,
+                reason: "deselect",
+            });
+        }
+
+        if (!isInputControlled) {
+            setInputText(customValue);
+        }
+
+        if (notifyInputChange) {
+            onInputChange?.({ inputValue: customValue, reason: "commit" });
+        }
+
         setActiveIndex(-1);
         setIsOpen(false);
     };
@@ -198,21 +349,29 @@ export const useComboboxController = <T>({
 
         skipBlurRef.current = false;
         setIsOpen(true);
-        onChangeText?.(next);
+
+        if (!isInputControlled) {
+            setInputText(next);
+        }
 
         if (next === "") {
             if (selectedKey !== undefined) {
                 setSelectedKey(undefined);
-                onChange?.(undefined, "");
+                expectedValueChangeRef.current = { value: undefined };
+                onChange?.({
+                    value: undefined,
+                    item: undefined,
+                    reason: "deselect",
+                });
             }
 
-            setEdit({ text: "", key: undefined });
+            onInputChange?.({ inputValue: next, reason: "clear" });
             setActiveIndex(-1);
             return;
         }
 
+        onInputChange?.({ inputValue: next, reason: "input" });
         setActiveIndex(0);
-        setEdit({ text: next, key: selectedKey });
     };
 
     const handleArrowDown = (e: TextInputKeyPressEvent) => {
@@ -281,43 +440,69 @@ export const useComboboxController = <T>({
         inputRef.current?.blur();
     };
 
-    const handleSubmitEditing: NonNullable<
-        FieldTextInputProps["onSubmitEditing"]
-    > = (e) => {
-        if (!interactive) {
-            onSubmitEditing?.(e);
-            return;
-        }
+    const submitItem = (item: ValueItem<T>) => {
+        selectItem(item);
 
-        const item =
-            showContainer && activeIndex >= 0
-                ? filteredItems[activeIndex]
-                : undefined;
+        if (!submitOnEnter) return;
 
-        if (item) {
-            selectItem(item);
-            return;
-        }
-
-        if (allowsCustomValue && query && query !== selectedItem?.label) {
-            commitCustomValue(query);
-            blurInput();
-            return;
-        }
-
-        onSubmitEditing?.(e);
-        inputRef.current?.blur();
+        onSubmit?.({
+            value: getItemKey(item),
+            item,
+            inputValue: item.label,
+            reason: "select",
+        });
     };
 
-    const clear = () => {
+    const submitCustom = (customValue: string) => {
+        commitCustomValue(customValue, customValue !== query);
+        onSubmit?.({
+            value: undefined,
+            item: undefined,
+            inputValue: customValue,
+            reason: "custom",
+        });
+        blurInput();
+    };
+
+    const submitSelection = (item: ValueItem<T> | undefined) => {
+        if (displayText !== (item?.label ?? "")) {
+            revertText();
+        }
+
+        onSubmit?.({
+            value: item ? getItemKey(item) : undefined,
+            item,
+            inputValue: item?.label ?? "",
+            reason: item ? "select" : "empty",
+        });
+        blurInput();
+    };
+
+    const handleSubmitEditing: NonNullable<
+        FieldTextInputProps["onSubmitEditing"]
+    > = () => {
         if (!interactive) return;
 
-        setEdit(undefined);
-        setIsOpen(false);
-        setActiveIndex(-1);
-        setSelectedKey(undefined);
-        onChange?.(undefined, "");
-        onChangeText?.("");
+        const resolution = resolveSubmit({
+            showContainer,
+            activeIndex,
+            filteredItems,
+            query,
+            selectedItem,
+            allowsCustomValue,
+        });
+
+        if (resolution.type === "item") {
+            submitItem(resolution.item);
+            return;
+        }
+
+        if (resolution.type === "custom") {
+            submitCustom(resolution.customValue);
+            return;
+        }
+
+        submitSelection(resolution.item);
     };
 
     return {
@@ -332,7 +517,6 @@ export const useComboboxController = <T>({
         handleSubmitEditing,
         selectItem,
         updateInputText,
-        clear,
         open: () => {
             if (interactive) {
                 setIsOpen(true);

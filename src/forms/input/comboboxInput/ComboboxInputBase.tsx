@@ -18,13 +18,15 @@ import type { ValueItem } from "../valueItem";
 import { ComboboxBlurGuard } from "./ComboboxBlurGuard";
 import type { ComboboxInputTheme } from "./ComboboxInput.theme";
 import { type ComboboxValue, getItemKey } from "./helpers";
-import { useComboboxController } from "./useComboboxController";
-
-export type { ComboboxValue } from "./helpers";
+import {
+    type ComboboxInputChangeDetails,
+    type ComboboxSelectBehavior,
+    type ComboboxSubmitDetails,
+    type ComboboxValueChangeDetails,
+    useComboboxController,
+} from "./useComboboxController";
 
 export interface ComboboxInputHandle {
-    setInputValue: (text: string) => void;
-    clear: () => void;
     open: () => void;
     close: () => void;
     focus: () => void;
@@ -42,15 +44,15 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     | "placeholder"
     | "clearButtonMode"
     | "maxLength"
-    | "onSubmitEditing"
     | "autoFocus"
     | "style"
 > & {
     items?: Array<ValueItem<T>>;
 
     /**
-     * The selected item's key. Controlled when supplied; otherwise the
-     * component manages selection internally (seed it with `defaultValue`).
+     * The selected item's key. Controlled when the prop is present; pass
+     * `undefined` for an explicit empty selection. Omit the prop for
+     * uncontrolled usage.
      */
     value?: ComboboxValue<T>;
 
@@ -58,19 +60,49 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     defaultValue?: ComboboxValue<T>;
 
     /**
-     * Called when the selection changes. The item is `undefined` for a custom
-     * (free-typed) value; `inputValue` is always the current input text.
+     * Called when the selection changes with reason `"select"` or
+     * `"deselect"`. Custom text is not represented here; it is reported through
+     * `onInputChange` and `onSubmit`.
      */
-    onChange?: (item: ValueItem<T> | undefined, inputValue: string) => void;
+    onChange?: (details: ComboboxValueChangeDetails<T>) => void;
 
     /**
-     * Notification for text changes: user typing, imperative set/clear, and
-     * reverts to the selected label on blur/escape. Not called on selection
-     * (use `onChange` for that).
+     * The input text. Controlled when supplied. When controlled, update it
+     * from `onInputChange` (including selection and revert events) so the
+     * displayed text stays in sync. The component does not write this prop or
+     * emit `onInputChange` for external `value` changes; reset `inputValue`
+     * alongside `value` when resetting the form.
      */
-    onChangeText?: (text: string) => void;
+    inputValue?: string;
 
-    /** Imperative controls (set text, clear, open/close, focus/blur). */
+    /**
+     * Initial input text for uncontrolled usage. Defaults to the selected
+     * item's label.
+     */
+    defaultInputValue?: string;
+
+    /**
+     * Called whenever the input text changes: typing, selection, custom-value
+     * commits, reverts, and clears.
+     */
+    onInputChange?: (details: ComboboxInputChangeDetails) => void;
+
+    /**
+     * Called on every return-key press, including empty or unchanged
+     * selections. Receives the resolved value, so it does not depend on state
+     * updates from `onChange`/`onInputChange`.
+     */
+    onSubmit?: (details: ComboboxSubmitDetails<T>) => void;
+
+    /**
+     * Whether Enter also submits when it accepts a highlighted suggestion.
+     * Enter already submits when the popup is closed, with custom text, or
+     * with an empty value.
+     * @default false
+     */
+    submitOnEnter?: boolean;
+
+    /** Imperative controls (open/close, focus/blur). */
     controllerRef?: Ref<ComboboxInputHandle>;
 
     /**
@@ -80,17 +112,22 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     disableOpenOnFocus?: boolean;
 
     /**
-     * Whether free-typed values that don't match an item are kept and reported
-     * through `onChange` (rather than reverting to the selected item on blur).
+     * Whether free-typed values are kept instead of reverting on blur. Custom
+     * text is committed on blur/Enter and reported through `onInputChange`
+     * and `onSubmit`.
      * @default false
      */
     allowsCustomValue?: boolean;
 
     /**
-     * Whether selecting an item blurs (and closes) the input.
-     * @default true
+     * Controls what happens when an item is selected.
+     *
+     * - `"blurAndClose"`: close the menu and blur the input.
+     * - `"close"`: close the menu and keep focus in the input.
+     * - `"keepOpen"`: keep the menu open and keep focus in the input.
+     * @default "blurAndClose"
      */
-    blurOnSelect?: boolean;
+    selectBehavior?: ComboboxSelectBehavior;
 
     /** Overrides the default label/description matching. */
     filterItems?: (item: ValueItem<T>, query: string) => boolean;
@@ -124,12 +161,16 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         items = EMPTY_ITEMS,
         value,
         defaultValue,
+        inputValue,
+        defaultInputValue,
         onChange,
-        onChangeText,
+        onInputChange,
+        onSubmit,
+        submitOnEnter = false,
+        selectBehavior = "blurAndClose",
         controllerRef,
         disableOpenOnFocus = false,
         allowsCustomValue = false,
-        blurOnSelect = true,
         filterItems,
         minimumSearchLength = 1,
         maxSuggestionCount,
@@ -139,12 +180,12 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         onBlur,
         onFocus,
         onKeyPress,
-        onSubmitEditing,
         ref,
         ...inputProps
     } = props;
 
     const isValueControlled = "value" in props;
+    const isInputControlled = "inputValue" in props;
     const { interactive } = useFieldControlState();
 
     const inputRef = useForwardedRef(ref);
@@ -163,7 +204,6 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         handleSubmitEditing,
         selectItem,
         updateInputText,
-        clear,
         open,
         close,
     } = useComboboxController({
@@ -171,16 +211,20 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         value,
         defaultValue,
         isValueControlled,
+        inputValue,
+        defaultInputValue,
+        isInputControlled,
         interactive,
         onChange,
-        onChangeText,
+        onInputChange,
+        onSubmit,
         onFocus,
         onBlur,
         onKeyPress,
-        onSubmitEditing,
+        selectBehavior,
         disableOpenOnFocus,
         allowsCustomValue,
-        blurOnSelect,
+        submitOnEnter,
         filterItems,
         minimumSearchLength,
         maxSuggestionCount,
@@ -191,15 +235,12 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     useImperativeHandle(
         controllerRef,
         () => ({
-            setInputValue: updateInputText,
-            clear,
             open,
             close,
             focus: () => interactive && inputRef.current?.focus(),
-
             blur: () => inputRef.current?.blur(),
         }),
-        [updateInputText, clear, open, close, interactive, inputRef],
+        [open, close, interactive, inputRef],
     );
 
     return (

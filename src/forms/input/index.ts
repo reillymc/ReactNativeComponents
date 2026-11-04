@@ -1,9 +1,10 @@
-export type { ComboboxInputProps, ComboboxInputTheme } from "./comboboxInput";
-export {
-    ComboboxInput,
-    type ComboboxInputHandle,
-    type ComboboxValue,
+export type {
+    ComboboxInputHandle,
+    ComboboxInputProps,
+    ComboboxInputTheme,
+    ComboboxValue,
 } from "./comboboxInput";
+export { ComboboxInput } from "./comboboxInput";
 export type { CounterInputProps, CounterInputTheme } from "./counterInput";
 export { CounterInput } from "./counterInput";
 export type {
