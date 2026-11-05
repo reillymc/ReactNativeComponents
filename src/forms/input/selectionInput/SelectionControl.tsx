@@ -60,8 +60,12 @@ export const SelectionControl = <T,>({
                     {selectionMode === "single" &&
                         !!selection &&
                         !Array.isArray(selection) && (
-                            <View style={styles.none}>
-                                <Text theme={{ color: fieldTheme.text.color }}>
+                            <View style={styles.valueLabel}>
+                                <Text
+                                    numberOfLines={1}
+                                    ellipsizeMode="tail"
+                                    theme={{ color: fieldTheme.text.color }}
+                                >
                                     {selection.label}
                                 </Text>
                             </View>
@@ -81,8 +85,10 @@ export const SelectionControl = <T,>({
                         ))}
 
                     {!hasSelection && (
-                        <View style={styles.none}>
+                        <View style={styles.valueLabel}>
                             <Text
+                                numberOfLines={1}
+                                ellipsizeMode="tail"
                                 theme={{
                                     color: fieldTheme.text.placeholderColor,
                                 }}
@@ -112,7 +118,11 @@ const createStyles = defineStyles((theme: SelectionInputTheme) => ({
     boxNone: {
         pointerEvents: "box-none",
     },
-    none: {
+    valueLabel: {
         pointerEvents: "none",
+        flexShrink: 1,
+        minWidth: 0,
+        width: "100%",
+        maxWidth: "100%",
     },
 }));
