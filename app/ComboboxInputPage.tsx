@@ -14,6 +14,56 @@ import {
     FieldTextInputPropDefinitions,
 } from "../demo/helpers";
 
+type ComboboxItem = NonNullable<ComboboxInputProps["items"]>[number];
+
+const defaultItems: Array<ComboboxItem> = [
+    { value: "1", label: "First Item" },
+    { value: "2", label: "Second Item" },
+    { value: "3", label: "Third Item" },
+    { value: "4", label: "Fourth Entry" },
+    { value: "5", label: "Fifth Entry" },
+    { value: "6", label: "Sixth Entry" },
+    { value: "7", label: "First Additional Item" },
+    { value: "8", label: "Second Additional Item" },
+    { value: "9", label: "First Additional Entry" },
+];
+
+const createTestItems = (
+    count: number,
+    variant: "short" | "described",
+): Array<ComboboxItem> =>
+    Array.from({ length: count }, (_, index) => {
+        const value = String(index + 1);
+        const number = value.padStart(4, "0");
+
+        return {
+            value,
+            label: `Item ${number}`,
+            description:
+                variant === "described"
+                    ? `Description for item ${number}`
+                    : undefined,
+        };
+    });
+
+const testItemSets = [
+    {
+        id: "default",
+        label: "10 simple items",
+        value: defaultItems,
+    },
+    {
+        id: "short-1000",
+        label: "1,000 simple items",
+        value: createTestItems(1000, "short"),
+    },
+    {
+        id: "described-1000",
+        label: "1,000 items with descriptions",
+        value: createTestItems(1000, "described"),
+    },
+];
+
 const propDefinitions: PropDefinitions<ComboboxInputProps> = {
     label: FieldPropDefinitions.label,
     hideLabel: FieldPropDefinitions.hideLabel,
@@ -25,6 +75,12 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
     readOnly: FieldPropDefinitions.readOnly,
     placeholder: FieldTextInputPropDefinitions.placeholder,
     clearButtonMode: FieldTextInputPropDefinitions.clearButtonMode,
+    items: {
+        type: "enum",
+        label: "Test items",
+        default: "Default (10 items)",
+        values: testItemSets,
+    },
     onChange: {
         type: "function",
         label: "onChange",
@@ -55,21 +111,7 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
 
 const defaultProps: ComboboxInputProps = {
     placeholder: "Combobox Input",
-    items: [
-        { value: "1", label: "Item 1" },
-        {
-            value: "2",
-            label: "Item 2",
-            description: "An item with description",
-        },
-        { value: "3", label: "Item 3" },
-        { value: "4", label: "Item 4" },
-        { value: "5", label: "Item 5" },
-        { value: "6", label: "Item 6" },
-        { value: "s1", label: "Something Else 1" },
-        { value: "s2", label: "Something Else 2" },
-        { value: "s3", label: "Something Else 3" },
-    ],
+    items: defaultItems,
     submitOnEnter: false,
     selectBehavior: "blurAndClose",
     disableOpenOnFocus: false,

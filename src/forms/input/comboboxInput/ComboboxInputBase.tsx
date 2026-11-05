@@ -8,11 +8,11 @@ import type { AnimatedRef } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent, useForwardedRef } from "../../../internal";
+import { Menu, MenuItem } from "../../../overlays";
 import {
     AnchoredContainer,
     type AnchoredContainerProps,
 } from "../../../overlays/anchoredContainer";
-import { Menu, MenuItem } from "../../../overlays/menu";
 import {
     FieldTextInput,
     type FieldTextInputProps,
@@ -200,6 +200,19 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     const [isMenuInverted, setIsMenuInverted] = useState(false);
     const { theme } = useComponent("comboboxInput", { themeOverrides });
 
+    const singleLineHeight =
+        theme.option.paddingVertical * 2 + theme.option.lineHeight.label;
+    const descriptionHeight =
+        singleLineHeight + theme.option.lineHeight.description;
+
+    const hasDescriptionLines = items.some(
+        (item) => item.description !== undefined && item.description !== "",
+    );
+
+    const optionHeight = hasDescriptionLines
+        ? descriptionHeight
+        : singleLineHeight;
+
     const {
         displayText,
         query,
@@ -295,6 +308,14 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                             data={filteredItems}
                             activeIndex={activeIndex}
                             reverse={inverted}
+                            scrollResetKey={query}
+                            getItemLayout={(_data, index) => ({
+                                length: optionHeight,
+                                offset:
+                                    theme.menu.padding +
+                                    index * (optionHeight + theme.menu.gap),
+                                index,
+                            })}
                             keyExtractor={(item) => String(getItemKey(item))}
                             renderItem={({ item, index }) => (
                                 <MenuItem
@@ -302,6 +323,8 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
                                     description={item.description}
                                     searchValue={query}
                                     highlighted={index === activeIndex}
+                                    truncate
+                                    height={optionHeight}
                                     onPress={() => selectItem(item)}
                                     theme={theme.option}
                                 />

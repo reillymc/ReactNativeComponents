@@ -10,6 +10,8 @@ export type Palette = {
             sans: string;
             mono: string;
         };
+        /** @default 1.2 */
+        lineHeightScale: number;
         size: {
             /** @default 10 */
             tiny: number;
@@ -74,6 +76,7 @@ export const defaultPalette: Palette = {
                     default: "monospace",
                 }) ?? "monospace",
         },
+        lineHeightScale: 1.2,
         size: {
             tiny: 10,
             small: 12,

@@ -27,6 +27,7 @@ type AnchorRect = {
 
 export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     parentRef,
+    anchorRef,
     show,
     position = "auto",
     theme: themeOverrides,
@@ -47,11 +48,11 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     const { height: windowHeight } = useWindowDimensions();
     const { top, bottom } = useSafeAreaInsets();
 
-    const anchorRef = useRef<AnchorRect | undefined>(undefined);
+    const anchorRectRef = useRef<AnchorRect | undefined>(undefined);
     const contentHeightRef = useRef(0);
 
     const recompute = useCallback(() => {
-        const anchor = anchorRef.current;
+        const anchor = anchorRectRef.current;
         const contentHeight = contentHeightRef.current;
         if (!(anchor && contentHeight)) return;
 
@@ -83,9 +84,19 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     }, [position, theme.parentMargin, top, bottom, windowHeight]);
 
     const updateAnchor = useCallback(() => {
-        if (parentRef.current?.getBoundingClientRect) {
-            const rect = parentRef.current.getBoundingClientRect();
-            anchorRef.current = {
+        const anchorElement = anchorRef?.current as unknown as
+            | Element
+            | null
+            | undefined;
+        const parentElement = parentRef.current as unknown as
+            | Element
+            | null
+            | undefined;
+        const element = anchorElement ?? parentElement;
+
+        if (element?.getBoundingClientRect) {
+            const rect = element.getBoundingClientRect();
+            anchorRectRef.current = {
                 x: rect.left,
                 y: rect.top,
                 width: rect.width,
@@ -94,7 +105,7 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
         }
 
         recompute();
-    }, [parentRef, recompute]);
+    }, [anchorRef, parentRef, recompute]);
 
     useEffect(() => {
         if (!show || typeof document === "undefined") return;
@@ -110,7 +121,9 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
         window.addEventListener("scroll", schedule, true);
         window.addEventListener("resize", schedule);
 
-        const node = parentRef.current;
+        const node =
+            (anchorRef?.current as unknown as Element | null | undefined) ??
+            parentRef.current;
         let observer: ResizeObserver | undefined;
         if (node instanceof Element && typeof ResizeObserver !== "undefined") {
             observer = new ResizeObserver(schedule);
@@ -123,12 +136,12 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
             window.removeEventListener("resize", schedule);
             observer?.disconnect();
         };
-    }, [show, updateAnchor, parentRef]);
+    }, [show, updateAnchor, anchorRef, parentRef]);
 
     useEffect(() => {
         if (!show) {
             setGeometry(undefined);
-            anchorRef.current = undefined;
+            anchorRectRef.current = undefined;
             contentHeightRef.current = 0;
         }
     }, [show]);

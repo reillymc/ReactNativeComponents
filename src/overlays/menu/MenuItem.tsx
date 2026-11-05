@@ -12,6 +12,10 @@ export type MenuItemTheme = {
     paddingHorizontal: number;
     paddingVertical: number;
     borderRadius: number;
+    lineHeight: {
+        label: number;
+        description: number;
+    };
     label: HighlightedTextTheme;
     description: HighlightedTextTheme;
 };
@@ -21,6 +25,9 @@ export interface MenuItemProps {
     description?: string;
     searchValue?: string;
     highlighted?: boolean;
+    /** Truncate label and description to a single line with a tail ellipsis. */
+    truncate?: boolean;
+    height?: number;
     onPress: () => void;
     theme?: DeepPartial<MenuItemTheme>;
 }
@@ -30,11 +37,14 @@ export const MenuItem: FC<MenuItemProps> = ({
     description,
     searchValue,
     highlighted,
+    truncate,
+    height,
     onPress,
     theme: themeOverrides,
 }) => {
     const { styles, theme } = useComponent("menuItem", {
         themeOverrides,
+        props: { height },
         createStyles,
     });
 
@@ -48,6 +58,9 @@ export const MenuItem: FC<MenuItemProps> = ({
             <HighlightedText
                 text={label}
                 highlight={searchValue}
+                numberOfLines={truncate ? 1 : undefined}
+                ellipsizeMode={truncate ? "tail" : undefined}
+                style={{ lineHeight: theme.lineHeight.label }}
                 theme={theme.label}
             />
             {!!description && (
@@ -55,6 +68,11 @@ export const MenuItem: FC<MenuItemProps> = ({
                     variant="caption"
                     text={description}
                     highlight={searchValue}
+                    numberOfLines={truncate ? 1 : undefined}
+                    ellipsizeMode={truncate ? "tail" : undefined}
+                    style={{
+                        lineHeight: theme.lineHeight.description,
+                    }}
                     theme={theme.description}
                 />
             )}
@@ -64,10 +82,15 @@ export const MenuItem: FC<MenuItemProps> = ({
 
 MenuItem.displayName = "MenuItem";
 
-const createStyles = defineStyles((theme: MenuItemTheme) => ({
-    menuItem: {
-        paddingHorizontal: theme.paddingHorizontal,
-        paddingVertical: theme.paddingVertical,
-        borderRadius: theme.borderRadius,
-    },
-}));
+const createStyles = defineStyles(
+    (theme: MenuItemTheme, props: Pick<MenuItemProps, "height">) => ({
+        menuItem: {
+            alignSelf: "stretch",
+            minWidth: 0,
+            paddingHorizontal: theme.paddingHorizontal,
+            paddingVertical: theme.paddingVertical,
+            borderRadius: theme.borderRadius,
+            height: props.height,
+        },
+    }),
+);

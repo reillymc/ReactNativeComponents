@@ -47,9 +47,10 @@ export interface HighlightedTextTheme {
         weight: Record<TextVariant, TextStyle["fontWeight"]>;
     };
 }
-export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
+export interface HighlightedTextProps
+    extends Pick<TextProps, "variant" | "numberOfLines" | "ellipsizeMode"> {
     text?: string;
-    textStyles?: TextProps["style"];
+    style?: TextProps["style"];
     theme?: DeepPartial<HighlightedTextTheme>;
     highlight?: string;
 }
@@ -57,7 +58,7 @@ export interface HighlightedTextProps extends Pick<TextProps, "variant"> {
 export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     text = "",
     highlight = "",
-    textStyles,
+    style,
     theme: themeOverrides,
     variant = "body",
     ...props
@@ -67,10 +68,20 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     const parts = splitHighlight(text, highlight);
 
     return (
-        <Text style={[styles.textWrapper, textStyles]}>
+        <Text
+            {...props}
+            variant={variant}
+            theme={theme.text}
+            style={[
+                styles.textWrapper,
+                props.numberOfLines === 1
+                    ? styles.textWrapperTruncated
+                    : styles.textWrapperRow,
+                style,
+            ]}
+        >
             {parts.map((part) => (
                 <Text
-                    {...props}
                     variant={variant}
                     key={part.offset}
                     theme={{
@@ -95,7 +106,16 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
 
 const styles = StyleSheet.create({
     textWrapper: {
+        flexShrink: 1,
+        minWidth: 0,
+    },
+    textWrapperRow: {
         display: "flex",
         flexDirection: "row",
+    },
+    textWrapperTruncated: {
+        width: "100%",
+        maxWidth: "100%",
+        overflow: "hidden",
     },
 });

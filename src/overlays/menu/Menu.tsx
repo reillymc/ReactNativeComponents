@@ -1,4 +1,3 @@
-import { useEffect, useRef, useState } from "react";
 import {
     type ColorValue,
     FlatList,
@@ -11,9 +10,8 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { defineStyles, useComponent } from "../../internal";
 import { useSystems } from "../../theme/useSystems";
 import { ScrollViewContextResetter } from "./ScrollViewContextResetter";
+import { useMenuScroll } from "./useMenuScroll";
 import { VirtualizedListContextResetter } from "./VirtualizedListContextResetter";
-
-const VIEW_POSITION = 0.33;
 
 export type MenuTheme = {
     backgroundColor: ColorValue;
@@ -33,23 +31,24 @@ export type MenuProps<T = unknown> = {
     onScroll?: FlatListProps<T>["onScroll"];
     showsScrollIndicator?: boolean;
     theme?: DeepPartial<MenuTheme>;
-
     /**
-     * Passthrough for list features such as pagination/async loading
-     * (`onEndReached`, `ListFooterComponent`, `refreshing`, …).
+     * Change this value to reset the list to `activeIndex` without animating
      */
-    listProps?: Omit<
-        FlatListProps<T>,
-        | "data"
-        | "renderItem"
-        | "keyExtractor"
-        | "inverted"
-        | "horizontal"
-        | "style"
-        | "contentContainerStyle"
-        | "showsVerticalScrollIndicator"
-    >;
-};
+    scrollResetKey?: string | number;
+} & Omit<
+    FlatListProps<T>,
+    | "data"
+    | "renderItem"
+    | "keyExtractor"
+    | "inverted"
+    | "horizontal"
+    | "style"
+    | "contentContainerStyle"
+    | "showsVerticalScrollIndicator"
+    | "initialScrollIndex"
+    | "onScroll"
+    | "onScrollToIndexFailed"
+>;
 
 export const Menu = <T,>({
     data,
@@ -60,27 +59,28 @@ export const Menu = <T,>({
     onScroll,
     showsScrollIndicator,
     theme: themeOverrides,
-    listProps,
+    scrollResetKey,
+    ...listProps
 }: MenuProps<T>) => {
-    const { styles } = useComponent("menu", {
+    const { styles, theme } = useComponent("menu", {
         themeOverrides,
         createStyles,
     });
     const { shadowStyle } = useSystems();
-    const listRef = useRef<FlatList<T>>(null);
-    const [isReady, setIsReady] = useState(
-        activeIndex === undefined || activeIndex <= 0,
-    );
-
-    useEffect(() => {
-        if (activeIndex === undefined || activeIndex < 0) return;
-
-        listRef.current?.scrollToIndex({
-            index: activeIndex,
-            animated: true,
-            viewPosition: VIEW_POSITION,
-        });
-    }, [activeIndex]);
+    const {
+        listRef,
+        isReady,
+        initialScrollIndex,
+        onContentSizeChange,
+        onScrollToIndexFailed,
+    } = useMenuScroll({
+        data,
+        activeIndex,
+        scrollResetKey,
+        getItemLayout: listProps.getItemLayout,
+        onContentSizeChange: listProps.onContentSizeChange,
+        gap: theme.gap,
+    });
 
     return (
         <VirtualizedListContextResetter>
@@ -99,29 +99,10 @@ export const Menu = <T,>({
                         renderItem={renderItem}
                         keyExtractor={keyExtractor}
                         inverted={reverse}
+                        initialScrollIndex={initialScrollIndex}
                         onScroll={onScroll}
-                        onContentSizeChange={() => {
-                            if (activeIndex !== undefined && activeIndex >= 0) {
-                                listRef.current?.scrollToIndex({
-                                    index: activeIndex,
-                                    animated: false,
-                                    viewPosition: VIEW_POSITION,
-                                });
-                            }
-
-                            if (!isReady) {
-                                requestAnimationFrame(() => setIsReady(true));
-                            }
-                        }}
-                        onScrollToIndexFailed={({
-                            index,
-                            averageItemLength,
-                        }) => {
-                            listRef.current?.scrollToOffset({
-                                offset: averageItemLength * index,
-                                animated: true,
-                            });
-                        }}
+                        onContentSizeChange={onContentSizeChange}
+                        onScrollToIndexFailed={onScrollToIndexFailed}
                         scrollEventThrottle={16}
                         keyboardShouldPersistTaps="always"
                         keyboardDismissMode="none"
