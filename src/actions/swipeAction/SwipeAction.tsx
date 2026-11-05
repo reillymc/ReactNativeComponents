@@ -17,12 +17,14 @@ export type SwipeActionTheme = {
 };
 
 export interface SwipeActionProps
-    extends Pick<IconButtonProps, "onPress" | "variant"> {
+    extends Pick<IconButtonProps, "onPress" | "variant" | "appearance"> {
     theme?: DeepPartial<SwipeActionTheme>;
 }
 
 export const SwipeAction = <G extends string>({
     theme: themeOverrides,
+    appearance,
+    variant,
     ...props
 }: SwipeActionProps & IconComponentProps<G>) => {
     const { styles, theme } = useComponent("swipeAction", {
@@ -33,8 +35,12 @@ export const SwipeAction = <G extends string>({
     return (
         <IconButton
             {...props}
+            appearance={
+                appearance ??
+                (variant === "destructive" ? "prominent" : "subtle")
+            }
+            variant={variant}
             theme={theme.button}
-            appearance="prominent"
             style={styles.actionButton}
         />
     );
