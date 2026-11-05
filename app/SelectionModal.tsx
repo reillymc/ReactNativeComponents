@@ -66,6 +66,7 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
             />
             <FlatList
                 data={request.items}
+                style={styles.screen}
                 contentInsetAdjustmentBehavior="always"
                 contentContainerStyle={styles.list}
                 ListHeaderComponent={
@@ -148,6 +149,10 @@ const SelectionModal: FC = () => {
 export default SelectionModal;
 
 const createStyles = defineStyles(({ palette, theme, appTheme }) => ({
+    screen: {
+        flex: 1,
+        backgroundColor: appTheme.page.backgroundColor,
+    },
     list: {
         paddingBottom: appTheme.page.bottom,
     },

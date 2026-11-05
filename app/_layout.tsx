@@ -2,13 +2,14 @@ import { type FC, StrictMode, useEffect } from "react";
 import { LogBox, Platform, useColorScheme } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
+import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from "expo-router";
 // biome-ignore lint/performance/noNamespaceImport: package import convention
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from "expo-status-bar";
 import {
     darkColorScheme,
     type PaletteOverrides,
+    usePalette,
 } from "@reillymc/react-native-components/theme";
 
 import { SelectionModalProvider } from "../demo/components/SelectionModalProvider";
@@ -36,6 +37,45 @@ LogBox.ignoreLogs([
 
 SplashScreen.preventAutoHideAsync();
 
+const NavigationStack: FC = () => {
+    const colorScheme = useColorScheme();
+    const palette = usePalette();
+
+    const baseTheme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
+
+    const navigationTheme = {
+        ...baseTheme,
+        colors: {
+            ...baseTheme.colors,
+            primary: palette.color.primary,
+            background: palette.color.background,
+            card: palette.color.background,
+            text: palette.color.foreground,
+            border: palette.color.border,
+            notification: palette.color.destructive,
+        },
+    };
+
+    return (
+        <ThemeProvider value={navigationTheme}>
+            <SelectionModalProvider>
+                <Stack>
+                    <Stack.Screen name="index" />
+                    <Stack.Screen
+                        name="SelectionModal"
+                        options={{
+                            presentation: "formSheet",
+                            sheetAllowedDetents: [0.5, 1.0],
+                            sheetGrabberVisible: true,
+                            sheetExpandsWhenScrolledToEdge: true,
+                        }}
+                    />
+                </Stack>
+            </SelectionModalProvider>
+        </ThemeProvider>
+    );
+};
+
 const Layout: FC = () => {
     const colorScheme = useColorScheme();
 
@@ -59,20 +99,7 @@ const Layout: FC = () => {
             <GestureHandlerRootView style={{ flex: 1 }}>
                 <AppThemeProvider palette={palette}>
                     <StatusBar style="auto" />
-                    <SelectionModalProvider>
-                        <Stack>
-                            <Stack.Screen name="index" />
-                            <Stack.Screen
-                                name="SelectionModal"
-                                options={{
-                                    presentation: "formSheet",
-                                    sheetAllowedDetents: [0.5, 1.0],
-                                    sheetGrabberVisible: true,
-                                    sheetExpandsWhenScrolledToEdge: true,
-                                }}
-                            />
-                        </Stack>
-                    </SelectionModalProvider>
+                    <NavigationStack />
                 </AppThemeProvider>
             </GestureHandlerRootView>
         </StrictMode>
