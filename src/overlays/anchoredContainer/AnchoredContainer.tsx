@@ -1,8 +1,8 @@
 import type { FC, ReactNode, RefObject } from "react";
 import type {
+    HostInstance,
     LayoutChangeEvent,
     StyleProp,
-    TextInput,
     View,
     ViewStyle,
 } from "react-native";
@@ -48,14 +48,20 @@ export type MountProps = {
 };
 
 export interface AnchoredContainerProps {
-    parentRef: RefObject<TextInput | null>;
+    parentRef: RefObject<HostInstance | null>;
 
     /**
      * Animated ref to the anchor view. Used by the iOS overlay mount to keep
-     * the container attached while scrolling. When omitted, iOS falls back to the
-     * in-tree inline mount.
+     * the container attached while scrolling. When omitted, iOS falls back to
+     * the in-tree inline mount.
      */
     anchorRef?: AnimatedRef<View>;
+
+    /**
+     * Mount strategy. `"inline"` forces the in-tree mount on native; web
+     * always portals.
+     */
+    mount?: "overlay" | "inline";
 
     show?: boolean;
     position?: "auto" | "above";
@@ -67,6 +73,8 @@ export interface AnchoredContainerProps {
 
 export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     parentRef,
+    anchorRef,
+    mount,
     show,
     position,
     onInvertedChange,
@@ -74,8 +82,10 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     style,
     children,
 }) => {
+    const measurementRef =
+        mount === "inline" ? (anchorRef ?? parentRef) : parentRef;
     const { geometry, inlineStyle, onLayout } = useAnchoredContainerPosition({
-        parentRef,
+        parentRef: measurementRef,
         show,
         position,
         theme,

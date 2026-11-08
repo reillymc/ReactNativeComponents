@@ -1,4 +1,5 @@
-import type { View } from "react-native";
+import { useState } from "react";
+import { Platform, StyleSheet, type View } from "react-native";
 import { useAnimatedRef } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -38,6 +39,7 @@ export type ComboboxInputProps<T = string> = FieldComponentProps &
         | "minimumSearchLength"
         | "maxSuggestionCount"
         | "containerPosition"
+        | "menuMount"
         | "ref"
     > & {
         theme?: DeepPartial<ComboboxInputTheme>;
@@ -53,11 +55,22 @@ export const ComboboxInput = <T,>({
     readOnly,
     variant,
     style,
+    menuMount,
     theme: themeOverrides,
     ...props
 }: ComboboxInputProps<T>) => {
     const { theme } = useComponent("comboboxInput", { themeOverrides });
     const surfaceAnchorRef = useAnimatedRef<View>();
+    const inlineNative = menuMount === "inline" && Platform.OS !== "web";
+    const [inlineMenuVisible, setInlineMenuVisible] = useState(false);
+
+    const fieldStyle = inlineNative
+        ? [
+              styles.inlineField,
+              inlineMenuVisible && styles.inlineFieldVisible,
+              style,
+          ]
+        : style;
 
     return (
         <Field
@@ -69,11 +82,15 @@ export const ComboboxInput = <T,>({
             disabled={disabled}
             readOnly={readOnly}
             variant={variant}
-            style={style}
+            style={fieldStyle}
         >
             <FieldSurface ref={surfaceAnchorRef} theme={theme.surface}>
                 <ComboboxInputBase
                     anchorRef={surfaceAnchorRef}
+                    menuMount={menuMount}
+                    onMenuVisibilityChange={
+                        inlineNative ? setInlineMenuVisible : undefined
+                    }
                     theme={theme}
                     {...props}
                 />
@@ -81,3 +98,15 @@ export const ComboboxInput = <T,>({
         </Field>
     );
 };
+
+const styles = StyleSheet.create({
+    inlineField: {
+        position: "relative",
+        zIndex: 1,
+        elevation: 1,
+    },
+    inlineFieldVisible: {
+        zIndex: 2,
+        elevation: 2,
+    },
+});

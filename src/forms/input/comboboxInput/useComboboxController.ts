@@ -106,6 +106,7 @@ export type ComboboxControllerOptions<T> = {
     onFocus?: FieldTextInputProps["onFocus"];
     onBlur?: FieldTextInputProps["onBlur"];
     onKeyPress?: FieldTextInputProps["onKeyPress"];
+    onMenuVisibilityChange?: (visible: boolean) => void;
     selectBehavior: ComboboxSelectBehavior;
     disableOpenOnFocus: boolean;
     allowsCustomValue: boolean;
@@ -132,6 +133,7 @@ export const useComboboxController = <T>({
     onFocus,
     onBlur,
     onKeyPress,
+    onMenuVisibilityChange,
     selectBehavior,
     disableOpenOnFocus,
     allowsCustomValue,
@@ -202,6 +204,11 @@ export const useComboboxController = <T>({
     });
 
     const showContainer = isOpen && meetsMinimum && filteredItems.length > 0;
+
+    useEffect(() => {
+        onMenuVisibilityChange?.(showContainer);
+    }, [showContainer, onMenuVisibilityChange]);
+
     const selectedIndex =
         selectedKey === undefined
             ? -1

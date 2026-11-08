@@ -8,6 +8,7 @@ import { useAnchoredContainerPosition } from "./useAnchoredContainerPosition";
 export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     parentRef,
     anchorRef,
+    mount,
     show,
     position,
     theme,
@@ -15,9 +16,12 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
     style,
     children,
 }) => {
+    const isInlineMount = mount === "inline" || !anchorRef;
+    const measurementRef = isInlineMount ? (anchorRef ?? parentRef) : parentRef;
+
     const { geometry, inlineStyle, parentMargin, onLayout } =
         useAnchoredContainerPosition({
-            parentRef,
+            parentRef: measurementRef,
             show,
             position,
             theme,
@@ -26,7 +30,7 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
 
     if (!show) return null;
 
-    if (!anchorRef) {
+    if (isInlineMount || !anchorRef) {
         return (
             <InlineMount
                 geometry={geometry}

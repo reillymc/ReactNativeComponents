@@ -107,6 +107,15 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
         type: "boolean",
         label: "Allow custom value",
     },
+    menuMount: {
+        type: "enum",
+        label: "Menu mount",
+        default: "Overlay",
+        values: [
+            { label: "Overlay", value: "overlay" },
+            { label: "Inline", value: "inline" },
+        ],
+    },
 };
 
 const defaultProps: ComboboxInputProps = {
@@ -116,6 +125,7 @@ const defaultProps: ComboboxInputProps = {
     selectBehavior: "blurAndClose",
     disableOpenOnFocus: false,
     allowsCustomValue: false,
+    menuMount: "overlay",
 };
 
 const ComboboxInputPage: FunctionComponent = () => {
