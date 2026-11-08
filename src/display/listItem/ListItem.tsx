@@ -147,7 +147,6 @@ export const ListItem: FC<ListItemProps> = ({
 const createStyles = defineStyles(
     (theme: ListItemTheme, props: PropFilter<ListItemProps, "variant">) => ({
         container: {
-            overflow: "hidden",
             width: "100%",
         },
         pressableContainer: {

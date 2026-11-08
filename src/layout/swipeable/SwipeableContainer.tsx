@@ -53,7 +53,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
             enableTrackpadTwoFingerGesture
             friction={1.5}
             overshootRight={false}
-            containerStyle={style}
+            containerStyle={[style, styles.overflowVisible]}
             onSwipeableOpenStartDrag={() => onSwipeInteractionChange?.(true)}
             onSwipeableClose={() => onSwipeInteractionChange?.(false)}
         >
@@ -68,5 +68,8 @@ const styles = StyleSheet.create({
         flexDirection: "row-reverse",
         gap: 8,
         marginLeft: 8,
+    },
+    overflowVisible: {
+        overflow: "visible",
     },
 });

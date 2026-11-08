@@ -26,7 +26,7 @@ export const FieldSurfacePressLayer: FC<FieldSurfacePressLayerProps> = ({
     const pressRef = useRef<View>(null);
     const focusPress = () => pressRef.current?.focus?.();
 
-    const { getFocusProps } = useFieldControlFocus({
+    const { focusRingStyle, getFocusProps } = useFieldControlFocus({
         focus: focusPress,
         pressEvents: true,
     });
@@ -40,7 +40,7 @@ export const FieldSurfacePressLayer: FC<FieldSurfacePressLayerProps> = ({
             accessibilityRole="button"
             {...fieldAria(field)}
             onPress={onPress}
-            style={[StyleSheet.absoluteFill, styles.pressable]}
+            style={[StyleSheet.absoluteFill, focusRingStyle, styles.pressable]}
         >
             {({ pressed, hovered }) => (
                 <StateLayer pressed={pressed} hovered={hovered} />
