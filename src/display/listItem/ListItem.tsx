@@ -1,4 +1,4 @@
-import type { FC, ReactNode } from "react";
+import { type FC, type ReactNode, useRef } from "react";
 import {
     type ColorValue,
     type StyleProp,
@@ -7,7 +7,7 @@ import {
 } from "react-native";
 import { type DeepPartial, Undefined } from "@reillymc/es-utils";
 
-import { ActionBase } from "../../actions/action";
+import { ActionBase, type ActionBaseProps } from "../../actions/action";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import {
     SwipeableContainer,
@@ -30,7 +30,7 @@ export interface ListItemTheme {
     textColor: ColorValue;
 }
 
-export interface ListItemProps {
+export interface ListItemProps extends Pick<ActionBaseProps, "onPress"> {
     heading?: ReactNode;
     header?: ReactNode;
 
@@ -60,7 +60,6 @@ export interface ListItemProps {
     style?: StyleProp<ViewStyle>;
     theme?: DeepPartial<ListItemTheme>;
     contentContainerStyle?: StyleProp<ViewStyle>;
-    onPress?: () => void;
 }
 
 export const ListItem: FC<ListItemProps> = ({
@@ -78,6 +77,7 @@ export const ListItem: FC<ListItemProps> = ({
     onPress,
 }) => {
     const filteredActions = swipeActions?.filter(Undefined);
+    const isSwipingRef = useRef(false);
 
     const { styles, theme } = useComponent("listItem", {
         themeOverrides,
@@ -117,7 +117,7 @@ export const ListItem: FC<ListItemProps> = ({
     const innerContent = onPress ? (
         <ActionBase
             hitSlop={0}
-            onPress={onPress}
+            onPress={(e) => !isSwipingRef.current && onPress(e)}
             style={[styles.pressableContainer, style]}
         >
             {listContent}
@@ -129,7 +129,12 @@ export const ListItem: FC<ListItemProps> = ({
     return (
         <View style={styles.container}>
             {filteredActions?.length ? (
-                <SwipeableContainer rightActions={filteredActions}>
+                <SwipeableContainer
+                    rightActions={filteredActions}
+                    onSwipeInteractionChange={(active) => {
+                        isSwipingRef.current = active;
+                    }}
+                >
                     <View>{innerContent}</View>
                 </SwipeableContainer>
             ) : (

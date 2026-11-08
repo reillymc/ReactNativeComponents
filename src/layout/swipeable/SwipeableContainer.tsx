@@ -17,6 +17,7 @@ export interface SwipeableContainerProps {
     rightActions?: Array<ReactNode>;
     style?: ViewStyle;
     children?: ReactNode;
+    onSwipeInteractionChange?: (active: boolean) => void;
 }
 
 const EMPTY_ACTIONS: Array<ReactNode> = [];
@@ -25,6 +26,7 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
     rightActions = EMPTY_ACTIONS,
     style,
     children,
+    onSwipeInteractionChange,
 }) => {
     const swipeableRef = useRef<SwipeableMethods>(null);
 
@@ -52,6 +54,8 @@ export const SwipeableContainer: FunctionComponent<SwipeableContainerProps> = ({
             friction={1.5}
             overshootRight={false}
             containerStyle={style}
+            onSwipeableOpenStartDrag={() => onSwipeInteractionChange?.(true)}
+            onSwipeableClose={() => onSwipeInteractionChange?.(false)}
         >
             {children}
         </Swipeable>
