@@ -6,7 +6,7 @@ import {
 } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputBase } from "./InputBase";
@@ -16,7 +16,14 @@ import { NumberInputBase, type NumberInputBaseProps } from "./NumberInputBase";
 
 export type TimeInputValue = { hours: string; minutes: string };
 
+const DEFAULT_TIME_VALUE: TimeInputValue = { hours: "", minutes: "" };
+
 export type TimeInputIcons = ComponentIconAssets<"time">;
+
+export type TimeInputPlaceholders = {
+    hours?: string;
+    minutes?: string;
+};
 
 export interface TimeInputProps
     extends Pick<
@@ -26,9 +33,7 @@ export interface TimeInputProps
         InputScaffoldFieldProps {
     value?: TimeInputValue;
 
-    hoursPlaceholder?: string;
-
-    minutesPlaceholder?: string;
+    placeholder?: TimeInputPlaceholders;
 
     onChange?: (e: TimeInputValue) => void;
 }
@@ -36,10 +41,9 @@ export interface TimeInputProps
 export const TimeInput: FC<TimeInputProps> = ({
     disabled: disabledProp,
     clearButtonMode,
-    hoursPlaceholder,
-    minutesPlaceholder,
+    placeholder,
     variant = "regular",
-    value = { hours: "", minutes: "" },
+    value = DEFAULT_TIME_VALUE,
     onChange,
     onSubmitEditing,
     ...baseProps
@@ -60,11 +64,12 @@ export const TimeInput: FC<TimeInputProps> = ({
                     {...icons.time}
                     variant={variant}
                     disabled={disabled}
+                    onPress={() => hoursRef.current?.focus()}
                 />
                 <NumberInputBase
                     ref={hoursRef}
                     disabled={disabled}
-                    placeholder={hoursPlaceholder}
+                    placeholder={placeholder?.hours}
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
                     value={value?.hours}
@@ -93,7 +98,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                 <NumberInputBase
                     ref={minutesRef}
                     disabled={disabled}
-                    placeholder={minutesPlaceholder}
+                    placeholder={placeholder?.minutes}
                     value={value.minutes}
                     maxLength={2}
                     clearButtonMode={clearButtonMode}
@@ -164,10 +169,10 @@ const createStyles = (
         },
         clearInput: {
             flexShrink: 1,
-            marginLeft: inputBase.container.padding,
+            marginStart: inputBase.container.padding,
         },
         timeLabel: {
-            height: inputBase.container.height[variant],
+            minHeight: inputBase.container.height[variant],
             justifyContent: "center",
         },
     });

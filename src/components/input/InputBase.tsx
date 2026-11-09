@@ -1,31 +1,10 @@
-import type { FC, Ref } from "react";
-import {
-    type ColorValue,
-    StyleSheet,
-    TextInput,
-    type TextInputProps,
-} from "react-native";
+import type { FC, RefObject } from "react";
+import { StyleSheet, TextInput, type TextInputProps } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
+import { MAX_FONT_SIZE_MULTIPLIER } from "../../common";
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-
-export type InputState = "enabled" | "disabled";
-export type InputVariant = "regular" | "compact";
-
-export interface InputBaseStyles {
-    container: {
-        height: Record<InputVariant, number>;
-        padding: number;
-        borderRadius: number;
-        backgroundColor: Record<InputState, ColorValue>;
-    };
-    text: {
-        fontSize: number;
-        fontFamily: string;
-        color: Record<InputState, ColorValue>;
-        placeholderColor: ColorValue;
-    };
-}
+import type { InputBaseStyles, InputVariant } from "./InputBase.styles";
 
 export interface InputBaseProps
     extends Omit<TextInputProps, "editable" | "style"> {
@@ -33,7 +12,7 @@ export interface InputBaseProps
     variant?: InputVariant;
     style?: DeepPartial<InputBaseStyles>;
     inputStyle?: TextInputProps["style"];
-    ref?: Ref<TextInput>;
+    ref?: RefObject<TextInput | null>;
 }
 
 export const InputBase: FC<InputBaseProps> = ({
@@ -56,10 +35,11 @@ export const InputBase: FC<InputBaseProps> = ({
         <TextInput
             ref={ref}
             editable={!disabled}
+            maxFontSizeMultiplier={MAX_FONT_SIZE_MULTIPLIER}
             placeholderTextColor={style.text.placeholderColor}
             style={[styles.input, inputStyle]}
             multiline={multiline}
-            scrollEnabled={scrollEnabled ?? false}
+            scrollEnabled={scrollEnabled ?? multiline}
             onChangeText={onChangeText}
             {...props}
         />

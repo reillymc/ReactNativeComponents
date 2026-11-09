@@ -1,5 +1,2 @@
-export {
-    ThemeContext,
-    type ThemeContextDefinition,
-    ThemeProvider,
-} from "./ThemeProvider";
+export { ThemeContext, type ThemeContextDefinition } from "./ThemeContext";
+export { ThemeProvider } from "./ThemeProvider";

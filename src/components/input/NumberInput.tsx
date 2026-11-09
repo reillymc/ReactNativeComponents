@@ -1,4 +1,4 @@
-import { type FC, type Ref, useCallback } from "react";
+import type { FC, RefObject } from "react";
 import {
     type TextInput as DefaultTextInput,
     StyleSheet,
@@ -6,7 +6,7 @@ import {
 } from "react-native";
 
 import { type ThemedStyles, useThemedStyles } from "../../hooks";
-import type { ComponentIconAssets } from "../../theme";
+import type { ComponentIconAssets } from "../../icons/componentIconAssets";
 import { Text } from "../text";
 import { InputAction } from "./InputAction";
 import { InputRowContainer } from "./InputRowContainer";
@@ -65,6 +65,26 @@ const getNextValue = (
 
 export type NumberInputValue = NumberValue | FractionValue | RangeValue;
 
+export type NumberInputPlaceholders = {
+    value?: string;
+    start?: string;
+    end?: string;
+    whole?: string;
+    numerator?: string;
+    denominator?: string;
+};
+
+const DEFAULT_ENABLED_REPRESENTATIONS: Representations[] = [
+    "number",
+    "fraction",
+    "range",
+];
+
+const DEFAULT_VALUE: NumberInputValue = {
+    representation: "number",
+    value: "",
+};
+
 export type NumberInputIcons = ComponentIconAssets<
     "number" | "range" | "fraction"
 >;
@@ -73,7 +93,6 @@ export interface NumberInputProps
     extends Pick<
             NumberInputBaseProps,
             | "disabled"
-            | "placeholder"
             | "maxLength"
             | "onSubmitEditing"
             | "clearButtonMode"
@@ -86,35 +105,37 @@ export interface NumberInputProps
 
     value?: NumberInputValue;
 
-    placeholder2?: string;
+    placeholder?: NumberInputPlaceholders;
 
-    ref?: Ref<DefaultTextInput | null>;
+    ref?: RefObject<DefaultTextInput | null>;
 
     onChange?: (e: NumberInputValue) => void;
 }
 
 export const NumberInput: FC<NumberInputProps> = ({
     keyboardType = "number-pad",
-    enabledRepresentations = ["number", "fraction", "range"],
+    enabledRepresentations = DEFAULT_ENABLED_REPRESENTATIONS,
     disabled = false,
     clearButtonMode,
     placeholder,
-    placeholder2,
     maxLength,
-    value = { representation: "number", value: "" },
+    value = DEFAULT_VALUE,
     variant = "regular",
     onChange,
     onSubmitEditing,
     ref,
     ...baseProps
 }) => {
+    const getPlaceholder = (key: keyof NumberInputPlaceholders) =>
+        placeholder?.[key] ?? placeholder?.value;
+
     const [styles, { icons }] = useThemedStyles("numberInput", createStyles, {
         props: { value },
     });
 
     const icon = icons[value.representation];
 
-    const handleChangeMode = useCallback(() => {
+    const handleChangeMode = () => {
         const nextMode = getNextMode(
             enabledRepresentations,
             value.representation,
@@ -125,37 +146,34 @@ export const NumberInput: FC<NumberInputProps> = ({
         if (!nextValue) return;
 
         onChange?.(nextValue);
-    }, [enabledRepresentations, onChange, value]);
+    };
 
-    const handlePrimaryInputChangeText = useCallback(
-        (text: string) => {
-            switch (value.representation) {
-                case "number":
-                    onChange?.({
-                        representation: value.representation,
-                        value: text,
-                    });
-                    break;
-                case "fraction":
-                    onChange?.({
-                        representation: value.representation,
-                        value: [
-                            text,
-                            value.value?.[1] ?? "",
-                            value.value?.[2] ?? "",
-                        ],
-                    });
-                    break;
-                case "range":
-                    onChange?.({
-                        representation: value.representation,
-                        value: [text, value.value?.[1] ?? ""],
-                    });
-                    break;
-            }
-        },
-        [onChange, value.representation, value.value],
-    );
+    const handlePrimaryInputChangeText = (text: string) => {
+        switch (value.representation) {
+            case "number":
+                onChange?.({
+                    representation: value.representation,
+                    value: text,
+                });
+                break;
+            case "fraction":
+                onChange?.({
+                    representation: value.representation,
+                    value: [
+                        text,
+                        value.value?.[1] ?? "",
+                        value.value?.[2] ?? "",
+                    ],
+                });
+                break;
+            case "range":
+                onChange?.({
+                    representation: value.representation,
+                    value: [text, value.value?.[1] ?? ""],
+                });
+                break;
+        }
+    };
 
     return (
         <InputScaffold {...baseProps}>
@@ -176,8 +194,10 @@ export const NumberInput: FC<NumberInputProps> = ({
                     variant={variant}
                     placeholder={
                         value.representation === "range"
-                            ? placeholder2
-                            : placeholder
+                            ? getPlaceholder("start")
+                            : value.representation === "fraction"
+                              ? getPlaceholder("whole")
+                              : getPlaceholder("value")
                     }
                     maxLength={maxLength}
                     clearButtonMode={clearButtonMode}
@@ -203,7 +223,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                     <NumberInputBase
                         disabled={disabled}
                         variant={variant}
-                        placeholder={placeholder2}
+                        placeholder={getPlaceholder("numerator")}
                         value={value.value?.[1]}
                         maxLength={maxLength}
                         clearButtonMode={clearButtonMode}
@@ -234,7 +254,11 @@ export const NumberInput: FC<NumberInputProps> = ({
                         <NumberInputBase
                             disabled={disabled}
                             variant={variant}
-                            placeholder={placeholder2}
+                            placeholder={
+                                value.representation === "fraction"
+                                    ? getPlaceholder("denominator")
+                                    : getPlaceholder("end")
+                            }
                             value={
                                 value.representation === "fraction"
                                     ? value.value?.[2]
@@ -282,7 +306,7 @@ const createStyles = (
         input: {
             flexGrow: 1,
             flexBasis: 0,
-            textAlign: value.representation === "number" ? "left" : "center",
+            textAlign: value.representation === "number" ? "auto" : "center",
         },
         separator: {
             justifyContent: "center",

@@ -2,25 +2,11 @@ import type { FC } from "react";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useStyles } from "../../hooks";
-import { InteractiveText, type InteractiveTextStyles } from "../text";
-import {
-    ButtonBase,
-    type ButtonBaseProps,
-    type ButtonBaseStyles,
-} from "./ButtonBase";
+import { InteractiveText } from "../text";
+import type { ButtonStyles, ButtonVariant } from "./Button.styles";
+import { ButtonBase, type ButtonBaseProps } from "./ButtonBase";
 
 export type ButtonSize = "medium" | "large";
-export type ButtonVariant = "primary" | "secondary" | "destructive";
-
-export type ButtonStyles = {
-    container: {
-        borderRadius: ButtonBaseStyles["borderRadius"];
-        color: Record<ButtonVariant, ButtonBaseStyles["backgroundColor"]>;
-    };
-    label: {
-        color: Record<ButtonVariant, InteractiveTextStyles["color"]>;
-    };
-};
 
 export interface ButtonProps
     extends Pick<

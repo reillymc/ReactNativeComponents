@@ -1,6 +1,6 @@
-import type React from "react";
+import type { FC } from "react";
 import { useState } from "react";
-import { ScrollView, StyleSheet } from "react-native";
+import { ScrollView } from "react-native";
 import { Stack } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
@@ -8,13 +8,13 @@ import {
     FormContainer,
     FormRow,
     TextInput,
-    type ThemedStyles,
     ToggleInput,
-    useTheme,
-    useThemedStyles,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
+import { useThemedStyles } from "@reillymc/react-native-components/hooks";
 
-const FormPage: React.FC = () => {
+import { createThemedStyles, useTheme } from "../demo/theme";
+
+const FormPage: FC = () => {
     const { theme } = useTheme();
     const styles = useThemedStyles(createStyles);
 
@@ -46,7 +46,7 @@ const FormPage: React.FC = () => {
             <ScrollView
                 contentInsetAdjustmentBehavior="automatic"
                 keyboardShouldPersistTaps="handled"
-                contentContainerStyle={styles.page}
+                contentContainerStyle={styles.content}
             >
                 <FormContainer>
                     <TextInput label="Full name" placeholder="Ada Lovelace" />
@@ -78,7 +78,7 @@ const FormPage: React.FC = () => {
                         multiline
                         helpText="This multiline field grows with its content."
                     />
-                    <FormRow ratios={[1, 2]}>
+                    <FormRow>
                         <TextInput label="City" placeholder="London" />
                         <TextInput
                             label="Address"
@@ -99,14 +99,15 @@ const FormPage: React.FC = () => {
     );
 };
 
-const createStyles = ({ theme: { spacing, color } }: ThemedStyles) =>
-    StyleSheet.create({
-        page: {
+const createStyles = createThemedStyles(
+    ({ styles: { page }, theme: { color } }) => ({
+        content: {
             backgroundColor: color.background,
-            paddingHorizontal: spacing.pageHorizontal,
-            paddingTop: spacing.pageTop,
-            paddingBottom: spacing.pageBottom,
+            paddingHorizontal: page.horizontal,
+            paddingTop: page.top,
+            paddingBottom: page.bottom,
         },
-    });
+    }),
+);
 
 export default FormPage;

@@ -1,28 +1,25 @@
-import type { ColorValue } from "react-native";
-import type { DeepPartial } from "@reillymc/es-utils";
-
-import { useStyles } from "../../hooks";
-import type { IconComponentProps } from "./componentWithIcon";
-
-export interface IconBaseStyles {
-    color: ColorValue;
-    size: number;
-}
+import { useTheme } from "../../hooks";
+import type { IconBaseStyles } from "./IconBase.styles";
+import type { IconComponentProps } from "./IconComponentProps";
 
 export type IconBaseProps<G extends string> = IconComponentProps<G> & {
-    style?: DeepPartial<IconBaseStyles>;
+    size?: IconBaseStyles["size"];
+    color?: IconBaseStyles["color"];
 };
 
 export const IconBase = <G extends string>({
-    style,
-    iconName,
     iconSet: IconSet,
+    iconName,
+    size,
+    color,
 }: IconBaseProps<G>) => {
-    const { iconBase } = useStyles({ iconBase: style });
+    const { styles } = useTheme();
 
     return (
-        <IconSet size={iconBase.size} color={iconBase.color} name={iconName} />
+        <IconSet
+            size={size ?? styles.iconBase.size}
+            color={color ?? styles.iconBase.color}
+            name={iconName}
+        />
     );
 };
-
-IconBase.displayName = "IconBase";

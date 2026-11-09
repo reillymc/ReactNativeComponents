@@ -1,4 +1,6 @@
+import { Platform } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
+import merge from "lodash.merge";
 
 export type Theme = typeof DefaultTheme;
 
@@ -7,17 +9,24 @@ export type ThemeOverrides = DeepPartial<Theme>;
 export const DefaultTheme = {
     font: {
         family: {
-            sans: "Helvetica",
-            mono: "Helvetica",
+            sans: Platform.select({
+                ios: "System",
+                android: "sans-serif",
+                default: "system-ui",
+            }),
+            mono: Platform.select({
+                ios: "Menlo",
+                android: "monospace",
+                default: "monospace",
+            }),
         },
         size: {
-            tiny: 12,
-            small: 14,
-            regular: 16,
-            emphasised: 18,
-            large: 20,
-            xLarge: 24,
-            xxLarge: 32,
+            tiny: 10,
+            small: 12,
+            regular: 14,
+            large: 16,
+            xLarge: 20,
+            xxLarge: 28,
         },
     },
     color: {
@@ -76,18 +85,6 @@ export const DefaultTheme = {
         warning: "#f5c61d",
     },
     spacing: {
-        // Screen
-        screenContentTop: 0,
-
-        // Page
-        pageHorizontal: 16,
-        pageBottom: 80,
-        pageTop: 16,
-
-        // Navigation
-        navigationActionHorizontal: 0,
-
-        // Body
         large: 24,
         medium: 16,
         small: 8,
@@ -107,51 +104,5 @@ export const DefaultTheme = {
     },
 };
 
-export const MergeTheme = (
-    first: ThemeOverrides,
-    second: ThemeOverrides | undefined,
-): Theme => ({
-    ...DefaultTheme,
-    ...first,
-    ...second,
-    color: {
-        ...DefaultTheme.color,
-        ...first.color,
-        ...second?.color,
-    },
-    font: {
-        ...DefaultTheme.font,
-        ...first.font,
-        ...second?.font,
-        family: {
-            ...DefaultTheme.font.family,
-            ...first.font?.family,
-            ...second?.font?.family,
-        },
-        size: {
-            ...DefaultTheme.font.size,
-            ...first.font?.size,
-            ...second?.font?.size,
-        },
-    },
-    spacing: {
-        ...DefaultTheme.spacing,
-        ...first.spacing,
-        ...second?.spacing,
-    },
-    border: {
-        ...DefaultTheme.border,
-        ...first.border,
-        ...second?.border,
-        radius: {
-            ...DefaultTheme.border.radius,
-            ...first.border?.radius,
-            ...second?.border?.radius,
-        },
-        width: {
-            ...DefaultTheme.border.width,
-            ...first.border?.width,
-            ...second?.border?.width,
-        },
-    },
-});
+export const MergeTheme = (overrides?: ThemeOverrides): Theme =>
+    merge({}, DefaultTheme, overrides ?? {}) as Theme;

@@ -18,7 +18,7 @@ const createStyles = ({ styles: { listItem } }: ThemedStyles) =>
         alert: {
             alignItems: "center",
             justifyContent: "center",
-            marginLeft: listItem.spacingMargin,
-            marginRight: listItem.internalSpacing,
+            marginStart: listItem.spacingMargin,
+            marginEnd: listItem.internalSpacing,
         },
     });

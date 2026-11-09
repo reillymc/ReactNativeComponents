@@ -1,11 +1,15 @@
-import React from "react";
+import { type FunctionComponent, useState } from "react";
 import {
     CounterInput,
     type CounterInputProps,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
-import { CommonInputProps } from "../helpers";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
+import { CommonInputProps } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<CounterInputProps> = {
     ...CommonInputProps,
@@ -29,11 +33,9 @@ const defaultProps: CounterInputProps = {
     label: "Counter Input",
 };
 
-const CounterInputPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<CounterInputProps>(defaultProps);
-    const [inputValue, setInputValue] = React.useState<string | undefined>(
-        undefined,
-    );
+const CounterInputPage: FunctionComponent = () => {
+    const [props, setProps] = useState<CounterInputProps>(defaultProps);
+    const [inputValue, setInputValue] = useState<string | undefined>(undefined);
 
     return (
         <ComponentPage
@@ -42,7 +44,7 @@ const CounterInputPage: React.FunctionComponent = () => {
                 <CounterInput
                     {...props}
                     value={inputValue}
-                    onChangeText={setInputValue}
+                    onChange={setInputValue}
                 />
             }
             propsPanel={

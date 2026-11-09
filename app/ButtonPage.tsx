@@ -1,9 +1,16 @@
-import React from "react";
-import { Button, type ButtonProps } from "@reillymc/react-native-components";
+import { type FunctionComponent, useState } from "react";
+import {
+    Button,
+    type ButtonProps,
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
-export const defaultProps: ButtonProps = {
+const defaultProps: ButtonProps = {
     label: "Secondary Button",
     variant: "secondary",
     width: "auto",
@@ -43,8 +50,8 @@ const propDefinitions: PropDefinitions<ButtonProps> = {
     },
 };
 
-const ButtonPage: React.FunctionComponent = () => {
-    const [props, setProps] = React.useState<ButtonProps>(defaultProps);
+const ButtonPage: FunctionComponent = () => {
+    const [props, setProps] = useState<ButtonProps>(defaultProps);
 
     return (
         <ComponentPage

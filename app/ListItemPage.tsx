@@ -10,9 +10,13 @@ import {
     ListItemRow,
     SwipeAction,
     Text,
-} from "@reillymc/react-native-components";
+} from "@reillymc/react-native-components/components";
 
-import { ComponentPage, type PropDefinitions, PropsPanel } from "../components";
+import {
+    ComponentPage,
+    type PropDefinitions,
+    PropsPanel,
+} from "../demo/components";
 
 const defaultProps: ListItemProps = {
     heading: "Heading text",
