@@ -22,24 +22,17 @@ const EMPTY_ACTIONS: Array<ReactNode> = [];
 
 export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
     actions = EMPTY_ACTIONS,
-    style,
-    actionsContainerStyle,
     children,
-    onSwipeStateChange,
+    ...props
 }) => {
     const resolvedActions = Children.toArray(actions);
 
     if (resolvedActions.length === 0) {
-        return <View style={style}>{children}</View>;
+        return <View style={props.style}>{children}</View>;
     }
 
     return (
-        <ContextContainerSwipeable
-            actions={resolvedActions}
-            containerStyle={style}
-            actionsContainerStyle={actionsContainerStyle}
-            onSwipeStateChange={onSwipeStateChange}
-        >
+        <ContextContainerSwipeable {...props} actions={resolvedActions}>
             {children}
         </ContextContainerSwipeable>
     );

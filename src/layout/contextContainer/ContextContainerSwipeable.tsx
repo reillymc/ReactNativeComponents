@@ -8,7 +8,7 @@ export type ContextSwipeState = "closed" | "opening" | "open" | "closing";
 
 export interface ContextContainerSwipeableProps {
     actions: Array<ReactNode>;
-    containerStyle?: StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>;
     actionsContainerStyle?: StyleProp<ViewStyle>;
     children?: ReactNode;
     onSwipeStateChange?: (state: ContextSwipeState) => void;
@@ -18,7 +18,7 @@ export const ContextContainerSwipeable: FunctionComponent<
     ContextContainerSwipeableProps
 > = ({
     actions,
-    containerStyle,
+    style,
     actionsContainerStyle,
     children,
     onSwipeStateChange,
@@ -39,7 +39,7 @@ export const ContextContainerSwipeable: FunctionComponent<
         enableTrackpadTwoFingerGesture
         friction={1.5}
         overshootRight={false}
-        containerStyle={[containerStyle, styles.overflowVisible]}
+        containerStyle={[style, styles.overflowVisible]}
         onSwipeableOpenStartDrag={() => onSwipeStateChange?.("opening")}
         onSwipeableWillOpen={() => onSwipeStateChange?.("opening")}
         onSwipeableOpen={() => onSwipeStateChange?.("open")}
@@ -55,8 +55,6 @@ const styles = StyleSheet.create({
     actionsContainer: {
         display: "flex",
         flexDirection: "row-reverse",
-        gap: 8,
-        marginLeft: 8,
     },
     overflowVisible: {
         overflow: "visible",

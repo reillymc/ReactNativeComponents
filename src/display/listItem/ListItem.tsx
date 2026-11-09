@@ -33,7 +33,8 @@ export interface ListItemTheme {
         paddingEnd: number;
     };
     swipeActions: {
-        marginVertical: number;
+        margin: number;
+        gap: number;
     };
     internalGap: number;
     textColor: ColorValue;
@@ -192,7 +193,9 @@ const createStyles = defineStyles(
             backgroundColor: theme.surface.backgroundColor,
         },
         swipeActions: {
-            marginVertical: theme.swipeActions.marginVertical,
+            margin: theme.swipeActions.margin,
+            marginLeft: theme.swipeActions.gap,
+            gap: theme.swipeActions.gap,
         },
         pressableContainer: {
             display: "flex",
