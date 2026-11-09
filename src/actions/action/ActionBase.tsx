@@ -1,5 +1,6 @@
 import type { FC, ReactNode } from "react";
 import {
+    Platform,
     type PressableProps,
     type StyleProp,
     View,
@@ -40,6 +41,25 @@ export interface ActionBaseProps
     highlighted?: boolean;
     theme?: DeepPartial<ActionBaseTheme>;
     children?: ReactNode | ((state: ActionState) => ReactNode);
+    /**
+     * Link target. When set, the surface defaults to the `link` role and web
+     * renders it as an anchor.
+     */
+    href?: string;
+    /**
+     * Web-only attributes for `href`.
+     */
+    hrefAttrs?: {
+        download?: string;
+        rel?: string;
+        target?: string;
+    };
+    /**
+     * Shorthand web-only link attributes, forwarded as `hrefAttrs`.
+     */
+    rel?: string;
+    target?: string;
+    download?: string;
 }
 
 export const ActionBase: FC<ActionBaseProps> = ({
@@ -51,6 +71,13 @@ export const ActionBase: FC<ActionBaseProps> = ({
     onBlur,
     theme: themeOverrides,
     children,
+    href,
+    hrefAttrs,
+    rel,
+    target,
+    download,
+    role,
+    accessibilityRole,
     onPress,
     ...pressableProps
 }) => {
@@ -61,6 +88,36 @@ export const ActionBase: FC<ActionBaseProps> = ({
     });
     const { getFocusRingStyle, getDisabledStyle, hitSlop } = useSystems();
     const resolvedHitSlop = hitSlopOverride ?? hitSlop.default;
+    let defaultRole: "button" | "link" | undefined;
+    if (href != null) {
+        defaultRole = "link";
+    } else if (onPress) {
+        defaultRole = "button";
+    }
+    const resolvedRole =
+        role ?? (accessibilityRole == null ? defaultRole : undefined);
+    const linkProps =
+        href == null
+            ? {}
+            : {
+                  href,
+                  ...(Platform.OS === "web"
+                      ? {
+                            hrefAttrs:
+                                hrefAttrs == null &&
+                                rel == null &&
+                                target == null &&
+                                download == null
+                                    ? undefined
+                                    : {
+                                          rel,
+                                          target,
+                                          download,
+                                          ...hrefAttrs,
+                                      },
+                        }
+                      : {}),
+              };
     const renderChildren = (state: ActionState) =>
         typeof children === "function" ? children(state) : children;
 
@@ -68,6 +125,9 @@ export const ActionBase: FC<ActionBaseProps> = ({
         return (
             <View
                 {...pressableProps}
+                {...linkProps}
+                role={resolvedRole}
+                accessibilityRole={accessibilityRole}
                 style={[getDisabledStyle(!!disabled), styles.pressable, style]}
             >
                 {renderChildren({ pressed: false, hovered: false })}
@@ -78,6 +138,9 @@ export const ActionBase: FC<ActionBaseProps> = ({
     return (
         <PressableBase
             {...pressableProps}
+            {...linkProps}
+            role={resolvedRole}
+            accessibilityRole={accessibilityRole}
             hitSlop={resolvedHitSlop}
             disabled={disabled}
             onBlur={(event) => {

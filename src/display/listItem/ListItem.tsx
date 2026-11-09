@@ -40,7 +40,18 @@ export interface ListItemTheme {
     textColor: ColorValue;
 }
 
-export interface ListItemProps extends Pick<ActionBaseProps, "onPress"> {
+export interface ListItemProps
+    extends Pick<
+        ActionBaseProps,
+        | "onPress"
+        | "role"
+        | "accessibilityRole"
+        | "accessibilityLabel"
+        | "href"
+        | "rel"
+        | "target"
+        | "download"
+    > {
     heading?: ReactNode;
     header?: ReactNode;
 
@@ -89,6 +100,7 @@ export const ListItem: FC<ListItemProps> = ({
     theme: themeOverrides,
     contentContainerStyle,
     onPress,
+    ...props
 }) => {
     const filteredActions = actions?.filter(Undefined);
     const swipeState = useSharedValue<ContextSwipeState>("closed");
@@ -145,14 +157,21 @@ export const ListItem: FC<ListItemProps> = ({
 
     const surface = (
         <Animated.View style={[styles.surface, animatedSurfaceStyle]}>
-            {onPress ? (
+            {onPress || props.href != null ? (
                 <ActionBase
+                    {...props}
                     hitSlop={0}
-                    onPress={(event) => {
-                        if (swipeState.value === "closed") {
-                            onPress(event);
-                        }
-                    }}
+                    onPress={
+                        onPress
+                            ? (event) => {
+                                  if (swipeState.value === "closed") {
+                                      onPress(event);
+                                  } else if (props.href != null) {
+                                      event.preventDefault();
+                                  }
+                              }
+                            : undefined
+                    }
                     style={[styles.pressableContainer, style]}
                 >
                     {listContent}
