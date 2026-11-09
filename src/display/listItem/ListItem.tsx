@@ -194,7 +194,7 @@ export const ListItem: FC<ListItemProps> = ({
                         swipeState.value = state;
                     }}
                 >
-                    {surface}
+                    <View>{surface}</View>
                 </ContextContainer>
             ) : (
                 surface
