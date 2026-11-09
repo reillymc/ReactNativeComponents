@@ -1,8 +1,8 @@
 import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
+    ContextAction,
     IconAction,
-    SwipeAction,
 } from "@reillymc/react-native-components/actions";
 import {
     Badge,
@@ -47,16 +47,18 @@ const defaultProps: ListItemProps = {
             <Text>Description 2</Text>
         </ContentRow>
     ),
-    swipeActions: [
-        <SwipeAction
+    actions: [
+        <ContextAction
             key="1"
+            label="Delete"
             iconSet={Octicons}
             iconName={"trash"}
             variant="destructive"
             onPress={() => null}
         />,
-        <SwipeAction
+        <ContextAction
             key="2"
+            label="Edit"
             iconSet={Octicons}
             iconName="pencil"
             variant="primary"
@@ -147,26 +149,28 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             },
         ],
     },
-    swipeActions: {
+    actions: {
         type: "enum",
-        label: "Swipe actions",
+        label: "Actions",
         default: "Delete",
         values: [
             { id: "None", label: "None", value: undefined },
-            { id: "Delete", label: "Delete", value: defaultProps.swipeActions },
+            { id: "Delete", label: "Delete", value: defaultProps.actions },
             {
                 id: "DeleteAndEdit",
                 label: "Delete and Edit",
                 value: [
-                    <SwipeAction
+                    <ContextAction
                         key="1"
+                        label="Delete"
                         iconSet={Octicons}
                         iconName="trash"
                         variant="destructive"
                         onPress={() => null}
                     />,
-                    <SwipeAction
+                    <ContextAction
                         key="2"
+                        label="Edit"
                         iconSet={Octicons}
                         iconName="pencil"
                         variant="primary"

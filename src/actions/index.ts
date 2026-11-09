@@ -15,7 +15,8 @@ export type {
 } from "./button";
 export { Button, ButtonBase, IconButton, IconButtonBase } from "./button";
 export {
-    SwipeAction,
-    type SwipeActionProps,
-    type SwipeActionTheme,
-} from "./swipeAction";
+    ContextAction,
+    type ContextActionProps,
+    type ContextActionTheme,
+    type ContextActionVariant,
+} from "./contextAction";

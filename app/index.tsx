@@ -83,7 +83,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconButtonPage",
                 component: <IconButton iconSet={Octicons} iconName="star" />,
             },
-            { name: "Swipe Action", href: "/SwipeActionPage" },
+            { name: "Context Action", href: "/ContextActionPage" },
         ],
     },
     {
@@ -187,7 +187,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 name: "Collapsible Panel",
                 href: "/CollapsiblePanelPage",
             },
-            { name: "Swipeable Container", href: "/SwipeableContainerPage" },
+            { name: "Context Container", href: "/ContextContainerPage" },
         ],
     },
     {

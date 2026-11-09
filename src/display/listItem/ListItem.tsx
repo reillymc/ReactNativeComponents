@@ -10,9 +10,9 @@ import { type DeepPartial, Undefined } from "@reillymc/es-utils";
 import { ActionBase, type ActionBaseProps } from "../../actions/action";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import {
-    SwipeableContainer,
-    type SwipeableContainerProps,
-} from "../../layout/swipeable";
+    ContextContainer,
+    type ContextContainerProps,
+} from "../../layout/contextContainer";
 import { Text } from "../../typography/text";
 
 type ListItemVariant = "default" | "compact";
@@ -56,7 +56,7 @@ export interface ListItemProps extends Pick<ActionBaseProps, "onPress"> {
      */
     footer?: ReactNode;
 
-    swipeActions?: SwipeableContainerProps["rightActions"];
+    actions?: ContextContainerProps["actions"];
     style?: StyleProp<ViewStyle>;
     theme?: DeepPartial<ListItemTheme>;
     contentContainerStyle?: StyleProp<ViewStyle>;
@@ -70,13 +70,13 @@ export const ListItem: FC<ListItemProps> = ({
     header,
     variant = "default",
     content,
-    swipeActions,
+    actions,
     style,
     theme: themeOverrides,
     contentContainerStyle,
     onPress,
 }) => {
-    const filteredActions = swipeActions?.filter(Undefined);
+    const filteredActions = actions?.filter(Undefined);
     const isSwipingRef = useRef(false);
 
     const { styles, theme } = useComponent("listItem", {
@@ -129,14 +129,14 @@ export const ListItem: FC<ListItemProps> = ({
     return (
         <View style={styles.container}>
             {filteredActions?.length ? (
-                <SwipeableContainer
-                    rightActions={filteredActions}
+                <ContextContainer
+                    actions={filteredActions}
                     onSwipeInteractionChange={(active) => {
                         isSwipingRef.current = active;
                     }}
                 >
                     <View>{innerContent}</View>
-                </SwipeableContainer>
+                </ContextContainer>
             ) : (
                 innerContent
             )}

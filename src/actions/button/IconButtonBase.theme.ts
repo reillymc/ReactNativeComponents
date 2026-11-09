@@ -6,6 +6,7 @@ export const defaultIconButtonBaseTheme: ThemeFactory<"iconButtonBase"> = ({
 }) => ({
     container: {
         padding: 4,
+        gap: palette.spacing.tiny,
         size: 48,
         backgroundColor: palette.color.inset,
         borderRadius: "50%",
@@ -14,4 +15,5 @@ export const defaultIconButtonBaseTheme: ThemeFactory<"iconButtonBase"> = ({
         size: theme.iconBase.size,
         color: palette.color.insetForeground,
     },
+    label: theme.text,
 });

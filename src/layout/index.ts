@@ -3,6 +3,6 @@ export {
     type CollapsiblePanelProps,
 } from "./collapsiblePanel";
 export {
-    SwipeableContainer,
-    type SwipeableContainerProps,
-} from "./swipeable";
+    ContextContainer,
+    type ContextContainerProps,
+} from "./contextContainer";

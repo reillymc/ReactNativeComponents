@@ -1,34 +1,37 @@
 import { View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
-import { SwipeAction } from "@reillymc/react-native-components/actions";
-import { SwipeableContainer } from "@reillymc/react-native-components/layout";
+import { ContextAction } from "@reillymc/react-native-components/actions";
+import { ContextContainer } from "@reillymc/react-native-components/layout";
 import { usePalette } from "@reillymc/react-native-components/theme";
 import { Text } from "@reillymc/react-native-components/typography";
 
 import { ComponentPage } from "../demo/components";
 
-const SwipeableContainerPage = () => {
+const ContextContainerPage = () => {
     const palette = usePalette();
 
     return (
         <ComponentPage
-            componentName="Swipeable Container"
+            componentName="Context Container"
             component={
                 <View style={{ width: "100%", gap: 12 }}>
                     <Text variant="caption">
-                        Swipe the row left to reveal actions.
+                        Swipe the row left on mobile. Right-click or press
+                        Shift+F10 on web.
                     </Text>
-                    <SwipeableContainer
-                        rightActions={[
-                            <SwipeAction
+                    <ContextContainer
+                        actions={[
+                            <ContextAction
                                 key="edit"
+                                label="Edit"
                                 iconSet={Octicons}
                                 iconName="pencil"
                                 variant="primary"
                                 onPress={() => null}
                             />,
-                            <SwipeAction
+                            <ContextAction
                                 key="delete"
+                                label="Delete"
                                 iconSet={Octicons}
                                 iconName="trash"
                                 variant="destructive"
@@ -42,13 +45,13 @@ const SwipeableContainerPage = () => {
                                 padding: 16,
                             }}
                         >
-                            <Text>Swipeable row</Text>
+                            <Text>Context row</Text>
                         </View>
-                    </SwipeableContainer>
+                    </ContextContainer>
                 </View>
             }
         />
     );
 };
 
-export default SwipeableContainerPage;
+export default ContextContainerPage;

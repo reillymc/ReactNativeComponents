@@ -6,8 +6,8 @@ import { defaultButtonTheme } from "../actions/button/Button.theme";
 import { defaultButtonBaseTheme } from "../actions/button/ButtonBase.theme";
 import { defaultIconButtonTheme } from "../actions/button/IconButton.theme";
 import { defaultIconButtonBaseTheme } from "../actions/button/IconButtonBase.theme";
+import { defaultContextActionTheme } from "../actions/contextAction/ContextAction.theme";
 import { defaultStateLayerTheme } from "../actions/surface/StateLayer.theme";
-import { defaultSwipeActionTheme } from "../actions/swipeAction/SwipeAction.theme";
 import { defaultAvatarTheme } from "../display/avatar/Avatar.theme";
 import { defaultBadgeTheme } from "../display/badge/Badge.theme";
 import { defaultContentRowTheme } from "../display/contentRow/ContentRow.theme";
@@ -75,7 +75,7 @@ export const definitions: ThemeDefinitions = {
     menuItem: defaultMenuItemTheme,
     avatar: defaultAvatarTheme,
     toast: defaultToastTheme,
-    swipeAction: defaultSwipeActionTheme,
+    contextAction: defaultContextActionTheme,
     anchoredContainer: defaultAnchoredContainerTheme,
     formContainer: defaultFormContainerTheme,
     formRow: defaultFormRowTheme,

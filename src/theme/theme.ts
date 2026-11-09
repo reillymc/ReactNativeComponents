@@ -8,8 +8,8 @@ import type { ButtonTheme } from "../actions/button/Button";
 import type { ButtonBaseTheme } from "../actions/button/ButtonBase";
 import type { IconButtonTheme } from "../actions/button/IconButton";
 import type { IconButtonBaseTheme } from "../actions/button/IconButtonBase";
+import type { ContextActionTheme } from "../actions/contextAction/ContextAction";
 import type { StateLayerTheme } from "../actions/surface/StateLayer";
-import type { SwipeActionTheme } from "../actions/swipeAction/SwipeAction";
 import type { AvatarTheme } from "../display/avatar/Avatar";
 import type { BadgeTheme } from "../display/badge/Badge";
 import type { ContentRowTheme } from "../display/contentRow/ContentRow";
@@ -73,7 +73,7 @@ export interface Theme {
     menuItem: MenuItemTheme;
     avatar: AvatarTheme;
     toast: ToastTheme;
-    swipeAction: SwipeActionTheme;
+    contextAction: ContextActionTheme;
     anchoredContainer: AnchoredContainerTheme;
     formContainer: FormContainerTheme;
     formRow: FormRowTheme;

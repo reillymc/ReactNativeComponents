@@ -21,7 +21,7 @@ export type IconButtonTheme = {
 export interface IconButtonProps
     extends Pick<
         IconButtonBaseProps,
-        "onPress" | "disabled" | "highlighted" | "style"
+        "onPress" | "disabled" | "highlighted" | "accessibilityLabel" | "style"
     > {
     variant?: IconButtonVariant;
     appearance?: ButtonAppearance;

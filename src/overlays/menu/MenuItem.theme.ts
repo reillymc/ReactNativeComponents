@@ -16,6 +16,7 @@ export const defaultMenuItemTheme: ThemeFactory<"menuItem"> = ({
         paddingHorizontal: theme.field.surface.padding - theme.menu.padding,
         paddingVertical: palette.spacing.small + palette.spacing.tiny,
         borderRadius: palette.border.radius.tight,
+        gap: palette.spacing.small,
         lineHeight: {
             label: Math.ceil(
                 textTheme.text.font.body.size * palette.font.lineHeightScale,
@@ -26,5 +27,9 @@ export const defaultMenuItemTheme: ThemeFactory<"menuItem"> = ({
         },
         label: textTheme,
         description: textTheme,
+        icon: {
+            size: theme.iconBase.size,
+            color: theme.menu.textColor,
+        },
     };
 };

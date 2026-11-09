@@ -13,6 +13,7 @@ export interface InteractionSurfaceProps
         | "hitSlop"
         | "tabIndex"
         | "accessibilityLabel"
+        | "role"
         | "onFocus"
         | "onBlur"
     > {
