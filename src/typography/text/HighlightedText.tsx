@@ -3,7 +3,8 @@ import { StyleSheet, type TextStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent } from "../../internal";
-import { Text, type TextProps, type TextTheme, type TextVariant } from "./Text";
+import type { TextProps, TextTheme, TextVariant } from "./Text";
+import { TextBase } from "./TextBase";
 
 type HighlightPart = {
     text: string;
@@ -64,14 +65,16 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
     ...props
 }) => {
     const { theme } = useComponent("highlightedText", { themeOverrides });
-
     const parts = splitHighlight(text, highlight);
+    const font = theme.text.font[variant];
 
     return (
-        <Text
+        <TextBase
             {...props}
-            variant={variant}
-            theme={theme.text}
+            theme={{
+                color: theme.text.color,
+                font,
+            }}
             style={[
                 styles.textWrapper,
                 props.numberOfLines === 1
@@ -81,26 +84,21 @@ export const HighlightedText: FunctionComponent<HighlightedTextProps> = ({
             ]}
         >
             {parts.map((part) => (
-                <Text
-                    variant={variant}
+                <TextBase
                     key={part.offset}
                     theme={{
-                        ...theme.text,
+                        color: theme.text.color,
                         font: {
-                            ...theme.text.font,
-                            [variant]: {
-                                ...theme.text.font[variant],
-                                weight: part.highlighted
-                                    ? theme.highlight.weight[variant]
-                                    : undefined,
-                            },
+                            weight: part.highlighted
+                                ? theme.highlight.weight[variant]
+                                : font.weight,
                         },
                     }}
                 >
                     {part.text}
-                </Text>
+                </TextBase>
             ))}
-        </Text>
+        </TextBase>
     );
 };
 

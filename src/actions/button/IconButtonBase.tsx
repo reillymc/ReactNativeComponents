@@ -4,7 +4,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { IconBase } from "../../icons/IconBase";
 import type { IconComponentProps } from "../../icons/IconComponentProps";
 import { defineStyles, useComponent } from "../../internal";
-import { Text, type TextTheme } from "../../typography/text";
+import { TextBase, type TextBaseTheme } from "../../typography/text";
 import { InteractionSurface } from "../surface";
 import type { ButtonBaseProps, ButtonBaseTheme } from "./ButtonBase";
 
@@ -20,7 +20,7 @@ export type IconButtonBaseTheme = {
         size: number;
         color: ColorValue;
     };
-    label: TextTheme;
+    label: TextBaseTheme;
 };
 
 export interface IconButtonBaseProps
@@ -64,15 +64,14 @@ export const IconButtonBase = <G extends string>({
                 color={theme.icon.color}
             />
             {!!label && (
-                <Text
-                    variant="caption"
+                <TextBase
                     numberOfLines={2}
                     ellipsizeMode="tail"
                     theme={theme.label}
                     style={styles.label}
                 >
                     {label}
-                </Text>
+                </TextBase>
             )}
         </InteractionSurface>
     );

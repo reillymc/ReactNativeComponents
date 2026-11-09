@@ -37,9 +37,11 @@ import type { MenuTheme } from "../overlays/menu/Menu";
 import type { MenuItemTheme } from "../overlays/menu/MenuItem";
 import type { HighlightedTextTheme } from "../typography/text/HighlightedText";
 import type { TextTheme } from "../typography/text/Text";
+import type { TextBaseTheme } from "../typography/text/TextBase";
 import type { ThemeFactoryFor } from "./resolveThemeGraph";
 
 export interface Theme {
+    textBase: TextBaseTheme;
     text: TextTheme;
     highlightedText: HighlightedTextTheme;
     iconBase: IconBaseTheme;

@@ -4,9 +4,8 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import type { IconComponentProps } from "../../icons/IconComponentProps";
 import { defineStyles, useComponent } from "../../internal";
 import { MenuItem, type MenuItemTheme } from "../../overlays/menu";
-import type { TextTheme } from "../../typography/text";
 import {
-    IconButtonBase,
+    IconButton,
     type IconButtonProps,
     type IconButtonTheme,
 } from "../button";
@@ -20,11 +19,10 @@ export type ContextActionTheme = {
         width: number;
         borderRadius: number;
         gap: number;
-        caption: TextTheme;
         button: IconButtonTheme;
     };
     menu: {
-        item: Record<ContextActionVariant, MenuItemTheme>;
+        item: Record<ContextActionVariant, DeepPartial<MenuItemTheme>>;
     };
 };
 
@@ -80,15 +78,8 @@ export const ContextAction = <G extends string>({
         );
     }
 
-    const content =
-        theme.swipe.button.appearance[resolvedAppearance].content[variant];
-    const container =
-        resolvedAppearance === "prominent"
-            ? theme.swipe.button.appearance.prominent.container[variant]
-            : theme.swipe.button.appearance.subtle.container;
-
     return (
-        <IconButtonBase
+        <IconButton
             iconSet={iconSet}
             iconName={iconName}
             label={label}
@@ -97,16 +88,9 @@ export const ContextAction = <G extends string>({
             onPress={handlePress}
             disabled={disabled}
             accessibilityLabel={accessibilityLabel ?? label}
-            theme={{
-                container: {
-                    size: theme.swipe.width,
-                    gap: theme.swipe.gap,
-                    backgroundColor: container,
-                    borderRadius: theme.swipe.borderRadius,
-                },
-                icon: { color: content },
-                label: { ...theme.swipe.caption, color: content },
-            }}
+            variant={variant}
+            appearance={resolvedAppearance}
+            theme={theme.swipe.button}
             style={styles.swipeAction}
         />
     );
@@ -116,5 +100,7 @@ const createStyles = defineStyles((theme: ContextActionTheme) => ({
     swipeAction: {
         width: theme.swipe.width,
         height: "100%",
+        gap: theme.swipe.gap,
+        borderRadius: theme.swipe.borderRadius,
     },
 }));

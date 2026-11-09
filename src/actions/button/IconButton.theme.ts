@@ -29,5 +29,6 @@ export const defaultIconButtonTheme: ThemeFactory<"iconButton"> = ({
                 },
             },
         },
+        label: theme.iconButtonBase.label,
     };
 };

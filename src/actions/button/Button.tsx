@@ -3,7 +3,7 @@ import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 import {
     ButtonBase,
     type ButtonBaseProps,
@@ -65,9 +65,9 @@ export const Button: FC<ButtonProps> = ({
                 backgroundColor: container,
             }}
         >
-            <Text numberOfLines={1} theme={{ color: content }}>
+            <TextBase numberOfLines={1} theme={{ color: content }}>
                 {label}
-            </Text>
+            </TextBase>
         </ButtonBase>
     );
 };

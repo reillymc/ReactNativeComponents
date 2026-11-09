@@ -2,6 +2,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import type { IconComponentProps } from "../../icons/IconComponentProps";
 import { useComponent } from "../../internal";
+import type { TextBaseTheme } from "../../typography/text";
 import type {
     ButtonAppearance,
     ButtonAppearanceTheme,
@@ -16,12 +17,20 @@ export type IconButtonTheme = {
         size: number;
     };
     appearance: ButtonAppearanceTheme;
+    label: TextBaseTheme;
 };
 
 export interface IconButtonProps
     extends Pick<
         IconButtonBaseProps,
-        "onPress" | "disabled" | "highlighted" | "accessibilityLabel" | "style"
+        | "onPress"
+        | "disabled"
+        | "highlighted"
+        | "hitSlop"
+        | "tabIndex"
+        | "accessibilityLabel"
+        | "label"
+        | "style"
     > {
     variant?: IconButtonVariant;
     appearance?: ButtonAppearance;
@@ -52,6 +61,10 @@ export const IconButton = <G extends string>({
                     size: theme.container.size,
                 },
                 icon: {
+                    color: content,
+                },
+                label: {
+                    ...theme.label,
                     color: content,
                 },
             }}

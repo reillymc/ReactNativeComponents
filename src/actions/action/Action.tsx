@@ -3,7 +3,7 @@ import type { ColorValue } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
 import { StateTint } from "./StateTint";
 
@@ -37,12 +37,12 @@ export const Action: FC<ActionProps> = ({
         <ActionBase {...baseProps}>
             {(state) => (
                 <StateTint {...state}>
-                    <Text
+                    <TextBase
                         numberOfLines={1}
                         theme={{ color: theme.label.color[variant] }}
                     >
                         {label}
-                    </Text>
+                    </TextBase>
                 </StateTint>
             )}
         </ActionBase>

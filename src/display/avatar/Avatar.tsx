@@ -10,7 +10,7 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 
 type AvatarColorSet = { background: ColorValue; foreground: ColorValue };
 type AvatarColorSets = [AvatarColorSet, ...AvatarColorSet[]];
@@ -95,35 +95,31 @@ export const Avatar: FC<AvatarProps> = ({
                 <Image source={{ uri: imageUri }} style={styles.image} />
             ) : (
                 <>
-                    <Text
+                    <TextBase
                         theme={{
                             color: foreground,
                             font: {
-                                body: {
-                                    weight: theme.initials.fontWeight,
-                                    size: theme.initials.fontSize[size],
-                                },
+                                weight: theme.initials.fontWeight,
+                                size: theme.initials.fontSize[size],
                             },
                         }}
                     >
                         {initials}
-                    </Text>
+                    </TextBase>
                     {size === "large" && (
-                        <Text
+                        <TextBase
                             numberOfLines={3}
                             style={styles.label}
                             theme={{
                                 color: foreground,
                                 font: {
-                                    body: {
-                                        weight: theme.label.fontWeight,
-                                        size: theme.label.fontSize,
-                                    },
+                                    weight: theme.label.fontWeight,
+                                    size: theme.label.fontSize,
                                 },
                             }}
                         >
                             {`${firstName} ${lastName}`}
-                        </Text>
+                        </TextBase>
                     )}
                 </>
             )}

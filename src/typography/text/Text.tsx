@@ -1,14 +1,9 @@
 import type { FC, ReactNode } from "react";
-import {
-    type ColorValue,
-    Text as RnText,
-    type TextProps as RnTextProps,
-    type TextStyle,
-} from "react-native";
+import type { ColorValue, TextProps as RnTextProps } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
-import { defineStyles, type PropFilter, useComponent } from "../../internal";
-import { useSystems } from "../../theme/useSystems";
+import { useComponent } from "../../internal";
+import { TextBase, type TextBaseTheme } from "./TextBase";
 
 export type TextVariant =
     | "display"
@@ -20,13 +15,7 @@ export type TextVariant =
 
 export interface TextTheme {
     color: ColorValue;
-    font: {
-        [Variant in TextVariant]: {
-            family: string;
-            weight: TextStyle["fontWeight"];
-            size: number;
-        };
-    };
+    font: Record<TextVariant, TextBaseTheme["font"]>;
 }
 
 export interface TextProps extends RnTextProps {
@@ -37,36 +26,21 @@ export interface TextProps extends RnTextProps {
 
 export const Text: FC<TextProps> = ({
     variant = "body",
-    style,
     theme: themeOverrides,
     children,
     ...props
 }) => {
-    const { maxFontSizeMultiplier } = useSystems();
-    const { styles } = useComponent("text", {
-        themeOverrides,
-        props: { variant },
-        createStyles,
-    });
+    const { theme } = useComponent("text", { themeOverrides });
 
     return (
-        <RnText
-            maxFontSizeMultiplier={maxFontSizeMultiplier}
+        <TextBase
             {...props}
-            style={[styles.text, style]}
+            theme={{
+                ...theme,
+                font: theme.font[variant],
+            }}
         >
             {children}
-        </RnText>
+        </TextBase>
     );
 };
-
-const createStyles = defineStyles(
-    (theme: TextTheme, props: PropFilter<TextProps, "variant">) => ({
-        text: {
-            fontFamily: theme.font[props.variant].family,
-            fontWeight: theme.font[props.variant].weight,
-            fontSize: theme.font[props.variant].size,
-            color: theme.color,
-        },
-    }),
-);

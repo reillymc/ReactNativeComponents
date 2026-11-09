@@ -9,7 +9,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { ActionBase } from "../../actions/action";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 
 export type TagTone = "light" | "dark";
 
@@ -50,7 +50,9 @@ export const Tag: FC<TagProps> = ({
     const content = (
         <>
             {icon}
-            <Text theme={{ color: theme.textColor[tone] }}>{label}</Text>
+            <TextBase theme={{ color: theme.textColor[tone] }}>
+                {label}
+            </TextBase>
         </>
     );
 

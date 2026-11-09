@@ -1,9 +1,8 @@
 import { Children, type FunctionComponent, type ReactNode } from "react";
-import { StyleSheet, View } from "react-native";
-import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
+import { View } from "react-native";
 
-import { ContextActionContext } from "../../actions/contextAction/ContextActionContext";
 import type { ContextContainerProps } from "./ContextContainer";
+import { ContextContainerSwipeable } from "./ContextContainerSwipeable";
 import { ContextMenu } from "./ContextMenu.web";
 import { useContextMenuTrigger } from "./useContextMenuTrigger.web";
 
@@ -26,36 +25,13 @@ export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
 
     return (
         <>
-            <View ref={containerRef}>
-                <Swipeable
-                    renderRightActions={(
-                        _progress,
-                        _translation,
-                        swipeableMethods,
-                    ) => (
-                        <ContextActionContext.Provider
-                            value={{
-                                layout: "swipe",
-                                onActionActivated: () =>
-                                    swipeableMethods.close(),
-                            }}
-                        >
-                            <View style={styles.actionsContainer}>
-                                {resolvedActions}
-                            </View>
-                        </ContextActionContext.Provider>
-                    )}
-                    enableTrackpadTwoFingerGesture
-                    friction={1.5}
-                    overshootRight={false}
-                    containerStyle={[style, styles.overflowVisible]}
-                    onSwipeableOpenStartDrag={() =>
-                        onSwipeInteractionChange?.(true)
-                    }
-                    onSwipeableClose={() => onSwipeInteractionChange?.(false)}
+            <View ref={containerRef} style={style}>
+                <ContextContainerSwipeable
+                    actions={resolvedActions}
+                    onSwipeInteractionChange={onSwipeInteractionChange}
                 >
                     {children}
-                </Swipeable>
+                </ContextContainerSwipeable>
             </View>
             {menuAnchor && (
                 <ContextMenu
@@ -68,15 +44,3 @@ export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
         </>
     );
 };
-
-const styles = StyleSheet.create({
-    actionsContainer: {
-        display: "flex",
-        flexDirection: "row-reverse",
-        gap: 8,
-        marginLeft: 8,
-    },
-    overflowVisible: {
-        overflow: "visible",
-    },
-});

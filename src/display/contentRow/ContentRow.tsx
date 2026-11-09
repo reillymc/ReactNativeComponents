@@ -3,7 +3,7 @@ import { type StyleProp, View, type ViewStyle } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 
 export type ContentRowTheme = {
     gap: number;
@@ -16,7 +16,7 @@ export interface ContentRowProps {
     theme?: DeepPartial<ContentRowTheme>;
 }
 
-const DEFAULT_SEPARATOR = <Text>·</Text>;
+const DEFAULT_SEPARATOR = <TextBase>·</TextBase>;
 
 export const ContentRow: FC<ContentRowProps> = ({
     children,

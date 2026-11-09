@@ -4,7 +4,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 import { IconBase } from "../../icons/IconBase";
 import type { IconComponentProps } from "../../icons/IconComponentProps";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 import { ActionBase, type ActionBaseProps } from "./ActionBase";
 import { StateTint } from "./StateTint";
 
@@ -58,9 +58,12 @@ export const IconActionBase = <G extends string>({
                         color={theme.color}
                     />
                     {!!label && (
-                        <Text numberOfLines={1} theme={{ color: theme.color }}>
+                        <TextBase
+                            numberOfLines={1}
+                            theme={{ color: theme.color }}
+                        >
                             {label}
-                        </Text>
+                        </TextBase>
                     )}
                 </StateTint>
             )}

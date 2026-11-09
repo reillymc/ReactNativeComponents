@@ -35,6 +35,7 @@ import { defaultMenuTheme } from "../overlays/menu/Menu.theme";
 import { defaultMenuItemTheme } from "../overlays/menu/MenuItem.theme";
 import { defaultHighlightedTextTheme } from "../typography/text/HighlightedText.theme";
 import { defaultTextTheme } from "../typography/text/Text.theme";
+import { defaultTextBaseTheme } from "../typography/text/TextBase.theme";
 import type { Theme, ThemeFactory } from "./theme";
 
 export type ThemeDefinitions = {
@@ -42,6 +43,7 @@ export type ThemeDefinitions = {
 };
 
 export const definitions: ThemeDefinitions = {
+    textBase: defaultTextBaseTheme,
     text: defaultTextTheme,
     highlightedText: defaultHighlightedTextTheme,
     iconBase: defaultIconBaseTheme,

@@ -9,7 +9,7 @@ import {
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
-import { Text } from "../../typography/text";
+import { TextBase } from "../../typography/text";
 
 type BadgeVariant = "primary" | "secondary";
 
@@ -42,15 +42,15 @@ export const Badge: FC<BadgeProps> = ({
 
     return (
         <View style={[styles.container, style]}>
-            <Text
+            <TextBase
                 numberOfLines={1}
                 theme={{
                     color: theme.color[variant],
-                    font: { body: { weight: theme.fontWeight } },
+                    font: { weight: theme.fontWeight },
                 }}
             >
                 {label}
-            </Text>
+            </TextBase>
         </View>
     );
 };

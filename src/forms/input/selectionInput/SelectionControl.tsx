@@ -3,7 +3,7 @@ import type { DeepPartial } from "@reillymc/es-utils";
 
 import { Tag } from "../../../display/tag";
 import { defineStyles, useComponent } from "../../../internal";
-import { Text } from "../../../typography/text";
+import { TextBase } from "../../../typography/text";
 import {
     FieldIcon,
     FieldRow,
@@ -61,13 +61,13 @@ export const SelectionControl = <T,>({
                         !!selection &&
                         !Array.isArray(selection) && (
                             <View style={styles.valueLabel}>
-                                <Text
+                                <TextBase
                                     numberOfLines={1}
                                     ellipsizeMode="tail"
                                     theme={{ color: fieldTheme.text.color }}
                                 >
                                     {selection.label}
-                                </Text>
+                                </TextBase>
                             </View>
                         )}
                     {selectionMode === "multi" &&
@@ -86,7 +86,7 @@ export const SelectionControl = <T,>({
 
                     {!hasSelection && (
                         <View style={styles.valueLabel}>
-                            <Text
+                            <TextBase
                                 numberOfLines={1}
                                 ellipsizeMode="tail"
                                 theme={{
@@ -94,7 +94,7 @@ export const SelectionControl = <T,>({
                                 }}
                             >
                                 {placeholder}
-                            </Text>
+                            </TextBase>
                         </View>
                     )}
                 </View>

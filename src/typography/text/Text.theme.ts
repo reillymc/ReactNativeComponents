@@ -1,20 +1,17 @@
 import type { ThemeFactory } from "../../theme/theme";
 
 export const defaultTextTheme: ThemeFactory<"text"> = ({
-    palette: { color, font },
+    palette: { font },
+    theme,
 }) => ({
-    color: color.foreground,
+    color: theme.textBase.color,
     font: {
         caption: {
             family: font.family.sans,
             weight: "200",
             size: font.size.small,
         },
-        body: {
-            family: font.family.sans,
-            weight: "400",
-            size: font.size.regular,
-        },
+        body: theme.textBase.font,
         label: {
             family: font.family.sans,
             weight: "500",
