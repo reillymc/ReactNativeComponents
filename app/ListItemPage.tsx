@@ -31,6 +31,7 @@ const footerContentRow = (
 
 const defaultProps: ListItemProps = {
     heading: "Heading text",
+    corners: "rounded",
     footer: footerContentRow,
     avatar: (
         <IconAction
@@ -193,13 +194,13 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             },
         ],
     },
-    variant: {
+    corners: {
         type: "enum",
-        label: "Variant",
-        default: "Default",
+        label: "Corners",
+        default: "Rounded",
         values: [
-            { label: "Default", value: "default" },
-            { label: "Compact", value: "compact" },
+            { label: "Rounded", value: "rounded" },
+            { label: "Square", value: "square" },
         ],
     },
     onPress: {

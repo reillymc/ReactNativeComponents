@@ -11,8 +11,9 @@ const EMPTY_ACTIONS: Array<ReactNode> = [];
 export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
     actions = EMPTY_ACTIONS,
     style,
+    actionsContainerStyle,
     children,
-    onSwipeInteractionChange,
+    onSwipeStateChange,
 }) => {
     const resolvedActions = Children.toArray(actions);
     const { containerRef, menuAnchor, handleDismiss } = useContextMenuTrigger({
@@ -28,7 +29,8 @@ export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
             <View ref={containerRef} style={style}>
                 <ContextContainerSwipeable
                     actions={resolvedActions}
-                    onSwipeInteractionChange={onSwipeInteractionChange}
+                    actionsContainerStyle={actionsContainerStyle}
+                    onSwipeStateChange={onSwipeStateChange}
                 >
                     {children}
                 </ContextContainerSwipeable>

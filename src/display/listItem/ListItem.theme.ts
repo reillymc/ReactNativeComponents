@@ -11,6 +11,9 @@ export const defaultListItemTheme: ThemeFactory<"listItem"> = ({
         paddingStart: spacing.medium,
         paddingEnd: spacing.medium,
     },
+    swipeActions: {
+        marginVertical: spacing.tiny,
+    },
     internalGap: spacing.medium,
     textColor: color.surfaceForeground,
 });

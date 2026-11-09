@@ -1,21 +1,27 @@
-import { type FC, type ReactNode, useRef } from "react";
+import type { FC, ReactNode } from "react";
 import {
     type ColorValue,
     type StyleProp,
     View,
     type ViewStyle,
 } from "react-native";
+import Animated, {
+    useAnimatedStyle,
+    useSharedValue,
+    withTiming,
+} from "react-native-reanimated";
 import { type DeepPartial, Undefined } from "@reillymc/es-utils";
 
-import { ActionBase, type ActionBaseProps } from "../../actions/action";
+import { ActionBase, type ActionBaseProps } from "../../actions";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import {
     ContextContainer,
     type ContextContainerProps,
-} from "../../layout/contextContainer";
-import { Text } from "../../typography/text";
+    type ContextSwipeState,
+} from "../../layout";
+import { Text } from "../../typography";
 
-type ListItemVariant = "default" | "compact";
+type ListItemCorners = "rounded" | "square";
 
 export interface ListItemTheme {
     surface: {
@@ -25,6 +31,9 @@ export interface ListItemTheme {
         paddingBottom: number;
         paddingStart: number;
         paddingEnd: number;
+    };
+    swipeActions: {
+        marginVertical: number;
     };
     internalGap: number;
     textColor: ColorValue;
@@ -44,7 +53,11 @@ export interface ListItemProps extends Pick<ActionBaseProps, "onPress"> {
      */
     alert?: ReactNode;
 
-    variant?: ListItemVariant;
+    /**
+     * Corner treatment for the item surface.
+     * @default "rounded"
+     */
+    corners?: ListItemCorners;
 
     /**
      * Main content, typically one or more `ContentRow` elements.
@@ -68,7 +81,7 @@ export const ListItem: FC<ListItemProps> = ({
     heading,
     footer,
     header,
-    variant = "default",
+    corners = "rounded",
     content,
     actions,
     style,
@@ -77,12 +90,27 @@ export const ListItem: FC<ListItemProps> = ({
     onPress,
 }) => {
     const filteredActions = actions?.filter(Undefined);
-    const isSwipingRef = useRef(false);
+    const swipeState = useSharedValue<ContextSwipeState>("closed");
 
     const { styles, theme } = useComponent("listItem", {
         themeOverrides,
-        props: { variant },
+        props: { corners },
         createStyles,
+    });
+
+    const animatedSurfaceStyle = useAnimatedStyle(() => {
+        if (corners === "rounded") {
+            return { borderRadius: theme.surface.borderRadius };
+        }
+
+        return {
+            borderRadius: withTiming(
+                swipeState.value === "opening" || swipeState.value === "open"
+                    ? theme.surface.borderRadius
+                    : 0,
+                { duration: 150 },
+            ),
+        };
     });
 
     const listContent = (
@@ -114,16 +142,26 @@ export const ListItem: FC<ListItemProps> = ({
         </>
     );
 
-    const innerContent = onPress ? (
-        <ActionBase
-            hitSlop={0}
-            onPress={(e) => !isSwipingRef.current && onPress(e)}
-            style={[styles.pressableContainer, style]}
-        >
-            {listContent}
-        </ActionBase>
-    ) : (
-        <View style={[styles.pressableContainer, style]}>{listContent}</View>
+    const surface = (
+        <Animated.View style={[styles.surface, animatedSurfaceStyle]}>
+            {onPress ? (
+                <ActionBase
+                    hitSlop={0}
+                    onPress={(event) => {
+                        if (swipeState.value === "closed") {
+                            onPress(event);
+                        }
+                    }}
+                    style={[styles.pressableContainer, style]}
+                >
+                    {listContent}
+                </ActionBase>
+            ) : (
+                <View style={[styles.pressableContainer, style]}>
+                    {listContent}
+                </View>
+            )}
+        </Animated.View>
     );
 
     return (
@@ -131,30 +169,36 @@ export const ListItem: FC<ListItemProps> = ({
             {filteredActions?.length ? (
                 <ContextContainer
                     actions={filteredActions}
-                    onSwipeInteractionChange={(active) => {
-                        isSwipingRef.current = active;
+                    actionsContainerStyle={styles.swipeActions}
+                    onSwipeStateChange={(state) => {
+                        swipeState.value = state;
                     }}
                 >
-                    <View>{innerContent}</View>
+                    {surface}
                 </ContextContainer>
             ) : (
-                innerContent
+                surface
             )}
         </View>
     );
 };
 
 const createStyles = defineStyles(
-    (theme: ListItemTheme, props: PropFilter<ListItemProps, "variant">) => ({
+    (theme: ListItemTheme, props: PropFilter<ListItemProps, "corners">) => ({
         container: {
             width: "100%",
+        },
+        surface: {
+            backgroundColor: theme.surface.backgroundColor,
+        },
+        swipeActions: {
+            marginVertical: theme.swipeActions.marginVertical,
         },
         pressableContainer: {
             display: "flex",
             flexDirection: "column",
-            backgroundColor: theme.surface.backgroundColor,
             borderRadius:
-                props.variant === "compact" ? 0 : theme.surface.borderRadius,
+                props.corners === "square" ? 0 : theme.surface.borderRadius,
             paddingTop: theme.surface.paddingTop,
             paddingBottom: theme.surface.paddingBottom,
             paddingStart: theme.surface.paddingStart,

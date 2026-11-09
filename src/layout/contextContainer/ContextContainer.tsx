@@ -1,7 +1,10 @@
 import { Children, type FunctionComponent, type ReactNode } from "react";
-import { View, type ViewStyle } from "react-native";
+import { type StyleProp, View, type ViewStyle } from "react-native";
 
-import { ContextContainerSwipeable } from "./ContextContainerSwipeable";
+import {
+    ContextContainerSwipeable,
+    type ContextSwipeState,
+} from "./ContextContainerSwipeable";
 
 export interface ContextContainerProps {
     /**
@@ -10,8 +13,9 @@ export interface ContextContainerProps {
      */
     actions?: Array<ReactNode>;
     style?: ViewStyle;
+    actionsContainerStyle?: StyleProp<ViewStyle>;
     children?: ReactNode;
-    onSwipeInteractionChange?: (active: boolean) => void;
+    onSwipeStateChange?: (state: ContextSwipeState) => void;
 }
 
 const EMPTY_ACTIONS: Array<ReactNode> = [];
@@ -19,8 +23,9 @@ const EMPTY_ACTIONS: Array<ReactNode> = [];
 export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
     actions = EMPTY_ACTIONS,
     style,
+    actionsContainerStyle,
     children,
-    onSwipeInteractionChange,
+    onSwipeStateChange,
 }) => {
     const resolvedActions = Children.toArray(actions);
 
@@ -32,7 +37,8 @@ export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
         <ContextContainerSwipeable
             actions={resolvedActions}
             containerStyle={style}
-            onSwipeInteractionChange={onSwipeInteractionChange}
+            actionsContainerStyle={actionsContainerStyle}
+            onSwipeStateChange={onSwipeStateChange}
         >
             {children}
         </ContextContainerSwipeable>

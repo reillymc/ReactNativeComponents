@@ -5,4 +5,5 @@ export {
 export {
     ContextContainer,
     type ContextContainerProps,
+    type ContextSwipeState,
 } from "./contextContainer";
