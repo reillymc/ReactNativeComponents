@@ -135,7 +135,7 @@ export const ListItem: FC<ListItemProps> = ({
                     <View
                         style={[styles.contentContainer, contentContainerStyle]}
                     >
-                        {!!heading && typeof heading === "string" ? (
+                        {heading && typeof heading === "string" ? (
                             <Text
                                 variant="heading"
                                 numberOfLines={2}

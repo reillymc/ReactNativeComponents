@@ -115,7 +115,7 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
                                 )}
                             />
                         </View>
-                    ) : null
+                    ) : undefined
                 }
                 renderItem={({ item }) => (
                     <View style={styles.item}>

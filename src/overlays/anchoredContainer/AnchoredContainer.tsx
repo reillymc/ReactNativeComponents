@@ -3,7 +3,7 @@ import type {
     HostInstance,
     LayoutChangeEvent,
     StyleProp,
-    View,
+    ViewInstance,
     ViewStyle,
 } from "react-native";
 import type { AnimatedRef } from "react-native-reanimated";
@@ -55,7 +55,7 @@ export interface AnchoredContainerProps {
      * the container attached while scrolling. When omitted, iOS falls back to
      * the in-tree inline mount.
      */
-    anchorRef?: AnimatedRef<View>;
+    anchorRef?: AnimatedRef<ViewInstance>;
 
     /**
      * Mount strategy. `"inline"` forces the in-tree mount on native; web

@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import type { View } from "react-native";
+import { type Ref, useCallback, useEffect, useRef, useState } from "react";
+import type { ViewInstance } from "react-native";
 
 import type { ContextMenuDismissReason } from "./ContextMenu.web";
 
@@ -16,10 +16,16 @@ type UseContextMenuTriggerOptions = {
     hasActions: boolean;
 };
 
+type UseContextMenuTriggerResult = {
+    containerRef: Ref<ViewInstance | null>;
+    menuAnchor: ContextMenuAnchor | undefined;
+    handleDismiss: (reason: ContextMenuDismissReason) => void;
+};
+
 export const useContextMenuTrigger = ({
     hasActions,
-}: UseContextMenuTriggerOptions) => {
-    const containerRef = useRef<View>(null);
+}: UseContextMenuTriggerOptions): UseContextMenuTriggerResult => {
+    const containerRef = useRef<ViewInstance>(null);
     const triggerRef = useRef<HTMLElement | null>(null);
     const [menuAnchor, setMenuAnchor] = useState<ContextMenuAnchor>();
 

@@ -1,8 +1,8 @@
 import { type RefObject, useEffect, useRef, useState } from "react";
 import type {
     BlurEvent,
-    TextInput as DefaultTextInput,
     FocusEvent,
+    TextInputInstance,
     TextInputKeyPressEvent,
 } from "react-native";
 
@@ -114,7 +114,7 @@ export type ComboboxControllerOptions<T> = {
     filterItems?: (item: ValueItem<T>, query: string) => boolean;
     minimumSearchLength: number;
     maxSuggestionCount?: number;
-    inputRef: RefObject<DefaultTextInput | null>;
+    inputRef: RefObject<TextInputInstance | null>;
     isMenuInverted?: boolean;
 };
 
@@ -215,7 +215,7 @@ export const useComboboxController = <T>({
             : filteredItems.findIndex(
                   (item) => getItemKey(item) === selectedKey,
               );
-    const initialActiveIndex = selectedIndex >= 0 ? selectedIndex : 0;
+    const initialActiveIndex = Math.max(selectedIndex, 0);
 
     useEffect(() => {
         if (!showContainer || filteredItems.length === 0) {

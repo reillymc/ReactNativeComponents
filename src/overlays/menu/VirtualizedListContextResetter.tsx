@@ -1,3 +1,4 @@
+// biome-ignore-all lint/suspicious/noReactNativeDeepImports: React Native exposes no public API for resetting the inherited VirtualizedList context.
 import type { ComponentType, PropsWithChildren } from "react";
 // @ts-expect-error React Native does not publish types for this internal module.
 import { VirtualizedListContextResetter as NativeResetter } from "react-native/Libraries/Lists/VirtualizedListContext";

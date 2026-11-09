@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Platform, StyleSheet, type View } from "react-native";
+import { Platform, StyleSheet, type ViewInstance } from "react-native";
 import { useAnimatedRef } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -60,7 +60,7 @@ export const ComboboxInput = <T,>({
     ...props
 }: ComboboxInputProps<T>) => {
     const { theme } = useComponent("comboboxInput", { themeOverrides });
-    const surfaceAnchorRef = useAnimatedRef<View>();
+    const surfaceAnchorRef = useAnimatedRef<ViewInstance>();
     const inlineNative = menuMount === "inline" && Platform.OS !== "web";
     const [inlineMenuVisible, setInlineMenuVisible] = useState(false);
 

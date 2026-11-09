@@ -4,6 +4,7 @@ import {
     type StyleProp,
     StyleSheet,
     View,
+    type ViewInstance,
     type ViewStyle,
 } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
@@ -20,7 +21,7 @@ export type FieldSurfaceProps = {
     children?: ReactNode;
     style?: StyleProp<ViewStyle>;
     theme?: DeepPartial<FieldTheme["surface"]>;
-    ref?: Ref<View>;
+    ref?: Ref<ViewInstance>;
 };
 
 /**
@@ -79,7 +80,7 @@ export const FieldSurface: FC<FieldSurfaceProps> = ({
         >
             <View style={[StyleSheet.absoluteFill, styles.surface]} />
             <FieldSurfaceContext.Provider value={{ reportFocus }}>
-                {canPress && onPress && (
+                {!!(canPress && onPress) && (
                     <FieldSurfacePressLayer onPress={onPress} />
                 )}
                 <View
