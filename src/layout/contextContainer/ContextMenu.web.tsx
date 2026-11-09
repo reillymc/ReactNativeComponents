@@ -13,6 +13,7 @@ import {
     StyleSheet,
     useWindowDimensions,
     View,
+    type ViewInstance,
     type ViewStyle,
 } from "react-native";
 
@@ -71,7 +72,7 @@ export const ContextMenu = ({
     const [size, setSize] = useState<MenuSize>();
     const [activeIndex, setActiveIndex] = useState<number>();
     const hasActiveRef = useRef(false);
-    const menuRef = useRef<View>(null);
+    const menuRef = useRef<ViewInstance>(null);
     const { width: viewportWidth, height: viewportHeight } =
         useWindowDimensions();
 

@@ -108,7 +108,7 @@ export const Field: FC<FieldProps> = ({
             }}
         >
             <View style={[styles.container, style]}>
-                {hasVisibleLabel && (
+                {!!hasVisibleLabel && (
                     <Pressable
                         accessible
                         accessibilityLabel={label}
@@ -125,7 +125,7 @@ export const Field: FC<FieldProps> = ({
                 )}
                 <View style={styles.controlContainer}>
                     {children}
-                    {required && (
+                    {!!required && (
                         <Text
                             variant="title"
                             accessible={false}
@@ -137,7 +137,7 @@ export const Field: FC<FieldProps> = ({
                         </Text>
                     )}
                 </View>
-                {(help || error) && (
+                {!!(help || error) && (
                     <View style={styles.helpText}>
                         {!!error && (
                             <Icon

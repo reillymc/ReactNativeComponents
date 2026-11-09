@@ -1,5 +1,11 @@
 import type { FC } from "react";
-import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
+import {
+    type StyleProp,
+    StyleSheet,
+    View,
+    type ViewInstance,
+    type ViewStyle,
+} from "react-native";
 import Animated, {
     type AnimatedRef,
     measure,
@@ -13,7 +19,7 @@ import type { MountProps } from "./AnchoredContainer";
 import { getContainerPlacement } from "./helpers";
 
 export type OverlayMountProps = MountProps & {
-    anchorRef: AnimatedRef<View>;
+    anchorRef: AnimatedRef<ViewInstance>;
     margin: number;
     style?: StyleProp<ViewStyle>;
 };
@@ -70,7 +76,7 @@ export const OverlayMount: FC<OverlayMountProps> = ({
                 >
                     {typeof children === "function"
                         ? children(getContainerPlacement(geometry))
-                        : children}
+                        : (children ?? null)}
                 </Animated.View>
             </View>
         </FullWindowOverlay>

@@ -43,7 +43,7 @@ export const Toast: FunctionComponent<ToastProps> = ({
     return (
         <View style={[styles.container, shadowStyle, style, styles.row]}>
             <View style={styles.content}>{children}</View>
-            {action && <View style={styles.action}>{action}</View>}
+            {!!action && <View style={styles.action}>{action}</View>}
         </View>
     );
 };

@@ -18,7 +18,7 @@ npm install react-native-gesture-handler react-native-reanimated \
 
 ## Quick start
 
-Create an app theme once, then use the generated provider and style helper:
+Create an app theme once at module scope, then use the generated provider and style helper:
 
 ```tsx
 import { View } from "react-native";
@@ -97,7 +97,7 @@ Component theme overrides cascade into derived component themes. For one-off ove
     label="Save"
     theme={{ container: { borderRadius: 12 } }}
     style={{ marginTop: 8 }}
-/>
+/>;
 ```
 
 Keep provider objects stable (module scope or memoized) so the theme is not rebuilt on every render.

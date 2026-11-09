@@ -179,7 +179,7 @@ export const AnchoredContainer: FC<AnchoredContainerProps> = ({
         >
             {typeof children === "function"
                 ? children(getContainerPlacement(geometry))
-                : children}
+                : (children ?? null)}
         </View>,
         document.body,
     );

@@ -186,7 +186,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                         }
                         renderSegment={(segment, index) => (
                             <>
-                                {segment.separator && (
+                                {!!segment.separator && (
                                     <View style={styles.separator}>
                                         <Text variant="title">
                                             {segment.separator}

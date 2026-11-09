@@ -1,8 +1,8 @@
 import { type Ref, useImperativeHandle, useState } from "react";
 import {
-    type TextInput as DefaultTextInput,
     Platform,
-    type View,
+    type TextInputInstance,
+    type ViewInstance,
 } from "react-native";
 import type { AnimatedRef } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
@@ -157,11 +157,11 @@ export type ComboboxInputBaseProps<T = string> = Pick<
      * falls back to the inline mount, which can clip inside scrollable or
      * clipped parents.
      */
-    anchorRef?: AnimatedRef<View>;
+    anchorRef?: AnimatedRef<ViewInstance>;
 
     theme?: DeepPartial<ComboboxInputTheme>;
 
-    ref?: Ref<DefaultTextInput>;
+    ref?: Ref<TextInputInstance>;
 };
 
 type WebPressHandlers = {

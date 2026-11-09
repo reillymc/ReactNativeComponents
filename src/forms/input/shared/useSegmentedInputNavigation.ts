@@ -1,5 +1,5 @@
 import { type Ref, useEffect, useRef } from "react";
-import type { TextInput } from "react-native";
+import type { TextInputInstance } from "react-native";
 
 import { focusPreservingFocusVisible } from "../../../internal";
 import type { FieldNumberInputProps } from "../../field";
@@ -36,6 +36,7 @@ const getEventSelection = (event: KeyPressEvent): TextSelection | null => {
 
     if (
         target &&
+        typeof target === "object" &&
         "selectionStart" in target &&
         typeof target.selectionStart === "number" &&
         "selectionEnd" in target &&
@@ -47,7 +48,7 @@ const getEventSelection = (event: KeyPressEvent): TextSelection | null => {
     return null;
 };
 
-const setCaretToEnd = (input: TextInput, valueLength: number) => {
+const setCaretToEnd = (input: TextInputInstance, valueLength: number) => {
     if (input.setSelection) {
         input.setSelection(valueLength, valueLength);
         return;
@@ -101,7 +102,7 @@ const shouldMoveFocus = (
 
 type SegmentedInputNavigationOptions<K extends string> = {
     segments: readonly SegmentedInputSegment<K>[];
-    externalRefs?: Partial<Record<K, Ref<TextInput>>>;
+    externalRefs?: Partial<Record<K, Ref<TextInputInstance>>>;
     onSubmitEditing?: FieldNumberInputProps["onSubmitEditing"];
     finalReturnKeyType?: FieldNumberInputProps["returnKeyType"];
     finalEnterKeyHint?: FieldNumberInputProps["enterKeyHint"];
@@ -140,9 +141,11 @@ export const useSegmentedInputNavigation = <K extends string>({
     finalEnterKeyHint,
     finalSubmitBehavior,
 }: SegmentedInputNavigationOptions<K>) => {
-    const inputNodes = useRef(new Map<K, TextInput>());
+    const inputNodes = useRef(new Map<K, TextInputInstance>());
     const selectionNodes = useRef(new Map<K, TextSelection>());
-    const refCallbacks = useRef(new Map<K, (node: TextInput | null) => void>());
+    const refCallbacks = useRef(
+        new Map<K, (node: TextInputInstance | null) => void>(),
+    );
     const externalRefsRef = useRef(externalRefs);
 
     useEffect(() => {
@@ -154,7 +157,7 @@ export const useSegmentedInputNavigation = <K extends string>({
 
         if (existing) return existing;
 
-        const callback = (node: TextInput | null) => {
+        const callback = (node: TextInputInstance | null) => {
             if (node) {
                 inputNodes.current.set(key, node);
             } else {

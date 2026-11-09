@@ -35,7 +35,7 @@ export const ContextContainer: FunctionComponent<ContextContainerProps> = ({
                     {children}
                 </ContextContainerSwipeable>
             </View>
-            {menuAnchor && (
+            {!!menuAnchor && (
                 <ContextMenu
                     anchor={menuAnchor}
                     actions={resolvedActions}

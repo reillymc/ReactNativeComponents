@@ -29,7 +29,14 @@
     },
     "files": {
         "ignoreUnknown": false,
-        "includes": ["**", "!**/*.d.ts", "!**/.expo", "!lib", "**/*.json"]
+        "includes": [
+            "**",
+            "!**/*.d.ts",
+            "!**/.expo",
+            "!lib",
+            "!dependency-graph.svg",
+            "**/*.json"
+        ]
     },
     "formatter": {
         "enabled": true,
@@ -44,7 +51,7 @@
             "test": "all"
         },
         "rules": {
-            "recommended": true,
+            "preset": "recommended",
             "complexity": {
                 "noExcessiveCognitiveComplexity": {
                     "level": "warn",
@@ -57,6 +64,12 @@
             "correctness": {
                 "useHookAtTopLevel": "error",
                 "noConstantMathMinMaxClamp": "warn",
+                "noReactNativeRawText": {
+                    "level": "error",
+                    "options": {
+                        "skip": ["TextBase"]
+                    }
+                },
                 "noUnusedImports": {
                     "fix": "safe",
                     "level": "warn"
@@ -67,7 +80,9 @@
             },
             "performance": {
                 "noReExportAll": "warn",
-                "noNamespaceImport": "warn"
+                "noNamespaceImport": "warn",
+                // React Compiler memoizes inline callbacks in compiled code
+                "noJsxPropsBind": "off"
             },
             "style": {
                 "noNegationElse": "warn",

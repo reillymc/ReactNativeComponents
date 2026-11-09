@@ -1,6 +1,11 @@
 import { type FC, useEffect, useEffectEvent, useRef, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
-import { Gesture, GestureDetector } from "react-native-gesture-handler";
+import { Platform, StyleSheet, View, type ViewInstance } from "react-native";
+import {
+    GestureDetector,
+    useExclusiveGestures,
+    usePanGesture,
+    useTapGesture,
+} from "react-native-gesture-handler";
 import {
     useSharedValue,
     withDelay,
@@ -53,7 +58,7 @@ export const RatingControl: FC<RatingControlProps> = ({
     const { theme: fieldTheme } = useComponent("field");
     const canChange = interactive && !!onChange;
 
-    const controlRef = useRef<View>(null);
+    const controlRef = useRef<ViewInstance>(null);
     const focusControl = () => {
         controlRef.current?.focus();
     };
@@ -99,34 +104,36 @@ export const RatingControl: FC<RatingControlProps> = ({
         commitRating(next);
     };
 
-    const pan = Gesture.Pan()
-        .enabled(canChange)
-        .onBegin((e) => {
+    const pan = usePanGesture({
+        enabled: canChange,
+        onBegin: (e) => {
             interacting.set(1);
             ratingShared.set(calculateRating(e.x, widthShared.value, max));
-        })
-        .onUpdate((e) => {
+        },
+        onUpdate: (e) => {
             ratingShared.set(calculateRating(e.x, widthShared.value, max));
-        })
-        .onEnd((e) => {
+        },
+        onDeactivate: (e) => {
             const nextRating = calculateRating(e.x, widthShared.value, max);
             ratingShared.set(nextRating);
             scheduleOnRN(commitRating, nextRating);
-        })
-        .onFinalize(() => {
+        },
+        onFinalize: () => {
             interacting.set(0);
-        });
+        },
+    });
 
-    const tap = Gesture.Tap()
-        .enabled(canChange)
-        .onEnd((e) => {
+    const tap = useTapGesture({
+        enabled: canChange,
+        onDeactivate: (e) => {
             scheduleOnRN(
                 commitRating,
                 calculateRating(e.x, widthShared.value, max),
             );
-        });
+        },
+    });
 
-    const gesture = Gesture.Exclusive(pan, tap);
+    const gesture = useExclusiveGestures(pan, tap);
 
     const ratingIconSize = computeIconSize(
         width,
