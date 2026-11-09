@@ -49,7 +49,9 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
             >
                 <View style={styles.component}>{component}</View>
             </View>
-            <View style={styles.propsContainer}>{propsPanel}</View>
+            {propsPanel && (
+                <View style={styles.propsContainer}>{propsPanel}</View>
+            )}
         </>
     );
 };

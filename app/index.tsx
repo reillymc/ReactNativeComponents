@@ -1,4 +1,4 @@
-import { cloneElement, type FC, type ReactElement, useState } from "react";
+import type { FC, ReactElement } from "react";
 import {
     Appearance,
     SectionList,
@@ -32,7 +32,6 @@ import {
     ToggleInput,
 } from "@reillymc/react-native-components/forms";
 import { Icon } from "@reillymc/react-native-components/icons";
-import { CollapsiblePanel } from "@reillymc/react-native-components/layout";
 import { usePalette } from "@reillymc/react-native-components/theme";
 import {
     HighlightedText,
@@ -233,9 +232,6 @@ const ComponentListScreen: FC = () => {
     const palette = usePalette();
     const styles = useStyles(createStyles);
 
-    const [collapsed, setCollapsed] = useState(true);
-    const [variant, setVariant] = useState<"primary" | "destructive">();
-
     return (
         <>
             <Stack.Screen
@@ -261,8 +257,9 @@ const ComponentListScreen: FC = () => {
                 keyboardShouldPersistTaps="handled"
                 sections={ComponentScreens}
                 keyExtractor={({ name }) => name}
-                ListHeaderComponent={
-                    <View style={styles.listHeader}>
+                ListFooterComponent={
+                    <View style={styles.footer}>
+                        <Text variant="label">Settings</Text>
                         <View style={styles.schemeRow}>
                             <Action
                                 label="Light"
@@ -286,30 +283,6 @@ const ComponentListScreen: FC = () => {
                                 }
                             />
                         </View>
-                        <IconAction
-                            iconSet={Octicons}
-                            label="Common Props"
-                            iconName={collapsed ? "chevron-down" : "chevron-up"}
-                            iconPosition="end"
-                            onPress={() => setCollapsed((prev) => !prev)}
-                        />
-                        <CollapsiblePanel
-                            collapsed={collapsed}
-                            style={styles.propsContainer}
-                        >
-                            <ComboboxInput
-                                placeholder="Variant"
-                                value={variant}
-                                onChange={({ value }) => setVariant(value)}
-                                items={[
-                                    { label: "Primary", value: "primary" },
-                                    {
-                                        label: "Destructive",
-                                        value: "destructive",
-                                    },
-                                ]}
-                            />
-                        </CollapsiblePanel>
                     </View>
                 }
                 renderSectionHeader={({ section }) => (
@@ -325,10 +298,7 @@ const ComponentListScreen: FC = () => {
                             alert={
                                 component && (
                                     <View style={styles.listItemDisplay}>
-                                        {cloneElement(component, {
-                                            ...component.props,
-                                            variant,
-                                        })}
+                                        {component}
                                     </View>
                                 )
                             }
@@ -349,8 +319,9 @@ const createStyles = defineStyles(({ palette, appTheme }) => ({
         paddingBottom: appTheme.page.bottom,
         gap: palette.spacing.tiny,
     },
-    listHeader: {
-        alignItems: "flex-end",
+    footer: {
+        marginTop: palette.spacing.large,
+        gap: palette.spacing.medium,
     },
     schemeRow: {
         flexDirection: "row",
