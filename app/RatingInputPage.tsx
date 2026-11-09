@@ -2,14 +2,14 @@ import { type FunctionComponent, useState } from "react";
 import {
     RatingInput,
     type RatingInputProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 
 import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps } from "../demo/helpers";
+import { FieldPropDefinitions } from "../demo/helpers";
 
 const defaultProps: RatingInputProps = {
     disabled: false,
@@ -17,7 +17,14 @@ const defaultProps: RatingInputProps = {
 };
 
 const propDefinitions: PropDefinitions<RatingInputProps> = {
-    ...CommonInputProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
     max: {
         type: "number",
         label: "Max Value",

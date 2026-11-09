@@ -14,12 +14,16 @@ module.exports = (api) => {
                     // Inline Babel helpers instead of emitting `@babel/runtime`
                     // requires, which is not a declared dependency.
                     enableBabelRuntime: false,
+                    dev: false,
                 },
             ],
         ],
         plugins: [
             // React Compiler must run first.
-            [require.resolve("babel-plugin-react-compiler"), { target: "19" }],
+            [
+                require.resolve("babel-plugin-react-compiler"),
+                { target: "19", panicThreshold: "all_errors" },
+            ],
         ],
     };
 };

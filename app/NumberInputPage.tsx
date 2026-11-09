@@ -3,20 +3,24 @@ import {
     NumberInput,
     type NumberInputProps,
     type NumberInputValue,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 
 import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps } from "../demo/helpers";
-
-const { placeholder: _placeholder, ...numberInputCommonProps } =
-    CommonInputProps;
+import { FieldPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
-    ...numberInputCommonProps,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
     enabledRepresentations: {
         type: "enum",
         label: "Enabled Modes",
@@ -69,8 +73,6 @@ const defaultProps: NumberInputProps = {
 const NumberInputPage: FunctionComponent = () => {
     const [props, setProps] = useState<NumberInputProps>(defaultProps);
     const [inputValue, setInputValue] = useState<NumberInputValue>();
-
-    console.debug(inputValue);
 
     return (
         <ComponentPage

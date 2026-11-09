@@ -1,37 +1,45 @@
 {
     "name": "@reillymc/react-native-components",
-    "version": "0.11.11",
+    "version": "0.12.13",
     "description": "A collection of React Native components and resources",
     "type": "module",
     "sideEffects": false,
     "exports": {
-        "./components": {
-            "types": "./lib/types/components/index.d.ts",
-            "default": "./lib/components/index.js"
+        "./actions": {
+            "types": "./lib/types/actions/index.d.ts",
+            "default": "./lib/actions/index.js"
         },
-        "./hooks": {
-            "types": "./lib/types/hooks/index.d.ts",
-            "default": "./lib/hooks/index.js"
+        "./display": {
+            "types": "./lib/types/display/index.d.ts",
+            "default": "./lib/display/index.js"
+        },
+        "./feedback": {
+            "types": "./lib/types/feedback/index.d.ts",
+            "default": "./lib/feedback/index.js"
+        },
+        "./forms": {
+            "types": "./lib/types/forms/index.d.ts",
+            "default": "./lib/forms/index.js"
+        },
+        "./layout": {
+            "types": "./lib/types/layout/index.d.ts",
+            "default": "./lib/layout/index.js"
+        },
+        "./overlays": {
+            "types": "./lib/types/overlays/index.d.ts",
+            "default": "./lib/overlays/index.js"
+        },
+        "./typography": {
+            "types": "./lib/types/typography/index.d.ts",
+            "default": "./lib/typography/index.js"
         },
         "./icons": {
             "types": "./lib/types/icons/index.d.ts",
             "default": "./lib/icons/index.js"
         },
-        "./providers": {
-            "types": "./lib/types/providers/index.d.ts",
-            "default": "./lib/providers/index.js"
-        },
         "./theme": {
             "types": "./lib/types/theme/index.d.ts",
             "default": "./lib/theme/index.js"
-        },
-        "./style": {
-            "types": "./lib/types/style/index.d.ts",
-            "default": "./lib/style/index.js"
-        },
-        "./common": {
-            "types": "./lib/types/common/index.d.ts",
-            "default": "./lib/common/index.js"
         },
         "./package.json": "./package.json"
     },
@@ -42,6 +50,7 @@
     "scripts": {
         "clean": "rm -rf ./lib",
         "build": "npm run clean && tsc -p ./tsconfig.build.json && babel --config-file ./babel.config.build.cjs --extensions .ts,.tsx ./src -d ./lib",
+        "knip": "knip",
         "lint": "biome check --error-on-warnings",
         "lint:fix": "biome check --fix",
         "prepare": "npm run build",
@@ -70,18 +79,15 @@
         "registry": "https://registry.npmjs.org/"
     },
     "dependencies": {
-        "@reillymc/es-utils": "^0.0.7",
-        "lodash.merge": "^4.6.2"
+        "@reillymc/es-utils": "^0.0.7"
     },
     "devDependencies": {
         "@babel/cli": "^7.28.3",
         "@babel/core": "^7.29.0",
-        "@babel/preset-typescript": "^7.27.1",
         "@biomejs/biome": "2.4.9",
         "@expo/metro-runtime": "~56.0.15",
         "@react-native-vector-icons/octicons": "^21.1.2",
         "@react-native/babel-preset": "0.85.3",
-        "@types/lodash.merge": "^4.6.9",
         "@types/react": "~19.2.0",
         "@types/react-dom": "~19.2.0",
         "babel-plugin-react-compiler": "^1.0.0",
@@ -95,6 +101,7 @@
         "expo-router": "~56.2.11",
         "expo-splash-screen": "~56.0.10",
         "expo-status-bar": "~56.0.4",
+        "knip": "^6.44.1",
         "react-dom": "19.2.3",
         "react-native-web": "^0.21.2",
         "react-native-worklets": "0.8.3",

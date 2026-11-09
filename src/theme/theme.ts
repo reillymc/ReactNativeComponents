@@ -1,108 +1,86 @@
-import { Platform } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
-import merge from "lodash.merge";
 
-export type Theme = typeof DefaultTheme;
+import type { ActionTheme } from "../actions/action/Action";
+import type { ActionBaseTheme } from "../actions/action/ActionBase";
+import type { IconActionTheme } from "../actions/action/IconAction";
+import type { IconActionBaseTheme } from "../actions/action/IconActionBase";
+import type { ButtonTheme } from "../actions/button/Button";
+import type { ButtonBaseTheme } from "../actions/button/ButtonBase";
+import type { IconButtonTheme } from "../actions/button/IconButton";
+import type { IconButtonBaseTheme } from "../actions/button/IconButtonBase";
+import type { ContextActionTheme } from "../actions/contextAction/ContextAction";
+import type { StateLayerTheme } from "../actions/surface/StateLayer";
+import type { AvatarTheme } from "../display/avatar/Avatar";
+import type { BadgeTheme } from "../display/badge/Badge";
+import type { ContentRowTheme } from "../display/contentRow/ContentRow";
+import type { ListItemTheme } from "../display/listItem/ListItem";
+import type { RatingTheme } from "../display/rating/Rating";
+import type { TagTheme } from "../display/tag/Tag";
+import type { TagIconTheme } from "../display/tag/TagIcon";
+import type { ToggleIndicatorTheme } from "../display/toggleIndicator/ToggleIndicator";
+import type { ToastTheme } from "../feedback/toast/Toast";
+import type { FieldTheme } from "../forms/field";
+import type { FormContainerTheme } from "../forms/formContainer/FormContainer";
+import type { FormRowTheme } from "../forms/formRow/FormRow";
+import type { ComboboxInputTheme } from "../forms/input/comboboxInput/ComboboxInput.theme";
+import type { CounterInputTheme } from "../forms/input/counterInput/CounterInput.theme";
+import type { NumberInputTheme } from "../forms/input/numberInput/NumberInput.theme";
+import type { RatingInputTheme } from "../forms/input/ratingInput";
+import type { SelectionInputTheme } from "../forms/input/selectionInput";
+import type { TextInputTheme } from "../forms/input/TextInput.theme";
+import type { TimeInputTheme } from "../forms/input/timeInput/TimeInput.theme";
+import type { ToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
+import type { IconTheme } from "../icons/Icon";
+import type { IconBaseTheme } from "../icons/IconBase";
+import type { AnchoredContainerTheme } from "../overlays/anchoredContainer/AnchoredContainer";
+import type { MenuTheme } from "../overlays/menu/Menu";
+import type { MenuItemTheme } from "../overlays/menu/MenuItem";
+import type { HighlightedTextTheme } from "../typography/text/HighlightedText";
+import type { TextTheme } from "../typography/text/Text";
+import type { TextBaseTheme } from "../typography/text/TextBase";
+import type { ThemeFactoryFor } from "./resolveThemeGraph";
+
+export interface Theme {
+    textBase: TextBaseTheme;
+    text: TextTheme;
+    highlightedText: HighlightedTextTheme;
+    iconBase: IconBaseTheme;
+    icon: IconTheme;
+    action: ActionTheme;
+    actionBase: ActionBaseTheme;
+    iconActionBase: IconActionBaseTheme;
+    iconAction: IconActionTheme;
+    buttonBase: ButtonBaseTheme;
+    button: ButtonTheme;
+    iconButtonBase: IconButtonBaseTheme;
+    iconButton: IconButtonTheme;
+    stateLayer: StateLayerTheme;
+    field: FieldTheme;
+    textInput: TextInputTheme;
+    numberInput: NumberInputTheme;
+    counterInput: CounterInputTheme;
+    timeInput: TimeInputTheme;
+    selectionInput: SelectionInputTheme;
+    toggleInput: ToggleInputTheme;
+    toggleIndicator: ToggleIndicatorTheme;
+    comboboxInput: ComboboxInputTheme;
+    rating: RatingTheme;
+    ratingInput: RatingInputTheme;
+    badge: BadgeTheme;
+    tag: TagTheme;
+    tagIcon: TagIconTheme;
+    contentRow: ContentRowTheme;
+    listItem: ListItemTheme;
+    menu: MenuTheme;
+    menuItem: MenuItemTheme;
+    avatar: AvatarTheme;
+    toast: ToastTheme;
+    contextAction: ContextActionTheme;
+    anchoredContainer: AnchoredContainerTheme;
+    formContainer: FormContainerTheme;
+    formRow: FormRowTheme;
+}
 
 export type ThemeOverrides = DeepPartial<Theme>;
 
-export const DefaultTheme = {
-    font: {
-        family: {
-            sans: Platform.select({
-                ios: "System",
-                android: "sans-serif",
-                default: "system-ui",
-            }),
-            mono: Platform.select({
-                ios: "Menlo",
-                android: "monospace",
-                default: "monospace",
-            }),
-        },
-        size: {
-            tiny: 10,
-            small: 12,
-            regular: 14,
-            large: 16,
-            xLarge: 20,
-            xxLarge: 28,
-        },
-    },
-    color: {
-        // Palette
-        primary: "#FF4242",
-        primaryDark: "#ff8585",
-        primaryLight: "#ffbdbd",
-        secondary: "#12263A",
-        secondaryHighlight: "#718191",
-        secondaryDisabled: "#B5EAD7",
-        tertiary: "#06bcc1",
-
-        destructive: "#ff382e",
-        destructiveHighlight: "#ff9e96",
-
-        light: "#F4EDEA",
-
-        white: "#ffffff",
-        black: "#000000",
-
-        red: "#FF9AA2",
-        orange: "#FFDAC1",
-        green: "#E2F0CB",
-        blue: "#B5EAD7",
-        purple: "#C7CEEA",
-
-        // Tokens
-        textPrimary: "#12263A",
-        textSecondary: "#22476D",
-        textHighlight: "#30669c",
-        textInverted: "#F4EDEA",
-        textDisabled: "#B5EAD7",
-
-        textOnPrimary: "#F4EDEA",
-        textOnSecondary: "#F4EDEA",
-        textOnDestructive: "#F4EDEA",
-
-        background: "#F4EDEA",
-        backgroundHighlight: "#f7f3f2",
-        foreground: "#ffffff",
-        foregroundHighlight: "#B5EAD7",
-        backgroundOverlay: "#000",
-        shadow: "#555",
-
-        border: "#E2E8F0",
-
-        inputBackground: "#e4d8d4",
-        inputBackgroundDisabled: "#f0e9e2ff",
-        inputText: "#12263A",
-
-        pressOverlay: "rgba(0, 0, 0, 0.1)",
-
-        alert: "#d63333",
-        error: "#d63333",
-        success: "#4ed633",
-        warning: "#f5c61d",
-    },
-    spacing: {
-        large: 24,
-        medium: 16,
-        small: 8,
-        tiny: 4,
-    },
-    border: {
-        radius: {
-            tight: 4,
-            regular: 8,
-            loose: 16,
-        },
-        width: {
-            thick: 4,
-            regular: 2,
-            thin: 1,
-        },
-    },
-};
-
-export const MergeTheme = (overrides?: ThemeOverrides): Theme =>
-    merge({}, DefaultTheme, overrides ?? {}) as Theme;
+export type ThemeFactory<K extends keyof Theme> = ThemeFactoryFor<Theme, K>;

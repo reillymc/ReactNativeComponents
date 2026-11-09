@@ -2,7 +2,7 @@ import { type FC, useState } from "react";
 import {
     Text,
     type TextProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,
@@ -13,7 +13,6 @@ import {
 const defaultProps: TextProps = {
     children: "Text",
     variant: "body",
-    onPress: () => null,
 };
 
 const propDefinitions: PropDefinitions<TextProps> = {

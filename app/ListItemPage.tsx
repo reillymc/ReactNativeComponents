@@ -1,16 +1,16 @@
 import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
-    AlertIndicator,
+    ContextAction,
     IconAction,
+} from "@reillymc/react-native-components/actions";
+import {
+    Badge,
+    ContentRow,
     ListItem,
-    ListItemAlert,
-    ListItemAvatar,
     type ListItemProps,
-    ListItemRow,
-    SwipeAction,
-    Text,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/display";
+import { Text } from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,
@@ -18,45 +18,51 @@ import {
     PropsPanel,
 } from "../demo/components";
 
+const headerContent = <Text variant="caption">Header text</Text>;
+
+const footerText = <Text variant="caption">Footer text</Text>;
+
+const footerContentRow = (
+    <ContentRow>
+        <Text variant="caption">Footer text</Text>
+        <Text variant="caption">Footer text 2</Text>
+    </ContentRow>
+);
+
 const defaultProps: ListItemProps = {
     heading: "Heading text",
+    corners: "rounded",
+    footer: footerContentRow,
     avatar: (
-        <ListItemAvatar>
-            <IconAction
-                iconSet={Octicons}
-                onPress={() => null}
-                iconName="apps"
-                variant="primary"
-            />
-        </ListItemAvatar>
+        <IconAction
+            iconSet={Octicons}
+            onPress={() => null}
+            iconName="apps"
+            variant="primary"
+        />
     ),
-    alert: (
-        <ListItemAlert>
-            <AlertIndicator variant="primary" label="8" />
-        </ListItemAlert>
+    alert: <Badge variant="primary" label="8" />,
+    content: (
+        <ContentRow>
+            <Text>Description</Text>
+            <Text>Description 2</Text>
+        </ContentRow>
     ),
-    contentRows: [
-        <ListItemRow
-            key={1}
-            contentItems={[
-                <Text key={1}>Description</Text>,
-                <Text key={2}>Description 2</Text>,
-            ]}
-        />,
-    ],
-    swipeActions: [
-        <SwipeAction
+    actions: [
+        <ContextAction
             key="1"
+            label="Delete"
             iconSet={Octicons}
             iconName={"trash"}
             variant="destructive"
             onPress={() => null}
         />,
-        <SwipeAction
+        <ContextAction
             key="2"
+            label="Edit"
             iconSet={Octicons}
             iconName="pencil"
-            variant="secondary"
+            variant="primary"
             onPress={() => null}
         />,
     ],
@@ -68,6 +74,29 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
         type: "string",
         label: "Heading text",
     },
+    header: {
+        type: "enum",
+        label: "Header",
+        default: "None",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: headerContent },
+        ],
+    },
+    footer: {
+        type: "enum",
+        label: "Footer",
+        default: "Content row",
+        values: [
+            { id: "None", label: "None", value: undefined },
+            { id: "Text", label: "Text", value: footerText },
+            {
+                id: "ContentRow",
+                label: "Content row",
+                value: footerContentRow,
+            },
+        ],
+    },
     avatar: {
         type: "enum",
         label: "Avatar",
@@ -77,82 +106,75 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             { id: "Icon", label: "Icon", value: defaultProps.avatar },
         ],
     },
-    contentRows: {
+    content: {
         type: "enum",
-        label: "Content rows",
+        label: "Content",
         default: "One",
         values: [
             { id: "None", label: "None", value: undefined },
-            { id: "One", label: "One", value: defaultProps.contentRows },
+            { id: "One", label: "One", value: defaultProps.content },
             {
                 id: "Two",
                 label: "Two",
-                value: [
-                    <ListItemRow
-                        key={1}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                    <ListItemRow
-                        key={2}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                ],
+                value: (
+                    <>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                    </>
+                ),
             },
             {
                 id: "Three",
                 label: "Three",
-                value: [
-                    <ListItemRow
-                        key={1}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                    <ListItemRow
-                        key={2}
-                        contentItems={[<Text key={1}>Description</Text>]}
-                    />,
-                    <ListItemRow
-                        key={3}
-                        contentItems={[
-                            <Text key={1}>Description</Text>,
-                            <Text key={2}>Description 2</Text>,
-                        ]}
-                    />,
-                ],
+                value: (
+                    <>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                        </ContentRow>
+                        <ContentRow>
+                            <Text>Description</Text>
+                            <Text>Description 2</Text>
+                        </ContentRow>
+                    </>
+                ),
             },
         ],
     },
-    swipeActions: {
+    actions: {
         type: "enum",
-        label: "Swipe actions",
+        label: "Actions",
         default: "Delete",
         values: [
             { id: "None", label: "None", value: undefined },
-            { id: "Delete", label: "Delete", value: defaultProps.swipeActions },
+            { id: "Delete", label: "Delete", value: defaultProps.actions },
             {
                 id: "DeleteAndEdit",
                 label: "Delete and Edit",
                 value: [
-                    <SwipeAction
+                    <ContextAction
                         key="1"
+                        label="Delete"
                         iconSet={Octicons}
                         iconName="trash"
                         variant="destructive"
                         onPress={() => null}
                     />,
-                    <SwipeAction
+                    <ContextAction
                         key="2"
+                        label="Edit"
                         iconSet={Octicons}
                         iconName="pencil"
-                        variant="secondary"
+                        variant="primary"
                         onPress={() => null}
                     />,
                 ],
@@ -168,25 +190,17 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
             {
                 id: "Alert",
                 label: "Alert",
-                value: (
-                    <ListItemAlert>
-                        <AlertIndicator
-                            style={{ marginRight: 20 }}
-                            variant="primary"
-                            label="3"
-                        />
-                    </ListItemAlert>
-                ),
+                value: <Badge variant="primary" label="3" />,
             },
         ],
     },
-    variant: {
+    corners: {
         type: "enum",
-        label: "Variant",
-        default: "Default",
+        label: "Corners",
+        default: "Rounded",
         values: [
-            { label: "Default", value: "default" },
-            { label: "Compact", value: "compact" },
+            { label: "Rounded", value: "rounded" },
+            { label: "Square", value: "square" },
         ],
     },
     onPress: {

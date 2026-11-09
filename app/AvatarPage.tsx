@@ -1,10 +1,10 @@
 import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
+import { IconAction } from "@reillymc/react-native-components/actions";
 import {
     Avatar,
     type AvatarProps,
-    IconAction,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/display";
 
 import {
     ComponentPage,

@@ -1,0 +1,73 @@
+import type { DeepPartial } from "@reillymc/es-utils";
+
+import type { IconComponentProps } from "../../icons/IconComponentProps";
+import { useComponent } from "../../internal";
+import type { TextBaseTheme } from "../../typography/text";
+import type {
+    ButtonAppearance,
+    ButtonAppearanceTheme,
+    ButtonVariant,
+} from "./Button";
+import { IconButtonBase, type IconButtonBaseProps } from "./IconButtonBase";
+
+type IconButtonVariant = ButtonVariant;
+
+export type IconButtonTheme = {
+    container: {
+        size: number;
+    };
+    appearance: ButtonAppearanceTheme;
+    label: TextBaseTheme;
+};
+
+export interface IconButtonProps
+    extends Pick<
+        IconButtonBaseProps,
+        | "onPress"
+        | "disabled"
+        | "highlighted"
+        | "hitSlop"
+        | "tabIndex"
+        | "accessibilityLabel"
+        | "label"
+        | "style"
+    > {
+    variant?: IconButtonVariant;
+    appearance?: ButtonAppearance;
+    theme?: DeepPartial<IconButtonTheme>;
+    onPress?: () => void;
+}
+
+export const IconButton = <G extends string>({
+    variant = "primary",
+    appearance = "subtle",
+    theme: themeOverrides,
+    ...props
+}: IconButtonProps & IconComponentProps<G>) => {
+    const { theme } = useComponent("iconButton", { themeOverrides });
+
+    const content = theme.appearance[appearance].content[variant];
+    const container =
+        appearance === "prominent"
+            ? theme.appearance.prominent.container[variant]
+            : theme.appearance.subtle.container;
+
+    return (
+        <IconButtonBase
+            {...props}
+            theme={{
+                container: {
+                    backgroundColor: container,
+                    size: theme.container.size,
+                },
+                icon: {
+                    color: content,
+                },
+                label: {
+                    ...theme.label,
+                    color: content,
+                },
+            }}
+        />
+    );
+};

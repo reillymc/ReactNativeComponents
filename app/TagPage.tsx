@@ -4,7 +4,7 @@ import {
     Tag,
     TagIcon,
     type TagProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/display";
 
 import {
     ComponentPage,
@@ -14,7 +14,7 @@ import {
 
 const defaultProps: TagProps = {
     label: "Example Tag",
-    variant: "dark",
+    tone: "dark",
     icon: <TagIcon iconSet={Octicons} iconName="x-circle" />,
 };
 
@@ -39,9 +39,9 @@ const propDefinitions: PropDefinitions<TagProps> = {
             },
         ],
     },
-    variant: {
+    tone: {
         type: "enum",
-        label: "Variant",
+        label: "Tone",
         default: "dark",
         values: [
             { label: "Dark", value: "dark" },

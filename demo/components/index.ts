@@ -4,3 +4,9 @@ export {
     PropsPanel,
     type PropsPanelProps,
 } from "./PropsPanel";
+export {
+    type SelectionRequest,
+    useSelectionModalController,
+} from "./SelectionModalContext";
+export { SelectionModalProvider } from "./SelectionModalProvider";
+export { useSelectionModal } from "./useSelectionModal";

@@ -1,33 +1,44 @@
-import { cloneElement, type FC, type ReactElement, useState } from "react";
-import { SectionList, type SectionListData, View } from "react-native";
+import type { FC, ReactElement } from "react";
+import {
+    Appearance,
+    SectionList,
+    type SectionListData,
+    View,
+} from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     Action,
-    Avatar,
     Button,
-    CounterInput,
-    DropdownInput,
-    HighlightedText,
-    Icon,
     IconAction,
     IconButton,
+} from "@reillymc/react-native-components/actions";
+import {
+    Avatar,
+    Badge,
     ListItem,
-    ListItemAlert,
-    NumberInput,
-    Panel,
     Rating,
+    Tag,
+    ToggleIndicator,
+} from "@reillymc/react-native-components/display";
+import {
+    ComboboxInput,
+    CounterInput,
+    NumberInput,
     RatingInput,
     SelectionInput,
-    Tag,
-    Text,
     TextInput,
     TimeInput,
     ToggleInput,
-} from "@reillymc/react-native-components/components";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+} from "@reillymc/react-native-components/forms";
+import { Icon } from "@reillymc/react-native-components/icons";
+import { usePalette } from "@reillymc/react-native-components/theme";
+import {
+    HighlightedText,
+    Text,
+} from "@reillymc/react-native-components/typography";
 
-import { createThemedStyles, useTheme } from "../demo/theme";
+import { defineStyles, useStyles } from "../demo/theme";
 
 interface ComponentScreen {
     name: string;
@@ -42,37 +53,6 @@ type ComponentScreenSection = SectionListData<
  * Map of all components to their respective screen
  */
 const ComponentScreens: Array<ComponentScreenSection> = [
-    {
-        sectionName: "Text",
-        data: [
-            {
-                name: "Text",
-                href: "/TextPage",
-                component: <Text variant="body">Text</Text>,
-            },
-            {
-                name: "Highlighted Text",
-                href: "/HighlightedTextPage",
-                component: (
-                    <HighlightedText
-                        variant="body"
-                        text="Highlighted Text"
-                        highlight="Highlight"
-                    />
-                ),
-            },
-        ],
-    },
-    {
-        sectionName: "Icon",
-        data: [
-            {
-                name: "Icon",
-                href: "/IconPage",
-                component: <Icon iconSet={Octicons} iconName="star" />,
-            },
-        ],
-    },
     {
         sectionName: "Actions",
         data: [
@@ -92,11 +72,6 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                     />
                 ),
             },
-        ],
-    },
-    {
-        sectionName: "Buttons",
-        data: [
             {
                 name: "Button",
                 href: "/ButtonPage",
@@ -107,10 +82,43 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconButtonPage",
                 component: <IconButton iconSet={Octicons} iconName="star" />,
             },
+            { name: "Context Action", href: "/ContextActionPage" },
         ],
     },
     {
-        sectionName: "Inputs",
+        sectionName: "Display",
+        data: [
+            { name: "List Item", href: "/ListItemPage" },
+            { name: "Content Row", href: "/ContentRowPage" },
+            {
+                name: "Avatar",
+                href: "/AvatarPage",
+                component: <Avatar firstName="First" lastName="Last" />,
+            },
+            { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
+            {
+                name: "Rating",
+                href: "/RatingPage",
+                component: <Rating value={3} max={5} />,
+            },
+            {
+                name: "Toggle Indicator",
+                href: "/ToggleIndicatorPage",
+                component: <ToggleIndicator value={true} />,
+            },
+            {
+                name: "Badge",
+                href: "/BadgePage",
+                component: <Badge label="8" />,
+            },
+        ],
+    },
+    {
+        sectionName: "Feedback",
+        data: [{ name: "Toast", href: "/ToastPage" }],
+    },
+    {
+        sectionName: "Forms",
         data: [
             {
                 name: "Text Input",
@@ -147,9 +155,9 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 ),
             },
             {
-                name: "Dropdown Input",
-                href: "/DropdownInputPage",
-                component: <DropdownInput placeholder="Dropdown Input" />,
+                name: "Combobox Input",
+                href: "/ComboboxInputPage",
+                component: <ComboboxInput placeholder="Combobox Input" />,
             },
             {
                 name: "Rating Input",
@@ -168,40 +176,61 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                     />
                 ),
             },
+            { name: "Form Layout", href: "/FormPage" },
         ],
     },
     {
-        sectionName: "Layouts",
-        data: [{ name: "Form Layout", href: "/FormPage" }],
+        sectionName: "Layout",
+        data: [
+            {
+                name: "Collapsible Panel",
+                href: "/CollapsiblePanelPage",
+            },
+            { name: "Context Container", href: "/ContextContainerPage" },
+        ],
     },
     {
-        sectionName: "Other",
+        sectionName: "Overlays",
+        data: [{ name: "Menu", href: "/MenuPage" }],
+    },
+    {
+        sectionName: "Typography",
         data: [
-            { name: "List Item", href: "/ListItemPage" },
             {
-                name: "Avatar",
-                href: "/AvatarPage",
-                component: <Avatar firstName="First" lastName="Last" />,
+                name: "Text",
+                href: "/TextPage",
+                component: <Text variant="body">Text</Text>,
             },
-            { name: "Tag", href: "/TagPage", component: <Tag label="Tag" /> },
-            { name: "Panel", href: "/PanelPage" },
             {
-                name: "Rating",
-                href: "/RatingPage",
-                component: <Rating value={3} max={5} />,
+                name: "Highlighted Text",
+                href: "/HighlightedTextPage",
+                component: (
+                    <HighlightedText
+                        variant="body"
+                        text="Highlighted Text"
+                        highlight="Highlight"
+                    />
+                ),
             },
+        ],
+    },
+    {
+        sectionName: "Icons",
+        data: [
+            {
+                name: "Icon",
+                href: "/IconPage",
+                component: <Icon iconSet={Octicons} iconName="star" />,
+            },
+            { name: "Built-in Icons", href: "/UiIconsPage" },
         ],
     },
 ];
 
 const ComponentListScreen: FC = () => {
     const router = useRouter();
-    const { theme } = useTheme();
-
-    const styles = useThemedStyles(createStyles);
-
-    const [collapsed, setCollapsed] = useState(true);
-    const [variant, setVariant] = useState<"primary" | "secondary">();
+    const palette = usePalette();
+    const styles = useStyles(createStyles);
 
     return (
         <>
@@ -211,15 +240,15 @@ const ComponentListScreen: FC = () => {
                     headerLargeTitle: true,
                     headerLargeTitleShadowVisible: false,
                     headerLargeTitleStyle: {
-                        fontFamily: theme.font.family.sans,
+                        fontFamily: palette.font.family.sans,
                         fontWeight: "800",
                     },
                     headerBackTitleStyle: {
-                        fontFamily: theme.font.family.sans,
-                        fontSize: theme.font.size.regular,
+                        fontFamily: palette.font.family.sans,
+                        fontSize: palette.font.size.regular,
                     },
                     headerLargeStyle: {
-                        backgroundColor: theme.color.background,
+                        backgroundColor: palette.color.background,
                     },
                 }}
             />
@@ -228,29 +257,32 @@ const ComponentListScreen: FC = () => {
                 keyboardShouldPersistTaps="handled"
                 sections={ComponentScreens}
                 keyExtractor={({ name }) => name}
-                ListHeaderComponent={
-                    <View style={styles.listHeader}>
-                        <IconAction
-                            iconSet={Octicons}
-                            label="Common Props"
-                            iconName={collapsed ? "chevron-down" : "chevron-up"}
-                            iconPosition="end"
-                            onPress={() => setCollapsed((prev) => !prev)}
-                        />
-                        <Panel
-                            collapsed={collapsed}
-                            style={styles.propsContainer}
-                        >
-                            <DropdownInput
-                                placeholder="Variant"
-                                value={variant}
-                                onChange={(item) => setVariant(item?.value)}
-                                items={[
-                                    { label: "Primary", value: "primary" },
-                                    { label: "Secondary", value: "secondary" },
-                                ]}
+                ListFooterComponent={
+                    <View style={styles.footer}>
+                        <Text variant="label">Settings</Text>
+                        <View style={styles.schemeRow}>
+                            <Action
+                                label="Light"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("light")
+                                }
                             />
-                        </Panel>
+                            <Action
+                                label="Dark"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("dark")
+                                }
+                            />
+                            <Action
+                                label="System"
+                                variant="secondary"
+                                onPress={() =>
+                                    Appearance.setColorScheme("unspecified")
+                                }
+                            />
+                        </View>
                     </View>
                 }
                 renderSectionHeader={({ section }) => (
@@ -265,14 +297,9 @@ const ComponentListScreen: FC = () => {
                             onPress={() => router.push(href)}
                             alert={
                                 component && (
-                                    <ListItemAlert>
-                                        <View style={styles.listItemDisplay}>
-                                            {cloneElement(component, {
-                                                ...component.props,
-                                                variant,
-                                            })}
-                                        </View>
-                                    </ListItemAlert>
+                                    <View style={styles.listItemDisplay}>
+                                        {component}
+                                    </View>
                                 )
                             }
                         />
@@ -284,33 +311,38 @@ const ComponentListScreen: FC = () => {
     );
 };
 
-const createStyles = createThemedStyles(
-    ({ styles: { page }, theme: { spacing, color } }) => ({
-        content: {
-            backgroundColor: color.background,
-            paddingHorizontal: page.horizontal,
-            paddingTop: page.top,
-            paddingBottom: page.bottom,
-        },
-        listHeader: {
-            alignItems: "flex-end",
-        },
-        propsContainer: {
-            height: 120,
-            marginTop: 20,
-            width: "100%",
-        },
-        sectionHeading: {
-            marginTop: spacing.small,
-            marginBottom: spacing.small,
-            marginLeft: spacing.medium,
-        },
-        listItemDisplay: {
-            width: 150,
-            alignItems: "flex-end",
-            paddingVertical: 8,
-        },
-    }),
-);
+const createStyles = defineStyles(({ palette, appTheme }) => ({
+    content: {
+        backgroundColor: appTheme.page.backgroundColor,
+        paddingHorizontal: appTheme.page.horizontal,
+        paddingTop: appTheme.page.top,
+        paddingBottom: appTheme.page.bottom,
+        gap: palette.spacing.tiny,
+    },
+    footer: {
+        marginTop: palette.spacing.large,
+        gap: palette.spacing.medium,
+    },
+    schemeRow: {
+        flexDirection: "row",
+        gap: palette.spacing.small,
+        alignSelf: "flex-start",
+    },
+    propsContainer: {
+        height: 120,
+        marginTop: 20,
+        width: "100%",
+    },
+    sectionHeading: {
+        marginTop: palette.spacing.small,
+        marginBottom: palette.spacing.small,
+        marginLeft: palette.spacing.medium,
+    },
+    listItemDisplay: {
+        width: 150,
+        alignItems: "flex-end",
+        paddingVertical: 8,
+    },
+}));
 
 export default ComponentListScreen;

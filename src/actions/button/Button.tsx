@@ -1,0 +1,75 @@
+import type { FC } from "react";
+import type { ColorValue } from "react-native";
+import type { DeepPartial } from "@reillymc/es-utils";
+
+import { useComponent } from "../../internal";
+import { TextBase } from "../../typography/text";
+import {
+    ButtonBase,
+    type ButtonBaseProps,
+    type ButtonBaseTheme,
+} from "./ButtonBase";
+
+export type ButtonVariant = "primary" | "destructive";
+export type ButtonAppearance = "prominent" | "subtle";
+
+export type ButtonAppearanceTheme = {
+    prominent: {
+        container: Record<ButtonVariant, ColorValue>;
+        content: Record<ButtonVariant, ColorValue>;
+    };
+    subtle: {
+        container: ColorValue;
+        content: Record<ButtonVariant, ColorValue>;
+    };
+};
+
+export type ButtonTheme = {
+    container: {
+        borderRadius: ButtonBaseTheme["borderRadius"];
+    };
+    appearance: ButtonAppearanceTheme;
+};
+
+export interface ButtonProps
+    extends Pick<
+        ButtonBaseProps,
+        "onPress" | "disabled" | "highlighted" | "width" | "style"
+    > {
+    variant?: ButtonVariant;
+    appearance?: ButtonAppearance;
+    label: string;
+    theme?: DeepPartial<ButtonTheme>;
+}
+
+export const Button: FC<ButtonProps> = ({
+    label,
+    variant = "primary",
+    appearance = "subtle",
+    theme: themeOverrides,
+    ...buttonProps
+}) => {
+    const { theme } = useComponent("button", { themeOverrides });
+
+    const content = theme.appearance[appearance].content[variant];
+    const container =
+        appearance === "prominent"
+            ? theme.appearance.prominent.container[variant]
+            : theme.appearance.subtle.container;
+
+    return (
+        <ButtonBase
+            {...buttonProps}
+            theme={{
+                borderRadius: theme.container.borderRadius,
+                backgroundColor: container,
+            }}
+        >
+            <TextBase numberOfLines={1} theme={{ color: content }}>
+                {label}
+            </TextBase>
+        </ButtonBase>
+    );
+};
+
+Button.displayName = "Button";

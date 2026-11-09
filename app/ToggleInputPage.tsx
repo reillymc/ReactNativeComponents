@@ -4,23 +4,28 @@ import {
     type OcticonsIconName,
 } from "@react-native-vector-icons/octicons";
 import {
-    type IconComponentProps,
     ToggleInput,
     type ToggleInputProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
+import type { IconComponentProps } from "@reillymc/react-native-components/icons";
 
 import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import { CommonInputProps, glyphMapValueItems } from "../demo/helpers";
+import { FieldPropDefinitions, IconPropDefinitions } from "../demo/helpers";
 
-type Props = IconComponentProps<OcticonsIconName> & ToggleInputProps;
+type Props = ToggleInputProps<OcticonsIconName> &
+    Required<Pick<IconComponentProps<OcticonsIconName>, "iconSet">>;
 
 const propDefinitions: PropDefinitions<Props> = {
-    ...CommonInputProps,
-    toggleVariant: {
+    label: FieldPropDefinitions.label,
+    help: FieldPropDefinitions.help,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
+    appearance: {
         type: "enum",
         label: "Style variant",
         default: "Primary",
@@ -29,32 +34,24 @@ const propDefinitions: PropDefinitions<Props> = {
             { label: "Secondary", value: "secondary" },
         ],
     },
-    iconName: {
-        type: "enum",
-        label: "Icon Name",
-        values: glyphMapValueItems,
-    },
+    iconName: IconPropDefinitions.iconName,
     onChange: {
-        type: "function",
-        label: "Change action",
-    },
-    iconSet: {
         type: "hidden",
     },
+    iconSet: IconPropDefinitions.iconSet,
 };
 
 const defaultProps: Props = {
     iconSet: Octicons,
     disabled: false,
     onChange: () => null,
-    toggleVariant: "primary",
+    appearance: "primary",
     label: "Toggle input label",
     iconName: "check",
 };
 
 const ToggleInputPage: FunctionComponent = () => {
     const [props, setProps] = useState<Props>(defaultProps);
-
     const [toggled, setToggled] = useState(false);
 
     return (

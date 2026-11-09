@@ -3,24 +3,24 @@ import {
     TimeInput,
     type TimeInputProps,
     type TimeInputValue,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/forms";
 
 import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
 } from "../demo/components";
-import {
-    InputBasePropDefinitions,
-    InputScaffoldPropDefinitions,
-} from "../demo/helpers";
+import { FieldPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
-    label: InputScaffoldPropDefinitions.label,
-    helpText: InputScaffoldPropDefinitions.helpText,
-    variant: InputBasePropDefinitions.variant,
-    mandatory: InputScaffoldPropDefinitions.mandatory,
-    disabled: InputBasePropDefinitions.disabled,
+    label: FieldPropDefinitions.label,
+    hideLabel: FieldPropDefinitions.hideLabel,
+    help: FieldPropDefinitions.help,
+    error: FieldPropDefinitions.error,
+    required: FieldPropDefinitions.required,
+    variant: FieldPropDefinitions.variant,
+    disabled: FieldPropDefinitions.disabled,
+    readOnly: FieldPropDefinitions.readOnly,
 };
 
 const defaultProps: TimeInputProps = {
@@ -34,8 +34,6 @@ const defaultProps: TimeInputProps = {
 const TimeInputPage: FunctionComponent = () => {
     const [props, setProps] = useState<TimeInputProps>(defaultProps);
     const [inputValue, setInputValue] = useState<TimeInputValue>();
-
-    console.debug(inputValue);
 
     return (
         <ComponentPage

@@ -1,0 +1,27 @@
+{
+    "$schema": "https://unpkg.com/knip@6/schema.json",
+    "entry": [
+        "src/actions/index.ts",
+        "src/display/index.ts",
+        "src/feedback/index.ts",
+        "src/forms/index.ts",
+        "src/icons/index.ts",
+        "src/layout/index.ts",
+        "src/overlays/index.ts",
+        "src/theme/index.ts",
+        "src/typography/index.ts",
+        "src/**/*.{ios,android,web,native}.{ts,tsx}"
+    ],
+    "project": ["src/**/*.{ts,tsx}"],
+    "includeEntryExports": false,
+    "babel": {
+        "config": ["babel.config.build.cjs"]
+    },
+    "ignoreDependencies": [
+        "babel-preset-expo",
+        "expo-dev-client",
+        "expo-system-ui",
+        "expo-updates"
+    ],
+    "ignoreBinaries": ["dot"]
+}

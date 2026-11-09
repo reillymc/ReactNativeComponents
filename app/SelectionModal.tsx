@@ -1,92 +1,82 @@
-/** biome-ignore-all lint/correctness/useExhaustiveDependencies: TODO: some specific behaviour is required, revisit later to fix */
-import type { FC } from "react";
+import { type FC, useState } from "react";
 import { FlatList, View } from "react-native";
-import { Stack, useGlobalSearchParams, useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
-import type { ValueItem } from "@reillymc/react-native-components/common";
+import { Action } from "@reillymc/react-native-components/actions";
+import { Tag, TagIcon } from "@reillymc/react-native-components/display";
+import type { ValueItem } from "@reillymc/react-native-components/forms";
+import { MenuItem } from "@reillymc/react-native-components/overlays";
+import { Text } from "@reillymc/react-native-components/typography";
+
 import {
-    Action,
-    MenuItem,
-    Tag,
-    TagIcon,
-    Text,
-} from "@reillymc/react-native-components/components";
-import { useThemedStyles } from "@reillymc/react-native-components/hooks";
+    type SelectionRequest,
+    useSelectionModalController,
+} from "../demo/components/SelectionModalContext";
+import { defineStyles, useStyles } from "../demo/theme";
 
-import { createThemedStyles } from "../demo/theme";
+type ModalItem = ValueItem & { id?: string };
 
-const SelectionModal: FC = () => {
-    const styles = useThemedStyles(createStyles);
+const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
+    request,
+}) => {
+    const styles = useStyles(createStyles);
     const router = useRouter();
 
-    const {
-        items: rawItems,
-        selection: rawSelection,
-        selectionMode: rawSelectionMode,
-        label,
-        placeholder = "Select items",
-    } = useGlobalSearchParams();
+    const [selectedItems, setSelectedItems] = useState<ModalItem[]>(
+        request.selection,
+    );
 
-    const items =
-        !rawItems || rawItems === "undefined" || Array.isArray(rawItems)
-            ? undefined
-            : (JSON.parse(rawItems) as Array<ValueItem & { id?: string }>);
+    const closeWithSelection = (selection: ModalItem[]) => {
+        request.resolve(selection);
+        router.back();
+    };
 
-    const selectedItems =
-        !rawSelection ||
-        rawSelection === "undefined" ||
-        Array.isArray(rawSelection)
-            ? []
-            : (JSON.parse(rawSelection) as Array<
-                  ValueItem | ValueItem<unknown>
-              >);
-
-    const selectionMode =
-        rawSelectionMode === "multi" || rawSelectionMode === "single"
-            ? rawSelectionMode
-            : "single";
-
-    const handleItemPress = (item: ValueItem | ValueItem<unknown>) => {
-        router.setParams({
-            selection: JSON.stringify([item]),
-        });
-
-        if (selectionMode === "single") {
-            setTimeout(router.back, 1);
+    const handleItemPress = (item: ModalItem) => {
+        if (request.selectionMode === "single") {
+            closeWithSelection([item]);
+            return;
         }
+
+        setSelectedItems((previous) =>
+            previous.some((selected) => selected.value === item.value)
+                ? previous.filter((selected) => selected.value !== item.value)
+                : [...previous, item],
+        );
     };
 
     return (
         <>
             <Stack.Screen
                 options={{
-                    title: label as string,
+                    title: request.label,
                     headerLargeTitle: false,
                     headerRight: () => (
                         <Action
                             label="Done"
-                            containerStyle={styles.headerAction}
-                            onPress={() => router.back()}
+                            onPress={() =>
+                                closeWithSelection(
+                                    request.selectionMode === "single"
+                                        ? selectedItems.slice(0, 1)
+                                        : selectedItems,
+                                )
+                            }
                         />
                     ),
                 }}
             />
             <FlatList
-                data={items}
+                data={request.items}
+                style={styles.screen}
                 contentInsetAdjustmentBehavior="always"
                 contentContainerStyle={styles.list}
                 ListHeaderComponent={
-                    selectionMode === "multi" ? (
+                    request.selectionMode === "multi" ? (
                         <View style={styles.selectionDisplay}>
                             {!!selectedItems.length && (
                                 <View style={styles.clearButton}>
                                     <Action
                                         label="Clear"
-                                        onPress={() =>
-                                            router.setParams({
-                                                selection: JSON.stringify([]),
-                                            })
-                                        }
+                                        onPress={() => setSelectedItems([])}
                                     />
                                 </View>
                             )}
@@ -94,9 +84,7 @@ const SelectionModal: FC = () => {
                                 horizontal
                                 showsHorizontalScrollIndicator={false}
                                 keyExtractor={(item) =>
-                                    "id" in item
-                                        ? item.id
-                                        : item.value.toString()
+                                    item.id ?? item.value.toString()
                                 }
                                 data={selectedItems}
                                 contentContainerStyle={
@@ -107,18 +95,19 @@ const SelectionModal: FC = () => {
                                         variant="caption"
                                         style={styles.previewPlaceholder}
                                     >
-                                        {placeholder}
+                                        {request.placeholder}
                                     </Text>
                                 }
                                 renderItem={({ item }) => (
                                     <Tag
                                         label={item.label}
                                         style={styles.tag}
-                                        variant="light"
+                                        tone="light"
                                         icon={
                                             <TagIcon
                                                 iconSet={Octicons}
                                                 iconName="x-circle"
+                                                tone="light"
                                             />
                                         }
                                         onPress={() => handleItemPress(item)}
@@ -149,46 +138,51 @@ const SelectionModal: FC = () => {
     );
 };
 
+const SelectionModal: FC = () => {
+    const { request } = useSelectionModalController();
+
+    if (!request) return null;
+
+    return <SelectionModalContent key={request.key} request={request} />;
+};
+
 export default SelectionModal;
 
-const createStyles = createThemedStyles(
-    ({
-        styles: { inputBase, page, selection },
-        theme: { spacing, color },
-    }) => ({
-        headerAction: {
-            marginHorizontal: selection.navigationActionHorizontal,
-        },
-        list: {
-            paddingBottom: page.bottom,
-        },
-        tag: {
-            marginVertical: 2,
-        },
-        item: {
-            paddingHorizontal: spacing.small,
-        },
-        selectionDisplay: {
-            flexDirection: "row",
-            marginTop: spacing.tiny,
-            marginBottom: spacing.medium,
-            overflow: "hidden",
-        },
-        previewTagContainer: {
-            paddingLeft: inputBase.container.padding,
-            paddingVertical: spacing.tiny,
-            height: 48,
-        },
-        previewPlaceholder: {
-            alignSelf: "center",
-            paddingLeft: inputBase.container.padding,
-        },
-        clearButton: {
-            paddingHorizontal: spacing.medium,
-            marginVertical: spacing.tiny + 2,
-            borderRightColor: color.border,
-            borderRightWidth: 1,
-            justifyContent: "center",
-        },
-    }),
-);
+const createStyles = defineStyles(({ palette, theme, appTheme }) => ({
+    screen: {
+        flex: 1,
+        backgroundColor: appTheme.page.backgroundColor,
+    },
+    list: {
+        paddingBottom: appTheme.page.bottom,
+    },
+    tag: {
+        marginVertical: 2,
+    },
+    item: {
+        paddingHorizontal: palette.spacing.small,
+    },
+    selectionDisplay: {
+        flexDirection: "row",
+        marginTop: palette.spacing.tiny,
+        marginBottom: palette.spacing.medium,
+        overflow: "hidden",
+    },
+    previewTagContainer: {
+        paddingLeft: theme.field.surface.padding,
+        paddingVertical: palette.spacing.tiny,
+        height: theme.field.surface.minHeight.regular,
+        gap: palette.spacing.small,
+    },
+    previewPlaceholder: {
+        alignSelf: "center",
+        paddingLeft: theme.field.surface.padding,
+    },
+    clearButton: {
+        paddingHorizontal: palette.spacing.medium,
+        marginVertical: palette.spacing.tiny + 2,
+        borderRightColor: palette.color.border,
+        borderRightWidth: 1,
+        justifyContent: "center",
+    },
+}));

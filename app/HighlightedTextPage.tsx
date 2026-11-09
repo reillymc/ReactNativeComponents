@@ -2,7 +2,7 @@ import { type FC, useState } from "react";
 import {
     HighlightedText,
     type HighlightedTextProps,
-} from "@reillymc/react-native-components/components";
+} from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,
