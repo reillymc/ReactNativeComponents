@@ -28,7 +28,10 @@ type AppThemedStylesFactory<
     AppTheme,
     Props,
     T extends StyleSheet.NamedStyles<T>,
-> = (context: AppThemedStylesContext<AppTheme>, props: Props) => T;
+> = (
+    context: AppThemedStylesContext<AppTheme>,
+    props: Props,
+) => T & StyleSheet.NamedStyles<T>;
 
 export const createAppTheme = <AppTheme extends object>(
     createValues: AppThemeFactory<AppTheme>,
