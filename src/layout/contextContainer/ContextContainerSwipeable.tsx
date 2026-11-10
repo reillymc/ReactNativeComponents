@@ -38,6 +38,8 @@ export const ContextContainerSwipeable: FunctionComponent<
         )}
         enableTrackpadTwoFingerGesture
         friction={1.5}
+        // Prevent full width containers interfering with iOS swipe to go back
+        hitSlop={{ left: -20 }}
         overshootRight={false}
         containerStyle={[style, styles.overflowVisible]}
         onSwipeableOpenStartDrag={() => onSwipeStateChange?.("opening")}
