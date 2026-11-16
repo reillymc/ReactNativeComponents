@@ -1,5 +1,5 @@
 import type { FC, ReactNode } from "react";
-import type { StyleProp, ViewStyle } from "react-native";
+import { Platform, type StyleProp, type ViewStyle } from "react-native";
 import Animated, {
     useAnimatedStyle,
     withTiming,
@@ -30,7 +30,7 @@ export const StateTint: FC<StateTintProps> = ({
 
     const animatedStyle = useAnimatedStyle(
         () => ({ opacity: withTiming(target, { duration }) }),
-        [target, duration],
+        Platform.OS === "web" ? [target, duration] : undefined,
     );
 
     return (

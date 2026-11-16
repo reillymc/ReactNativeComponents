@@ -1,6 +1,7 @@
 import type { FC } from "react";
 import {
     type ColorValue,
+    Platform,
     type StyleProp,
     StyleSheet,
     type ViewStyle,
@@ -45,7 +46,7 @@ export const StateLayer: FC<StateLayerProps> = ({
 
     const animatedStyle = useAnimatedStyle(
         () => ({ opacity: withTiming(target, { duration }) }),
-        [target, duration],
+        Platform.OS === "web" ? [target, duration] : undefined,
     );
 
     return <Animated.View style={[styles.layer, animatedStyle, style]} />;
