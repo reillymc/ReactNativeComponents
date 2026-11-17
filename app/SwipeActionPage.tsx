@@ -1,9 +1,6 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import { View } from "react-native";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@react-native-vector-icons/octicons";
+import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 import {
     SwipeAction,
     type SwipeActionProps,
@@ -12,58 +9,46 @@ import type { IconComponentProps } from "@reillymc/react-native-components/icons
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { IconPropDefinitions } from "../demo/helpers";
+import {
+    ContentPropDefinitions,
+    IconPropDefinitions,
+    InteractionPropDefinitions,
+    VariantPropDefinitions,
+} from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & SwipeActionProps;
 
-const defaultProps: Props = {
-    label: "Edit",
-    iconSet: Octicons,
-    iconName: "pencil",
-    variant: "primary",
-    onPress: () => null,
-};
-
 const propDefinitions: PropDefinitions<Props> = {
     label: {
-        type: "string",
-        label: "Label",
+        ...ContentPropDefinitions.label,
+        default: "Edit",
     },
-    iconName: IconPropDefinitions.iconName,
+    iconName: {
+        ...IconPropDefinitions.iconName,
+        default: "pencil",
+    },
     iconSet: IconPropDefinitions.iconSet,
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Primary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Destructive", value: "destructive" },
-        ],
-    },
-    appearance: {
-        type: "enum",
+    variant: VariantPropDefinitions.button,
+    appearance: enumPropDefinition({
         label: "Appearance",
+        default: "auto",
         values: [
             { id: "auto", label: "Auto", value: undefined },
             { label: "Prominent", value: "prominent" },
             { label: "Subtle", value: "subtle" },
         ],
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    onPress: {
-        type: "function",
-        label: "Press action",
-    },
+    }),
+    disabled: InteractionPropDefinitions.disabled,
+    onPress: InteractionPropDefinitions.onPress,
 };
 
 const SwipeActionPage: FunctionComponent = () => {
-    const [props, setProps] = useState<Props>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -77,9 +62,7 @@ const SwipeActionPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

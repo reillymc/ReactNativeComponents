@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import {
     TextInput,
     type TextInputProps,
@@ -8,14 +8,19 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
 import {
+    ContentPropDefinitions,
     FieldPropDefinitions,
     FieldTextInputPropDefinitions,
 } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TextInputProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Text Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -27,13 +32,8 @@ const propDefinitions: PropDefinitions<TextInputProps> = {
     clearButtonMode: FieldTextInputPropDefinitions.clearButtonMode,
 };
 
-const defaultProps: TextInputProps = {
-    placeholder: "Text Input",
-    disabled: false,
-};
-
 const TextInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<TextInputProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -43,9 +43,7 @@ const TextInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

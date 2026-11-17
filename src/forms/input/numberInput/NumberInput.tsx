@@ -65,7 +65,7 @@ export type NumberInputProps = FieldComponentProps &
         | "submitBehavior"
     > & {
         keyboardType?: "decimal-pad" | "number-pad";
-        enabledRepresentations?: Representations[];
+        enabledRepresentations?: ReadonlyArray<Representations>;
         value?: NumberInputValue;
         placeholder?: NumberInputPlaceholders;
         ref?: Ref<NumberInputHandle>;
@@ -73,7 +73,7 @@ export type NumberInputProps = FieldComponentProps &
         onChange?: (e: NumberInputValue) => void;
     };
 
-const DEFAULT_ENABLED_REPRESENTATIONS: Representations[] = [
+const DEFAULT_ENABLED_REPRESENTATIONS: ReadonlyArray<Representations> = [
     "number",
     "fraction",
     "range",

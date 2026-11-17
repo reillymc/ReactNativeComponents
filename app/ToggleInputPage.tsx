@@ -1,8 +1,5 @@
 import { type FunctionComponent, useState } from "react";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@react-native-vector-icons/octicons";
+import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 import {
     ToggleInput,
     type ToggleInputProps,
@@ -13,45 +10,39 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { FieldPropDefinitions, IconPropDefinitions } from "../demo/helpers";
+import {
+    ContentPropDefinitions,
+    FieldPropDefinitions,
+    IconPropDefinitions,
+    InteractionPropDefinitions,
+    VariantPropDefinitions,
+} from "../demo/helpers";
 
 type Props = ToggleInputProps<OcticonsIconName> &
     Required<Pick<IconComponentProps<OcticonsIconName>, "iconSet">>;
 
 const propDefinitions: PropDefinitions<Props> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Toggle Input",
+    },
     help: FieldPropDefinitions.help,
-    variant: FieldPropDefinitions.variant,
+    variant: VariantPropDefinitions.size,
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
-    appearance: {
-        type: "enum",
-        label: "Style variant",
-        default: "Primary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
-        ],
+    appearance: VariantPropDefinitions.toggleAppearance,
+    iconName: {
+        ...IconPropDefinitions.iconName,
+        default: "check",
     },
-    iconName: IconPropDefinitions.iconName,
-    onChange: {
-        type: "hidden",
-    },
+    onChange: InteractionPropDefinitions.hiddenOnChange,
     iconSet: IconPropDefinitions.iconSet,
 };
 
-const defaultProps: Props = {
-    iconSet: Octicons,
-    disabled: false,
-    onChange: () => null,
-    appearance: "primary",
-    label: "Toggle input label",
-    iconName: "check",
-};
-
 const ToggleInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<Props>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
     const [toggled, setToggled] = useState(false);
 
     return (
@@ -64,9 +55,7 @@ const ToggleInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

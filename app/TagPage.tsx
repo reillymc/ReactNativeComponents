@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
     Tag,
@@ -8,24 +8,21 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: TagProps = {
-    label: "Example Tag",
-    tone: "dark",
-    icon: <TagIcon iconSet={Octicons} iconName="x-circle" />,
-};
+import { ContentPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TagProps> = {
     label: {
-        type: "string",
-        label: "First Name",
+        ...ContentPropDefinitions.label,
+        default: "Example Tag",
     },
-    icon: {
-        type: "enum",
+    icon: enumPropDefinition({
         label: "Icon",
+        default: "close",
         values: [
             {
                 id: "none",
@@ -38,20 +35,19 @@ const propDefinitions: PropDefinitions<TagProps> = {
                 value: <TagIcon iconSet={Octicons} iconName="x-circle" />,
             },
         ],
-    },
-    tone: {
-        type: "enum",
+    }),
+    tone: enumPropDefinition({
         label: "Tone",
         default: "dark",
         values: [
             { label: "Dark", value: "dark" },
             { label: "Light", value: "light" },
         ],
-    },
+    }),
 };
 
 const TagPage: FunctionComponent = () => {
-    const [props, setProps] = useState<TagProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -61,9 +57,7 @@ const TagPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

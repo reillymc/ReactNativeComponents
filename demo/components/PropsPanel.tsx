@@ -12,52 +12,57 @@ import {
 
 import { defineStyles, useStyles } from "../theme";
 import { useSelectionModal } from "./useSelectionModal";
+import { getValueItemKey, type ValueItemKey } from "./valueItem";
 
 type PropDefinitionBase = {
     label?: string;
 };
 
-type StringPropDefinition = {
+type StringPropDefinition<T> = PropDefinitionBase & {
     type: "string";
+    default: T;
 };
 
-type NumberPropDefinition = {
+type NumberPropDefinition<T> = PropDefinitionBase & {
     type: "number";
+    default: T;
 };
 
-type BooleanPropDefinition = {
+type BooleanPropDefinition<T> = PropDefinitionBase & {
     type: "boolean";
+    default: T;
 };
 
-type FunctionPropDefinition = {
+type FunctionPropDefinition<T> = PropDefinitionBase & {
     type: "function";
+    default: T;
 };
 
-type HiddenPropDefinition = {
+type HiddenPropDefinition<T> = PropDefinitionBase & {
     type: "hidden";
+    default: T;
 };
 
-type ArrayPropDefinition = {
+type ArrayPropDefinition<T> = PropDefinitionBase & {
     type: "array";
     values: string[];
+    default: T;
 };
 
-interface EnumPropDefinition<T> {
+type EnumPropDefinition<T> = PropDefinitionBase & {
     type: "enum";
-    values: Array<ValueItem<T>>;
-    default?: this["values"][number]["label"];
-}
+    values: ReadonlyArray<ValueItem<T>>;
+    default: ValueItemKey<T>;
+};
 
-type PropDefinition<T> = PropDefinitionBase &
-    (
-        | StringPropDefinition
-        | NumberPropDefinition
-        | BooleanPropDefinition
-        | FunctionPropDefinition
-        | ArrayPropDefinition
-        | HiddenPropDefinition
-        | EnumPropDefinition<T>
-    );
+type PropDefinition<T> =
+    | StringPropDefinition<T>
+    | NumberPropDefinition<T>
+    | BooleanPropDefinition<T>
+    | FunctionPropDefinition<T>
+    | ArrayPropDefinition<T>
+    | HiddenPropDefinition<T>
+    | EnumPropDefinition<T>;
 
 export type PropDefinitions<T> = {
     [P in keyof T]: PropDefinition<T[P]>;
@@ -215,7 +220,9 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     ({ value }) => value === currentValue,
                                 )?.label ??
                                 definition.values.find(
-                                    ({ label }) => label === definition.default,
+                                    (item) =>
+                                        getValueItemKey(item) ===
+                                        definition.default,
                                 )?.label ??
                                 definition.values[0]?.label ??
                                 "",
@@ -248,7 +255,7 @@ export const PropsPanel = <T extends Record<string, any>>({
                                     onAdd={() =>
                                         openSelectionModal({
                                             key: propId,
-                                            items: definition.values,
+                                            items: [...definition.values],
                                             selectionMode: "single",
                                             label: definition.label ?? propId,
                                             selection:

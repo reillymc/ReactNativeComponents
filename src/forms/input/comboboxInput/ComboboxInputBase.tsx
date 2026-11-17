@@ -51,7 +51,7 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     | "autoFocus"
     | "style"
 > & {
-    items?: Array<ValueItem<T>>;
+    items?: ReadonlyArray<ValueItem<T>>;
 
     /**
      * The selected item's key. Controlled when the prop is present; pass
@@ -168,7 +168,7 @@ type WebPressHandlers = {
     onMouseDown: () => void;
 };
 
-const EMPTY_ITEMS: never[] = [];
+const EMPTY_ITEMS: ReadonlyArray<never> = [];
 
 export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     const {

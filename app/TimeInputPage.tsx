@@ -9,11 +9,15 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { FieldPropDefinitions } from "../demo/helpers";
+import { ContentPropDefinitions, FieldPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TimeInputProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Time Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -21,18 +25,17 @@ const propDefinitions: PropDefinitions<TimeInputProps> = {
     variant: FieldPropDefinitions.variant,
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
-};
-
-const defaultProps: TimeInputProps = {
     placeholder: {
-        hours: "0",
-        minutes: "0",
+        type: "hidden",
+        default: {
+            hours: "0",
+            minutes: "0",
+        },
     },
-    disabled: false,
 };
 
 const TimeInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<TimeInputProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
     const [inputValue, setInputValue] = useState<TimeInputValue>();
 
     return (
@@ -49,9 +52,7 @@ const TimeInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

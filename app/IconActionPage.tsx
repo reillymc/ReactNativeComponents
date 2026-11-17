@@ -1,8 +1,5 @@
-import { type FunctionComponent, useState } from "react";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@react-native-vector-icons/octicons";
+import type { FunctionComponent } from "react";
+import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 import {
     IconAction,
     type IconActionProps,
@@ -11,58 +8,42 @@ import type { IconComponentProps } from "@reillymc/react-native-components/icons
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { IconPropDefinitions } from "../demo/helpers";
+import {
+    ContentPropDefinitions,
+    IconPropDefinitions,
+    InteractionPropDefinitions,
+    VariantPropDefinitions,
+} from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconActionProps;
 
-const defaultProps: Props = {
-    iconSet: Octicons,
-    label: "Secondary IconAction",
-    iconName: "arrow-both",
-    variant: "secondary",
-    onPress: () => null,
-};
-
 const propDefinitions: PropDefinitions<Props> = {
     label: {
-        type: "string",
-        label: "Label",
+        ...ContentPropDefinitions.label,
+        default: "Secondary IconAction",
     },
     iconName: IconPropDefinitions.iconName,
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Secondary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
-        ],
-    },
-    iconPosition: {
-        type: "enum",
+    variant: VariantPropDefinitions.action,
+    iconPosition: enumPropDefinition({
         label: "Icon position",
         default: "start",
         values: [
             { label: "Start", value: "start" },
             { label: "End", value: "end" },
         ],
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    onPress: {
-        type: "function",
-        label: "Press action",
-    },
+    }),
+    disabled: InteractionPropDefinitions.disabled,
+    onPress: InteractionPropDefinitions.onPress,
     iconSet: IconPropDefinitions.iconSet,
 };
 
 const IconActionPage: FunctionComponent = () => {
-    const [props, setProps] = useState<Props>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -72,9 +53,7 @@ const IconActionPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

@@ -7,13 +7,22 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { FieldPropDefinitions } from "../demo/helpers";
+import {
+    ContentPropDefinitions,
+    FieldPropDefinitions,
+    InputPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<NumberInputProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Number Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -21,57 +30,63 @@ const propDefinitions: PropDefinitions<NumberInputProps> = {
     variant: FieldPropDefinitions.variant,
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
-    enabledRepresentations: {
-        type: "enum",
+    enabledRepresentations: enumPropDefinition({
         label: "Enabled Modes",
-        default: "All",
+        default: "all",
         values: [
-            { id: "number", label: "Number", value: ["number"] },
-            { id: "fraction", label: "Fraction", value: ["fraction"] },
-            { id: "range", label: "Range", value: ["range"] },
             {
-                id: "number-fraction",
+                id: "number",
+                label: "Number",
+                value: ["number"],
+            },
+            {
+                id: "fraction",
+                label: "Fraction",
+                value: ["fraction"],
+            },
+            {
+                id: "range",
+                label: "Range",
+                value: ["range"],
+            },
+            {
+                id: "numberFraction",
                 label: "Number and Fraction",
                 value: ["number", "fraction"],
             },
             {
-                id: "number-range",
+                id: "numberRange",
                 label: "Number and Range",
                 value: ["number", "range"],
             },
             {
-                id: "fraction-range",
+                id: "fractionRange",
                 label: "Fraction and Range",
                 value: ["fraction", "range"],
             },
-            { id: "all", label: "All", value: ["number", "fraction", "range"] },
+            {
+                id: "all",
+                label: "All",
+                value: ["number", "fraction", "range"],
+            },
         ],
-    },
-    keyboardType: {
-        type: "enum",
-        label: "Keyboard Type",
-        default: "Number Pad",
-        values: [
-            { label: "Number", value: "number-pad" },
-            { label: "Decimal", value: "decimal-pad" },
-        ],
-    },
-};
-
-const defaultProps: NumberInputProps = {
+    }),
+    keyboardType: InputPropDefinitions.keyboardType,
     placeholder: {
-        value: "0",
-        start: "0",
-        end: "0",
-        whole: "0",
-        numerator: "0",
-        denominator: "0",
+        type: "hidden",
+        default: {
+            value: "0",
+            start: "0",
+            end: "0",
+            whole: "0",
+            numerator: "0",
+            denominator: "0",
+        },
     },
-    disabled: false,
 };
 
 const NumberInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<NumberInputProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
     const [inputValue, setInputValue] = useState<NumberInputValue>();
 
     return (
@@ -88,9 +103,7 @@ const NumberInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

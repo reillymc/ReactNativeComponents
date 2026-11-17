@@ -64,7 +64,7 @@ const resolveSubmit = <T>({
 }: {
     showContainer: boolean;
     activeIndex: number;
-    filteredItems: Array<ValueItem<T>>;
+    filteredItems: ReadonlyArray<ValueItem<T>>;
     query: string;
     selectedItem: ValueItem<T> | undefined;
     allowsCustomValue: boolean;
@@ -92,7 +92,7 @@ const resolveSubmit = <T>({
 };
 
 export type ComboboxControllerOptions<T> = {
-    items: Array<ValueItem<T>>;
+    items: ReadonlyArray<ValueItem<T>>;
     value: ComboboxValue<T> | undefined;
     defaultValue: ComboboxValue<T> | undefined;
     isValueControlled: boolean;

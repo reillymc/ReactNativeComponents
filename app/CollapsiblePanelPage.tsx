@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import { Button } from "@reillymc/react-native-components/actions";
 import {
     CollapsiblePanel,
@@ -7,25 +7,21 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: CollapsiblePanelProps = {
-    collapsed: false,
-    header: <Button label="Collapsible panel header" />,
-    children: <Button label="Collapsible panel children" />,
-};
 
 const propDefinitions: PropDefinitions<CollapsiblePanelProps> = {
     collapsed: {
         type: "boolean",
         label: "Collapsed",
+        default: false,
     },
-    header: {
-        type: "enum",
+    header: enumPropDefinition({
         label: "Header",
-        default: "dark",
+        default: "button",
         values: [
             { label: "None", value: undefined, id: "none" },
             {
@@ -34,11 +30,10 @@ const propDefinitions: PropDefinitions<CollapsiblePanelProps> = {
                 id: "button",
             },
         ],
-    },
-    children: {
-        type: "enum",
+    }),
+    children: enumPropDefinition({
         label: "Children",
-        default: "dark",
+        default: "button",
         values: [
             { label: "None", value: undefined, id: "none" },
             {
@@ -47,11 +42,11 @@ const propDefinitions: PropDefinitions<CollapsiblePanelProps> = {
                 id: "button",
             },
         ],
-    },
+    }),
 };
 
 const CollapsiblePanelPage: FunctionComponent = () => {
-    const [props, setProps] = useState<CollapsiblePanelProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -66,9 +61,7 @@ const CollapsiblePanelPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />
