@@ -15,9 +15,9 @@ import { type DeepPartial, Undefined } from "@reillymc/es-utils";
 import { ActionBase, type ActionBaseProps } from "../../actions";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import {
-    ContextContainer,
-    type ContextContainerProps,
-    type ContextSwipeState,
+    SwipeActionContainer,
+    type SwipeActionContainerProps,
+    type SwipeActionState,
 } from "../../layout";
 import { Text } from "../../typography";
 
@@ -81,7 +81,7 @@ export interface ListItemProps
      */
     footer?: ReactNode;
 
-    actions?: ContextContainerProps["actions"];
+    actions?: SwipeActionContainerProps["actions"];
     style?: StyleProp<ViewStyle>;
     theme?: DeepPartial<ListItemTheme>;
     contentContainerStyle?: StyleProp<ViewStyle>;
@@ -102,8 +102,8 @@ export const ListItem: FC<ListItemProps> = ({
     onPress,
     ...props
 }) => {
-    const filteredActions = actions?.filter(Undefined);
-    const swipeState = useSharedValue<ContextSwipeState>("closed");
+    const filteredSwipeActions = actions?.filter(Undefined);
+    const swipeState = useSharedValue<SwipeActionState>("closed");
 
     const { styles, theme } = useComponent("listItem", {
         themeOverrides,
@@ -186,16 +186,16 @@ export const ListItem: FC<ListItemProps> = ({
 
     return (
         <View style={styles.container}>
-            {filteredActions?.length ? (
-                <ContextContainer
-                    actions={filteredActions}
+            {filteredSwipeActions?.length ? (
+                <SwipeActionContainer
+                    actions={filteredSwipeActions}
                     actionsContainerStyle={styles.swipeActions}
                     onSwipeStateChange={(state) => {
                         swipeState.value = state;
                     }}
                 >
                     <View>{surface}</View>
-                </ContextContainer>
+                </SwipeActionContainer>
             ) : (
                 surface
             )}

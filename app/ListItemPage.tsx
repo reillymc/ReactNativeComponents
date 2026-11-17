@@ -1,8 +1,8 @@
 import { type FunctionComponent, useState } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
-    ContextAction,
     IconAction,
+    SwipeAction,
 } from "@reillymc/react-native-components/actions";
 import {
     Badge,
@@ -29,6 +29,30 @@ const footerContentRow = (
     </ContentRow>
 );
 
+const deleteAction = (
+    <SwipeAction
+        key="delete"
+        label="Delete"
+        iconSet={Octicons}
+        iconName="trash"
+        variant="destructive"
+        onPress={() => null}
+    />
+);
+
+const editAction = (
+    <SwipeAction
+        key="edit"
+        label="Edit"
+        iconSet={Octicons}
+        iconName="pencil"
+        variant="primary"
+        onPress={() => null}
+    />
+);
+
+const deleteAndEditActions = [deleteAction, editAction];
+
 const defaultProps: ListItemProps = {
     heading: "Heading text",
     corners: "rounded",
@@ -48,24 +72,7 @@ const defaultProps: ListItemProps = {
             <Text>Description 2</Text>
         </ContentRow>
     ),
-    actions: [
-        <ContextAction
-            key="1"
-            label="Delete"
-            iconSet={Octicons}
-            iconName={"trash"}
-            variant="destructive"
-            onPress={() => null}
-        />,
-        <ContextAction
-            key="2"
-            label="Edit"
-            iconSet={Octicons}
-            iconName="pencil"
-            variant="primary"
-            onPress={() => null}
-        />,
-    ],
+    actions: deleteAndEditActions,
     onPress: () => null,
 };
 
@@ -152,32 +159,19 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
     },
     actions: {
         type: "enum",
-        label: "Actions",
+        label: "Swipe actions",
         default: "Delete",
         values: [
             { id: "None", label: "None", value: undefined },
-            { id: "Delete", label: "Delete", value: defaultProps.actions },
+            {
+                id: "Delete",
+                label: "Delete",
+                value: [deleteAction],
+            },
             {
                 id: "DeleteAndEdit",
                 label: "Delete and Edit",
-                value: [
-                    <ContextAction
-                        key="1"
-                        label="Delete"
-                        iconSet={Octicons}
-                        iconName="trash"
-                        variant="destructive"
-                        onPress={() => null}
-                    />,
-                    <ContextAction
-                        key="2"
-                        label="Edit"
-                        iconSet={Octicons}
-                        iconName="pencil"
-                        variant="primary"
-                        onPress={() => null}
-                    />,
-                ],
+                value: deleteAndEditActions,
             },
         ],
     },

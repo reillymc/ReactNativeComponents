@@ -3,7 +3,7 @@ export {
     type CollapsiblePanelProps,
 } from "./collapsiblePanel";
 export {
-    ContextContainer,
-    type ContextContainerProps,
-    type ContextSwipeState,
-} from "./contextContainer";
+    SwipeActionContainer,
+    type SwipeActionContainerProps,
+    type SwipeActionState,
+} from "./swipeActionContainer";

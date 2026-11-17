@@ -82,7 +82,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconButtonPage",
                 component: <IconButton iconSet={Octicons} iconName="star" />,
             },
-            { name: "Context Action", href: "/ContextActionPage" },
+            { name: "Swipe Action", href: "/SwipeActionPage" },
         ],
     },
     {
@@ -186,12 +186,18 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 name: "Collapsible Panel",
                 href: "/CollapsiblePanelPage",
             },
-            { name: "Context Container", href: "/ContextContainerPage" },
+            {
+                name: "Swipe Action Container",
+                href: "/SwipeActionContainerPage",
+            },
         ],
     },
     {
         sectionName: "Overlays",
-        data: [{ name: "Menu", href: "/MenuPage" }],
+        data: [
+            { name: "Menu", href: "/MenuPage" },
+            { name: "Context Menu", href: "/ContextMenuPage" },
+        ],
     },
     {
         sectionName: "Typography",

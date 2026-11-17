@@ -1,47 +1,42 @@
-import type { FunctionComponent, ReactNode } from "react";
+import type { FC, ReactNode } from "react";
 import { type StyleProp, StyleSheet, View, type ViewStyle } from "react-native";
 import Swipeable from "react-native-gesture-handler/ReanimatedSwipeable";
 
-import { ContextActionContext } from "../../actions/contextAction/ContextActionContext";
+import { SwipeActionContext } from "../../actions/swipeAction/SwipeActionContext";
 
-export type ContextSwipeState = "closed" | "opening" | "open" | "closing";
+export type SwipeActionState = "closed" | "opening" | "open" | "closing";
 
-export interface ContextContainerSwipeableProps {
-    actions: Array<ReactNode>;
-    style?: StyleProp<ViewStyle>;
+export interface SwipeActionContainerProps {
+    actions: ReadonlyArray<ReactNode>;
+    children: ReactNode;
     actionsContainerStyle?: StyleProp<ViewStyle>;
-    children?: ReactNode;
-    onSwipeStateChange?: (state: ContextSwipeState) => void;
+    onSwipeStateChange?: (state: SwipeActionState) => void;
 }
 
-export const ContextContainerSwipeable: FunctionComponent<
-    ContextContainerSwipeableProps
-> = ({
+export const SwipeActionContainer: FC<SwipeActionContainerProps> = ({
     actions,
-    style,
-    actionsContainerStyle,
     children,
+    actionsContainerStyle,
     onSwipeStateChange,
 }) => (
     <Swipeable
         renderRightActions={(_progress, _translation, swipeableMethods) => (
-            <ContextActionContext.Provider
+            <SwipeActionContext.Provider
                 value={{
-                    layout: "swipe",
                     onActionActivated: () => swipeableMethods.close(),
                 }}
             >
                 <View style={[styles.actionsContainer, actionsContainerStyle]}>
                     {actions}
                 </View>
-            </ContextActionContext.Provider>
+            </SwipeActionContext.Provider>
         )}
         enableTrackpadTwoFingerGesture
         friction={1.5}
-        // Prevent full width containers interfering with iOS swipe to go back
+        // Prevent gesture interfering with swipe from left to go back on iOS
         hitSlop={{ left: -20 }}
         overshootRight={false}
-        containerStyle={[style, styles.overflowVisible]}
+        containerStyle={styles.overflowVisible}
         onSwipeableOpenStartDrag={() => onSwipeStateChange?.("opening")}
         onSwipeableWillOpen={() => onSwipeStateChange?.("opening")}
         onSwipeableOpen={() => onSwipeStateChange?.("open")}

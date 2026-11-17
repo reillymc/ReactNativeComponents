@@ -5,8 +5,8 @@ import {
     type OcticonsIconName,
 } from "@react-native-vector-icons/octicons";
 import {
-    ContextAction,
-    type ContextActionProps,
+    SwipeAction,
+    type SwipeActionProps,
 } from "@reillymc/react-native-components/actions";
 import type { IconComponentProps } from "@reillymc/react-native-components/icons";
 
@@ -17,7 +17,7 @@ import {
 } from "../demo/components";
 import { IconPropDefinitions } from "../demo/helpers";
 
-type Props = IconComponentProps<OcticonsIconName> & ContextActionProps;
+type Props = IconComponentProps<OcticonsIconName> & SwipeActionProps;
 
 const defaultProps: Props = {
     label: "Edit",
@@ -62,15 +62,15 @@ const propDefinitions: PropDefinitions<Props> = {
     },
 };
 
-const ContextActionPage: FunctionComponent = () => {
+const SwipeActionPage: FunctionComponent = () => {
     const [props, setProps] = useState<Props>(defaultProps);
 
     return (
         <ComponentPage
-            componentName="Context Action"
+            componentName="Swipe Action"
             component={
                 <View style={{ height: 72 }}>
-                    <ContextAction {...props} />
+                    <SwipeAction {...props} />
                 </View>
             }
             propsPanel={
@@ -86,4 +86,4 @@ const ContextActionPage: FunctionComponent = () => {
     );
 };
 
-export default ContextActionPage;
+export default SwipeActionPage;
