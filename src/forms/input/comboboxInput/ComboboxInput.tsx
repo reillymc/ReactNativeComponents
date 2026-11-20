@@ -83,6 +83,7 @@ export const ComboboxInput = <T,>({
             readOnly={readOnly}
             variant={variant}
             style={fieldStyle}
+            collapsable={inlineNative ? false : undefined}
         >
             <FieldSurface ref={surfaceAnchorRef} theme={theme.surface}>
                 <ComboboxInputBase
