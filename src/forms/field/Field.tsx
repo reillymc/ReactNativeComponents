@@ -52,15 +52,11 @@ type FieldLabelProps = {
 
 export type FieldProps = FieldBaseProps &
     FieldLabelProps & {
-        collapsable?: boolean;
         /** Overrides Field scaffold styles. Field primitives resolve their own theme. */
         theme?: DeepPartial<FieldTheme>;
     };
 
-export type FieldComponentProps = Omit<
-    FieldProps,
-    "children" | "theme" | "collapsable"
->;
+export type FieldComponentProps = Omit<FieldProps, "children" | "theme">;
 
 /**
  * Standard field scaffold: label, control, help/error copy, and required marker.
@@ -78,7 +74,6 @@ export const Field: FC<FieldProps> = ({
     disabled = false,
     readOnly = false,
     variant = "regular",
-    collapsable,
     theme: themeOverrides,
     children,
     style,
@@ -112,7 +107,7 @@ export const Field: FC<FieldProps> = ({
                 focusFirstControl,
             }}
         >
-            <View collapsable={collapsable} style={[styles.container, style]}>
+            <View style={[styles.container, style]}>
                 {!!hasVisibleLabel && (
                     <Pressable
                         accessible

@@ -149,9 +149,6 @@ export type ComboboxInputBaseProps<T = string> = Pick<
 
     menuMount?: AnchoredContainerProps["mount"];
 
-    /** Called when the visibility of the suggestions panel changes. */
-    onMenuVisibilityChange?: (visible: boolean) => void;
-
     /**
      * Anchor for the iOS overlay and inline measurement. When omitted, iOS
      * falls back to the inline mount, which can clip inside scrollable or
@@ -191,7 +188,6 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         containerPosition,
         anchorRef,
         menuMount = "overlay",
-        onMenuVisibilityChange,
         theme: themeOverrides,
         onBlur,
         onFocus,
@@ -251,7 +247,6 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         onFocus,
         onBlur,
         onKeyPress,
-        onMenuVisibilityChange,
         selectBehavior,
         disableOpenOnFocus,
         allowsCustomValue,
