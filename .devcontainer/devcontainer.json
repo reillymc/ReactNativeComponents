@@ -1,6 +1,8 @@
 {
     "name": "React Native Components",
     "build": { "dockerfile": "Dockerfile" },
+    "initializeCommand": "test -f .devcontainer/.env || cp .devcontainer/.env.example .devcontainer/.env",
+    "runArgs": ["--env-file", "${localWorkspaceFolder}/.devcontainer/.env"],
     "customizations": {
         "vscode": {
             "extensions": [
