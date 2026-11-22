@@ -39,6 +39,7 @@ import type { MenuItemTheme } from "../overlays/menu/MenuItem";
 import type { HighlightedTextTheme } from "../typography/text/HighlightedText";
 import type { TextTheme } from "../typography/text/Text";
 import type { TextBaseTheme } from "../typography/text/TextBase";
+import type { Palette } from "./palette";
 import type { ThemeFactoryFor } from "./resolveThemeGraph";
 
 export interface Theme {
@@ -84,5 +85,9 @@ export interface Theme {
 }
 
 export type ThemeOverrides = DeepPartial<Theme>;
+
+export type ThemeOverridesFactory = (palette: Palette) => ThemeOverrides;
+
+export type ThemeOverridesInput = ThemeOverrides | ThemeOverridesFactory;
 
 export type ThemeFactory<K extends keyof Theme> = ThemeFactoryFor<Theme, K>;

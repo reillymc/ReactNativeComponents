@@ -11,7 +11,7 @@ import type { PaletteOverrides } from "./palette";
 import type { SystemsOverrides } from "./systems";
 import { ThemeContext, type ThemeContextValue } from "./ThemeContext";
 import { ThemeProvider } from "./ThemeProvider";
-import type { ThemeOverrides } from "./theme";
+import type { ThemeOverridesInput } from "./theme";
 
 export type AppThemeFactory<AppTheme> = (
     context: ThemeContextValue,
@@ -19,7 +19,7 @@ export type AppThemeFactory<AppTheme> = (
 
 type AppThemeProviderProps = {
     palette?: PaletteOverrides;
-    theme?: ThemeOverrides;
+    theme?: ThemeOverridesInput;
     systems?: SystemsOverrides;
     icons?: IconOverrides;
     children?: ReactNode;

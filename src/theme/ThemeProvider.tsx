@@ -5,7 +5,7 @@ import { createPalette, type PaletteOverrides } from "./palette";
 import { resolveTheme } from "./resolveTheme";
 import { createSystems, type SystemsOverrides } from "./systems";
 import { ThemeContext } from "./ThemeContext";
-import type { ThemeOverrides } from "./theme";
+import type { ThemeOverridesInput } from "./theme";
 
 export interface ThemeProviderProps {
     /**
@@ -13,9 +13,10 @@ export interface ThemeProviderProps {
      */
     palette?: PaletteOverrides;
     /**
-     * Component theme overrides.
+     * Component theme overrides, or a function that derives them from the
+     * resolved palette.
      */
-    theme?: ThemeOverrides;
+    theme?: ThemeOverridesInput;
     /**
      * Shared interaction, accessibility, and touch defaults.
      */
