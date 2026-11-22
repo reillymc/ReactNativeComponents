@@ -1,8 +1,8 @@
 import { type RefObject, useEffect, useRef, useState } from "react";
 import type {
     BlurEvent,
-    TextInput as DefaultTextInput,
     FocusEvent,
+    TextInputInstance,
     TextInputKeyPressEvent,
 } from "react-native";
 
@@ -64,7 +64,7 @@ const resolveSubmit = <T>({
 }: {
     showContainer: boolean;
     activeIndex: number;
-    filteredItems: Array<ValueItem<T>>;
+    filteredItems: ReadonlyArray<ValueItem<T>>;
     query: string;
     selectedItem: ValueItem<T> | undefined;
     allowsCustomValue: boolean;
@@ -92,7 +92,7 @@ const resolveSubmit = <T>({
 };
 
 export type ComboboxControllerOptions<T> = {
-    items: Array<ValueItem<T>>;
+    items: ReadonlyArray<ValueItem<T>>;
     value: ComboboxValue<T> | undefined;
     defaultValue: ComboboxValue<T> | undefined;
     isValueControlled: boolean;
@@ -106,7 +106,6 @@ export type ComboboxControllerOptions<T> = {
     onFocus?: FieldTextInputProps["onFocus"];
     onBlur?: FieldTextInputProps["onBlur"];
     onKeyPress?: FieldTextInputProps["onKeyPress"];
-    onMenuVisibilityChange?: (visible: boolean) => void;
     selectBehavior: ComboboxSelectBehavior;
     disableOpenOnFocus: boolean;
     allowsCustomValue: boolean;
@@ -114,7 +113,7 @@ export type ComboboxControllerOptions<T> = {
     filterItems?: (item: ValueItem<T>, query: string) => boolean;
     minimumSearchLength: number;
     maxSuggestionCount?: number;
-    inputRef: RefObject<DefaultTextInput | null>;
+    inputRef: RefObject<TextInputInstance | null>;
     isMenuInverted?: boolean;
 };
 
@@ -133,7 +132,6 @@ export const useComboboxController = <T>({
     onFocus,
     onBlur,
     onKeyPress,
-    onMenuVisibilityChange,
     selectBehavior,
     disableOpenOnFocus,
     allowsCustomValue,
@@ -205,17 +203,13 @@ export const useComboboxController = <T>({
 
     const showContainer = isOpen && meetsMinimum && filteredItems.length > 0;
 
-    useEffect(() => {
-        onMenuVisibilityChange?.(showContainer);
-    }, [showContainer, onMenuVisibilityChange]);
-
     const selectedIndex =
         selectedKey === undefined
             ? -1
             : filteredItems.findIndex(
                   (item) => getItemKey(item) === selectedKey,
               );
-    const initialActiveIndex = selectedIndex >= 0 ? selectedIndex : 0;
+    const initialActiveIndex = Math.max(selectedIndex, 0);
 
     useEffect(() => {
         if (!showContainer || filteredItems.length === 0) {

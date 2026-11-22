@@ -1,8 +1,8 @@
 import { type Ref, useImperativeHandle, useState } from "react";
 import {
-    type TextInput as DefaultTextInput,
     Platform,
-    type View,
+    type TextInputInstance,
+    type ViewInstance,
 } from "react-native";
 import type { AnimatedRef } from "react-native-reanimated";
 import type { DeepPartial } from "@reillymc/es-utils";
@@ -51,7 +51,7 @@ export type ComboboxInputBaseProps<T = string> = Pick<
     | "autoFocus"
     | "style"
 > & {
-    items?: Array<ValueItem<T>>;
+    items?: ReadonlyArray<ValueItem<T>>;
 
     /**
      * The selected item's key. Controlled when the prop is present; pass
@@ -149,26 +149,23 @@ export type ComboboxInputBaseProps<T = string> = Pick<
 
     menuMount?: AnchoredContainerProps["mount"];
 
-    /** Called when the visibility of the suggestions panel changes. */
-    onMenuVisibilityChange?: (visible: boolean) => void;
-
     /**
      * Anchor for the iOS overlay and inline measurement. When omitted, iOS
      * falls back to the inline mount, which can clip inside scrollable or
      * clipped parents.
      */
-    anchorRef?: AnimatedRef<View>;
+    anchorRef?: AnimatedRef<ViewInstance>;
 
     theme?: DeepPartial<ComboboxInputTheme>;
 
-    ref?: Ref<DefaultTextInput>;
+    ref?: Ref<TextInputInstance>;
 };
 
 type WebPressHandlers = {
     onMouseDown: () => void;
 };
 
-const EMPTY_ITEMS: never[] = [];
+const EMPTY_ITEMS: ReadonlyArray<never> = [];
 
 export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
     const {
@@ -191,7 +188,6 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         containerPosition,
         anchorRef,
         menuMount = "overlay",
-        onMenuVisibilityChange,
         theme: themeOverrides,
         onBlur,
         onFocus,
@@ -251,7 +247,6 @@ export const ComboboxInputBase = <T,>(props: ComboboxInputBaseProps<T>) => {
         onFocus,
         onBlur,
         onKeyPress,
-        onMenuVisibilityChange,
         selectBehavior,
         disableOpenOnFocus,
         allowsCustomValue,

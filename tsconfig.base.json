@@ -1,0 +1,24 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "compilerOptions": {
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "erasableSyntaxOnly": true,
+        "moduleDetection": "force",
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitOverride": true,
+        "noImplicitReturns": true,
+        "noPropertyAccessFromIndexSignature": true,
+        "noUncheckedIndexedAccess": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "skipLibCheck": true,
+        "strict": true,
+        "verbatimModuleSyntax": true,
+        "customConditions": ["react-native"],
+        "jsx": "react-native",
+        "lib": ["DOM", "ESNext"],
+        "module": "esnext",
+        "moduleResolution": "bundler"
+    }
+}

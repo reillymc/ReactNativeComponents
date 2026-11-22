@@ -1,4 +1,4 @@
-import { type FC, useState } from "react";
+import type { FC } from "react";
 import {
     Text,
     type TextProps,
@@ -8,31 +8,21 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: TextProps = {
-    children: "Text",
-    variant: "body",
-};
+import { VariantPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<TextProps> = {
     children: {
         type: "string",
         label: "Text",
+        default: "Text",
     },
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Secondary",
-        values: [
-            { label: "Label", value: "label" },
-            { label: "Caption", value: "caption" },
-        ],
-    },
+    variant: VariantPropDefinitions.text,
 };
 
 const TextPage: FC = () => {
-    const [props, setProps] = useState<TextProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -42,9 +32,7 @@ const TextPage: FC = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

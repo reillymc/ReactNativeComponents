@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     ContentRow,
     type ContentRowProps,
@@ -7,50 +6,49 @@ import { Text } from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
 
-const TWO_ITEMS = [
-    <Text key="description-1">Description</Text>,
-    <Text key="description-2">Description 2</Text>,
-];
-
-const THREE_ITEMS = [
-    <Text key="one">One</Text>,
-    <Text key="two">Two</Text>,
-    <Text key="three">Three</Text>,
-];
-
-const defaultProps: ContentRowProps = {
-    children: TWO_ITEMS,
-    separator: undefined,
-};
-
 const propDefinitions: PropDefinitions<ContentRowProps> = {
-    children: {
-        type: "enum",
+    children: enumPropDefinition({
         label: "Children",
-        default: "Two items",
+        default: "two",
         values: [
-            { id: "two", label: "Two items", value: TWO_ITEMS },
-            { id: "three", label: "Three items", value: THREE_ITEMS },
+            {
+                id: "two",
+                label: "Two items",
+                value: [
+                    <Text key="description-1">Description</Text>,
+                    <Text key="description-2">Description 2</Text>,
+                ],
+            },
+            {
+                id: "three",
+                label: "Three items",
+                value: [
+                    <Text key="one">One</Text>,
+                    <Text key="two">Two</Text>,
+                    <Text key="three">Three</Text>,
+                ],
+            },
         ],
-    },
-    separator: {
-        type: "enum",
+    }),
+    separator: enumPropDefinition({
         label: "Separator",
-        default: "Default dot",
+        default: "default",
         values: [
             { id: "default", label: "Default dot", value: undefined },
             { id: "slash", label: "Slash", value: <Text>/</Text> },
             { id: "none", label: "None", value: null },
         ],
-    },
+    }),
 };
 
 const ContentRowPage = () => {
-    const [props, setProps] = useState<ContentRowProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -60,9 +58,7 @@ const ContentRowPage = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

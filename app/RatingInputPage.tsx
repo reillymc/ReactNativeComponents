@@ -8,16 +8,19 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { FieldPropDefinitions } from "../demo/helpers";
-
-const defaultProps: RatingInputProps = {
-    disabled: false,
-    max: 10,
-};
+import {
+    ContentPropDefinitions,
+    FieldPropDefinitions,
+    RatingPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<RatingInputProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Rating Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -25,18 +28,12 @@ const propDefinitions: PropDefinitions<RatingInputProps> = {
     variant: FieldPropDefinitions.variant,
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
-    max: {
-        type: "number",
-        label: "Max Value",
-    },
-    scale: {
-        type: "number",
-        label: "Scale",
-    },
+    max: RatingPropDefinitions.max,
+    scale: RatingPropDefinitions.scale,
 };
 
 const RatingInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<RatingInputProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
     const [value, setValue] = useState<number | undefined>(undefined);
 
     return (
@@ -49,9 +46,7 @@ const RatingInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

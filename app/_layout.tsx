@@ -12,7 +12,10 @@ import {
     usePalette,
 } from "@reillymc/react-native-components/theme";
 
+import { useComponentPageSettings } from "../demo/components/ComponentPageSettingsContext";
+import { ComponentPageSettingsProvider } from "../demo/components/ComponentPageSettingsProvider";
 import { SelectionModalProvider } from "../demo/components/SelectionModalProvider";
+import { SettingsButton } from "../demo/components/SettingsButton";
 import { AppThemeProvider } from "../demo/theme";
 
 export {
@@ -37,8 +40,9 @@ LogBox.ignoreLogs([
 
 SplashScreen.preventAutoHideAsync();
 
-const NavigationStack: FC = () => {
-    const colorScheme = useColorScheme();
+const NavigationStack: FC<{ colorScheme: "light" | "dark" }> = ({
+    colorScheme,
+}) => {
     const palette = usePalette();
 
     const baseTheme = colorScheme === "dark" ? DarkTheme : DefaultTheme;
@@ -59,10 +63,21 @@ const NavigationStack: FC = () => {
     return (
         <ThemeProvider value={navigationTheme}>
             <SelectionModalProvider>
-                <Stack>
+                <Stack
+                    screenOptions={{ headerRight: () => <SettingsButton /> }}
+                >
                     <Stack.Screen name="index" />
                     <Stack.Screen
                         name="SelectionModal"
+                        options={{
+                            presentation: "formSheet",
+                            sheetAllowedDetents: [0.5, 1.0],
+                            sheetGrabberVisible: true,
+                            sheetExpandsWhenScrolledToEdge: true,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="SettingsModal"
                         options={{
                             presentation: "formSheet",
                             sheetAllowedDetents: [0.5, 1.0],
@@ -76,17 +91,29 @@ const NavigationStack: FC = () => {
     );
 };
 
-const Layout: FC = () => {
-    const colorScheme = useColorScheme();
-
-    useEffect(() => {
-        SplashScreen.hideAsync();
-    }, []);
+const ThemedRoot: FC = () => {
+    const systemColorScheme = useColorScheme();
+    const { appearance } = useComponentPageSettings();
+    const colorScheme =
+        appearance === "system" ? (systemColorScheme ?? "light") : appearance;
 
     const palette: PaletteOverrides = {
         font: { family: { mono: Font, sans: Font } },
         color: colorScheme === "dark" ? darkColorScheme : undefined,
     };
+
+    return (
+        <AppThemeProvider palette={palette}>
+            <StatusBar style="auto" />
+            <NavigationStack colorScheme={colorScheme} />
+        </AppThemeProvider>
+    );
+};
+
+const Layout: FC = () => {
+    useEffect(() => {
+        SplashScreen.hideAsync();
+    }, []);
 
     const [loaded] = useFonts({
         comfortaa: require("../assets/fonts/Comfortaa.ttf"),
@@ -97,10 +124,9 @@ const Layout: FC = () => {
     return (
         <StrictMode>
             <GestureHandlerRootView style={{ flex: 1 }}>
-                <AppThemeProvider palette={palette}>
-                    <StatusBar style="auto" />
-                    <NavigationStack />
-                </AppThemeProvider>
+                <ComponentPageSettingsProvider>
+                    <ThemedRoot />
+                </ComponentPageSettingsProvider>
             </GestureHandlerRootView>
         </StrictMode>
     );

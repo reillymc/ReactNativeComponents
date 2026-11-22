@@ -1,8 +1,5 @@
-import { type FunctionComponent, useState } from "react";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@react-native-vector-icons/octicons";
+import type { FunctionComponent } from "react";
+import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 import {
     ToggleIndicator,
     type ToggleIndicatorProps,
@@ -13,44 +10,30 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import {
-    IconPropDefinitions,
-    SizeVariantPropDefinitions,
-} from "../demo/helpers";
+import { IconPropDefinitions, VariantPropDefinitions } from "../demo/helpers";
 
 type Props = ToggleIndicatorProps<OcticonsIconName> &
     Required<Pick<IconComponentProps<OcticonsIconName>, "iconSet">>;
-
-const defaultProps: Props = {
-    value: true,
-    appearance: "primary",
-    variant: "regular",
-    iconSet: Octicons,
-    iconName: "check",
-};
 
 const propDefinitions: PropDefinitions<Props> = {
     value: {
         type: "boolean",
         label: "Value",
+        default: false,
     },
-    appearance: {
-        type: "enum",
-        label: "Appearance",
-        default: "Primary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
-        ],
+    appearance: VariantPropDefinitions.toggleAppearance,
+    variant: VariantPropDefinitions.size,
+    iconName: {
+        ...IconPropDefinitions.iconName,
+        default: "check",
     },
-    variant: SizeVariantPropDefinitions.variant,
-    iconName: IconPropDefinitions.iconName,
     iconSet: IconPropDefinitions.iconSet,
 };
 
 const ToggleIndicatorPage: FunctionComponent = () => {
-    const [props, setProps] = useState<Props>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -60,9 +43,7 @@ const ToggleIndicatorPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

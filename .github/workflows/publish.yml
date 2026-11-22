@@ -7,7 +7,7 @@ jobs:
     build:
         runs-on: ubuntu-latest
         permissions:
-            id-token: write  # Required for OIDC
+            id-token: write # Required for OIDC
             contents: write
             packages: write
         steps:
@@ -20,7 +20,7 @@ jobs:
               with:
                   node-version: "24.x"
                   cache: "npm"
-                  registry-url: 'https://registry.npmjs.org'
+                  registry-url: "https://registry.npmjs.org"
                   # Defaults to the user or organization that owns the workflow file
                   scope: "@reillymc"
             - name: Install dependencies
@@ -37,30 +37,28 @@ jobs:
             - name: Determine npm release-tag
               id: release-tag
               run: |
-                line="${GITHUB_REF_NAME#latest/}"
-                highest="$(git ls-remote --heads origin 'refs/heads/latest/*' \
-                  | sed 's#.*refs/heads/latest/##' \
-                  | sort -V \
-                  | tail -n 1)"
+                  line="${GITHUB_REF_NAME#latest/}"
+                  highest="$(git ls-remote --heads origin 'refs/heads/latest/*' \
+                    | sed 's#.*refs/heads/latest/##' \
+                    | sort -V \
+                    | tail -n 1)"
 
-                if [ "$line" = "$highest" ]; then
-                  echo "tag=latest" >> "$GITHUB_OUTPUT"
-                else
-                  echo "tag=release-${line}" >> "$GITHUB_OUTPUT"
-                fi
+                  if [ "$line" = "$highest" ]; then
+                    echo "tag=latest" >> "$GITHUB_OUTPUT"
+                  else
+                    echo "tag=release-${line}" >> "$GITHUB_OUTPUT"
+                  fi
 
             - name: Bump patch version and push
               run: |
-                git config user.name "github-actions[bot]"
-                git config user.email "github-actions[bot]@users.noreply.github.com"
-                npm version patch
-                git push --follow-tags
+                  git config user.name "github-actions[bot]"
+                  git config user.email "github-actions[bot]@users.noreply.github.com"
+                  npm version patch
+                  git push --follow-tags
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Publish package
               run: |
-                npm publish --ignore-scripts --provenance --access public \
-                  --tag "${{ steps.release-tag.outputs.tag }}"
-
-
+                  npm publish --ignore-scripts --provenance --access public \
+                    --tag "${{ steps.release-tag.outputs.tag }}"

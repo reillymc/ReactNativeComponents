@@ -12,7 +12,7 @@ export type ComboboxFilterOptions<T> = {
 };
 
 export const filterComboboxItems = <T>(
-    items: Array<ValueItem<T>>,
+    items: ReadonlyArray<ValueItem<T>>,
     query: string,
     {
         filterItems,

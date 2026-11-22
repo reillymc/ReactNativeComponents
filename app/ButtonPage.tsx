@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import {
     Button,
     type ButtonProps,
@@ -6,60 +6,38 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: ButtonProps = {
-    label: "Primary Button",
-    variant: "primary",
-    appearance: "subtle",
-    width: "auto",
-    onPress: () => null,
-};
+import {
+    ContentPropDefinitions,
+    InteractionPropDefinitions,
+    VariantPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<ButtonProps> = {
     label: {
-        type: "string",
-        label: "Label",
+        ...ContentPropDefinitions.label,
+        default: "Primary Button",
     },
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Primary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Destructive", value: "destructive" },
-        ],
-    },
-    appearance: {
-        type: "enum",
-        label: "Appearance",
-        values: [
-            { label: "Prominent", value: "prominent" },
-            { label: "Subtle", value: "subtle" },
-        ],
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    width: {
-        type: "enum",
+    variant: VariantPropDefinitions.button,
+    appearance: VariantPropDefinitions.buttonAppearance,
+    disabled: InteractionPropDefinitions.disabled,
+    width: enumPropDefinition({
         label: "Width",
+        default: "auto",
         values: [
             { label: "Auto", value: "auto" },
             { label: "Medium", value: "medium" },
         ],
-    },
-    onPress: {
-        type: "function",
-        label: "Press action",
-    },
+    }),
+    onPress: InteractionPropDefinitions.onPress,
 };
 
 const ButtonPage: FunctionComponent = () => {
-    const [props, setProps] = useState<ButtonProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -69,9 +47,7 @@ const ButtonPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

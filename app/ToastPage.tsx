@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Action } from "@reillymc/react-native-components/actions";
 import {
     Toast,
@@ -8,55 +7,64 @@ import { Text } from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
 
 type ToastPageProps = ToastProps & {
     visible: boolean;
 };
 
-const SUCCESS_CONTENT = <Text>Saved successfully</Text>;
-const LONG_CONTENT = (
-    <Text>Your changes were saved, but some fields still need attention.</Text>
-);
-const UNDO_ACTION = <Action label="Undo" onPress={() => null} />;
-const DISMISS_ACTION = <Action label="Dismiss" onPress={() => null} />;
-
-const defaultProps: ToastPageProps = {
-    visible: true,
-    children: SUCCESS_CONTENT,
-    action: UNDO_ACTION,
-};
-
 const propDefinitions: PropDefinitions<ToastPageProps> = {
     visible: {
         type: "boolean",
         label: "Visible",
+        default: true,
     },
-    children: {
-        type: "enum",
+    children: enumPropDefinition({
         label: "Content",
-        default: "Success",
+        default: "success",
         values: [
-            { id: "success", label: "Success", value: SUCCESS_CONTENT },
-            { id: "long", label: "Long message", value: LONG_CONTENT },
+            {
+                id: "success",
+                label: "Success",
+                value: <Text>Saved successfully</Text>,
+            },
+            {
+                id: "long",
+                label: "Long message",
+                value: (
+                    <Text>
+                        Your changes were saved, but some fields still need
+                        attention.
+                    </Text>
+                ),
+            },
         ],
-    },
-    action: {
-        type: "enum",
+    }),
+    action: enumPropDefinition({
         label: "Action",
-        default: "Undo",
+        default: "undo",
         values: [
             { id: "none", label: "None", value: undefined },
-            { id: "undo", label: "Undo", value: UNDO_ACTION },
-            { id: "dismiss", label: "Dismiss", value: DISMISS_ACTION },
+            {
+                id: "undo",
+                label: "Undo",
+                value: <Action label="Undo" onPress={() => null} />,
+            },
+            {
+                id: "dismiss",
+                label: "Dismiss",
+                value: <Action label="Dismiss" onPress={() => null} />,
+            },
         ],
-    },
+    }),
 };
 
 const ToastPage = () => {
-    const [props, setProps] = useState<ToastPageProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
     const { visible, ...toastProps } = props;
 
     return (
@@ -69,9 +77,7 @@ const ToastPage = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

@@ -1,6 +1,6 @@
 import type { FunctionComponent, ReactNode } from "react";
 import { type StyleProp, StyleSheet, type ViewStyle } from "react-native";
-import Animated, { Easing, LinearTransition } from "react-native-reanimated";
+import Animated, { LinearTransition } from "react-native-reanimated";
 
 export interface CollapsiblePanelProps {
     collapsed: boolean | undefined;
@@ -9,9 +9,7 @@ export interface CollapsiblePanelProps {
     children?: ReactNode;
 }
 
-const LAYOUT_TRANSITION = LinearTransition.easing(Easing.inOut(Easing.cubic))
-    .mass(0.3)
-    .springify();
+const LAYOUT_TRANSITION = LinearTransition.mass(0.3).springify();
 
 export const CollapsiblePanel: FunctionComponent<CollapsiblePanelProps> = ({
     collapsed,

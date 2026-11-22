@@ -15,9 +15,10 @@ import { type DeepPartial, Undefined } from "@reillymc/es-utils";
 import { ActionBase, type ActionBaseProps } from "../../actions";
 import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import {
-    ContextContainer,
-    type ContextContainerProps,
-    type ContextSwipeState,
+    SwipeActionContainer,
+    type SwipeActionContainerProps,
+    type SwipeActionContainerTheme,
+    type SwipeActionState,
 } from "../../layout";
 import { Text } from "../../typography";
 
@@ -32,10 +33,7 @@ export interface ListItemTheme {
         paddingStart: number;
         paddingEnd: number;
     };
-    swipeActions: {
-        margin: number;
-        gap: number;
-    };
+    swipeActions: SwipeActionContainerTheme;
     internalGap: number;
     textColor: ColorValue;
 }
@@ -81,7 +79,7 @@ export interface ListItemProps
      */
     footer?: ReactNode;
 
-    actions?: ContextContainerProps["actions"];
+    actions?: SwipeActionContainerProps["actions"];
     style?: StyleProp<ViewStyle>;
     theme?: DeepPartial<ListItemTheme>;
     contentContainerStyle?: StyleProp<ViewStyle>;
@@ -102,8 +100,8 @@ export const ListItem: FC<ListItemProps> = ({
     onPress,
     ...props
 }) => {
-    const filteredActions = actions?.filter(Undefined);
-    const swipeState = useSharedValue<ContextSwipeState>("closed");
+    const filteredSwipeActions = actions?.filter(Undefined);
+    const swipeState = useSharedValue<SwipeActionState>("closed");
 
     const { styles, theme } = useComponent("listItem", {
         themeOverrides,
@@ -118,9 +116,7 @@ export const ListItem: FC<ListItemProps> = ({
 
         return {
             borderRadius: withTiming(
-                swipeState.value === "opening" || swipeState.value === "open"
-                    ? theme.surface.borderRadius
-                    : 0,
+                swipeState.value === "closed" ? 0 : theme.surface.borderRadius,
                 { duration: 150 },
             ),
         };
@@ -135,7 +131,7 @@ export const ListItem: FC<ListItemProps> = ({
                     <View
                         style={[styles.contentContainer, contentContainerStyle]}
                     >
-                        {!!heading && typeof heading === "string" ? (
+                        {heading && typeof heading === "string" ? (
                             <Text
                                 variant="heading"
                                 numberOfLines={2}
@@ -186,16 +182,16 @@ export const ListItem: FC<ListItemProps> = ({
 
     return (
         <View style={styles.container}>
-            {filteredActions?.length ? (
-                <ContextContainer
-                    actions={filteredActions}
-                    actionsContainerStyle={styles.swipeActions}
+            {filteredSwipeActions?.length ? (
+                <SwipeActionContainer
+                    actions={filteredSwipeActions}
+                    theme={theme.swipeActions}
                     onSwipeStateChange={(state) => {
                         swipeState.value = state;
                     }}
                 >
                     <View>{surface}</View>
-                </ContextContainer>
+                </SwipeActionContainer>
             ) : (
                 surface
             )}
@@ -210,11 +206,6 @@ const createStyles = defineStyles(
         },
         surface: {
             backgroundColor: theme.surface.backgroundColor,
-        },
-        swipeActions: {
-            margin: theme.swipeActions.margin,
-            marginLeft: theme.swipeActions.gap,
-            gap: theme.swipeActions.gap,
         },
         pressableContainer: {
             display: "flex",

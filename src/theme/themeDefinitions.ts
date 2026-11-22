@@ -6,8 +6,8 @@ import { defaultButtonTheme } from "../actions/button/Button.theme";
 import { defaultButtonBaseTheme } from "../actions/button/ButtonBase.theme";
 import { defaultIconButtonTheme } from "../actions/button/IconButton.theme";
 import { defaultIconButtonBaseTheme } from "../actions/button/IconButtonBase.theme";
-import { defaultContextActionTheme } from "../actions/contextAction/ContextAction.theme";
 import { defaultStateLayerTheme } from "../actions/surface/StateLayer.theme";
+import { defaultSwipeActionTheme } from "../actions/swipeAction/SwipeAction.theme";
 import { defaultAvatarTheme } from "../display/avatar/Avatar.theme";
 import { defaultBadgeTheme } from "../display/badge/Badge.theme";
 import { defaultContentRowTheme } from "../display/contentRow/ContentRow.theme";
@@ -30,6 +30,7 @@ import { defaultTimeInputTheme } from "../forms/input/timeInput/TimeInput.theme"
 import { defaultToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
 import { defaultIconTheme } from "../icons/Icon.theme";
 import { defaultIconBaseTheme } from "../icons/IconBase.theme";
+import { defaultSwipeActionContainerTheme } from "../layout/swipeActionContainer/SwipeActionContainer.theme";
 import { defaultAnchoredContainerTheme } from "../overlays/anchoredContainer/AnchoredContainer.theme";
 import { defaultMenuTheme } from "../overlays/menu/Menu.theme";
 import { defaultMenuItemTheme } from "../overlays/menu/MenuItem.theme";
@@ -77,7 +78,8 @@ export const definitions: ThemeDefinitions = {
     menuItem: defaultMenuItemTheme,
     avatar: defaultAvatarTheme,
     toast: defaultToastTheme,
-    contextAction: defaultContextActionTheme,
+    swipeAction: defaultSwipeActionTheme,
+    swipeActionContainer: defaultSwipeActionContainerTheme,
     anchoredContainer: defaultAnchoredContainerTheme,
     formContainer: defaultFormContainerTheme,
     formRow: defaultFormRowTheme,

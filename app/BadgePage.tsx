@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import {
     Badge,
     type BadgeProps,
@@ -6,33 +6,30 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: BadgeProps = {
-    label: "8",
-    variant: "primary",
-};
+import { ContentPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<BadgeProps> = {
     label: {
-        type: "string",
-        label: "Label",
+        ...ContentPropDefinitions.label,
+        default: "",
     },
-    variant: {
-        type: "enum",
+    variant: enumPropDefinition({
         label: "Variant",
-        default: "Primary",
+        default: "primary",
         values: [
             { label: "Primary", value: "primary" },
             { label: "Secondary", value: "secondary" },
         ],
-    },
+    }),
 };
 
 const BadgePage: FunctionComponent = () => {
-    const [props, setProps] = useState<BadgeProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -42,9 +39,7 @@ const BadgePage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

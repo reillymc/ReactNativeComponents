@@ -8,8 +8,8 @@ import type { ButtonTheme } from "../actions/button/Button";
 import type { ButtonBaseTheme } from "../actions/button/ButtonBase";
 import type { IconButtonTheme } from "../actions/button/IconButton";
 import type { IconButtonBaseTheme } from "../actions/button/IconButtonBase";
-import type { ContextActionTheme } from "../actions/contextAction/ContextAction";
 import type { StateLayerTheme } from "../actions/surface/StateLayer";
+import type { SwipeActionTheme } from "../actions/swipeAction/SwipeAction";
 import type { AvatarTheme } from "../display/avatar/Avatar";
 import type { BadgeTheme } from "../display/badge/Badge";
 import type { ContentRowTheme } from "../display/contentRow/ContentRow";
@@ -32,12 +32,14 @@ import type { TimeInputTheme } from "../forms/input/timeInput/TimeInput.theme";
 import type { ToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
 import type { IconTheme } from "../icons/Icon";
 import type { IconBaseTheme } from "../icons/IconBase";
+import type { SwipeActionContainerTheme } from "../layout/swipeActionContainer/SwipeActionContainer";
 import type { AnchoredContainerTheme } from "../overlays/anchoredContainer/AnchoredContainer";
 import type { MenuTheme } from "../overlays/menu/Menu";
 import type { MenuItemTheme } from "../overlays/menu/MenuItem";
 import type { HighlightedTextTheme } from "../typography/text/HighlightedText";
 import type { TextTheme } from "../typography/text/Text";
 import type { TextBaseTheme } from "../typography/text/TextBase";
+import type { Palette } from "./palette";
 import type { ThemeFactoryFor } from "./resolveThemeGraph";
 
 export interface Theme {
@@ -75,12 +77,17 @@ export interface Theme {
     menuItem: MenuItemTheme;
     avatar: AvatarTheme;
     toast: ToastTheme;
-    contextAction: ContextActionTheme;
+    swipeAction: SwipeActionTheme;
+    swipeActionContainer: SwipeActionContainerTheme;
     anchoredContainer: AnchoredContainerTheme;
     formContainer: FormContainerTheme;
     formRow: FormRowTheme;
 }
 
 export type ThemeOverrides = DeepPartial<Theme>;
+
+export type ThemeOverridesFactory = (palette: Palette) => ThemeOverrides;
+
+export type ThemeOverridesInput = ThemeOverrides | ThemeOverridesFactory;
 
 export type ThemeFactory<K extends keyof Theme> = ThemeFactoryFor<Theme, K>;

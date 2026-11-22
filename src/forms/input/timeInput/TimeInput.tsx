@@ -137,7 +137,7 @@ export const TimeInput: FC<TimeInputProps> = ({
                                     keyboardType="number-pad"
                                     maxLength={TIME_SEGMENT_MAX_LENGTH}
                                 />
-                                {segment.separator && (
+                                {!!segment.separator && (
                                     <Pressable
                                         accessible={false}
                                         focusable={false}

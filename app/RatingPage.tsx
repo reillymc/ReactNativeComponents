@@ -1,4 +1,4 @@
-import { type FC, useState } from "react";
+import type { FC } from "react";
 import {
     Rating,
     type RatingProps,
@@ -8,30 +8,18 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: RatingProps = {
-    value: 5,
-    max: 10,
-};
+import { RatingPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<RatingProps> = {
-    value: {
-        type: "number",
-        label: "Rating value",
-    },
-    max: {
-        type: "number",
-        label: "Max Value",
-    },
-    scale: {
-        type: "number",
-        label: "Scale",
-    },
+    value: RatingPropDefinitions.value,
+    max: RatingPropDefinitions.max,
+    scale: RatingPropDefinitions.scale,
 };
 
 const RatingPage: FC = () => {
-    const [props, setProps] = useState<RatingProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -41,9 +29,7 @@ const RatingPage: FC = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

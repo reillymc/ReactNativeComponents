@@ -15,7 +15,7 @@ interface SingleSelection<T> {
 
 interface MultiSelection<T> {
     selectionMode: "multi";
-    selection?: Array<ValueItem<T>>;
+    selection?: ReadonlyArray<ValueItem<T>>;
 }
 
 export type SelectionInputProps<T = string> = FieldComponentProps & {

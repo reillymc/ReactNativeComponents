@@ -1,31 +1,10 @@
 {
-    "extends": "expo/tsconfig.base",
+    "extends": ["expo/tsconfig.base", "./tsconfig.base.json"],
     "compilerOptions": {
         "paths": {
             "@reillymc/react-native-components/*": ["./src/*"]
         },
-        "allowUnreachableCode": false,
-        "allowUnusedLabels": false,
-        "esModuleInterop": true,
-        "forceConsistentCasingInFileNames": true,
-        "jsx": "react-native",
-        "lib": ["DOM", "esnext"],
-        "module": "esnext",
-        "moduleResolution": "bundler",
-        "noFallthroughCasesInSwitch": true,
-        "noImplicitReturns": true,
-        "noImplicitUseStrict": false,
-        "noStrictGenericChecks": false,
-        "noUncheckedIndexedAccess": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "target": "esnext",
-        "noEmit": false,
-        "erasableSyntaxOnly": true,
-        "verbatimModuleSyntax": true
+        "target": "esnext"
     },
     "include": ["**/*.ts", "**/*.tsx", ".expo/types/**/*.ts", "expo-env.d.ts"]
 }

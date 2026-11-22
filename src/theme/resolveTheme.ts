@@ -1,6 +1,6 @@
 import { defaultPalette, type Palette } from "./palette";
 import { resolveThemeGraph } from "./resolveThemeGraph";
-import type { Theme, ThemeOverrides } from "./theme";
+import type { Theme, ThemeOverrides, ThemeOverridesInput } from "./theme";
 import { definitions } from "./themeDefinitions";
 
 const validateOverrides = (overrides?: ThemeOverrides) => {
@@ -24,11 +24,15 @@ const validateOverrides = (overrides?: ThemeOverrides) => {
  */
 export const resolveTheme = (
     palette: Palette = defaultPalette,
-    overrides?: ThemeOverrides,
-): Theme =>
-    resolveThemeGraph<Theme>({
+    overrides?: ThemeOverridesInput,
+): Theme => {
+    const resolvedOverrides =
+        typeof overrides === "function" ? overrides(palette) : overrides;
+
+    return resolveThemeGraph<Theme>({
         definitions,
         palette,
-        overrides,
+        overrides: resolvedOverrides,
         validateOverrides,
     });
+};

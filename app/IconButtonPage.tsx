@@ -1,8 +1,5 @@
-import { type FunctionComponent, useState } from "react";
-import {
-    Octicons,
-    type OcticonsIconName,
-} from "@react-native-vector-icons/octicons";
+import type { FunctionComponent } from "react";
+import type { OcticonsIconName } from "@react-native-vector-icons/octicons";
 import {
     IconButton,
     type IconButtonProps,
@@ -13,51 +10,27 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-import { IconPropDefinitions } from "../demo/helpers";
+import {
+    IconPropDefinitions,
+    InteractionPropDefinitions,
+    VariantPropDefinitions,
+} from "../demo/helpers";
 
 type Props = IconComponentProps<OcticonsIconName> & IconButtonProps;
 
-const defaultProps: Props = {
-    iconSet: Octicons,
-    iconName: "arrow-both",
-    variant: "primary",
-    appearance: "subtle",
-    onPress: () => null,
-};
-
 const propDefinitions: PropDefinitions<Props> = {
     iconName: IconPropDefinitions.iconName,
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: defaultProps.variant,
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Destructive", value: "destructive" },
-        ],
-    },
-    appearance: {
-        type: "enum",
-        label: "Appearance",
-        values: [
-            { label: "Prominent", value: "prominent" },
-            { label: "Subtle", value: "subtle" },
-        ],
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    onPress: {
-        type: "function",
-        label: "Press action",
-    },
+    variant: VariantPropDefinitions.button,
+    appearance: VariantPropDefinitions.buttonAppearance,
+    disabled: InteractionPropDefinitions.disabled,
+    onPress: InteractionPropDefinitions.onPress,
     iconSet: IconPropDefinitions.iconSet,
 };
 
 const IconButtonPage: FunctionComponent = () => {
-    const [props, setProps] = useState<Props>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -67,9 +40,7 @@ const IconButtonPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

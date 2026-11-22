@@ -1,4 +1,4 @@
-import { type FC, useState } from "react";
+import type { FC } from "react";
 import {
     HighlightedText,
     type HighlightedTextProps,
@@ -8,36 +8,26 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: HighlightedTextProps = {
-    text: "HighlightedText",
-    highlight: "Highlight",
-    variant: "body",
-};
+import { VariantPropDefinitions } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<HighlightedTextProps> = {
     text: {
         type: "string",
         label: "Text",
+        default: "",
     },
     highlight: {
         type: "string",
         label: "Highlighted Text",
+        default: "",
     },
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Secondary",
-        values: [
-            { label: "Body", value: "body" },
-            { label: "Caption", value: "caption" },
-        ],
-    },
+    variant: VariantPropDefinitions.text,
 };
 
 const HighlightedTextPage: FC = () => {
-    const [props, setProps] = useState<HighlightedTextProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -47,9 +37,7 @@ const HighlightedTextPage: FC = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

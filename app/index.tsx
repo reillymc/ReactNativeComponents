@@ -1,10 +1,5 @@
 import type { FC, ReactElement } from "react";
-import {
-    Appearance,
-    SectionList,
-    type SectionListData,
-    View,
-} from "react-native";
+import { SectionList, type SectionListData, View } from "react-native";
 import { type Href, Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
@@ -82,7 +77,7 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 href: "/IconButtonPage",
                 component: <IconButton iconSet={Octicons} iconName="star" />,
             },
-            { name: "Context Action", href: "/ContextActionPage" },
+            { name: "Swipe Action", href: "/SwipeActionPage" },
         ],
     },
     {
@@ -186,12 +181,18 @@ const ComponentScreens: Array<ComponentScreenSection> = [
                 name: "Collapsible Panel",
                 href: "/CollapsiblePanelPage",
             },
-            { name: "Context Container", href: "/ContextContainerPage" },
+            {
+                name: "Swipe Action Container",
+                href: "/SwipeActionContainerPage",
+            },
         ],
     },
     {
         sectionName: "Overlays",
-        data: [{ name: "Menu", href: "/MenuPage" }],
+        data: [
+            { name: "Menu", href: "/MenuPage" },
+            { name: "Context Menu", href: "/ContextMenuPage" },
+        ],
     },
     {
         sectionName: "Typography",
@@ -257,34 +258,6 @@ const ComponentListScreen: FC = () => {
                 keyboardShouldPersistTaps="handled"
                 sections={ComponentScreens}
                 keyExtractor={({ name }) => name}
-                ListFooterComponent={
-                    <View style={styles.footer}>
-                        <Text variant="label">Settings</Text>
-                        <View style={styles.schemeRow}>
-                            <Action
-                                label="Light"
-                                variant="secondary"
-                                onPress={() =>
-                                    Appearance.setColorScheme("light")
-                                }
-                            />
-                            <Action
-                                label="Dark"
-                                variant="secondary"
-                                onPress={() =>
-                                    Appearance.setColorScheme("dark")
-                                }
-                            />
-                            <Action
-                                label="System"
-                                variant="secondary"
-                                onPress={() =>
-                                    Appearance.setColorScheme("unspecified")
-                                }
-                            />
-                        </View>
-                    </View>
-                }
                 renderSectionHeader={({ section }) => (
                     <Text variant="label" style={styles.sectionHeading}>
                         {section.sectionName}
@@ -318,15 +291,6 @@ const createStyles = defineStyles(({ palette, appTheme }) => ({
         paddingTop: appTheme.page.top,
         paddingBottom: appTheme.page.bottom,
         gap: palette.spacing.tiny,
-    },
-    footer: {
-        marginTop: palette.spacing.large,
-        gap: palette.spacing.medium,
-    },
-    schemeRow: {
-        flexDirection: "row",
-        gap: palette.spacing.small,
-        alignSelf: "flex-start",
     },
     propsContainer: {
         height: 120,

@@ -1,5 +1,9 @@
 import type { FC, Ref } from "react";
-import { TextInput, type TextInputProps } from "react-native";
+import {
+    TextInput,
+    type TextInputInstance,
+    type TextInputProps,
+} from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
 import { defineStyles, useComponent, useForwardedRef } from "../../internal";
@@ -18,7 +22,7 @@ export type FieldTextInputProps = Omit<TextInputProps, "editable"> & {
      */
     readOnly?: boolean;
     theme?: DeepPartial<FieldTextInputTheme>;
-    ref?: Ref<TextInput>;
+    ref?: Ref<TextInputInstance>;
 };
 
 /**
@@ -58,7 +62,7 @@ export const FieldTextInput: FC<FieldTextInputProps> = ({
         createStyles,
     });
 
-    const inputRef = useForwardedRef<TextInput>(ref);
+    const inputRef = useForwardedRef<TextInputInstance>(ref);
     const focusInput = () => inputRef.current?.focus();
     const fieldFocus = useFieldControlFocus({
         focusable: !disabled,

@@ -1,4 +1,4 @@
-import { type FC, useState } from "react";
+import type { FC } from "react";
 import {
     Action,
     type ActionProps,
@@ -8,41 +8,26 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: ActionProps = {
-    label: "Secondary Action",
-    variant: "secondary",
-    onPress: () => null,
-};
+import {
+    ContentPropDefinitions,
+    InteractionPropDefinitions,
+    VariantPropDefinitions,
+} from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<ActionProps> = {
     label: {
-        type: "string",
-        label: "Label",
+        ...ContentPropDefinitions.label,
+        default: "Secondary Action",
     },
-    variant: {
-        type: "enum",
-        label: "Style variant",
-        default: "Secondary",
-        values: [
-            { label: "Primary", value: "primary" },
-            { label: "Secondary", value: "secondary" },
-            { label: "Destructive", value: "destructive" },
-        ],
-    },
-    disabled: {
-        type: "boolean",
-        label: "Disabled",
-    },
-    onPress: {
-        type: "function",
-        label: "Press action",
-    },
+    variant: VariantPropDefinitions.action,
+    disabled: InteractionPropDefinitions.disabled,
+    onPress: InteractionPropDefinitions.onPress,
 };
 
 const ActionPage: FC = () => {
-    const [props, setProps] = useState<ActionProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -52,9 +37,7 @@ const ActionPage: FC = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

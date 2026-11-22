@@ -18,7 +18,7 @@ npm install react-native-gesture-handler react-native-reanimated \
 
 ## Quick start
 
-Create an app theme once, then use the generated provider and style helper:
+Create an app theme once at module scope, then use the generated provider and style helper:
 
 ```tsx
 import { View } from "react-native";
@@ -90,6 +90,22 @@ const palette = { color: darkColorScheme };
 </AppThemeProvider>;
 ```
 
+`theme` also accepts a function that receives the resolved palette (defaults merged with the `palette` overrides). This is useful for palette-derived overrides that need values such as `spacing`:
+
+```tsx
+import { type Palette } from "@reillymc/react-native-components/theme";
+
+const createThemeOverrides = (palette: Palette) => ({
+    swipeActionContainer: {
+        actionsContainer: { margin: palette.spacing.tiny },
+    },
+});
+
+<AppThemeProvider palette={palette} theme={createThemeOverrides}>
+    <App />
+</AppThemeProvider>;
+```
+
 Component theme overrides cascade into derived component themes. For one-off overrides, pass `theme` to the component; native styles still go through `style`:
 
 ```tsx
@@ -97,10 +113,10 @@ Component theme overrides cascade into derived component themes. For one-off ove
     label="Save"
     theme={{ container: { borderRadius: 12 } }}
     style={{ marginTop: 8 }}
-/>
+/>;
 ```
 
-Keep provider objects stable (module scope or memoized) so the theme is not rebuilt on every render.
+Keep provider objects and theme functions stable (module scope or memoized) so the theme is not rebuilt on every render.
 
 ## Public entry points
 

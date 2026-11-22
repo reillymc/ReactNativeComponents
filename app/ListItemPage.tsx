@@ -1,8 +1,8 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import {
-    ContextAction,
     IconAction,
+    SwipeAction,
 } from "@reillymc/react-native-components/actions";
 import {
     Badge,
@@ -14,107 +14,113 @@ import { Text } from "@reillymc/react-native-components/typography";
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
+import { InteractionPropDefinitions } from "../demo/helpers";
 
-const headerContent = <Text variant="caption">Header text</Text>;
-
-const footerText = <Text variant="caption">Footer text</Text>;
-
-const footerContentRow = (
-    <ContentRow>
-        <Text variant="caption">Footer text</Text>
-        <Text variant="caption">Footer text 2</Text>
-    </ContentRow>
+const deleteAction = (
+    <SwipeAction
+        key="delete"
+        label="Delete"
+        iconSet={Octicons}
+        iconName="trash"
+        variant="destructive"
+        onPress={() => null}
+    />
 );
 
-const defaultProps: ListItemProps = {
-    heading: "Heading text",
-    corners: "rounded",
-    footer: footerContentRow,
-    avatar: (
-        <IconAction
-            iconSet={Octicons}
-            onPress={() => null}
-            iconName="apps"
-            variant="primary"
-        />
-    ),
-    alert: <Badge variant="primary" label="8" />,
-    content: (
-        <ContentRow>
-            <Text>Description</Text>
-            <Text>Description 2</Text>
-        </ContentRow>
-    ),
-    actions: [
-        <ContextAction
-            key="1"
-            label="Delete"
-            iconSet={Octicons}
-            iconName={"trash"}
-            variant="destructive"
-            onPress={() => null}
-        />,
-        <ContextAction
-            key="2"
-            label="Edit"
-            iconSet={Octicons}
-            iconName="pencil"
-            variant="primary"
-            onPress={() => null}
-        />,
-    ],
-    onPress: () => null,
-};
+const editAction = (
+    <SwipeAction
+        key="edit"
+        label="Edit"
+        iconSet={Octicons}
+        iconName="pencil"
+        variant="primary"
+        onPress={() => null}
+    />
+);
+
+const deleteAndEditActions = [deleteAction, editAction];
 
 const propDefinitions: PropDefinitions<ListItemProps> = {
     heading: {
         type: "string",
         label: "Heading text",
+        default: "Heading text",
     },
-    header: {
-        type: "enum",
+    header: enumPropDefinition({
         label: "Header",
-        default: "None",
+        default: "none",
         values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: headerContent },
-        ],
-    },
-    footer: {
-        type: "enum",
-        label: "Footer",
-        default: "Content row",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Text", label: "Text", value: footerText },
+            { id: "none", label: "None", value: undefined },
             {
-                id: "ContentRow",
-                label: "Content row",
-                value: footerContentRow,
+                id: "text",
+                label: "Text",
+                value: <Text variant="caption">Header text</Text>,
             },
         ],
-    },
-    avatar: {
-        type: "enum",
-        label: "Avatar",
-        default: "Icon",
+    }),
+    footer: enumPropDefinition({
+        label: "Footer",
+        default: "contentRow",
         values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Icon", label: "Icon", value: defaultProps.avatar },
-        ],
-    },
-    content: {
-        type: "enum",
-        label: "Content",
-        default: "One",
-        values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "One", label: "One", value: defaultProps.content },
+            { id: "none", label: "None", value: undefined },
             {
-                id: "Two",
+                id: "text",
+                label: "Text",
+                value: <Text variant="caption">Footer text</Text>,
+            },
+            {
+                id: "contentRow",
+                label: "Content row",
+                value: (
+                    <ContentRow>
+                        <Text variant="caption">Footer text</Text>
+                        <Text variant="caption">Footer text 2</Text>
+                    </ContentRow>
+                ),
+            },
+        ],
+    }),
+    avatar: enumPropDefinition({
+        label: "Avatar",
+        default: "icon",
+        values: [
+            { id: "none", label: "None", value: undefined },
+            {
+                id: "icon",
+                label: "Icon",
+                value: (
+                    <IconAction
+                        iconSet={Octicons}
+                        onPress={() => null}
+                        iconName="apps"
+                        variant="primary"
+                    />
+                ),
+            },
+        ],
+    }),
+    content: enumPropDefinition({
+        label: "Content",
+        default: "one",
+        values: [
+            { id: "none", label: "None", value: undefined },
+            {
+                id: "one",
+                label: "One",
+                value: (
+                    <ContentRow>
+                        <Text>Description</Text>
+                        <Text>Description 2</Text>
+                    </ContentRow>
+                ),
+            },
+            {
+                id: "two",
                 label: "Two",
                 value: (
                     <>
@@ -130,7 +136,7 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 ),
             },
             {
-                id: "Three",
+                id: "three",
                 label: "Three",
                 value: (
                     <>
@@ -149,68 +155,49 @@ const propDefinitions: PropDefinitions<ListItemProps> = {
                 ),
             },
         ],
-    },
-    actions: {
-        type: "enum",
-        label: "Actions",
-        default: "Delete",
+    }),
+    actions: enumPropDefinition({
+        label: "Swipe actions",
+        default: "deleteAndEdit",
         values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Delete", label: "Delete", value: defaultProps.actions },
+            { id: "none", label: "None", value: undefined },
             {
-                id: "DeleteAndEdit",
+                id: "delete",
+                label: "Delete",
+                value: [deleteAction],
+            },
+            {
+                id: "deleteAndEdit",
                 label: "Delete and Edit",
-                value: [
-                    <ContextAction
-                        key="1"
-                        label="Delete"
-                        iconSet={Octicons}
-                        iconName="trash"
-                        variant="destructive"
-                        onPress={() => null}
-                    />,
-                    <ContextAction
-                        key="2"
-                        label="Edit"
-                        iconSet={Octicons}
-                        iconName="pencil"
-                        variant="primary"
-                        onPress={() => null}
-                    />,
-                ],
+                value: deleteAndEditActions,
             },
         ],
-    },
-    alert: {
-        type: "enum",
+    }),
+    alert: enumPropDefinition({
         label: "Alert",
-        default: "None",
+        default: "alert",
         values: [
-            { id: "None", label: "None", value: undefined },
+            { id: "none", label: "None", value: undefined },
             {
-                id: "Alert",
+                id: "alert",
                 label: "Alert",
-                value: <Badge variant="primary" label="3" />,
+                value: <Badge variant="primary" label="8" />,
             },
         ],
-    },
-    corners: {
-        type: "enum",
+    }),
+    corners: enumPropDefinition({
         label: "Corners",
-        default: "Rounded",
+        default: "rounded",
         values: [
             { label: "Rounded", value: "rounded" },
             { label: "Square", value: "square" },
         ],
-    },
-    onPress: {
-        type: "function",
-        label: "On press",
-    },
+    }),
+    onPress: InteractionPropDefinitions.onPress,
 };
 
 const ListItemPage: FunctionComponent = () => {
-    const [props, setProps] = useState<ListItemProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -220,9 +207,7 @@ const ListItemPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) => {
-                        setProps((prev) => ({ ...prev, [propId]: value }));
-                    }}
+                    onChange={onChange}
                 />
             }
         />

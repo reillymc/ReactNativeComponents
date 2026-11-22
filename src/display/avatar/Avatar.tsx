@@ -13,7 +13,7 @@ import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import { TextBase } from "../../typography/text";
 
 type AvatarColorSet = { background: ColorValue; foreground: ColorValue };
-type AvatarColorSets = [AvatarColorSet, ...AvatarColorSet[]];
+type AvatarColorSets = readonly [AvatarColorSet, ...AvatarColorSet[]];
 
 const getHashedColorPair = (
     colors: AvatarColorSets,

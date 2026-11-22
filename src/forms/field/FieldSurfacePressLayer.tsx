@@ -1,5 +1,5 @@
 import { type FC, useRef } from "react";
-import { StyleSheet, type View } from "react-native";
+import { StyleSheet, type ViewInstance } from "react-native";
 
 import { PressableBase } from "../../actions/action";
 import { StateLayer } from "../../actions/surface";
@@ -23,7 +23,7 @@ export const FieldSurfacePressLayer: FC<FieldSurfacePressLayerProps> = ({
 }) => {
     const { field } = useFieldControlState();
     const { styles } = useComponent("field", { createStyles });
-    const pressRef = useRef<View>(null);
+    const pressRef = useRef<ViewInstance>(null);
     const focusPress = () => pressRef.current?.focus?.();
 
     const { focusRingStyle, getFocusProps } = useFieldControlFocus({

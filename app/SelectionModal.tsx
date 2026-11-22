@@ -1,5 +1,5 @@
 import { type FC, useState } from "react";
-import { FlatList, View } from "react-native";
+import { FlatList, Platform, View } from "react-native";
 import { Stack, useRouter } from "expo-router";
 import Octicons from "@react-native-vector-icons/octicons";
 import { Action } from "@reillymc/react-native-components/actions";
@@ -53,6 +53,7 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
                     headerRight: () => (
                         <Action
                             label="Done"
+                            style={styles.headerAction}
                             onPress={() =>
                                 closeWithSelection(
                                     request.selectionMode === "single"
@@ -62,6 +63,15 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
                             }
                         />
                     ),
+                    // biome-ignore lint/style/useNamingConvention: Expo Router native header items API.
+                    unstable_headerRightItems: () => [
+                        {
+                            type: "button",
+                            label: "Done",
+                            icon: { type: "sfSymbol", name: "checkmark" },
+                            onPress: router.back,
+                        },
+                    ],
                 }}
             />
             <FlatList
@@ -115,7 +125,7 @@ const SelectionModalContent: FC<{ request: SelectionRequest }> = ({
                                 )}
                             />
                         </View>
-                    ) : null
+                    ) : undefined
                 }
                 renderItem={({ item }) => (
                     <View style={styles.item}>
@@ -184,5 +194,8 @@ const createStyles = defineStyles(({ palette, theme, appTheme }) => ({
         borderRightColor: palette.color.border,
         borderRightWidth: 1,
         justifyContent: "center",
+    },
+    headerAction: {
+        marginEnd: Platform.OS === "web" ? palette.spacing.medium : undefined,
     },
 }));

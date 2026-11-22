@@ -7,11 +7,15 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
+    getDefaults,
+    getValueItemKey,
     type PropDefinitions,
     PropsPanel,
     useSelectionModal,
 } from "../demo/components";
 import {
+    ContentPropDefinitions,
     FieldPropDefinitions,
     FieldTextInputPropDefinitions,
 } from "../demo/helpers";
@@ -23,7 +27,7 @@ type SelectionInputDemoProps = Pick<
     Exclude<keyof SelectionInputProps, "selection" | "selectionMode">
 > & {
     selectionMode: SelectionMode;
-    selection?: ValueItem | Array<ValueItem>;
+    selection?: ValueItem | ReadonlyArray<ValueItem>;
 };
 
 const DEMO_ITEMS: ValueItem[] = [
@@ -42,10 +46,6 @@ const DEMO_ITEMS: ValueItem[] = [
     { label: "Item 9", value: "item9" },
 ];
 
-const DEFAULT_SELECTION = DEMO_ITEMS[0] as ValueItem;
-
-const getItemKey = (item: ValueItem) => ("id" in item ? item.id : item.value);
-
 const normalizeSelection = (
     selectionMode: SelectionMode,
     selection: SelectionInputProps["selection"],
@@ -59,7 +59,10 @@ const normalizeSelection = (
 };
 
 const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Selection Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -67,30 +70,32 @@ const propDefinitions: PropDefinitions<SelectionInputDemoProps> = {
     variant: FieldPropDefinitions.variant,
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
-    placeholder: FieldTextInputPropDefinitions.placeholder,
-    selectionMode: {
-        type: "enum",
+    placeholder: {
+        ...FieldTextInputPropDefinitions.placeholder,
+        default: "Select an item",
+    },
+    selectionMode: enumPropDefinition({
         label: "Selection mode",
+        default: "single",
         values: [
             { label: "Single", value: "single" },
             { label: "Multi", value: "multi" },
         ],
+    }),
+    selection: {
+        type: "hidden",
+        default: DEMO_ITEMS[0],
     },
     onRemoveItem: {
         type: "hidden",
+        default: undefined,
     },
 };
 
-const defaultProps: SelectionInputProps = {
-    label: "Selection Input",
-    disabled: false,
-    placeholder: "Select an item",
-    selectionMode: "single",
-    selection: DEFAULT_SELECTION,
-};
-
 const SelectionInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<SelectionInputProps>(defaultProps);
+    const [props, setProps] = useState(
+        () => getDefaults(propDefinitions) as SelectionInputProps,
+    );
     const { openSelectionModal } = useSelectionModal();
 
     const handleAdd = () => {
@@ -138,8 +143,8 @@ const SelectionInputPage: FunctionComponent = () => {
                             : Array.isArray(prev.selection)
                               ? prev.selection.filter(
                                     (selected) =>
-                                        getItemKey(selected) !==
-                                        getItemKey(item),
+                                        getValueItemKey(selected) !==
+                                        getValueItemKey(item),
                                 )
                               : undefined,
                 }) as SelectionInputProps,

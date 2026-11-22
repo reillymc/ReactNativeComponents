@@ -8,14 +8,20 @@ import {
     ComponentPage,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
 import {
+    ContentPropDefinitions,
     FieldPropDefinitions,
     FieldTextInputPropDefinitions,
+    InputPropDefinitions,
 } from "../demo/helpers";
 
 const propDefinitions: PropDefinitions<CounterInputProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Counter Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -24,37 +30,26 @@ const propDefinitions: PropDefinitions<CounterInputProps> = {
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
     placeholder: FieldTextInputPropDefinitions.placeholder,
-    keyboardType: {
-        type: "enum",
-        label: "Keyboard Type",
-        default: "Number Pad",
-        values: [
-            { label: "Number", value: "number-pad" },
-            { label: "Decimal", value: "decimal-pad" },
-        ],
-    },
+    keyboardType: InputPropDefinitions.keyboardType,
     min: {
         type: "number",
         label: "Min Value",
+        default: 0,
     },
     max: {
         type: "number",
         label: "Max Value",
+        default: Number.MAX_VALUE,
     },
     disableKeyboardInput: {
         type: "boolean",
         label: "Disable Keyboard Input",
+        default: false,
     },
 };
 
-const defaultProps: CounterInputProps = {
-    placeholder: "0",
-    disabled: false,
-    label: "Counter Input",
-};
-
 const CounterInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState<CounterInputProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
     const [inputValue, setInputValue] = useState<string | undefined>(undefined);
 
     return (
@@ -71,9 +66,7 @@ const CounterInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

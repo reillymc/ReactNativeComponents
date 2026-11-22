@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import {
     ComboboxInput,
     type ComboboxInputProps,
@@ -6,12 +6,16 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
 import {
+    ContentPropDefinitions,
     FieldPropDefinitions,
     FieldTextInputPropDefinitions,
+    InteractionPropDefinitions,
 } from "../demo/helpers";
 
 type ComboboxItem = NonNullable<ComboboxInputProps["items"]>[number];
@@ -53,19 +57,22 @@ const testItemSets = [
         value: defaultItems,
     },
     {
-        id: "short-1000",
+        id: "short1000",
         label: "1,000 simple items",
         value: createTestItems(1000, "short"),
     },
     {
-        id: "described-1000",
+        id: "described1000",
         label: "1,000 items with descriptions",
         value: createTestItems(1000, "described"),
     },
 ];
 
 const propDefinitions: PropDefinitions<ComboboxInputProps> = {
-    label: FieldPropDefinitions.label,
+    label: {
+        ...ContentPropDefinitions.label,
+        default: "Combobox Input",
+    },
     hideLabel: FieldPropDefinitions.hideLabel,
     help: FieldPropDefinitions.help,
     error: FieldPropDefinitions.error,
@@ -73,63 +80,50 @@ const propDefinitions: PropDefinitions<ComboboxInputProps> = {
     variant: FieldPropDefinitions.variant,
     disabled: FieldPropDefinitions.disabled,
     readOnly: FieldPropDefinitions.readOnly,
-    placeholder: FieldTextInputPropDefinitions.placeholder,
     clearButtonMode: FieldTextInputPropDefinitions.clearButtonMode,
-    items: {
-        type: "enum",
+    placeholder: FieldTextInputPropDefinitions.placeholder,
+    items: enumPropDefinition({
         label: "Test items",
-        default: "Default (10 items)",
+        default: "default",
         values: testItemSets,
-    },
-    onChange: {
-        type: "function",
-        label: "onChange",
-    },
+    }),
+    onChange: InteractionPropDefinitions.onChange,
     submitOnEnter: {
         type: "boolean",
         label: "Always submit on enter",
+        default: false,
     },
-    selectBehavior: {
-        type: "enum",
+    selectBehavior: enumPropDefinition({
         label: "Select behavior",
-        default: "Blur and close",
+        default: "blurAndClose",
         values: [
             { label: "Blur and close", value: "blurAndClose" },
             { label: "Close", value: "close" },
             { label: "Keep open", value: "keepOpen" },
         ],
-    },
+    }),
     disableOpenOnFocus: {
         type: "boolean",
         label: "Disable open on focus",
+        default: false,
     },
     allowsCustomValue: {
         type: "boolean",
         label: "Allow custom value",
+        default: false,
     },
-    menuMount: {
-        type: "enum",
+    menuMount: enumPropDefinition({
         label: "Menu mount",
-        default: "Overlay",
+        default: "overlay",
         values: [
             { label: "Overlay", value: "overlay" },
             { label: "Inline", value: "inline" },
         ],
-    },
-};
-
-const defaultProps: ComboboxInputProps = {
-    placeholder: "Combobox Input",
-    items: defaultItems,
-    submitOnEnter: false,
-    selectBehavior: "blurAndClose",
-    disableOpenOnFocus: false,
-    allowsCustomValue: false,
-    menuMount: "overlay",
+    }),
 };
 
 const ComboboxInputPage: FunctionComponent = () => {
-    const [props, setProps] = useState(defaultProps);
+    const { props, setProps, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -149,9 +143,7 @@ const ComboboxInputPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

@@ -13,10 +13,14 @@ import {
 import type { ValueItem } from "../valueItem";
 import type { SelectionInputTheme } from "./SelectionInput.theme";
 
+const isValueItemArray = <T,>(
+    selection: ValueItem<T> | ReadonlyArray<ValueItem<T>> | undefined,
+): selection is ReadonlyArray<ValueItem<T>> => Array.isArray(selection);
+
 type SelectionControlProps<T> = {
     placeholder?: string;
     selectionMode: "single" | "multi";
-    selection?: ValueItem<T> | Array<ValueItem<T>>;
+    selection?: ValueItem<T> | ReadonlyArray<ValueItem<T>>;
     themeOverrides?: DeepPartial<SelectionInputTheme>;
     onAdd?: () => void;
     onRemoveItem?: (item: ValueItem<T> | undefined) => void;
@@ -38,7 +42,7 @@ export const SelectionControl = <T,>({
     const { theme: fieldTheme } = useComponent("field");
     const canAdd = interactive && !!onAdd;
     const canRemove = interactive && !!onRemoveItem;
-    const hasSelection = Array.isArray(selection)
+    const hasSelection = isValueItemArray(selection)
         ? selection.length > 0
         : !!selection;
 
@@ -59,7 +63,7 @@ export const SelectionControl = <T,>({
                 >
                     {selectionMode === "single" &&
                         !!selection &&
-                        !Array.isArray(selection) && (
+                        !isValueItemArray(selection) && (
                             <View style={styles.valueLabel}>
                                 <TextBase
                                     numberOfLines={1}
@@ -71,7 +75,7 @@ export const SelectionControl = <T,>({
                             </View>
                         )}
                     {selectionMode === "multi" &&
-                        Array.isArray(selection) &&
+                        isValueItemArray(selection) &&
                         selection.map((item) => (
                             <Tag
                                 key={"id" in item ? item.id : item.value}

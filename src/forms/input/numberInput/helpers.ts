@@ -47,7 +47,7 @@ export const getClearedNumberInputValue = (
 ): NumberInputValue => buildValue(representation, []);
 
 export const getNextMode = (
-    enabledRepresentations: Representations[],
+    enabledRepresentations: ReadonlyArray<Representations>,
     current: Representations,
 ) => {
     const currentIndex = enabledRepresentations.indexOf(current);

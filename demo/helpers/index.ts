@@ -1,7 +1,11 @@
 export { glyphMapValueItems } from "./glyphMapValueItems";
 export {
+    ContentPropDefinitions,
     FieldPropDefinitions,
     FieldTextInputPropDefinitions,
     IconPropDefinitions,
-    SizeVariantPropDefinitions,
+    InputPropDefinitions,
+    InteractionPropDefinitions,
+    RatingPropDefinitions,
+    VariantPropDefinitions,
 } from "./propControls";

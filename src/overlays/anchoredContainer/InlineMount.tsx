@@ -19,6 +19,6 @@ export const InlineMount: FC<InlineMountProps> = ({
     <View onLayout={onLayout} style={[containerStyle, style]}>
         {typeof children === "function"
             ? children(getContainerPlacement(geometry))
-            : children}
+            : (children ?? null)}
     </View>
 );

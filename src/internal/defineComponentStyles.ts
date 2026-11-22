@@ -1,13 +1,20 @@
-import { StyleSheet } from "react-native";
+import {
+    type ImageStyle,
+    StyleSheet,
+    type TextStyle,
+    type ViewStyle,
+} from "react-native";
 
 export type PropFilter<Props, Keys extends keyof Props> = Required<
     Pick<Props, Keys>
 >;
 
+type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
+
 type StyleFactory<ThemeSlice, Props, T> = (
     theme: ThemeSlice,
     props: Props,
-) => T & StyleSheet.NamedStyles<T>;
+) => T & NamedStyles<T>;
 
 type StylesFactory<ThemeSlice, Props, T> = Props extends undefined
     ? (theme: ThemeSlice) => T
@@ -15,7 +22,7 @@ type StylesFactory<ThemeSlice, Props, T> = Props extends undefined
 
 export const defineStyles = <
     ThemeSlice,
-    T extends StyleSheet.NamedStyles<T>,
+    T extends NamedStyles<T>,
     Props = undefined,
 >(
     factory: StyleFactory<ThemeSlice, Props, T>,

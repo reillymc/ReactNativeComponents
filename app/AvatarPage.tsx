@@ -1,4 +1,4 @@
-import { type FunctionComponent, useState } from "react";
+import type { FunctionComponent } from "react";
 import Octicons from "@react-native-vector-icons/octicons";
 import { IconAction } from "@reillymc/react-native-components/actions";
 import {
@@ -8,38 +8,28 @@ import {
 
 import {
     ComponentPage,
+    enumPropDefinition,
     type PropDefinitions,
     PropsPanel,
+    useComponentProps,
 } from "../demo/components";
-
-const defaultProps: AvatarProps = {
-    firstName: "John",
-    lastName: "Smith",
-    imageUri: undefined,
-    size: "regular",
-    action: (
-        <IconAction
-            iconSet={Octicons}
-            iconName="x-circle"
-            onPress={() => null}
-        />
-    ),
-};
 
 const propDefinitions: PropDefinitions<AvatarProps> = {
     firstName: {
         type: "string",
         label: "First Name",
+        default: "",
     },
     lastName: {
         type: "string",
         label: "Last Name",
+        default: "",
     },
-    imageUri: {
-        type: "enum",
+    imageUri: enumPropDefinition({
         label: "Image URL",
+        default: "none",
         values: [
-            { id: "None", label: "None", value: undefined },
+            { id: "none", label: "None", value: undefined },
             {
                 label: "David",
                 value: "https://randomuser.me/api/portraits/men/19.jpg",
@@ -49,25 +39,34 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
                 value: "https://randomuser.me/api/portraits/men/20.jpg",
             },
         ],
-    },
-    size: {
-        type: "enum",
+    }),
+    size: enumPropDefinition({
         label: "Size",
-        default: "Regular",
+        default: "regular",
         values: [
             { label: "Small", value: "small" },
             { label: "Regular", value: "regular" },
             { label: "Large", value: "large" },
         ],
-    },
-    action: {
-        type: "enum",
+    }),
+    action: enumPropDefinition({
         label: "Action",
+        default: "close",
         values: [
-            { id: "None", label: "None", value: undefined },
-            { id: "Close", label: "Close", value: defaultProps.action },
+            { id: "none", label: "None", value: undefined },
             {
-                id: "Edit",
+                id: "close",
+                label: "Close",
+                value: (
+                    <IconAction
+                        iconSet={Octicons}
+                        iconName="x-circle"
+                        onPress={() => null}
+                    />
+                ),
+            },
+            {
+                id: "edit",
                 label: "Edit",
                 value: (
                     <IconAction
@@ -78,11 +77,11 @@ const propDefinitions: PropDefinitions<AvatarProps> = {
                 ),
             },
         ],
-    },
+    }),
 };
 
 const AvatarPage: FunctionComponent = () => {
-    const [props, setProps] = useState<AvatarProps>(defaultProps);
+    const { props, onChange } = useComponentProps(propDefinitions);
 
     return (
         <ComponentPage
@@ -92,9 +91,7 @@ const AvatarPage: FunctionComponent = () => {
                 <PropsPanel
                     propValues={props}
                     propDefinitions={propDefinitions}
-                    onChange={(propId, value) =>
-                        setProps((prev) => ({ ...prev, [propId]: value }))
-                    }
+                    onChange={onChange}
                 />
             }
         />

@@ -1,12 +1,17 @@
 import { createContext, type ReactNode, use } from "react";
-import { StyleSheet } from "react-native";
+import {
+    type ImageStyle,
+    StyleSheet,
+    type TextStyle,
+    type ViewStyle,
+} from "react-native";
 
 import type { IconOverrides } from "./icons";
 import type { PaletteOverrides } from "./palette";
 import type { SystemsOverrides } from "./systems";
 import { ThemeContext, type ThemeContextValue } from "./ThemeContext";
 import { ThemeProvider } from "./ThemeProvider";
-import type { ThemeOverrides } from "./theme";
+import type { ThemeOverridesInput } from "./theme";
 
 export type AppThemeFactory<AppTheme> = (
     context: ThemeContextValue,
@@ -14,7 +19,7 @@ export type AppThemeFactory<AppTheme> = (
 
 type AppThemeProviderProps = {
     palette?: PaletteOverrides;
-    theme?: ThemeOverrides;
+    theme?: ThemeOverridesInput;
     systems?: SystemsOverrides;
     icons?: IconOverrides;
     children?: ReactNode;
@@ -24,20 +29,19 @@ type AppThemedStylesContext<AppTheme> = ThemeContextValue & {
     appTheme: AppTheme;
 };
 
-type AppThemedStylesFactory<
-    AppTheme,
-    Props,
-    T extends StyleSheet.NamedStyles<T>,
-> = (
+type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle | ImageStyle };
+
+type AppThemedStylesFactory<AppTheme, Props, T extends NamedStyles<T>> = (
     context: AppThemedStylesContext<AppTheme>,
     props: Props,
-) => T & StyleSheet.NamedStyles<T>;
+) => T & NamedStyles<T>;
 
 export const createAppTheme = <AppTheme extends object>(
     createValues: AppThemeFactory<AppTheme>,
 ) => {
     const AppThemeContext = createContext<AppTheme | undefined>(undefined);
 
+    // biome-ignore lint/correctness/noComponentHookFactories: stable hook created once by a module-scope factory call.
     const useAppTheme = (): AppTheme => {
         const appTheme = use(AppThemeContext);
 
@@ -49,20 +53,21 @@ export const createAppTheme = <AppTheme extends object>(
     };
 
     const defineStyles =
-        <T extends StyleSheet.NamedStyles<T>, Props = undefined>(
+        <T extends NamedStyles<T>, Props = undefined>(
             factory: AppThemedStylesFactory<AppTheme, Props, T>,
         ) =>
         (context: AppThemedStylesContext<AppTheme>, props: Props): T =>
             StyleSheet.create(factory(context, props));
 
-    function useStyles<T extends StyleSheet.NamedStyles<T>>(
+    function useStyles<T extends NamedStyles<T>>(
         factory: AppThemedStylesFactory<AppTheme, undefined, T>,
     ): T;
-    function useStyles<T extends StyleSheet.NamedStyles<T>, Props>(
+    function useStyles<T extends NamedStyles<T>, Props>(
         factory: AppThemedStylesFactory<AppTheme, Props, T>,
         props: Props,
     ): T;
-    function useStyles<T extends StyleSheet.NamedStyles<T>, Props>(
+    // biome-ignore lint/correctness/noComponentHookFactories: stable hook created once by a module-scope factory call.
+    function useStyles<T extends NamedStyles<T>, Props>(
         factory: AppThemedStylesFactory<AppTheme, Props, T>,
         props?: Props,
     ): T {
@@ -72,6 +77,7 @@ export const createAppTheme = <AppTheme extends object>(
         return factory({ ...baseContext, appTheme }, props as Props);
     }
 
+    // biome-ignore lint/correctness/noComponentHookFactories: stable component created once by a module-scope factory call.
     const AppThemeLayer = ({ children }: { children?: ReactNode }) => {
         const baseContext = use(ThemeContext);
         const appTheme = createValues(baseContext);
@@ -83,6 +89,7 @@ export const createAppTheme = <AppTheme extends object>(
         );
     };
 
+    // biome-ignore lint/correctness/noComponentHookFactories: stable component created once by a module-scope factory call.
     const AppThemeProvider = ({
         children,
         ...themProviderProps
