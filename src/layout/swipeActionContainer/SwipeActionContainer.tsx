@@ -13,10 +13,8 @@ export interface SwipeActionContainerRenderState {
 }
 
 export interface SwipeActionContainerTheme {
-    actionsContainer: {
-        margin: number;
-        gap: number;
-    };
+    margin: number;
+    gap: number;
 }
 
 export interface SwipeActionContainerProps {
@@ -94,8 +92,8 @@ export const SwipeActionContainer: FC<SwipeActionContainerProps> = ({
 
 const createStyles = defineStyles((theme: SwipeActionContainerTheme) => ({
     actionsContainer: {
-        margin: theme.actionsContainer.margin,
-        gap: theme.actionsContainer.gap,
+        margin: theme.margin,
+        gap: theme.gap,
         display: "flex",
         flexDirection: "row-reverse",
     },
