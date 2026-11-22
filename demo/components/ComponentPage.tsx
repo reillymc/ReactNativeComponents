@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import { usePalette } from "@reillymc/react-native-components/theme";
 
 import { defineStyles, useStyles } from "../theme";
+import { useComponentPageSettings } from "./ComponentPageSettingsContext";
 
 export interface ComponentPageProps {
     componentName?: string;
@@ -20,6 +21,7 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
 }) => {
     const palette = usePalette();
     const styles = useStyles(createStyles);
+    const { surfaceBackground } = useComponentPageSettings();
 
     return (
         <>
@@ -47,7 +49,14 @@ export const ComponentPage: FunctionComponent<ComponentPageProps> = ({
                     fullscreen ? undefined : styles.centred,
                 ]}
             >
-                <View style={styles.component}>{component}</View>
+                <View
+                    style={[
+                        styles.component,
+                        !surfaceBackground && styles.componentBackground,
+                    ]}
+                >
+                    {component}
+                </View>
             </View>
             {!!propsPanel && (
                 <View style={styles.propsContainer}>{propsPanel}</View>
@@ -63,7 +72,7 @@ const createStyles = defineStyles(({ palette: { color, border } }) => ({
         flexGrow: 1,
         flexBasis: 1,
         backgroundColor: color.background,
-        paddingTop: 160,
+        paddingTop: 180,
         paddingBottom: 60,
     },
     component: {
@@ -75,6 +84,9 @@ const createStyles = defineStyles(({ palette: { color, border } }) => ({
         alignItems: "center",
         borderRadius: border.radius.loose,
         padding: 12,
+    },
+    componentBackground: {
+        backgroundColor: color.background,
     },
     centred: {
         alignItems: "center",

@@ -1,4 +1,10 @@
 export { ComponentPage, type ComponentPageProps } from "./ComponentPage";
+export {
+    type AppearancePreference,
+    type ComponentPageSettings,
+    useComponentPageSettings,
+} from "./ComponentPageSettingsContext";
+export { ComponentPageSettingsProvider } from "./ComponentPageSettingsProvider";
 export { enumPropDefinition } from "./enumPropDefinition";
 export { getDefaults } from "./getDefaults";
 export {
