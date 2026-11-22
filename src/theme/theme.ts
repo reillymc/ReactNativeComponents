@@ -32,6 +32,7 @@ import type { TimeInputTheme } from "../forms/input/timeInput/TimeInput.theme";
 import type { ToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
 import type { IconTheme } from "../icons/Icon";
 import type { IconBaseTheme } from "../icons/IconBase";
+import type { SwipeActionContainerTheme } from "../layout/swipeActionContainer/SwipeActionContainer";
 import type { AnchoredContainerTheme } from "../overlays/anchoredContainer/AnchoredContainer";
 import type { MenuTheme } from "../overlays/menu/Menu";
 import type { MenuItemTheme } from "../overlays/menu/MenuItem";
@@ -76,6 +77,7 @@ export interface Theme {
     avatar: AvatarTheme;
     toast: ToastTheme;
     swipeAction: SwipeActionTheme;
+    swipeActionContainer: SwipeActionContainerTheme;
     anchoredContainer: AnchoredContainerTheme;
     formContainer: FormContainerTheme;
     formRow: FormRowTheme;

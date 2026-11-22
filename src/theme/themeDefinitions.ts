@@ -30,6 +30,7 @@ import { defaultTimeInputTheme } from "../forms/input/timeInput/TimeInput.theme"
 import { defaultToggleInputTheme } from "../forms/input/toggleInput/ToggleInput.theme";
 import { defaultIconTheme } from "../icons/Icon.theme";
 import { defaultIconBaseTheme } from "../icons/IconBase.theme";
+import { defaultSwipeActionContainerTheme } from "../layout/swipeActionContainer/SwipeActionContainer.theme";
 import { defaultAnchoredContainerTheme } from "../overlays/anchoredContainer/AnchoredContainer.theme";
 import { defaultMenuTheme } from "../overlays/menu/Menu.theme";
 import { defaultMenuItemTheme } from "../overlays/menu/MenuItem.theme";
@@ -78,6 +79,7 @@ export const definitions: ThemeDefinitions = {
     avatar: defaultAvatarTheme,
     toast: defaultToastTheme,
     swipeAction: defaultSwipeActionTheme,
+    swipeActionContainer: defaultSwipeActionContainerTheme,
     anchoredContainer: defaultAnchoredContainerTheme,
     formContainer: defaultFormContainerTheme,
     formRow: defaultFormRowTheme,

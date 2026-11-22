@@ -1,3 +1,4 @@
+import { View } from "react-native";
 import Octicons from "@react-native-vector-icons/octicons";
 import { SwipeAction } from "@reillymc/react-native-components/actions";
 import { ContentRow } from "@reillymc/react-native-components/display";
@@ -31,19 +32,25 @@ const SwipeActionContainerPage = () => {
                             onPress={() => null}
                         />,
                     ]}
-                    actionsContainerStyle={{
-                        gap: palette.spacing.tiny,
-                    }}
                 >
-                    <ContentRow
-                        style={{
-                            padding: palette.spacing.large,
-                            backgroundColor: palette.color.elevated,
-                            width: "150",
-                        }}
-                    >
-                        <Text>Swipe row</Text>
-                    </ContentRow>
+                    {({ swipeState }) => (
+                        <View
+                            pointerEvents={
+                                swipeState === "closed" ? "auto" : "none"
+                            }
+                        >
+                            <ContentRow
+                                style={{
+                                    padding: palette.spacing.large,
+                                    backgroundColor: palette.color.elevated,
+                                    width: "180",
+                                    borderRadius: palette.border.radius.regular,
+                                }}
+                            >
+                                <Text>Swipe row</Text>
+                            </ContentRow>
+                        </View>
+                    )}
                 </SwipeActionContainer>
             }
         />

@@ -2,6 +2,7 @@ import type { ThemeFactory } from "../../theme/theme";
 
 export const defaultListItemTheme: ThemeFactory<"listItem"> = ({
     palette: { border, color, spacing },
+    theme,
 }) => ({
     surface: {
         backgroundColor: color.surface,
@@ -11,10 +12,7 @@ export const defaultListItemTheme: ThemeFactory<"listItem"> = ({
         paddingStart: spacing.medium,
         paddingEnd: spacing.medium,
     },
-    swipeActions: {
-        margin: spacing.tiny,
-        gap: spacing.small,
-    },
+    swipeActions: theme.swipeActionContainer,
     internalGap: spacing.medium,
     textColor: color.surfaceForeground,
 });

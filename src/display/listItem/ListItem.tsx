@@ -17,6 +17,7 @@ import { defineStyles, type PropFilter, useComponent } from "../../internal";
 import {
     SwipeActionContainer,
     type SwipeActionContainerProps,
+    type SwipeActionContainerTheme,
     type SwipeActionState,
 } from "../../layout";
 import { Text } from "../../typography";
@@ -32,10 +33,7 @@ export interface ListItemTheme {
         paddingStart: number;
         paddingEnd: number;
     };
-    swipeActions: {
-        margin: number;
-        gap: number;
-    };
+    swipeActions: SwipeActionContainerTheme;
     internalGap: number;
     textColor: ColorValue;
 }
@@ -118,9 +116,7 @@ export const ListItem: FC<ListItemProps> = ({
 
         return {
             borderRadius: withTiming(
-                swipeState.value === "opening" || swipeState.value === "open"
-                    ? theme.surface.borderRadius
-                    : 0,
+                swipeState.value === "closed" ? 0 : theme.surface.borderRadius,
                 { duration: 150 },
             ),
         };
@@ -189,7 +185,7 @@ export const ListItem: FC<ListItemProps> = ({
             {filteredSwipeActions?.length ? (
                 <SwipeActionContainer
                     actions={filteredSwipeActions}
-                    actionsContainerStyle={styles.swipeActions}
+                    theme={theme.swipeActions}
                     onSwipeStateChange={(state) => {
                         swipeState.value = state;
                     }}
@@ -210,11 +206,6 @@ const createStyles = defineStyles(
         },
         surface: {
             backgroundColor: theme.surface.backgroundColor,
-        },
-        swipeActions: {
-            margin: theme.swipeActions.margin,
-            marginLeft: theme.swipeActions.gap,
-            gap: theme.swipeActions.gap,
         },
         pressableContainer: {
             display: "flex",
