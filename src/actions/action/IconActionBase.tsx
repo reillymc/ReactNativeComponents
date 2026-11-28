@@ -25,6 +25,7 @@ export interface IconActionBaseProps
         | "accessibilityLabel"
         | "onFocus"
         | "onBlur"
+        | "onPressIn"
     > {
     label?: string;
     iconPosition?: "start" | "end";

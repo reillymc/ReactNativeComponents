@@ -101,7 +101,7 @@ const shouldMoveFocus = (
 };
 
 type SegmentedInputNavigationOptions<K extends string> = {
-    segments: readonly SegmentedInputSegment<K>[];
+    segments: readonly SegmentedInputDisplaySegment<K>[];
     externalRefs?: Partial<Record<K, Ref<TextInputInstance>>>;
     onSubmitEditing?: FieldNumberInputProps["onSubmitEditing"];
     finalReturnKeyType?: FieldNumberInputProps["returnKeyType"];
@@ -143,6 +143,7 @@ export const useSegmentedInputNavigation = <K extends string>({
 }: SegmentedInputNavigationOptions<K>) => {
     const inputNodes = useRef(new Map<K, TextInputInstance>());
     const selectionNodes = useRef(new Map<K, TextSelection>());
+    const focusedKey = useRef<K | null>(null);
     const refCallbacks = useRef(
         new Map<K, (node: TextInputInstance | null) => void>(),
     );
@@ -162,6 +163,10 @@ export const useSegmentedInputNavigation = <K extends string>({
                 inputNodes.current.set(key, node);
             } else {
                 inputNodes.current.delete(key);
+
+                if (focusedKey.current === key) {
+                    focusedKey.current = null;
+                }
             }
 
             const external = externalRefsRef.current?.[key];
@@ -222,6 +227,7 @@ export const useSegmentedInputNavigation = <K extends string>({
 
     const getSegmentInputProps = (key: K) => {
         const index = segments.findIndex((segment) => segment.key === key);
+        const segment = segments[index];
         const nextSegment = segments[index + 1];
         const isLast = !nextSegment;
         const returnKeyType: FieldNumberInputProps["returnKeyType"] = isLast
@@ -244,10 +250,28 @@ export const useSegmentedInputNavigation = <K extends string>({
             event,
         ) => handleKeyPress(index, event);
 
+        const onFocus: NonNullable<FieldNumberInputProps["onFocus"]> = (
+            event,
+        ) => {
+            focusedKey.current = key;
+            segment?.inputProps?.onFocus?.(event);
+        };
+
+        const onBlur: NonNullable<FieldNumberInputProps["onBlur"]> = (
+            event,
+        ) => {
+            if (focusedKey.current === key) {
+                focusedKey.current = null;
+            }
+            segment?.inputProps?.onBlur?.(event);
+        };
+
         return {
             ref: getInputRef(key),
             onSelectionChange,
             onKeyPress,
+            onFocus,
+            onBlur,
             returnKeyType,
             enterKeyHint,
             submitBehavior,
@@ -263,5 +287,12 @@ export const useSegmentedInputNavigation = <K extends string>({
         }
     };
 
-    return { getSegmentInputProps, focusSegment, blurSegments };
+    const isInputFocused = () => focusedKey.current !== null;
+
+    return {
+        getSegmentInputProps,
+        isInputFocused,
+        focusSegment,
+        blurSegments,
+    };
 };

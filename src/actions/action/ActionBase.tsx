@@ -28,6 +28,7 @@ export interface ActionBaseProps
         | "tabIndex"
         | "onFocus"
         | "onBlur"
+        | "onPressIn"
         | "accessibilityLabel"
         | "role"
         | "accessibilityRole"

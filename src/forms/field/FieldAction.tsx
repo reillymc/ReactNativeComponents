@@ -1,6 +1,6 @@
 import { IconActionBase, type IconActionBaseProps } from "../../actions/action";
 import type { IconComponentProps } from "../../icons/IconComponentProps";
-import { defineStyles, useComponent } from "../../internal";
+import { defineStyles, FocusBlurGuard, useComponent } from "../../internal";
 import type { FieldTheme, InputVariant } from "./Field.theme";
 import { useFieldControlState } from "./FieldContext";
 import { FieldIcon } from "./FieldIcon";
@@ -8,7 +8,7 @@ import { FieldIcon } from "./FieldIcon";
 export type FieldActionProps<G extends string> = IconComponentProps<G> &
     Pick<
         IconActionBaseProps,
-        "tabIndex" | "accessibilityLabel" | "onPress" | "style"
+        "tabIndex" | "accessibilityLabel" | "onPress" | "onPressIn" | "style"
     >;
 
 /**
@@ -21,6 +21,7 @@ export type FieldActionProps<G extends string> = IconComponentProps<G> &
  */
 export const FieldAction = <G extends string>({
     onPress,
+    onPressIn,
     accessibilityLabel,
     style,
     tabIndex,
@@ -37,16 +38,19 @@ export const FieldAction = <G extends string>({
     }
 
     return (
-        <IconActionBase
-            {...iconProps}
-            onPress={onPress}
-            accessibilityLabel={accessibilityLabel}
-            style={[styles.icon, style]}
-            theme={{ color: theme.icon.color }}
-            iconSize={theme.icon.size}
-            hitSlop={0}
-            tabIndex={tabIndex}
-        />
+        <FocusBlurGuard>
+            <IconActionBase
+                {...iconProps}
+                onPress={onPress}
+                onPressIn={onPressIn}
+                accessibilityLabel={accessibilityLabel}
+                style={[styles.icon, style]}
+                theme={{ color: theme.icon.color }}
+                iconSize={theme.icon.size}
+                hitSlop={0}
+                tabIndex={tabIndex}
+            />
+        </FocusBlurGuard>
     );
 };
 

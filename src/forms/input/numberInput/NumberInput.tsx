@@ -1,4 +1,4 @@
-import { type FC, type Ref, useImperativeHandle } from "react";
+import { type FC, type Ref, useImperativeHandle, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import type { DeepPartial } from "@reillymc/es-utils";
 
@@ -119,7 +119,7 @@ export const NumberInput: FC<NumberInputProps> = ({
         getPlaceholder,
         keyboardType,
     });
-    const { getSegmentInputProps, focusSegment, blurSegments } =
+    const { getSegmentInputProps, isInputFocused, focusSegment, blurSegments } =
         useSegmentedInputNavigation({
             segments,
             onSubmitEditing,
@@ -127,6 +127,7 @@ export const NumberInput: FC<NumberInputProps> = ({
             finalEnterKeyHint: enterKeyHint,
             finalSubmitBehavior: submitBehavior,
         });
+    const focusedBeforePress = useRef(false);
 
     useImperativeHandle(
         ref,
@@ -163,6 +164,13 @@ export const NumberInput: FC<NumberInputProps> = ({
         const nextValue = getNextValue(nextMode, value);
         if (!nextValue) return;
 
+        const wasFocused = focusedBeforePress.current || isInputFocused();
+        focusedBeforePress.current = false;
+
+        if (wasFocused) {
+            focusSegment("primary");
+        }
+
         onChange?.(nextValue);
     };
 
@@ -173,6 +181,14 @@ export const NumberInput: FC<NumberInputProps> = ({
                     <FieldAction
                         {...icon}
                         accessibilityLabel="Switch number format"
+                        onPressIn={
+                            enabledRepresentations.length > 1 && onChange
+                                ? () => {
+                                      focusedBeforePress.current =
+                                          isInputFocused();
+                                  }
+                                : undefined
+                        }
                         onPress={
                             enabledRepresentations.length > 1 && onChange
                                 ? handleChangeMode
@@ -181,9 +197,7 @@ export const NumberInput: FC<NumberInputProps> = ({
                     />
                     <SegmentedInputSegments
                         segments={segments}
-                        keyExtractor={(segment) =>
-                            `${value.representation}-${segment.key}`
-                        }
+                        keyExtractor={(segment) => segment.key}
                         renderSegment={(segment, index) => (
                             <>
                                 {!!segment.separator && (
